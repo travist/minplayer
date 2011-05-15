@@ -1,0 +1,38 @@
+<?php
+/**
+ * This module currently does not do anything.
+ */
+
+
+/**
+ * Implements hook_theme().
+ */
+function html5_media_theme() {
+  $theme['mediaplayer_formatter'] = array(
+    'render element' => 'element',
+    'arguments' => array('items' => NULL)
+  );
+
+  $theme['mediaplayer'] = array(
+    'render element' => 'element',
+    'arguments' => array('entity' => NULL, 'preset' => NULL)
+  );
+
+  return $theme;
+}
+
+/**
+ * Implement the theme for the media player.
+ */
+function theme_mediaplayer( $variables ) {
+  
+}
+
+/**
+ * API to get a media player display.
+ */
+function html5_media_get_player() {
+  $args = func_get_args();
+  $params = $args[0];
+  
+}

@@ -1,0 +1,8 @@
+name = HTML5 Media
+description = A module to begin implementation of HTML5 rich media handling in core.
+package = Other
+core = 7.x
+files[] = html5_media.module
+files[] = html5_media.install
+files[] = html5_media.admin.inc
+required = FALSE
