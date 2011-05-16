@@ -8,24 +8,45 @@
  * Implements hook_theme().
  */
 function html5_media_theme() {
-  $theme['mediaplayer_formatter'] = array(
-    'render element' => 'element',
-    'arguments' => array('items' => NULL)
-  );
-
+  
+  // Add the media render element.
   $theme['mediaplayer'] = array(
     'render element' => 'element',
-    'arguments' => array('entity' => NULL, 'preset' => NULL)
+    'arguments' => array('entity' => NULL)
   );
 
   return $theme;
 }
 
 /**
+ * Implements hook_field_formatter_info().
+ */
+function html5_media_field_formatter_info() {
+  return array(
+    'mediaplayer' => array(
+      'label' => t('Media Player'),
+      'description' => t('Display this file within a media player.'),
+      'field types' => array('file')
+    )
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function html5_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  return array(array(
+    '#theme' => 'mediaplayer',
+    '#entity' => $entity
+  ));
+}
+
+/**
  * Implement the theme for the media player.
  */
-function theme_mediaplayer( $variables ) {
-  
+function theme_mediaplayer( $entity ) {
+  $output = '<video' . drupal_attributes($variables['attributes']) . '></video>';
+  return $output;
 }
 
 /**
