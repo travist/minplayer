@@ -27,7 +27,7 @@ function html5_media_field_widget_info() {
 /**
  * Implements hook_field_widget_settings_form().
  */
-function file_field_widget_settings_form($field, $instance) {
+function html5_media_widget_settings_form($field, $instance) {
   $widget = $instance['widget'];
   $settings = $widget['settings'];
 

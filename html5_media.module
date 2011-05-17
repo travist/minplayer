@@ -3,6 +3,9 @@
  * This module currently does not do anything.
  */
 
+// Load all Field module hooks.
+require_once DRUPAL_ROOT . '/' . drupal_get_path('module', 'html5_media') . '/html5_media.field.inc';
+
 
 /**
  * Implements hook_theme().

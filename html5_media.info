@@ -4,5 +4,5 @@ package = Other
 core = 7.x
 files[] = html5_media.module
 files[] = html5_media.install
-files[] = html5_media.admin.inc
+files[] = html5_media.field.inc
 required = FALSE
