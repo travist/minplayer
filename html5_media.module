@@ -19,29 +19,6 @@ function html5_media_theme() {
 }
 
 /**
- * Implements hook_field_formatter_info().
- */
-function html5_media_field_formatter_info() {
-  return array(
-    'mediaplayer' => array(
-      'label' => t('Media Player'),
-      'description' => t('Display this file within a media player.'),
-      'field types' => array('file')
-    )
-  );
-}
-
-/**
- * Implements hook_field_formatter_view().
- */
-function html5_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
-  return array(array(
-    '#theme' => 'mediaplayer',
-    '#entity' => $entity
-  ));
-}
-
-/**
  * Implement the theme for the media player.
  */
 function theme_mediaplayer( $entity ) {
