@@ -27,7 +27,7 @@ function html5_media_field_widget_info() {
 /**
  * Implements hook_field_widget_settings_form().
  */
-function html5_media_widget_settings_form($field, $instance) {
+function html5_media_field_widget_settings_form($field, $instance) {
   $widget = $instance['widget'];
   $settings = $widget['settings'];
 
@@ -61,7 +61,7 @@ function html5_media_field_formatter_info() {
 /**
  * Implements hook_field_formatter_view().
  */
-function html5_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+function html5_media_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   return array(array(
     '#theme' => 'mediaplayer',
     '#entity' => $entity
