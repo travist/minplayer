@@ -31,8 +31,16 @@ function html5_media_field_widget_settings_form($field, $instance) {
   $widget = $instance['widget'];
   $settings = $widget['settings'];
 
+  $form['player'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Media Player Settings',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#weight' => 20
+  );
+  
   // Add all the custom settings for the core media player.
-  $form['template'] = array(
+  $form['player']['template'] = array(
     '#type' => 'select',
     '#title' => t('Media Player Template'),
     '#options' => array(
@@ -43,6 +51,24 @@ function html5_media_field_widget_settings_form($field, $instance) {
   );
 
   return $form;
+}
+
+/**
+ * Define the media player widget form.
+ * 
+ * @param type $form
+ * @param type $form_state
+ * @param type $field
+ * @param type $instance
+ * @param type $langcode
+ * @param type $items
+ * @param type $delta
+ * @param type $element 
+ */
+function html5_media_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  
+  // Just use the file field widget for the media player widget form.
+  return file_field_widget_form($form, $form_state, $field, $instance, $langcode, $items, $delta, $element);
 }
 
 /**
