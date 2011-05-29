@@ -91,12 +91,14 @@ function html5_media_field_formatter_view($entity_type, $entity, $field, $instan
   
   // Pass all the variables to our template.
   return array(array(
-    '#theme' => 'mediaplayer',
-    '#entity' => $entity,
-    '#field' => $field,
-    '#instance' => $instance,
-    '#langcode' => $langcode,
-    '#items' => $items,
-    '#display' => $display
+    '#theme' => 'media_player',
+    '#params' => array(
+      '#entity' => $entity,
+      '#field' => $field,
+      '#instance' => $instance,
+      '#langcode' => $langcode,
+      '#items' => $items,
+      '#display' => $display
+    )
   ));
 }

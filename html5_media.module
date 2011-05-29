@@ -12,10 +12,20 @@ require_once DRUPAL_ROOT . '/' . drupal_get_path('module', 'html5_media') . '/ht
  */
 function html5_media_theme() {
   
+  $template_path = drupal_get_path('module', 'html5_media') . '/templates';
+  
   // Add the media render element.
-  $theme['mediaplayer'] = array(
-    'render element' => 'element',
-    'arguments' => array('variables' => NULL)
+  $theme['media_player'] = array(
+    'variables' => array('params' => array()),
+    'path' => $template_path,
+    'template' => 'media_player'
+  );
+  
+  // Add the media controls element.
+  $theme['media_controls'] = array(
+    'variables' => array('params' => array()),
+    'path' => $template_path,
+    'template' => 'media_controls'    
   );
 
   return $theme;
@@ -31,6 +41,25 @@ function html5_media_source($file) {
     'src' => file_create_url($file['uri']),
     'type' => $file['filemime']
   );
+}
+
+/**
+ * Converts the settings into an attributes array.
+ */
+function html5_media_attributes($settings) {
+  $attributes = array();
+  
+  // Add the width.
+  $attributes['width'] = isset($settings['width']) ? $settings['width'] : '550';
+  
+  // Add the height only if it is set.
+  if( isset($settings['height']) && ($settings['height'] > 0) ) {
+    $attributes['height'] = $settings['height'];
+  }
+  
+  // Add the controls.
+  $attributes['controls'] = NULL;
+  return $attributes;
 }
 
 /**
@@ -55,40 +84,54 @@ function html5_media_get_media_element_info() {
 }
 
 /**
- * Implement the theme for the media player.
+ * Preprocess function for media_player
  */
-function theme_mediaplayer( $variables ) {
-  $output = '';
-  $variables = array_shift( $variables );
-  $field_name = $variables['#field']['field_name'];
-  $langcode = $variables['#entity']->language;
-  $files = $variables['#entity']->{$field_name}[$langcode];
+function template_preprocess_media_player(&$variables) {
+  $params = $variables['params'];
+  $field_name = $params['#field']['field_name'];
+  $langcode = $params['#entity']->language;
   
-  // The first file will determine what type we will use.
-  $type = explode('/', $files[0]['filemime']);
+  // Add the files object to the variables.
+  $variables['media_files'] = $params['#entity']->{$field_name}[$langcode];
+  
+  // Get the element type for this media based on the first file uploaded.
+  $type = explode('/', $variables['media_files'][0]['filemime']);
   $type = $type[0];
+  $variables['media_type'] = in_array($type, array('audio', 'video')) ? $type : 'div';
   
-  // Only continue if this is a video or an audio type.
-  if( ($type == 'video') || ($type == 'audio') ) {
-    $output = '<' . $type . ' controls>';
-    
-    // Iterate through each of the files in this field and add a source for each.
-    foreach( $files as $file ) {
-      // Add this source to the html5 markup.
-      $output .= '<source ' . drupal_attributes(html5_media_source($file)) . '>';
+  // Get the attributes for this media element.
+  $variables['media_attributes'] = html5_media_attributes($params['#instance']['settings']);
+  
+  // Allow other modules to add their own source's.
+  $variables['media_plugins'] = array();
+  $infos = html5_media_get_media_element_info();
+  foreach( $infos as $plugin_type => $info ) {
+    if( isset($info['plugin_callback']) ) {
+      
+      // Merge all the plugins into a single plugins array.
+      $variables['media_plugins'][] = $info['plugin_callback']($variables);
     }
-    
-    // Allow other modules to add their own source's.
-    $infos = html5_media_get_media_element_info();
-    foreach( $infos as $source_type => $info ) {
-      if( isset($info['source_callback']) ) {
-        $output .= $info['source_callback']($type, $attributes, $files);
-      }
-    }    
-    
-    $output .= '</' . $type . '>';
-  }
-  return $output;
+  }   
+}
+
+/**
+ * Implements our own hook_media_element_info
+ */
+function html5_media_element_info() {
+  return array(
+    'controls' => array(
+      'plugin_callback' => 'html5_media_controls'
+    )
+  );
+}
+
+/**
+ * Returns a control bar template.
+ * 
+ * @param type $variables 
+ */
+function html5_media_controls($variables) {
+  return theme('media_controls', $variables);
 }
 
 /**
