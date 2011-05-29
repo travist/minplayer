@@ -15,17 +15,79 @@ function html5_media_theme() {
   // Add the media render element.
   $theme['mediaplayer'] = array(
     'render element' => 'element',
-    'arguments' => array('entity' => NULL)
+    'arguments' => array('variables' => NULL)
   );
 
   return $theme;
 }
 
 /**
+ * Converts a Drupal file object into a source object for HTML5.
+ * 
+ * @param type $file 
+ */
+function html5_media_source($file) {
+  return array(
+    'src' => file_create_url($file['uri']),
+    'type' => $file['filemime']
+  );
+}
+
+/**
+ * Get's the media element info from other modules.
+ * 
+ * @return type 
+ */
+function html5_media_get_media_element_info() {
+  
+  // Get the info from cache.
+  $info = cache_get('media_element_info', 'cache_media');
+  if( $info ) {
+    
+    // Return immediately if the cache is set.
+    return $info->data;
+  }
+  
+  // Get the media element info.
+  $info = module_invoke_all('media_element_info');
+  cache_set('media_element_info', $info);
+  return $info;
+}
+
+/**
  * Implement the theme for the media player.
  */
-function theme_mediaplayer( $entity ) {
-  $output = '<video' . drupal_attributes($variables['attributes']) . '></video>';
+function theme_mediaplayer( $variables ) {
+  $output = '';
+  $variables = array_shift( $variables );
+  $field_name = $variables['#field']['field_name'];
+  $langcode = $variables['#entity']->language;
+  $files = $variables['#entity']->{$field_name}[$langcode];
+  
+  // The first file will determine what type we will use.
+  $type = explode('/', $files[0]['filemime']);
+  $type = $type[0];
+  
+  // Only continue if this is a video or an audio type.
+  if( ($type == 'video') || ($type == 'audio') ) {
+    $output = '<' . $type . ' controls>';
+    
+    // Iterate through each of the files in this field and add a source for each.
+    foreach( $files as $file ) {
+      // Add this source to the html5 markup.
+      $output .= '<source ' . drupal_attributes(html5_media_source($file)) . '>';
+    }
+    
+    // Allow other modules to add their own source's.
+    $infos = html5_media_get_media_element_info();
+    foreach( $infos as $source_type => $info ) {
+      if( isset($info['source_callback']) ) {
+        $output .= $info['source_callback']($type, $attributes, $files);
+      }
+    }    
+    
+    $output .= '</' . $type . '>';
+  }
   return $output;
 }
 

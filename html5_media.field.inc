@@ -88,8 +88,15 @@ function html5_media_field_formatter_info() {
  * Implements hook_field_formatter_view().
  */
 function html5_media_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  
+  // Pass all the variables to our template.
   return array(array(
     '#theme' => 'mediaplayer',
-    '#entity' => $entity
+    '#entity' => $entity,
+    '#field' => $field,
+    '#instance' => $instance,
+    '#langcode' => $langcode,
+    '#items' => $items,
+    '#display' => $display
   ));
 }
