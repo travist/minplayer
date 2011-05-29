@@ -50,11 +50,12 @@ function html5_media_attributes($settings) {
   $attributes = array();
   
   // Add the width.
-  $attributes['width'] = isset($settings['width']) ? $settings['width'] : '550';
+  $attributes['width'] = $settings['width'] ? $settings['width'] : '550';
+  $attributes['width'] = $settings['fluidwidth'] ? '100%' : ($attributes['width'] . 'px');
   
   // Add the height only if it is set.
-  if( isset($settings['height']) && ($settings['height'] > 0) ) {
-    $attributes['height'] = $settings['height'];
+  if( isset($settings['height']) && ($settings['height'] > 0) && !$settings['fluidheight']) {
+    $attributes['height'] = $settings['height'] . 'px';
   }
   
   // Add the controls.
@@ -100,7 +101,8 @@ function template_preprocess_media_player(&$variables) {
   $variables['media_type'] = in_array($type, array('audio', 'video')) ? $type : 'div';
   
   // Get the attributes for this media element.
-  $variables['media_attributes'] = html5_media_attributes($params['#instance']['settings']);
+  $settings = $params['#instance']['widget']['settings']['mediaplayer'];
+  $variables['media_attributes'] = html5_media_attributes($settings);
   
   // Allow other modules to add their own source's.
   $variables['media_plugins'] = array();

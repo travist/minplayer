@@ -14,7 +14,12 @@ function html5_media_field_widget_info() {
       'label' => t('Media Player'),
       'field types' => array('file'),
       'settings' => array(
-        'template' => 'default',
+        'mediaplayer' => array(
+          'width' => 550,
+          'height' => 450,
+          'fluidwidth' => 1,
+          'fluidheight' => 1,
+        )
       ),
       'behaviors' => array(
         'multiple values' => FIELD_BEHAVIOR_CUSTOM,
@@ -31,7 +36,8 @@ function html5_media_field_widget_settings_form($field, $instance) {
   $widget = $instance['widget'];
   $settings = $widget['settings'];
 
-  $form['player'] = array(
+  // Store all settings in the media player array.
+  $form['mediaplayer'] = array(
     '#type' => 'fieldset',
     '#title' => 'Media Player Settings',
     '#collapsible' => TRUE,
@@ -40,15 +46,38 @@ function html5_media_field_widget_settings_form($field, $instance) {
   );
   
   // Add all the custom settings for the core media player.
-  $form['player']['template'] = array(
-    '#type' => 'select',
-    '#title' => t('Media Player Template'),
-    '#options' => array(
-      'default' => t('Default')
-    ),
-    '#default_value' => $settings['template'],
-    '#description' => t('Select which template you would like to use for this Media Player.')
+  $form['mediaplayer']['width'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Player Width'),
+    '#field_suffix' => 'px',
+    '#size' => 4,
+    '#default_value' => $settings['mediaplayer']['width'],
+    '#description' => t('Select the width of the media player.')
   );
+  
+  $form['mediaplayer']['fluidwidth'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Fluid Width'),
+    '#description' => t('Adjust the width of the media player to fit its parent element.'),
+    '#default_value' => $settings['mediaplayer']['fluidwidth']
+  );
+  
+  $form['mediaplayer']['height'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Player Height'),
+    '#field_suffix' => 'px',
+    '#size' => 4,
+    '#default_value' => $settings['mediaplayer']['height'],
+    '#description' => t('Select the height of the media player.')
+  );  
+  
+  $form['mediaplayer']['fluidheight'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Fluid Height'),
+    '#description' => 'Adjust the height of the media player according to the width automatically.',
+    '#default_value' => $settings['mediaplayer']['fluidheight']
+  );
+    
 
   return $form;
 }
