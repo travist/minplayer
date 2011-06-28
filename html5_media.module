@@ -1,146 +1,111 @@
 <?php
 /**
- * This module currently does not do anything.
+ * Implements hook_field_formatter_info().
  */
-
-// Load all Field module hooks.
-require_once DRUPAL_ROOT . '/' . drupal_get_path('module', 'html5_media') . '/html5_media.field.inc';
-
-
-/**
- * Implements hook_theme().
- */
-function html5_media_theme() {
-  
-  $template_path = drupal_get_path('module', 'html5_media') . '/templates';
-  
-  // Add the media render element.
-  $theme['media_player'] = array(
-    'variables' => array('params' => array()),
-    'path' => $template_path,
-    'template' => 'media_player'
-  );
-  
-  // Add the media controls element.
-  $theme['media_controls'] = array(
-    'variables' => array('params' => array()),
-    'path' => $template_path,
-    'template' => 'media_controls'    
-  );
-
-  return $theme;
-}
-
-/**
- * Converts a Drupal file object into a source object for HTML5.
- * 
- * @param type $file 
- */
-function html5_media_source($file) {
+function html5_media_field_formatter_info() {
   return array(
-    'src' => file_create_url($file['uri']),
-    'type' => $file['filemime']
-  );
-}
-
-/**
- * Converts the settings into an attributes array.
- */
-function html5_media_attributes($settings) {
-  $attributes = array();
-  
-  // Add the width.
-  $attributes['width'] = $settings['width'] ? $settings['width'] : '550';
-  $attributes['width'] = $settings['fluidwidth'] ? '100%' : ($attributes['width'] . 'px');
-  
-  // Add the height only if it is set.
-  if( isset($settings['height']) && ($settings['height'] > 0) && !$settings['fluidheight']) {
-    $attributes['height'] = $settings['height'] . 'px';
-  }
-  
-  // Add the controls.
-  $attributes['controls'] = NULL;
-  return $attributes;
-}
-
-/**
- * Get's the media element info from other modules.
- * 
- * @return type 
- */
-function html5_media_get_media_element_info() {
-  
-  // Get the info from cache.
-  $info = cache_get('media_element_info', 'cache_media');
-  if( $info ) {
-    
-    // Return immediately if the cache is set.
-    return $info->data;
-  }
-  
-  // Get the media element info.
-  $info = module_invoke_all('media_element_info');
-  cache_set('media_element_info', $info);
-  return $info;
-}
-
-/**
- * Preprocess function for media_player
- */
-function template_preprocess_media_player(&$variables) {
-  $params = $variables['params'];
-  $field_name = $params['#field']['field_name'];
-  $langcode = $params['#entity']->language;
-  
-  // Add the files object to the variables.
-  $variables['media_files'] = $params['#entity']->{$field_name}[$langcode];
-  
-  // Get the element type for this media based on the first file uploaded.
-  $type = explode('/', $variables['media_files'][0]['filemime']);
-  $type = $type[0];
-  $variables['media_type'] = in_array($type, array('audio', 'video')) ? $type : 'div';
-  
-  // Get the attributes for this media element.
-  $settings = $params['#instance']['widget']['settings']['mediaplayer'];
-  $variables['media_attributes'] = html5_media_attributes($settings);
-  
-  // Allow other modules to add their own source's.
-  $variables['media_plugins'] = array();
-  $infos = html5_media_get_media_element_info();
-  foreach( $infos as $plugin_type => $info ) {
-    if( isset($info['plugin_callback']) ) {
-      
-      // Merge all the plugins into a single plugins array.
-      $variables['media_plugins'][] = $info['plugin_callback']($variables);
-    }
-  }   
-}
-
-/**
- * Implements our own hook_media_element_info
- */
-function html5_media_element_info() {
-  return array(
-    'controls' => array(
-      'plugin_callback' => 'html5_media_controls'
+    'html5_audio' => array(
+      'label' => t('Audio'),
+      'description' => t('Play this file as audio.'),
+      'field types' => array('file'),
+      'settings' => array(
+        'controls' => TRUE,
+        'preload' => TRUE,
+        'autoplay' => FALSE,
+        'loop' => FALSE
+      )
+    ),    
+    'html5_video' => array(
+      'label' => t('Video'),
+      'description' => t('Display this file as a video.'),
+      'field types' => array('file'),
+      'settings' => array(
+        'controls' => TRUE,
+        'preload' => TRUE,
+        'autoplay' => FALSE,
+        'loop' => FALSE
+      )
     )
   );
 }
 
 /**
- * Returns a control bar template.
- * 
- * @param type $variables 
+ * Implements hook_field_formatter_settings_form
  */
-function html5_media_controls($variables) {
-  return theme('media_controls', $variables);
+function html5_media_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $element = array();
+  if (($display['type'] == 'html5_audio') || ($display['type'] == 'html5_video')) {
+    
+    $element['preload'] = array(
+      '#title' => t('Preload'),
+      '#type' => 'checkbox',
+      '#default_value' => $settings['preload']
+    );
+    
+    $element['autoplay'] = array(
+      '#title' => t('Autoplay'),
+      '#type' => 'checkbox',
+      '#default_value' => $settings['autoplay']
+    );
+    
+    $element['loop'] = array(
+      '#title' => t('Loop'),
+      '#type' => 'checkbox',
+      '#default_value' => $settings['loop']
+    );    
+  }
+  return $element;
 }
 
 /**
- * API to get a media player display.
+ * Implements hook_field_formatter_settings_summary
  */
-function html5_media_get_player() {
-  $args = func_get_args();
-  $params = $args[0];
-  
+function html5_media_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $summary = '';
+  if (($display['type'] == 'html5_audio') || ($display['type'] == 'html5_video')) {
+    $header = array('Setting', 'Value');
+    $rows = array();
+    foreach ($settings as $name => $value) {
+      $rows[] = array($name, $value);
+    }
+    $summary = theme('table', array('header' => $header, 'rows' => $rows));
+  }
+  return $summary;
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function html5_media_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+  switch ($display['type']) {
+    case 'html5_audio':
+      foreach ($items as $delta => $item) {
+        $element[$delta] = array(
+          '#theme' => 'html_tag',
+          '#tag' => 'audio',
+          '#attributes' => array(
+            'src' => file_create_url($item['uri']),
+          ),
+        );
+      }
+      break;
+
+    case 'html5_video':
+      foreach ($items as $delta => $item) {
+        $element[$delta] = array(
+          '#theme' => 'html_tag',
+          '#tag' => 'video',
+          '#attributes' => array(
+            'src' => file_create_url($item['uri']),
+          ),
+        );
+      }
+      break;
+  }
+  return $element;
 }
