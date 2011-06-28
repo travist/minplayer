@@ -1,59 +1,111 @@
 <?php
 /**
- * This module currently does not do anything.
- */
-
-
-/**
- * Implements hook_theme().
- */
-function html5_media_theme() {
-  
-  // Add the media render element.
-  $theme['mediaplayer'] = array(
-    'render element' => 'element',
-    'arguments' => array('entity' => NULL)
-  );
-
-  return $theme;
-}
-
-/**
  * Implements hook_field_formatter_info().
  */
 function html5_media_field_formatter_info() {
   return array(
-    'mediaplayer' => array(
-      'label' => t('Media Player'),
-      'description' => t('Display this file within a media player.'),
-      'field types' => array('file')
+    'html5_audio' => array(
+      'label' => t('Audio'),
+      'description' => t('Play this file as audio.'),
+      'field types' => array('file'),
+      'settings' => array(
+        'controls' => TRUE,
+        'preload' => TRUE,
+        'autoplay' => FALSE,
+        'loop' => FALSE
+      )
+    ),    
+    'html5_video' => array(
+      'label' => t('Video'),
+      'description' => t('Display this file as a video.'),
+      'field types' => array('file'),
+      'settings' => array(
+        'controls' => TRUE,
+        'preload' => TRUE,
+        'autoplay' => FALSE,
+        'loop' => FALSE
+      )
     )
   );
 }
 
 /**
+ * Implements hook_field_formatter_settings_form
+ */
+function html5_media_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $element = array();
+  if (($display['type'] == 'html5_audio') || ($display['type'] == 'html5_video')) {
+    
+    $element['preload'] = array(
+      '#title' => t('Preload'),
+      '#type' => 'checkbox',
+      '#default_value' => $settings['preload']
+    );
+    
+    $element['autoplay'] = array(
+      '#title' => t('Autoplay'),
+      '#type' => 'checkbox',
+      '#default_value' => $settings['autoplay']
+    );
+    
+    $element['loop'] = array(
+      '#title' => t('Loop'),
+      '#type' => 'checkbox',
+      '#default_value' => $settings['loop']
+    );    
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary
+ */
+function html5_media_field_formatter_settings_summary($field, $instance, $view_mode) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $summary = '';
+  if (($display['type'] == 'html5_audio') || ($display['type'] == 'html5_video')) {
+    $header = array('Setting', 'Value');
+    $rows = array();
+    foreach ($settings as $name => $value) {
+      $rows[] = array($name, $value);
+    }
+    $summary = theme('table', array('header' => $header, 'rows' => $rows));
+  }
+  return $summary;
+}
+
+/**
  * Implements hook_field_formatter_view().
  */
-function html5_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
-  return array(array(
-    '#theme' => 'mediaplayer',
-    '#entity' => $entity
-  ));
-}
+function html5_media_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+  switch ($display['type']) {
+    case 'html5_audio':
+      foreach ($items as $delta => $item) {
+        $element[$delta] = array(
+          '#theme' => 'html_tag',
+          '#tag' => 'audio',
+          '#attributes' => array(
+            'src' => file_create_url($item['uri']),
+          ),
+        );
+      }
+      break;
 
-/**
- * Implement the theme for the media player.
- */
-function theme_mediaplayer( $entity ) {
-  $output = '<video' . drupal_attributes($variables['attributes']) . '></video>';
-  return $output;
-}
-
-/**
- * API to get a media player display.
- */
-function html5_media_get_player() {
-  $args = func_get_args();
-  $params = $args[0];
-  
+    case 'html5_video':
+      foreach ($items as $delta => $item) {
+        $element[$delta] = array(
+          '#theme' => 'html_tag',
+          '#tag' => 'video',
+          '#attributes' => array(
+            'src' => file_create_url($item['uri']),
+          ),
+        );
+      }
+      break;
+  }
+  return $element;
 }
