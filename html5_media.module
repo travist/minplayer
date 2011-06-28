@@ -78,9 +78,24 @@ function html5_media_field_formatter_settings_summary($field, $instance, $view_m
 }
 
 /**
+ * Returns the settings for this video or audio element.
+ */
+function html5_media_get_attributes($item, $settings) {
+  $attributes = array();
+  $attributes['src'] = file_create_url($item['uri']);
+  foreach ($settings as $name => $value) {
+    if ($value) {
+      $attributes[$name] = NULL;
+    }
+  }
+  return $attributes;
+}
+
+/**
  * Implements hook_field_formatter_view().
  */
 function html5_media_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $settings = $display['settings'];  
   $element = array();
   switch ($display['type']) {
     case 'html5_audio':
@@ -88,9 +103,7 @@ function html5_media_field_formatter_view($entity_type, $entity, $field, $instan
         $element[$delta] = array(
           '#theme' => 'html_tag',
           '#tag' => 'audio',
-          '#attributes' => array(
-            'src' => file_create_url($item['uri']),
-          ),
+          '#attributes' => html5_media_get_attributes($item, $settings),
         );
       }
       break;
@@ -100,9 +113,7 @@ function html5_media_field_formatter_view($entity_type, $entity, $field, $instan
         $element[$delta] = array(
           '#theme' => 'html_tag',
           '#tag' => 'video',
-          '#attributes' => array(
-            'src' => file_create_url($item['uri']),
-          ),
+          '#attributes' => html5_media_get_attributes($item, $settings),
         );
       }
       break;
