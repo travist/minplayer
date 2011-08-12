@@ -1,6 +1,4 @@
-/* 
- * File object to contain all information important to a media file.
- */
+Drupal.media = Drupal.media ? Drupal.media : {};
 (function(media) {
   media.file = function( file ) {
     this.duration = file.duration ? file.duration : 0;
@@ -8,14 +6,61 @@
     this.quality = file.quality ? file.quality : 0;
     this.stream = file.stream ? file.stream : '';
     this.path = file.path ? file.path : '';
+    this.codecs = file.codecs ? file.codecs : '';
 
     // These should be provided, but just in case...
     this.extension = file.extension ? file.extension : this.getFileExtension();
     this.mimetype = file.mimetype ? file.mimetype : this.getMimeType();
     this.type = file.type ? file.mediatype : this.getType();
+    this.player = file.player ? file.player : this.getBestPlayer();
+    this.priority = file.priority ? file.priority : this.getPriority();
   };
 
   media.file.prototype = {
+    
+    /**
+     * Returns the best media player for this file.
+     */
+    getBestPlayer: function() {
+      var bestplayer = null;
+      var bestpriority = 0;
+      var _this = this;
+      jQuery.each(media.players, function(name, player) {
+        var priority = player.getPriority();
+        if (player.canPlay(_this) && (priority > bestpriority)) {
+          bestplayer = name;
+          bestpriority = priority;
+        }
+      });
+      return bestplayer;
+    },
+    
+    /**
+     * The priority of this file is determined by the priority of the best player multiplied by the 
+     * priority of the mimetype.
+     */
+    getPriority: function() {
+      var priority = 1;
+      if (this.player) {
+        priority = media.players[this.player].getPriority();
+      }
+      switch (this.mimetype) {
+        case 'video/x-webm':
+          return priority*10;
+        case 'video/mp4':
+        case 'audio/mp4':
+        case 'audio/mpeg':
+          return priority*9;
+        case 'video/ogg':
+        case 'audio/ogg':
+        case 'video/quicktime':
+          return priority*8;
+        default:
+          return priority*5;     
+      }
+      return priority;  
+    },    
+    
     getFileExtension: function() {
       return this.path.substring(this.path.lastIndexOf(".") + 1).toLowerCase();
     },
@@ -63,6 +108,6 @@
       }
     }
   };
-})(Drupal ? Drupal.media : {});
+})(Drupal.media);
 
 

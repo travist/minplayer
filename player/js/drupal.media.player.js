@@ -1,49 +1,138 @@
-(function($, media) {
-  /*
-   * This is the main media player file for the media player.
-   *
-   * Although this is designed to play HTML5, it will have a pluggable
-   * system that will allow any module to implement their own javascript
-   * class to implement their own player API's.
-   */
-
+Drupal.media = Drupal.media ? Drupal.media : {};
+(function($, media) {   
   /**
    * Constructor for the media.player
    */
-  media.player = function( context ) {
+  media.player = function( context, options ) {
+    
+    // Make sure we provide default options...
+    options = jQuery.extend({
+      controller:"base",
+      template:"default",
+      id:"player",
+      volume:80
+    }, options);
+    
+    // Derive from display
+    media.display.call(this, context, options);
+
+    // Store the this pointer for callbacks.
+    var _this = this;
 
     // The current player.
     this.media = null;
+    
+    // The controllers that control this media player.
+    this.controllers = [];
+    
+    // Setup our template.
+    if (media.templates[options.template]) {
+      this.template = new media.templates[options.template](context, options);
+    }    
+    
+    // Add the default controller.
+    if (media.controllers[options.controller]) {
+      this.addController(new media.controllers[options.controller](jQuery(options.id + "_controller", context), options));
+    }
 
-    // The media display.
-    this.display = $(context);
+    // The best media file to play.
+    this.mediaFile = null;
 
-    // Define the load function.
-    this.load = function( file ) {
-
-      // Empty the current display.
-      this.display.empty();
-
-      // Get the media player for this file.
-      this.mediaFile = new media.file( file );
-
-      // Now get the player for this file.
-      this.media = new this.getPlayer();
-
-      // Now create the media player.
-      this.media.loadPlayer();
-    };
+    // Get the files involved...
+    var _files = [];
+    var mediaDisplay = $(options.id + "_player");
+    var mediaSrc = mediaDisplay.attr('src');
+    if (mediaSrc) {
+      _files.push({"path":mediaSrc});
+    }
+    $("source", mediaDisplay).each(function() {
+      _files.push({
+        "path":$(this).attr('src'), 
+        "mimetype":$(this).attr('type'), 
+        "codecs":$(this).attr('codecs')
+      });
+    });
+    
+    // Now load these files.
+    this.load(_files);
   }
 
   /**
    * Define the media player interface.
    */
-  media.player.prototype = {
-    getPlayer: function() {
-      alert('No media players defined!');
-      return null;
+  media.player.prototype = new media.display();
+  media.player.prototype.constructor = media.player;
+  media.player.prototype = jQuery.extend(media.player.prototype, {
+    
+    // Returns the best media file to play given a list of files.
+    getMediaFile: function(files) {
+      if (typeof files == 'string') {
+        return new media.file({"path":file});
+      }
+      
+      if (files.path) {
+        return new media.file(file);
+      }
+      
+      // Add the files and get the best player to play.
+      var i=files.length;
+      var bestPriority = 0;
+      var mediaFile = null;
+      while(i--) {
+        var file = files[i];
+        
+        // Get the media file object.
+        file = (typeof file == 'string') ? new media.file({"path":file}) : new media.file(file);
+        
+        // Determine the best file for this browser.
+        if (file.priority > bestPriority) {
+          mediaFile = file;
+        }
+      }
+      
+      // Return the media file.
+      return mediaFile;
     },
-    loadPlayer: function() {},
+    
+    // Load a set of files or a single file for the media player.
+    load:function(files) {
+      
+      // Empty the current media display.
+      if (this.media) {
+        this.media.destroy();
+      }
+      
+      // Get the best media file.
+      this.mediaFile = this.getMediaFile(files);
+      
+      // Create a new media player for this file.
+      this.media = new media.players[this.mediaFile.player]($(this.options.id + "_display"), this.options);
+      
+      // Iterate through all controllers and add the player to them.
+      var i = this.controllers.length;
+      while (i--) {
+        this.controllers[i].setPlayer(this.media);
+      }
+      
+      // Set the template media player.
+      if (this.template) {
+        this.template.setPlayer(this.media);
+      }
+      
+      // Now load this media.
+      this.media.load(this.mediaFile);
+    },
+    
+    // Allow multiple controllers.
+    addController: function(controller) {
+      
+      // Only continue if the controller exists.
+      if (controller.isValid()) {
+
+        // Add to controllers.
+        this.controllers.push(controller);
+      }
+    },
     play: function() {
       if( this.media ) {
         this.media.play();
@@ -75,5 +164,5 @@
     getDuration: function() { 
       return this.media ? this.media.getDuration() : 0;
     }
-  };
-})(jQuery, (Drupal ? Drupal.media : {}));
+  });
+})(jQuery, Drupal.media);
