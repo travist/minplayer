@@ -13,6 +13,9 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       volume:80
     }, options);
     
+    // Set the player item.
+    options.player = this;
+    
     // Derive from display
     media.display.call(this, context, options);
 

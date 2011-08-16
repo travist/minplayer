@@ -12,32 +12,54 @@ Drupal.media = Drupal.media ? Drupal.media : {};
     // Derive from base controller
     media.controllers.base.call(this, context, options);
     
-    // Set play pause state.
-    var playState = true;
-    this.setPlayPause = function(showPlay) {
-      if (showPlay != playState) {
-        playState = showPlay;
-        $(options.id + "_play", context).css('display', showPlay ? 'inherit' : 'none');
-        $(options.id + "_pause", context).css('display', showPlay ? 'none' : 'inherit');
+    var playState = false;
+    this.setPlayPause = function(state) {
+      if (state != playState) {
+        playState = state;
+        $(options.id + "_play", context).css('display', state ? 'inherit' : 'none');
+        $(options.id + "_pause", context).css('display', state ? 'none' : 'inherit');
+      }
+    };    
+    
+    // Play or pause the player.
+    this.playPause = function(state) {
+      var type = state ? "play" : "pause";
+      context.trigger(type);
+      this.setPlayPause(state);
+      if (this.player) {
+        this.player[type]();
       }
     };
     
     // Trigger the controller events.
     $(options.id + "_play", context).bind("click", {obj:this}, function(event) {
       event.preventDefault();
-      context.trigger("play");
-      event.data.obj.setPlayPause(false);
-      if (event.data.obj.player) {
-        event.data.obj.player.play();
-      }
+      event.data.obj.playPause(true);
     });
     
     $(options.id + "_pause", context).bind("click", {obj:this}, function(event) {
       event.preventDefault();
-      context.trigger("pause");
-      event.data.obj.setPlayPause(true);
-      if (event.data.obj.player) {
-        event.data.obj.player.pause();
+      event.data.obj.playPause(false);
+    });
+    
+    // Fullscreen button.
+    $(options.id + "_fullscreen").css("pointer", "hand").click(function() {
+      var isFull = $(options.player.display).hasClass("fullscreen");
+      if (isFull) {
+        $(options.player.display).removeClass("fullscreen");
+      }
+      else {
+        $(options.player.display).addClass("fullscreen");
+      }
+    });
+    
+    // Add key events to the window.
+    var _this = this;
+    $(window).keyup( function( event ) {
+      // Escape out of fullscreen if they press ESC or Q.
+      var isFull = $(options.player.display).hasClass("fullscreen");
+      if (isFull && (event.keyCode == 113 || event.keyCode == 27)) {
+        $(options.player.display).removeClass("fullscreen");
       }
     });
     
@@ -82,19 +104,22 @@ Drupal.media = Drupal.media ? Drupal.media : {};
           event.data.obj.timer.text(timeString);
         }
       });
-      
+
       // Register the events for the control bar to control the media.
       var _this = this;
       this.seekBar.slider({
         start: function(event,ui) {
+          console.log("start");
           _this.dragging = true;
         },
         stop: function(event,ui) {
+          console.log("stop");
           _this.dragging = false;
           var time = (ui.value/100)*player.getDuration();
           player.seek(time);
         },
         slide: function(event,ui) {
+          console.log("slide");
           var time = (ui.value/100)*player.getDuration();
           if (!_this.dragging) {
             player.seek(time);
