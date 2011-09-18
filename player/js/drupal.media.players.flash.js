@@ -29,25 +29,26 @@ Drupal.media = Drupal.media ? Drupal.media : {};
 
     // Called when the flash provides a media update.
     this.onMediaUpdate = function(eventType) {
-      switch (eventType) {
-        case 'mediaMeta':
-          clearInterval(durationInterval);
-          this.trigger("loadeddata");
-          this.trigger("loadedmetadata");
-          this.trigger("durationchange", {duration:this.getDuration()});
-          break;
-        case 'mediaPlaying':
-          this.trigger("playing");
-          interval = setInterval(function() {
-            _this.trigger("timeupdate", {currentTime:_this.getCurrentTime(), duration:_this.getDuration()});
-          }, 1000);
-          break;
-        case 'mediaPaused':
-          this.trigger("pause");
-          clearInterval(interval);
-          break;
+      if (this.ready) {
+        switch (eventType) {
+          case 'mediaMeta':
+            clearInterval(durationInterval);
+            this.trigger("loadeddata");
+            this.trigger("loadedmetadata");
+            this.trigger("durationchange", {duration:this.getDuration()});
+            break;
+          case 'mediaPlaying':
+            this.trigger("playing");
+            interval = setInterval(function() {
+              _this.trigger("timeupdate", {currentTime:_this.getCurrentTime(), duration:_this.getDuration()});
+            }, 1000);
+            break;
+          case 'mediaPaused':
+            this.trigger("pause");
+            clearInterval(interval);
+            break;
+        }
       }
-      console.log(eventType);
     };
   };
 

@@ -15,7 +15,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       wmode:"transparent",
       attributes:{},
       settings:{},
-      debug:true
+      debug:false
     }, options);
 
     // Set the player item.
