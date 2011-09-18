@@ -14,7 +14,8 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       swfplayer:"",
       wmode:"transparent",
       attributes:{},
-      settings:{}
+      settings:{},
+      debug:true
     }, options);
 
     // Set the player item.
@@ -39,6 +40,9 @@ Drupal.media = Drupal.media ? Drupal.media : {};
 
       // Store the this pointer for callbacks.
       var _this = this;
+
+      // Store this player in global scope so that it can be accessed by outside libraries.
+      media.player[this.options.id] = this;
 
       // The current player.
       this.media = null;
