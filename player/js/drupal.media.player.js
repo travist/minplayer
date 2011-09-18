@@ -14,7 +14,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       swfplayer:"",
       wmode:"transparent",
       attributes:{},
-      flashVars:{}
+      settings:{}
     }, options);
 
     // Set the player item.

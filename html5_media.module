@@ -28,15 +28,19 @@ function html5_media_theme() {
 /**
  * Register a new media player in JavaScript.
  */
-function html5_media_register_player($playerId, $attributes) {
+function html5_media_register_player($playerId, $settings, $attributes) {
   $playerId = check_plain($playerId);
   $attributes = drupal_json_encode($attributes);
+  $settings = drupal_json_encode($settings);
+  $swfplayer = url(drupal_get_path('module', 'html5_media') . '/player/minplayer/minplayer.swf');
   drupal_add_js("
     jQuery(function() {
       var playerId = '#{$playerId}';
       new Drupal.media.player(jQuery(playerId), {
         id:playerId,
-        attributes:{$attributes}
+        attributes:{$attributes},
+        settings:{$settings},
+        swfplayer:'{$swfplayer}'
       });
     });
   ", 'inline');
@@ -62,7 +66,7 @@ function theme_media_player($variables) {
   $variables['settings'] = $variables['element']['#settings'];
 
   // Register the media player in JavaScript.
-  html5_media_register_player($variables['settings']['id'], $variables['element']['#attributes']);
+  html5_media_register_player($variables['settings']['id'], $variables['element']['#settings'], $variables['element']['#attributes']);
 
   // Return the theme for our media player.
   return theme('media_player_' . $template, $variables);

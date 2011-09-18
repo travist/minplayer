@@ -16,6 +16,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
 
   // See if we can play this player.
   media.players.html5.canPlay = function(file) {
+    return false;
     switch (file.mimetype) {
       case "video/ogg":
         return media.playTypes.videoOGG;

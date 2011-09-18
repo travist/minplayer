@@ -50,8 +50,8 @@ Drupal.media = Drupal.media ? Drupal.media : {};
     var element = document.createElement('object');
     element.setAttribute('classid', 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000');
     element.setAttribute('codebase', protocol + '://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0');
-    element.setAttribute('width', width + 'px');
-    element.setAttribute('height', height + 'px');
+    element.setAttribute('width', width);
+    element.setAttribute('height', height);
     element.setAttribute('id', id);
     element.setAttribute('name', id);
     element.setAttribute('playerType', playerType);
@@ -82,8 +82,8 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       embed.setAttribute((paramKey === 'movie') ? 'src' : paramKey, params[paramKey]);
     }
 
-    embed.setAttribute('width', width + 'px');
-    embed.setAttribute('height', height + 'px');
+    embed.setAttribute('width', width);
+    embed.setAttribute('height', height);
     embed.setAttribute('id', id);
     embed.setAttribute('name', id);
     embed.setAttribute('swLiveConnect', 'true');
@@ -106,14 +106,21 @@ Drupal.media = Drupal.media ? Drupal.media : {};
     // Create a new flash player.
     create: function() {
 
+      // The flash variables for this flash player.
+      var flashVars = {
+        'config':'nocontrols',
+        'file':this.mediaFile.path,
+        'autostart':this.options.settings.autoplay
+      };
+
       // Return a flash media player object.
       return media.players.flash.getFlash(
         this.options.swfplayer,
         this.options.id + "_player",
         "flash",
-        this.options.width,
-        this.options.height,
-        this.options.flashVars,
+        this.options.settings.width,
+        this.options.settings.height,
+        flashVars,
         this.options.wmode
       );
     },

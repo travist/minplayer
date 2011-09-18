@@ -42,10 +42,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
         $(this.playerId, this.display).remove();
 
         // Create a new media player element.
-        var element = this.create();
-        if (element) {
-          this.display.html(element);
-        }
+        this.display.html(this.create());
       }
 
       // Get the player object...
