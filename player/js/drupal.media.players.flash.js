@@ -7,6 +7,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
 
     var _this = this;
     var interval = null;
+    var durationInterval = null;
     this.duration = 0;
 
     // Derive from players base.
@@ -18,10 +19,10 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       this.trigger("loadstart");
 
       // Perform a check for the duration every second until it shows up.
-      var durationCheck = setInterval(function() {
-        console.log('check');
+      durationInterval = setInterval(function() {
         if (_this.getDuration()) {
-          clearInterval(durationCheck);
+          clearInterval(durationInterval);
+          _this.trigger("durationchange", {duration:_this.getDuration()});
         }
       }, 1000);
     };
@@ -30,6 +31,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
     this.onMediaUpdate = function(eventType) {
       switch (eventType) {
         case 'mediaMeta':
+          clearInterval(durationInterval);
           this.trigger("loadeddata");
           this.trigger("loadedmetadata");
           this.trigger("durationchange", {duration:this.getDuration()});
