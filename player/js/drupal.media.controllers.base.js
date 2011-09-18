@@ -1,19 +1,16 @@
 Drupal.media = Drupal.media ? Drupal.media : {};
 (function($, media) {
-  
+
   // Define the controllers object.
   media.controllers = media.controllers ? media.controllers : {};
-  
+
   // Templates constructor.
   media.controllers.base = function(context, options) {
-    
+
     // Derive from display
     media.display.call(this, context, options);
-    
-    // The media player.
-    this.player = null;
   };
-  
+
   /**
    * A static function that will format a time value into a string time format.
    */
@@ -46,13 +43,21 @@ Drupal.media = Drupal.media ? Drupal.media : {};
   media.controllers.base.prototype = new media.display();
   media.controllers.base.prototype.constructor = media.controllers.base;
   media.controllers.base.prototype = jQuery.extend(media.controllers.base.prototype, {
-  
-    /**
-     * Sets the media player....
-     */
+
+    // Constructor.
+    construct: function() {
+
+      // Call the media display constructor.
+      media.display.prototype.construct.call(this);
+
+      // The media player.
+      this.player = null;
+    },
+
+    // Sets the media player....
     setPlayer: function(player) {
       this.player = player;
-    }    
+    }
   });
-  
-})(jQuery, Drupal.media); 
+
+})(jQuery, Drupal.media);

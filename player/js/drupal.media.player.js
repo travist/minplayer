@@ -1,63 +1,27 @@
 Drupal.media = Drupal.media ? Drupal.media : {};
-(function($, media) {   
+(function($, media) {
   /**
    * Constructor for the media.player
    */
   media.player = function( context, options ) {
-    
+
     // Make sure we provide default options...
     options = jQuery.extend({
       controller:"base",
       template:"default",
       id:"player",
-      volume:80
+      volume:80,
+      swfplayer:"",
+      wmode:"transparent",
+      attributes:{},
+      flashVars:{}
     }, options);
-    
+
     // Set the player item.
     options.player = this;
-    
+
     // Derive from display
     media.display.call(this, context, options);
-
-    // Store the this pointer for callbacks.
-    var _this = this;
-
-    // The current player.
-    this.media = null;
-    
-    // The controllers that control this media player.
-    this.controllers = [];
-    
-    // Setup our template.
-    if (media.templates[options.template]) {
-      this.template = new media.templates[options.template](context, options);
-    }    
-    
-    // Add the default controller.
-    if (media.controllers[options.controller]) {
-      this.addController(new media.controllers[options.controller](jQuery(options.id + "_controller", context), options));
-    }
-
-    // The best media file to play.
-    this.mediaFile = null;
-
-    // Get the files involved...
-    var _files = [];
-    var mediaDisplay = $(options.id + "_player");
-    var mediaSrc = mediaDisplay.attr('src');
-    if (mediaSrc) {
-      _files.push({"path":mediaSrc});
-    }
-    $("source", mediaDisplay).each(function() {
-      _files.push({
-        "path":$(this).attr('src'), 
-        "mimetype":$(this).attr('type'), 
-        "codecs":$(this).attr('codecs')
-      });
-    });
-    
-    // Now load these files.
-    this.load(_files);
   }
 
   /**
@@ -66,69 +30,125 @@ Drupal.media = Drupal.media ? Drupal.media : {};
   media.player.prototype = new media.display();
   media.player.prototype.constructor = media.player;
   media.player.prototype = jQuery.extend(media.player.prototype, {
-    
+
+    // Constructor
+    construct: function() {
+
+      // Call the media display constructor.
+      media.display.prototype.construct.call(this);
+
+      // Store the this pointer for callbacks.
+      var _this = this;
+
+      // The current player.
+      this.media = null;
+
+      // The controllers that control this media player.
+      this.controllers = [];
+
+      // Setup our template.
+      if (media.templates[this.options.template]) {
+        this.template = new media.templates[this.options.template](this.display, this.options);
+      }
+
+      // Add the default controller.
+      if (media.controllers[this.options.controller]) {
+        this.addController(new media.controllers[this.options.controller](jQuery(this.options.id + "_controller", this.display), this.options));
+      }
+
+      // Variable to store the current media file.
+      this.mediaFile = {player:"html5"};
+
+      // Get the files involved...
+      var _files = [];
+      var mediaDisplay = $(this.options.id + "_player");
+      var mediaSrc = mediaDisplay.attr('src');
+      if (mediaSrc) {
+        _files.push({"path":mediaSrc});
+      }
+      $("source", mediaDisplay).each(function() {
+        _files.push({
+          "path":$(this).attr('src'),
+          "mimetype":$(this).attr('type'),
+          "codecs":$(this).attr('codecs')
+        });
+      });
+
+      // Now load these files.
+      this.load(_files);
+    },
+
     // Returns the best media file to play given a list of files.
     getMediaFile: function(files) {
       if (typeof files == 'string') {
         return new media.file({"path":file});
       }
-      
+
       if (files.path) {
         return new media.file(file);
       }
-      
+
       // Add the files and get the best player to play.
       var i=files.length;
       var bestPriority = 0;
       var mediaFile = null;
       while(i--) {
         var file = files[i];
-        
+
         // Get the media file object.
         file = (typeof file == 'string') ? new media.file({"path":file}) : new media.file(file);
-        
+
         // Determine the best file for this browser.
         if (file.priority > bestPriority) {
           mediaFile = file;
         }
       }
-      
+
       // Return the media file.
       return mediaFile;
     },
-    
+
     // Load a set of files or a single file for the media player.
     load:function(files) {
-      
-      // Empty the current media display.
-      if (this.media) {
-        this.media.destroy();
-      }
-      
+
+      // Get the current media player.
+      var currentPlayer = this.mediaFile.player;
+
       // Get the best media file.
       this.mediaFile = this.getMediaFile(files);
-      
-      // Create a new media player for this file.
-      this.media = new media.players[this.mediaFile.player]($(this.options.id + "_display"), this.options);
-      
-      // Iterate through all controllers and add the player to them.
-      var i = this.controllers.length;
-      while (i--) {
-        this.controllers[i].setPlayer(this.media);
+
+      // Only destroy if the current player is different than the new player.
+      if (!this.media || (this.mediaFile.player != currentPlayer)) {
+
+        // Make sure the player has an option to cleanup.
+        if (this.media) {
+          this.media.destroy();
+        }
+
+        // Create a new media player for this file.
+        this.media = new media.players[this.mediaFile.player]($(this.options.id + "_display"), this.options, this.mediaFile);
+
+        // Iterate through all controllers and add the player to them.
+        var i = this.controllers.length;
+        while (i--) {
+          this.controllers[i].setPlayer(this.media);
+        }
+
+        // Set the template media player.
+        if (this.template) {
+          this.template.setPlayer(this.media);
+        }
       }
-      
-      // Set the template media player.
-      if (this.template) {
-        this.template.setPlayer(this.media);
+
+      if (this.media) {
+        // Now load this media.
+        this.media.load(this.mediaFile);
       }
-      
-      // Now load this media.
-      this.media.load(this.mediaFile);
     },
-    
+
     // Allow multiple controllers.
     addController: function(controller) {
-      
+
       // Only continue if the controller exists.
       if (controller.isValid()) {
 
@@ -161,10 +181,10 @@ Drupal.media = Drupal.media ? Drupal.media : {};
         this.media.setVolume( vol );
       }
     },
-    getVolume: function() { 
+    getVolume: function() {
       return this.media ? this.media.getVolume() : 0;
     },
-    getDuration: function() { 
+    getDuration: function() {
       return this.media ? this.media.getDuration() : 0;
     }
   });

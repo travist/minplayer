@@ -3,82 +3,17 @@ Drupal.media = Drupal.media ? Drupal.media : {};
   media.players = media.players ? media.players : {};
 
   // Player constructor.
-  media.players.html5 = function(context, options) {
-    
-    // Derive players base.
-    media.players.base.call(this, context, options);
-    
-    // See if we are loaded.
-    this.loaded = false;
-    
-    // Get the player...
-    this.player = $(this.options.id + "_player", context).eq(0)[0];
-    
-    // Store the this pointer...
-    var _this = this;  
-    
-    // For the HTML5 player, we will just pass events along...
-    if( this.player ) {
-      this.player.addEventListener( "abort", function() {
-        _this.trigger("abort");
-      }, true);
-      this.player.addEventListener( "loadstart", function() {
-        _this.trigger("loadstart");
-      }, true);
-      this.player.addEventListener( "loadeddata", function() {
-        _this.trigger("loadeddata");
-      }, true);
-      this.player.addEventListener( "loadedmetadata", function() {
-        _this.trigger("loadedmetadata");
-      }, true);
-      this.player.addEventListener( "canplaythrough", function() {
-        _this.trigger("canplaythrough");
-      }, true);
-      this.player.addEventListener( "ended", function() {
-        _this.trigger("ended");
-      }, true);
-      this.player.addEventListener( "pause", function() {
-        _this.trigger("pause");
-      }, true);
-      this.player.addEventListener( "play", function() {
-        _this.trigger("play");
-      }, true);
-      this.player.addEventListener( "playing", function() {
-        _this.trigger("playing");
-      }, true);
-      this.player.addEventListener( "error", function() {
-        _this.trigger("error");
-      }, true);
-      this.player.addEventListener( "waiting", function() {
-        _this.trigger("waiting");
-      }, true);
-      this.player.addEventListener( "timeupdate", function(event) {
-        _this.duration = this.duration;
-        _this.currentTime = this.currentTime;
-        _this.trigger("timeupdate", {currentTime:this.currentTime, duration:this.duration});
-      }, true);
-      this.player.addEventListener( "durationchange", function() {
-        _this.duration = this.duration;
-        _this.trigger("durationchange", {duration:this.duration});
-      }, true);
-      this.player.addEventListener( "progress", function( event ) {
-        _this.trigger("progress", {loaded:event.loaded, total:event.total});
-      }, true);
+  media.players.html5 = function(context, options, mediaFile) {
 
-      if (typeof this.player.hasAttribute == "function" && this.player.hasAttribute("preload") && this.player.preload != "none") {
-        this.player.autobuffer = true;
-      } else {
-        this.player.autobuffer = false;
-        this.player.preload = "none";
-      }
-    }    
+    // Derive players base.
+    media.players.base.call(this, context, options, mediaFile);
   };
 
   // Get the priority for this player...
   media.players.html5.getPriority = function() {
     return 10;
   };
-  
+
   // See if we can play this player.
   media.players.html5.canPlay = function(file) {
     switch (file.mimetype) {
@@ -103,10 +38,96 @@ Drupal.media = Drupal.media ? Drupal.media : {};
   media.players.html5.prototype = new media.players.base();
   media.players.html5.prototype.constructor = media.players.html5;
   media.players.html5.prototype = jQuery.extend(media.players.html5.prototype, {
-    destroy: function() {
-      this.display.unbind();
-      this.display.remove(this.options.id + "_player");
+
+    // Constructor
+    construct: function() {
+
+      // Call base constructor.
+      media.players.base.prototype.construct.call(this);
+
+      // See if we are loaded.
+      this.loaded = false;
+
+      // Store the this pointer...
+      var _this = this;
+
+      // For the HTML5 player, we will just pass events along...
+      if( this.player ) {
+        this.player.addEventListener( "abort", function() {
+          _this.trigger("abort");
+        }, true);
+        this.player.addEventListener( "loadstart", function() {
+          _this.trigger("loadstart");
+        }, true);
+        this.player.addEventListener( "loadeddata", function() {
+          _this.trigger("loadeddata");
+        }, true);
+        this.player.addEventListener( "loadedmetadata", function() {
+          _this.trigger("loadedmetadata");
+        }, true);
+        this.player.addEventListener( "canplaythrough", function() {
+          _this.trigger("canplaythrough");
+        }, true);
+        this.player.addEventListener( "ended", function() {
+          _this.trigger("ended");
+        }, true);
+        this.player.addEventListener( "pause", function() {
+          _this.trigger("pause");
+        }, true);
+        this.player.addEventListener( "play", function() {
+          _this.trigger("play");
+        }, true);
+        this.player.addEventListener( "playing", function() {
+          _this.trigger("playing");
+        }, true);
+        this.player.addEventListener( "error", function() {
+          _this.trigger("error");
+        }, true);
+        this.player.addEventListener( "waiting", function() {
+          _this.trigger("waiting");
+        }, true);
+        this.player.addEventListener( "timeupdate", function(event) {
+          _this.duration = this.duration;
+          _this.currentTime = this.currentTime;
+          _this.trigger("timeupdate", {currentTime:this.currentTime, duration:this.duration});
+        }, true);
+        this.player.addEventListener( "durationchange", function() {
+          _this.duration = this.duration;
+          _this.trigger("durationchange", {duration:this.duration});
+        }, true);
+        this.player.addEventListener( "progress", function( event ) {
+          _this.trigger("progress", {loaded:event.loaded, total:event.total});
+        }, true);
+
+        if (typeof this.player.hasAttribute == "function" && this.player.hasAttribute("preload") && this.player.preload != "none") {
+          this.player.autobuffer = true;
+        } else {
+          this.player.autobuffer = false;
+          this.player.preload = "none";
+        }
+      }
     },
+
+    // Return if a player can be found.
+    playerFound: function() {
+      return (this.display.find(this.mediaFile.type).length > 0);
+    },
+
+    // Create a new <video> or <audio> element.
+    create: function() {
+      var element = document.createElement(this.mediaFile.type);
+      var attribute = '';
+      for (attribute in this.options.attributes) {
+        element.setAttribute(attribute, attributes[attribute]);
+      }
+      return element;
+    },
+
+    // Returns the player object.
+    getPlayer: function() {
+      return $(this.playerId, this.display).eq(0)[0];
+    },
+
     load: function( file ) {
       // Always call the base first on load...
       media.players.base.prototype.load.call(this, file);
@@ -117,7 +138,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
         code += file.codecs ? ' codecs="' + file.path + '">' : '>';
         $(this.options.id + "_player").attr('src', '').empty().html(code);
       }
-      
+
       // Set the loaded flag.
       this.loaded = true;
     },
