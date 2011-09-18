@@ -252,6 +252,8 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       }
     },
     getDuration: function() {
+
+      // Make sure to cache the duration since it is called often.
       if (this.duration) {
         return this.duration;
       }
