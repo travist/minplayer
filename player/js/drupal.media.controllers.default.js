@@ -91,7 +91,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
      * Adds a new media player to this controller.
      */
     setPlayer:function(player) {
-      media.controllers.base.prototype.setPlayer.call(this, player);
+      media.plugin.prototype.setPlayer.call(this, player);
       player.display.bind("pause", {obj:this}, function(event) {
         event.data.obj.setPlayPause(true);
         clearInterval(event.data.obj.interval);
@@ -145,6 +145,13 @@ Drupal.media = Drupal.media ? Drupal.media : {};
         }
       });
     }
+  });
+
+  // Add this to the media.plugins array.
+  media.plugins = media.plugins || [];
+  media.plugins.push({
+    object:media.controllers["default"],
+    id:options.id + "_controller"
   });
 
 })(jQuery, Drupal.media);

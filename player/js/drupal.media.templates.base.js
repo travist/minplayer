@@ -1,27 +1,26 @@
 Drupal.media = Drupal.media ? Drupal.media : {};
 (function($, media) {
-  
+
   // Define the templates class if need be...
   media.templates = media.templates ? media.templates : {};
-  
+
   // Templates constructor.
   media.templates.base = function(context, options) {
-    
-    // The template options.
-    this.options = options;
-    
-    // The media player.
-    this.player = null;
+
+    // Derive from plugin
+    media.plugin.call(this, context, options);
   };
 
-  // Define the prototype for all templates.
+  // Extend the plugin prototype.
+  media.templates.base.prototype = new media.plugin();
+  media.templates.base.prototype.constructor = media.templates.base;
   media.templates.base.prototype = {
-  
+
     /**
-     * Sets the new media player.
+     * The player is going into full screen mode.
      */
-    setPlayer:function(player) {
-      this.player = player;
+    onFullScreen:function(full) {
+
     }
   }
 })(jQuery, Drupal.media);

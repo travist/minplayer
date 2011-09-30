@@ -23,6 +23,29 @@
   height:100%;
 }
 
+.media-player .media-player-busy {
+  width:100%;
+  height:100%;
+  position:absolute;
+  z-index:1;
+  background: rgb(0, 0, 0);
+  background: rgba(0, 0, 0, 0.2);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#33000000, endColorstr=#33000000);
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#33000000, endColorstr=#33000000)";
+}
+
+.media-player .media-player-busy .media-player-loader {
+  width:42px;
+  height:10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -5px 0 0 -21px;
+  text-align:center;
+  vertical-align:center;
+  background: url(images/loader.gif) no-repeat;
+}
+
 .media-player.fullscreen, .media-player.fullscreen .media-player-display {
   position: fixed;
   left: 0;
@@ -37,6 +60,7 @@
 
 .media-player .media-player-controls {
   position: absolute;
+  z-index:2;
   bottom:0px;
   left:0px;
   right:0px;
@@ -87,15 +111,15 @@
   display: block;
   width: 22px;
   height: 22px;
-  margin:2px 0 0 4px;	
+  margin:2px 0 0 4px;
   opacity: 0.7;
   -moz-transition: all 0.2s ease-in-out; /* Firefox */
   -webkit-transition: all 0.2s ease-in-out; /* Safari and Chrome */
   -o-transition: all 0.2s ease-in-out;  /* Opera */
-  transition: all 0.2s ease-in-out; 
+  transition: all 0.2s ease-in-out;
 }
 
-.media-player .media-player-play:hover, .media-player .media-player-pause:hover {	
+.media-player .media-player-play:hover, .media-player .media-player-pause:hover {
   opacity: 1;
 }
 
@@ -105,7 +129,7 @@
 
 .media-player .media-player-pause {
   background: url(images/pause-icon.png) no-repeat;
-  display:none;  
+  display:none;
 }
 
 /* seek */
@@ -130,11 +154,11 @@
   top: -4px;
   -moz-border-radius:10px;
   -webkit-border-radius:10px;
-  border-radius:10px;	
+  border-radius:10px;
   background: #e6e6e6;
   background-image: -moz-linear-gradient(top, #e6e6e6, #d5d5d5);
   background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #e6e6e6),color-stop(1, #d5d5d5));
-  box-shadow: inset 0 -3px 3px #d5d5d5;	
+  box-shadow: inset 0 -3px 3px #d5d5d5;
 }
 
 .media-player .media-player-seek .ui-slider-handle.ui-state-hover {
@@ -183,7 +207,7 @@
   -moz-transition: all 0.1s ease-in-out; /* Firefox */
   -webkit-transition: all 0.1s ease-in-out; /* Safari and Chrome */
   -o-transition: all 0.2s ease-in-out;  /* Opera */
-  transition: all 0.1s ease-in-out; 
+  transition: all 0.1s ease-in-out;
 }
 
 .media-player.fullscreen .media-player-volume {
@@ -191,7 +215,7 @@
   bottom:13px;
 }
 
-.media-player .media-player-volume:hover {	
+.media-player .media-player-volume:hover {
   height: 135px;
   padding-top: 5px;
 }
@@ -203,7 +227,7 @@
   opacity: 1;
 }
 
-.media-player .media-player-volume-slider {	
+.media-player .media-player-volume-slider {
   position: relative;
   height: 100px;
   width: 7px;
@@ -221,7 +245,7 @@
   -moz-transition: all 0.1s ease-in-out; /* Firefox */
   -webkit-transition: all 0.1s ease-in-out; /* Safari and Chrome */
   -o-transition: all 0.1s ease-in-out;  /* Opera */
-  transition: all 0.1s ease-in-out; 
+  transition: all 0.1s ease-in-out;
 }
 
 .media-player .media-player-volume-slider .ui-slider-handle {
@@ -230,15 +254,15 @@
   left: -4px;
   margin-bottom:-0.6em;
   margin-left:0;
-  border: 1px solid #333;	
+  border: 1px solid #333;
   -moz-border-radius:10px;
   -webkit-border-radius:10px;
-  border-radius:10px;	
+  border-radius:10px;
   background: #e6e6e6;
   background-image: -moz-linear-gradient(top, #e6e6e6, #d5d5d5);
   background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #e6e6e6),color-stop(1, #d5d5d5));
 
-  box-shadow: inset 0 3px 3px #d5d5d5;	
+  box-shadow: inset 0 3px 3px #d5d5d5;
 }
 
 .media-player .media-player-volume-slider .ui-slider-handle.ui-state-hover {
@@ -283,7 +307,7 @@
   bottom:7px;
   width: 22px;
   height: 14px;
-  border:1px solid #aaa; 
+  border:1px solid #aaa;
 }
 
 .media-player.fullscreen .media-player-fullscreen {
@@ -300,7 +324,7 @@
   -moz-transition: all 0.1s ease-in-out; /* Firefox */
   -webkit-transition: all 0.1s ease-in-out; /* Safari and Chrome */
   -o-transition: all 0.1s ease-in-out;  /* Opera */
-  transition: all 0.1s ease-in-out;   
+  transition: all 0.1s ease-in-out;
 }
 
 .media-player .media-player-fullscreen:hover .media-player-fullscreen-inner, .media-player.fullscreen .media-player-fullscreen-inner {
@@ -327,7 +351,7 @@
   -moz-transition: all 0.1s ease-in-out; /* Firefox */
   -webkit-transition: all 0.1s ease-in-out; /* Safari and Chrome */
   -o-transition: all 0.1s ease-in-out;  /* Opera */
-  transition: all 0.1s ease-in-out; 
+  transition: all 0.1s ease-in-out;
 }
 
 
@@ -345,7 +369,7 @@
 
 .ui-slider-range {
   display:block;
-  width:100%;	
+  width:100%;
   height:100%;
   left:0;
   bottom: 0;

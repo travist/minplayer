@@ -1,4 +1,4 @@
-<div id="<?php print $settings['id']; ?>" class="media-player smalldark">
+<div id="<?php print $settings['id']; ?>" class="media-player smalldark" style="width:<?php print $settings['width']; ?>; height:<?php print $settings['height']; ?>;">
   <div id="<?php print $settings['id']; ?>_controller" class="media-player-controls" style="display: block; ">
     <div class="media-player-controls-left">
       <a id="<?php print $settings['id']; ?>_play" class="media-player-play" title="Play"></a>
@@ -18,5 +18,10 @@
       <div id="<?php print $settings['id']; ?>_seek" class="media-player-seek"></div>
     </div>
   </div>
-  <div id="<?php print $settings['id']; ?>_display" class="media-player-display" style="width:<?php print $settings['width']; ?>; height:<?php print $settings['height']; ?>;"><?php print $player; ?></div>
+  <div id="<?php print $settings['id']; ?>_busy" class="media-player-busy">
+    <div class="media-player-loader">&nbsp;</div>
+  </div>
+  <div id="<?php print $settings['id']; ?>_display" class="media-player-display">
+    <?php print $player; ?>
+  </div>
 </div>

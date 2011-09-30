@@ -7,8 +7,8 @@ Drupal.media = Drupal.media ? Drupal.media : {};
   // Templates constructor.
   media.controllers.base = function(context, options) {
 
-    // Derive from display
-    media.display.call(this, context, options);
+    // Derive from plugin
+    media.plugin.call(this, context, options);
   };
 
   /**
@@ -40,23 +40,15 @@ Drupal.media = Drupal.media ? Drupal.media : {};
   };
 
   // Define the prototype for all controllers.
-  media.controllers.base.prototype = new media.display();
+  media.controllers.base.prototype = new media.plugin();
   media.controllers.base.prototype.constructor = media.controllers.base;
   media.controllers.base.prototype = jQuery.extend(media.controllers.base.prototype, {
 
     // Constructor.
     construct: function() {
 
-      // Call the media display constructor.
-      media.display.prototype.construct.call(this);
-
-      // The media player.
-      this.player = null;
-    },
-
-    // Sets the media player....
-    setPlayer: function(player) {
-      this.player = player;
+      // Call the media plugin constructor.
+      media.plugin.prototype.construct.call(this);
     }
   });
 

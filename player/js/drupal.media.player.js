@@ -47,17 +47,15 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       // The current player.
       this.media = null;
 
-      // The controllers that control this media player.
-      this.controllers = [];
+      // An array of the plugin objects.
+      this.plugins = [];
 
-      // Setup our template.
-      if (media.templates[this.options.template]) {
-        this.template = new media.templates[this.options.template](this.display, this.options);
-      }
-
-      // Add the default controller.
-      if (media.controllers[this.options.controller]) {
-        this.addController(new media.controllers[this.options.controller](jQuery(this.options.id + "_controller", this.display), this.options));
+      // Iterate through all of our plugins and add them to our plugins array.
+      var plugin = {};
+      var pluginContext = null;
+      for (plugin in media.plugins) {
+        pluginContext = plugin.id ? jQuery(plugin.id, context) : context;
+        this.addPlugin(new plugin.object(pluginContext, options));
       }
 
       // Variable to store the current media file.
@@ -132,10 +130,10 @@ Drupal.media = Drupal.media ? Drupal.media : {};
         // Create a new media player for this file.
         this.media = new media.players[this.mediaFile.player]($(this.options.id + "_display"), this.options, this.mediaFile);
 
-        // Iterate through all controllers and add the player to them.
-        var i = this.controllers.length;
+        // Iterate through all plugins and add the player to them.
+        var i = this.plugins.length;
         while (i--) {
-          this.controllers[i].setPlayer(this.media);
+          this.plugins[i].setPlayer(this.media);
         }
 
         // Set the template media player.
@@ -150,14 +148,14 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       }
     },
 
-    // Allow multiple controllers.
-    addController: function(controller) {
+    // Allow multiple plugins.
+    addPlugin: function(plugin) {
 
-      // Only continue if the controller exists.
-      if (controller.isValid()) {
+      // Only continue if the plugin exists.
+      if (plugin.isValid()) {
 
-        // Add to controllers.
-        this.controllers.push(controller);
+        // Add to plugins.
+        this.plugins.push(plugin);
       }
     },
     play: function() {
