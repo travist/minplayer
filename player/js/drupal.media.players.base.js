@@ -31,15 +31,16 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       // Call the media display constructor.
       media.display.prototype.construct.call(this);
 
-      // The media player Id.
-      this.playerId = this.options.id + "_player";
-
       // Get the player display object.
       if (!this.playerFound()) {
 
         // Cleanup some events and code.
         this.display.unbind();
-        $(this.playerId, this.display).remove();
+
+        // Remove the media element if found
+        if (media.elements.player) {
+          media.elements.player.remove();
+        }
 
         // Create a new media player element.
         this.display.html(this.create());

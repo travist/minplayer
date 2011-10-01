@@ -6,16 +6,9 @@ Drupal.media = Drupal.media ? Drupal.media : {};
 
   // Template constructor.
   media.templates["default"] = function(context, options) {
+
+    // Derive from the base template.
     media.templates.base.call(this, context, options);
-
-    this.display.mouseover(function() {
-      console.log("mouseover");
-    }).mouseleave(function() {
-      console.log("mouseleave");
-    });
-
-    // Set the controller to the default controller.
-    options.controller = "default";
   };
 
   /**
@@ -25,12 +18,19 @@ Drupal.media = Drupal.media ? Drupal.media : {};
   media.templates["default"].prototype.constructor = media.templates["default"];
   media.templates["default"].prototype = jQuery.extend(media.templates["default"].prototype, {
 
-    setPlayer:function(player) {}
+    getElements: function() {
+      var elements = media.templates.base.prototype.getElements.call(this);
+      return jQuery.extend(elements, {
+        display:$(".media-player-display", this.display),
+        player:$(this.options.id + "_player", this.display)
+      });
+    }
   });
 
   // Add this to the media.plugins array.
   media.plugins = media.plugins || [];
   media.plugins.push({
+    id:"default_template",
     object:media.templates["default"]
   });
 

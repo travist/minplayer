@@ -1,4 +1,44 @@
 <?php
+
+/**
+ * Returns all of the media template information.
+ */
+function html5_media_get_template_info() {
+
+  // Implement hook_media_template
+  $cache = cache_get('media_template_info');
+  if ($cache) {
+    return $cache->data;
+  }
+  else {
+    // Invoke all media_template_info and then set the cache.
+    $template_info = module_invoke_all('media_template_info');
+    cache_set('media_template_info', $template_info);
+    return $template_info;
+  }
+}
+
+/**
+ * Implements hook_media_template_info
+ */
+function html5_media_media_template_info() {
+
+  // Add the default template.
+  return array(
+    'default' => array(
+      'path' => drupal_get_path('module', 'html5_media') . '/player/templates/default',
+      'js' => array(
+        'js/drupal.media.playLoader.default.js',
+        'js/drupal.media.controllers.default.js',
+        'js/jquery.media.templates.default.js'
+      ),
+      'css' => array(
+        'css/media_player_default.css'
+      )
+    )
+  );
+}
+
 /**
  * Implements hook_theme
  */
@@ -11,15 +51,13 @@ function html5_media_theme() {
   );
 
   // Register the templates
-  $templates_path = drupal_get_path('module', 'html5_media') . '/player/templates';
-  foreach (html5_media_templates() as $template) {
-    $path = $templates_path . '/' . $template;
-    $theme['media_player_' . $template] = array(
-      'template' => 'media_player_' . $template,
+  $templates = html5_media_get_template_info();
+  foreach ($templates as $name => $info) {
+    $theme['media_player_' . $name] = array(
+      'template' => 'media_player_' . $name,
       'variables' => array('params' => NULL),
-      'path' => $path
+      'path' => $info['path']
     );
-
   }
 
   return $theme;
@@ -73,33 +111,6 @@ function theme_media_player($variables) {
 }
 
 /**
- * Returns all the media player templates.
- */
-function html5_media_templates() {
-  $cache = cache_get('media_player_templates');
-  if ($cache) {
-    return $cache->data;
-  }
-
-  // Get all the folders in the player templates directory.
-  $templates = array();
-  $template_dir = getcwd() . '/' . drupal_get_path('module', 'html5_media') . '/player/templates';
-  if ($handle = opendir($template_dir)) {
-    while (FALSE !== ($dir = readdir($handle))) {
-      if ((strpos($dir, '.') === FALSE) && (is_dir($template_dir . '/' . $dir))) {
-        $templates[$dir] = $dir;
-      }
-    }
-
-    closedir($handle);
-  }
-
-  // Set this in cache...
-  cache_set('media_player_templates', $templates);
-  return $templates;
-}
-
-/**
  * Implements hook_field_formatter_info().
  */
 function html5_media_field_formatter_info() {
@@ -113,7 +124,8 @@ function html5_media_field_formatter_info() {
         'preload' => TRUE,
         'autoplay' => FALSE,
         'loop' => FALSE,
-        'width' => '100%'
+        'width' => '100%',
+        'height' => '350px'
       )
     ),
     'html5_video' => array(
@@ -125,7 +137,8 @@ function html5_media_field_formatter_info() {
         'preload' => TRUE,
         'autoplay' => FALSE,
         'loop' => FALSE,
-        'width' => '100%'
+        'width' => '100%',
+        'height' => '350px'
       )
     )
   );
@@ -140,10 +153,13 @@ function html5_media_field_formatter_settings_form($field, $instance, $view_mode
   $element = array();
   if (($display['type'] == 'html5_audio') || ($display['type'] == 'html5_video')) {
 
+    $templates = array_keys(html5_media_get_template_info());
+    $templates = array_combine($templates, $templates);
+
     $element['template'] = array(
       '#title' => t('Template'),
       '#type' => 'select',
-      '#options' => html5_media_templates(),
+      '#options' => $templates,
       '#default_value' => $settings['template']
     );
 
@@ -234,20 +250,39 @@ function html5_media_add_resources($template) {
     $path = drupal_get_path('module', 'html5_media') . '/player/js/';
 
     drupal_add_js($path . 'drupal.media.compatibility.js');
+    drupal_add_js($path . 'drupal.media.flags.js');
+    drupal_add_js($path . 'drupal.media.plugin.js');
     drupal_add_js($path . 'drupal.media.display.js');
     drupal_add_js($path . 'drupal.media.player.js');
     drupal_add_js($path . 'drupal.media.file.js');
+    drupal_add_js($path . 'drupal.media.playLoader.base.js');
     drupal_add_js($path . 'drupal.media.players.base.js');
     drupal_add_js($path . 'drupal.media.players.html5.js');
     drupal_add_js($path . 'drupal.media.players.flash.js');
     drupal_add_js($path . 'drupal.media.controllers.base.js');
-    drupal_add_js($path . 'drupal.media.controllers.default.js');
     drupal_add_js($path . 'drupal.media.templates.base.js');
 
-    // Add the template resources.
-    $path = drupal_get_path('module', 'html5_media') . '/player/templates/' . $template . '/';
-    drupal_add_js($path . 'jquery.media.templates.' . $template . '.js');
-    drupal_add_css($path . 'css/media_player_' . $template . '.css');
+    // Get the template information.
+    $templates = html5_media_get_template_info();
+
+    // If this template exists, then...
+    if (isset($templates[$template])) {
+
+      // Store the template info.
+      $template = $templates[$template];
+
+      // Include all of the template files.
+      if ($template['js']) {
+        foreach ($template['js'] as $file) {
+          drupal_add_js($template['path'] . '/' . $file);
+        }
+      }
+      if ($template['css']) {
+        foreach ($template['css'] as $file) {
+          drupal_add_css($template['path'] . '/' . $file);
+        }
+      }
+    }
   }
 }
 

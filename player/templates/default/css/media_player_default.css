@@ -23,18 +23,18 @@
   height:100%;
 }
 
-.media-player .media-player-busy {
+.media-player .media-player-play-loader {
   width:100%;
   height:100%;
   position:absolute;
   z-index:1;
   background: rgb(0, 0, 0);
-  background: rgba(0, 0, 0, 0.2);
-  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#33000000, endColorstr=#33000000);
-  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#33000000, endColorstr=#33000000)";
+  background: rgba(0, 0, 0, 0.3);
+  filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#55000000, endColorstr=#55000000);
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#55000000, endColorstr=#55000000)";
 }
 
-.media-player .media-player-busy .media-player-loader {
+.media-player .media-player-play-loader .media-player-loader {
   width:42px;
   height:10px;
   position: absolute;
@@ -46,7 +46,48 @@
   background: url(images/loader.gif) no-repeat;
 }
 
-.media-player.fullscreen, .media-player.fullscreen .media-player-display {
+/* Big play button */
+.media-player .media-player-play-loader .media-player-big-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  margin: -40px 0 0 -40px;
+  text-align: center;
+  vertical-align: center;
+  cursor: pointer !important;
+  border: none;
+  opacity: 0.9;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  background: rgba(23, 35, 34, 0.746094);
+  box-shadow: 2px 2px 4px #000;
+  -webkit-box-shadow: 2px 2px 4px #000;
+  -moz-box-shadow: 2px 2px 4px #000;
+}
+
+.media-player .media-player-play-loader .media-player-big-play span {
+  margin: 22px 0 0 48px;
+  border-left: 36px solid white;
+  border-top: 18px solid transparent;
+  border-bottom: 18px solid transparent;
+}
+
+.media-player .media-player-play-loader .media-player-big-play span {
+  display: block;
+  font-size: 0;
+  line-height: 0;
+  width: 0;
+  height: 0;
+  margin: 20px 0 0 23px;
+  border-left: 40px solid white;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+}
+
+.media-player.fullscreen, .media-player.fullscreen .media-player-display, .media-player.fullscreen .media-player-play-loader {
   position: fixed;
   left: 0;
   top: 0;
@@ -56,6 +97,10 @@
   z-index:1000;
   width: 100% !important;
   height: 100% !important;
+}
+
+.media-player.fullscreen .media-player-play-loader {
+  z-index:1001;
 }
 
 .media-player .media-player-controls {
@@ -334,7 +379,7 @@
 
 .media-player.fullscreen .media-player-controls {
   position: absolute;
-  z-index:1001;
+  z-index:1002;
   width:500px;
   left: 50%;
   bottom:10px;

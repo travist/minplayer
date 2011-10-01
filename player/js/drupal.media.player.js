@@ -1,5 +1,6 @@
 Drupal.media = Drupal.media ? Drupal.media : {};
 (function($, media) {
+
   /**
    * Constructor for the media.player
    */
@@ -7,7 +8,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
 
     // Make sure we provide default options...
     options = jQuery.extend({
-      controller:"base",
+      controller:"default",
       template:"default",
       id:"player",
       volume:80,
@@ -47,15 +48,17 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       // The current player.
       this.media = null;
 
-      // An array of the plugin objects.
-      this.plugins = [];
+      // All of the plugin objects.
+      this.plugins = {};
 
       // Iterate through all of our plugins and add them to our plugins array.
       var plugin = {};
       var pluginContext = null;
-      for (plugin in media.plugins) {
-        pluginContext = plugin.id ? jQuery(plugin.id, context) : context;
-        this.addPlugin(new plugin.object(pluginContext, options));
+      var i = media.plugins.length;
+      while(i--) {
+        plugin = media.plugins[i];
+        pluginContext = plugin.element ? jQuery(plugin.element, this.display) : this.display;
+        this.addPlugin(plugin.id, new plugin.object(pluginContext, this.options));
       }
 
       // Variable to store the current media file.
@@ -63,18 +66,19 @@ Drupal.media = Drupal.media ? Drupal.media : {};
 
       // Get the files involved...
       var _files = [];
-      var mediaDisplay = $(this.options.id + "_player");
-      var mediaSrc = mediaDisplay.attr('src');
-      if (mediaSrc) {
-        _files.push({"path":mediaSrc});
-      }
-      $("source", mediaDisplay).each(function() {
-        _files.push({
-          "path":$(this).attr('src'),
-          "mimetype":$(this).attr('type'),
-          "codecs":$(this).attr('codecs')
+      if (media.elements.player) {
+        var mediaSrc = media.elements.player.attr('src');
+        if (mediaSrc) {
+          _files.push({"path":mediaSrc});
+        }
+        $("source", media.elements.player).each(function() {
+          _files.push({
+            "path":$(this).attr('src'),
+            "mimetype":$(this).attr('type'),
+            "codecs":$(this).attr('codecs')
+          });
         });
-      });
+      }
 
       // Now load these files.
       this.load(_files);
@@ -128,17 +132,14 @@ Drupal.media = Drupal.media ? Drupal.media : {};
         }
 
         // Create a new media player for this file.
-        this.media = new media.players[this.mediaFile.player]($(this.options.id + "_display"), this.options, this.mediaFile);
-
-        // Iterate through all plugins and add the player to them.
-        var i = this.plugins.length;
-        while (i--) {
-          this.plugins[i].setPlayer(this.media);
+        if (media.elements.display) {
+          this.media = new media.players[this.mediaFile.player](media.elements.display, this.options, this.mediaFile);
         }
 
-        // Set the template media player.
-        if (this.template) {
-          this.template.setPlayer(this.media);
+        // Iterate through all plugins and add the player to them.
+        var id = "";
+        for (id in this.plugins) {
+          this.plugins[id].setPlayer(this.media);
         }
       }
 
@@ -149,14 +150,17 @@ Drupal.media = Drupal.media ? Drupal.media : {};
     },
 
     // Allow multiple plugins.
-    addPlugin: function(plugin) {
+    addPlugin: function(id, plugin) {
 
       // Only continue if the plugin exists.
       if (plugin.isValid()) {
 
         // Add to plugins.
-        this.plugins.push(plugin);
+        this.plugins[id] = plugin;
       }
+    },
+    getPlugin: function(id) {
+      return this.plugins[id];
     },
     play: function() {
       if( this.media ) {

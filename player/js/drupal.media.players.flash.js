@@ -10,9 +10,6 @@ Drupal.media = Drupal.media ? Drupal.media : {};
     var durationInterval = null;
     this.duration = 0;
 
-    // Derive from players base.
-    media.players.base.call(this, context, options, mediaFile);
-
     // Called when the flash player is ready.
     this.onReady = function() {
       this.ready = true;
@@ -50,6 +47,9 @@ Drupal.media = Drupal.media ? Drupal.media : {};
         }
       }
     };
+
+    // Derive from players base.
+    media.players.base.call(this, context, options, mediaFile);
   };
 
   window.onFlashPlayerReady = function( id ) {
