@@ -135,9 +135,9 @@ Drupal.media = Drupal.media ? Drupal.media : {};
     /**
      * Sets the time string on the control bar.
      */
-    setTimeString: function(time) {
-      if (this.options.elements.timer) {
-        this.options.elements.timer.text(media.formatTime(time).time);
+    setTimeString: function(element, time) {
+      if (this.options.elements[element]) {
+        this.options.elements[element].text(media.formatTime(time).time);
       }
     },
 
@@ -154,7 +154,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
         event.data.obj.setPlayPause(false);
       });
       player.display.bind("durationchange", {obj:this}, function(event, data) {
-        event.data.obj.setTimeString(data.duration);
+        event.data.obj.setTimeString("duration", data.duration);
       });
       player.display.bind("timeupdate", {obj:this}, function(event, data) {
         if (!event.data.obj.dragging) {
@@ -165,7 +165,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
             event.data.obj.seekBar.slider("option","value",value);
           }
 
-          event.data.obj.setTimeString(data.currentTime);
+          event.data.obj.setTimeString("timer", data.currentTime);
         }
       });
 
@@ -187,7 +187,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
               player.seek(time);
             }
 
-            _this.setTimeString(time);
+            _this.setTimeString("timer", time);
           }
         });
       }

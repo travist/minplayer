@@ -23,13 +23,15 @@ Drupal.media = Drupal.media ? Drupal.media : {};
     // Return the elements
     getElements: function() {
       var elements = media.controllers.base.prototype.getElements.call(this);
+      var timer = jQuery(".media-player-timer", this.display);
       return jQuery.extend(elements, {
         play:jQuery(".media-player-play", this.display),
         pause:jQuery(".media-player-pause", this.display),
         fullscreen:jQuery(".media-player-fullscreen", this.display),
         seek:jQuery(".media-player-seek", this.display),
         volume:jQuery(".media-player-volume-slider", this.display),
-        timer:jQuery(".media-player-timer", this.display)
+        timer:timer,
+        duration:timer
       });
     }
   });
