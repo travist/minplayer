@@ -1,3 +1,33 @@
+/**
+ * Drupal.media.flags - This is a class used to keep track of flag states
+ * which is used to control the busy cursor, big play button, among other
+ * items in which multiple components can have an interest in hiding or showing
+ * a single element on the screen.
+ *
+ * Usage:
+ *
+ *   // Declare a flags variable.
+ *   var flags = new Drupal.media.flags();
+ *
+ *   // Set the flag based on two components interested in the flag.
+ *   flags.setFlag("component1", true);
+ *   flags.setFlag("component2", true);
+ *
+ *   // Print out the value of the flags. ( Prints 3 )
+ *   console.log(flags.flags);
+ *
+ *   // Now unset a single components flag.
+ *   flags.setFlag("component1", false);
+ *
+ *   // Print out the value of the flags.
+ *   console.log(flags.flags);
+ *
+ *   // Unset the other components flag.
+ *   flags.setFlag("component2", false);
+ *
+ *   // Print out the value of the flags.
+ *   console.log(flags.flags);
+ */
 Drupal.media = Drupal.media ? Drupal.media : {};
 (function($, media) {
 

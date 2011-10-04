@@ -1,10 +1,19 @@
+/**
+ * Drupal.media.controllers.base
+ *
+ * This is the base media controller.  Other controllers can derive from the
+ * base and either build on top of it or simply define the elements that this
+ * base controller uses.
+ */
 Drupal.media = Drupal.media ? Drupal.media : {};
 (function($, media) {
 
   // Define the controllers object.
   media.controllers = media.controllers ? media.controllers : {};
 
-  // Templates constructor.
+  /**
+   * @see Drupal.media.display 
+   */
   media.controllers.base = function(context, options) {
 
     // Derive from display
@@ -13,6 +22,9 @@ Drupal.media = Drupal.media ? Drupal.media : {};
 
   /**
    * A static function that will format a time value into a string time format.
+   *
+   * @param - An integer value of time.
+   * @return - A string representation of the time.
    */
   media.formatTime = function(time) {
     time = time ? time : 0;
@@ -44,7 +56,9 @@ Drupal.media = Drupal.media ? Drupal.media : {};
   media.controllers.base.prototype.constructor = media.controllers.base;
   media.controllers.base.prototype = jQuery.extend(media.controllers.base.prototype, {
 
-    // Define elements required by this controller.
+    /**
+     * @see Drupal.media.display.getElements
+     */
     getElements: function() {
       var elements = media.display.prototype.getElements.call(this);
       return jQuery.extend(elements, {
@@ -57,7 +71,9 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       });
     },
 
-    // Constructor.
+    /**
+     * @see Drupal.media.plugin.construct
+     */
     construct: function() {
 
       // Call the media plugin constructor.
@@ -142,7 +158,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
     },
 
     /**
-     * Adds a new media player to this controller.
+     * @see Drupal.media.plugin.setPlayer
      */
     setPlayer:function(player) {
       media.display.prototype.setPlayer.call(this, player);

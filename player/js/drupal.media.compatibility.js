@@ -1,3 +1,35 @@
+/**
+ * Drupal.media.compatibility
+ *
+ * This class is used to define the types of media that can be played within
+ * the browser.
+ *
+ * Usage:
+ *
+ *   if (Drupal.media.playTypes.videoOGG) {
+ *     console.log("This browser can play OGG video");
+ *   }
+ *
+ *   if (Drupal.media.playTypes.videoH264) {
+ *     console.log("This browser can play H264 video");
+ *   }
+ *
+ *   if (Drupal.media.playTypes.videoWEBM) {
+ *     console.log("This browser can play WebM video");
+ *   }
+ *
+ *   if (Drupal.media.playTypes.audioOGG) {
+ *     console.log("This browser can play OGG audio");
+ *   }
+ *
+ *   if (Drupal.media.playTypes.audioMP3) {
+ *     console.log("This browser can play MP3 audio");
+ *   }
+ *
+ *   if (Drupal.media.audioMP4) {
+ *     console.log("This browser can play MP4 audio");
+ *   }
+ */
 Drupal.media = Drupal.media ? Drupal.media : {};
 (function(media) {
 
@@ -30,8 +62,8 @@ Drupal.media = Drupal.media ? Drupal.media : {};
     return types;
   }
 
+  // If the playTypes have not yet been determined, do so on script load.
   if( !media.playTypes ) {
-    // Cache for future lookups.
     media.playTypes = getPlayTypes();
   }
 })(Drupal.media);

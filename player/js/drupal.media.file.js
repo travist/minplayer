@@ -1,5 +1,17 @@
+/**
+ * Drupal.media.file
+ *
+ * A wrapper class used to provide all the data necessary to control an
+ * individual file within this media player.
+ */
 Drupal.media = Drupal.media ? Drupal.media : {};
 (function(media) {
+
+  /**
+   * Constructor
+   *
+   * @param - A media file object with minimal required information.
+   */
   media.file = function( file ) {
     this.duration = file.duration ? file.duration : 0;
     this.bytesTotal = file.bytesTotal ? file.bytesTotal : 0;
@@ -16,11 +28,9 @@ Drupal.media = Drupal.media ? Drupal.media : {};
     this.priority = file.priority ? file.priority : this.getPriority();
   };
 
-  media.file.prototype = {
-    
-    /**
-     * Returns the best media player for this file.
-     */
+  media.file.prototype = jQuery.extend(media.file.prototype, {
+
+    // Returns the best media player for this file.
     getBestPlayer: function() {
       var bestplayer = null;
       var bestpriority = 0;
@@ -34,9 +44,9 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       });
       return bestplayer;
     },
-    
+
     /**
-     * The priority of this file is determined by the priority of the best player multiplied by the 
+     * The priority of this file is determined by the priority of the best player multiplied by the
      * priority of the mimetype.
      */
     getPriority: function() {
@@ -56,11 +66,11 @@ Drupal.media = Drupal.media ? Drupal.media : {};
         case 'video/quicktime':
           return priority*8;
         default:
-          return priority*5;     
+          return priority*5;
       }
-      return priority;  
-    },    
-    
+      return priority;
+    },
+
     getFileExtension: function() {
       return this.path.substring(this.path.lastIndexOf(".") + 1).toLowerCase();
     },
@@ -107,7 +117,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
           return 'unknown';
       }
     }
-  };
+  });
 })(Drupal.media);
 
 
