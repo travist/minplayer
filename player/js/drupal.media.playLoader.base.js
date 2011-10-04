@@ -29,10 +29,10 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       media.display.prototype.construct.call(this);
 
       // Trigger a play event when someone clicks on the controller.
-      if (media.elements.bigPlay) {
-        media.elements.bigPlay.bind("click", {obj:this}, function(event) {
+      if (this.options.elements.bigPlay) {
+        this.options.elements.bigPlay.bind("click", {obj:this}, function(event) {
           event.preventDefault();
-          media.elements.bigPlay.hide();
+          $(this).hide();
           if (event.data.obj.player) {
             event.data.obj.player.play();
           }
@@ -47,18 +47,18 @@ Drupal.media = Drupal.media ? Drupal.media : {};
 
       // Hide or show the busy cursor based on the flags.
       if (this.busy.flags) {
-        media.elements.busy.show();
+        this.options.elements.busy.show();
       }
       else {
-        media.elements.busy.hide();
+        this.options.elements.busy.hide();
       }
 
       // Hide or show the big play button based on the flags.
       if (this.bigPlay.flags) {
-        media.elements.bigPlay.show();
+        this.options.elements.bigPlay.show();
       }
       else {
-        media.elements.bigPlay.hide();
+        this.options.elements.bigPlay.hide();
       }
 
       // Show the control either flag is set.

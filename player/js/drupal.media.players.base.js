@@ -38,8 +38,8 @@ Drupal.media = Drupal.media ? Drupal.media : {};
         this.display.unbind();
 
         // Remove the media element if found
-        if (media.elements.player) {
-          media.elements.player.remove();
+        if (this.options.elements.player) {
+          this.options.elements.player.remove();
         }
 
         // Create a new media player element.

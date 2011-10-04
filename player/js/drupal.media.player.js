@@ -55,7 +55,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       var plugin = {};
       var pluginContext = null;
       var i = media.plugins.length;
-      while(i--) {
+      while (i--) {
         plugin = media.plugins[i];
         pluginContext = plugin.element ? jQuery(plugin.element, this.display) : this.display;
         this.addPlugin(plugin.id, new plugin.object(pluginContext, this.options));
@@ -66,12 +66,12 @@ Drupal.media = Drupal.media ? Drupal.media : {};
 
       // Get the files involved...
       var _files = [];
-      if (media.elements.player) {
-        var mediaSrc = media.elements.player.attr('src');
+      if (this.options.elements.player) {
+        var mediaSrc = this.options.elements.player.attr('src');
         if (mediaSrc) {
           _files.push({"path":mediaSrc});
         }
-        $("source", media.elements.player).each(function() {
+        $("source", this.options.elements.player).each(function() {
           _files.push({
             "path":$(this).attr('src'),
             "mimetype":$(this).attr('type'),
@@ -132,8 +132,8 @@ Drupal.media = Drupal.media ? Drupal.media : {};
         }
 
         // Create a new media player for this file.
-        if (media.elements.display) {
-          this.media = new media.players[this.mediaFile.player](media.elements.display, this.options, this.mediaFile);
+        if (this.options.elements.display) {
+          this.media = new media.players[this.mediaFile.player](this.options.elements.display, this.options, this.mediaFile);
         }
 
         // Iterate through all plugins and add the player to them.

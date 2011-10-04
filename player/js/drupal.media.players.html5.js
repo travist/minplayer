@@ -125,7 +125,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
 
     // Returns the player object.
     getPlayer: function() {
-      return media.elements.player.eq(0)[0];
+      return this.options.elements.player.eq(0)[0];
     },
 
     load: function( file ) {
@@ -136,7 +136,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
         // Change the source...
         var code = '<source src="' + file.path + '" type="' + file.mimetype + '"';
         code += file.codecs ? ' codecs="' + file.path + '">' : '>';
-        media.elements.player.attr('src', '').empty().html(code);
+        this.options.elements.player.attr('src', '').empty().html(code);
       }
 
       // Set the loaded flag.

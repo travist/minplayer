@@ -64,11 +64,11 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       media.display.prototype.construct.call(this);
 
       this.setPlayPause = function(state) {
-        if (media.elements.play) {
-          media.elements.play.css('display', state ? 'inherit' : 'none');
+        if (this.options.elements.play) {
+          this.options.elements.play.css('display', state ? 'inherit' : 'none');
         }
-        if (media.elements.pause) {
-          media.elements.pause.css('display', state ? 'none' : 'inherit');
+        if (this.options.elements.pause) {
+          this.options.elements.pause.css('display', state ? 'none' : 'inherit');
         }
       };
 
@@ -83,15 +83,15 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       };
 
       // Trigger the controller events.
-      if (media.elements.play) {
-        media.elements.play.bind("click", {obj:this}, function(event) {
+      if (this.options.elements.play) {
+        this.options.elements.play.bind("click", {obj:this}, function(event) {
           event.preventDefault();
           event.data.obj.playPause(true);
         });
       }
 
-      if (media.elements.pause) {
-        media.elements.pause.bind("click", {obj:this}, function(event) {
+      if (this.options.elements.pause) {
+        this.options.elements.pause.bind("click", {obj:this}, function(event) {
           event.preventDefault();
           event.data.obj.playPause(false);
         });
@@ -99,8 +99,8 @@ Drupal.media = Drupal.media ? Drupal.media : {};
 
       // Fullscreen button.
       var _this = this;
-      if (media.elements.fullscreen) {
-        media.elements.fullscreen.css("pointer", "hand").click(function() {
+      if (this.options.elements.fullscreen) {
+        this.options.elements.fullscreen.css("pointer", "hand").click(function() {
           var isFull = $(_this.options.player.display).hasClass("fullscreen");
           if (isFull) {
             $(_this.options.player.display).removeClass("fullscreen");
@@ -124,11 +124,11 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       this.dragging = false;
 
       // Add a seekBar and volumeBar using jQuery UI Slider.
-      if (media.elements.seek) {
-        this.seekBar = media.elements.seek.slider({range: "min"});
+      if (this.options.elements.seek) {
+        this.seekBar = this.options.elements.seek.slider({range: "min"});
       }
-      if (media.elements.volume) {
-        this.volumeBar = media.elements.volume.slider({range:"min", orientation: "vertical"});
+      if (this.options.elements.volume) {
+        this.volumeBar = this.options.elements.volume.slider({range:"min", orientation: "vertical"});
       }
     },
 
@@ -136,8 +136,8 @@ Drupal.media = Drupal.media ? Drupal.media : {};
      * Sets the time string on the control bar.
      */
     setTimeString: function(time) {
-      if (media.elements.timer) {
-        media.elements.timer.text(media.formatTime(time).time);
+      if (this.options.elements.timer) {
+        this.options.elements.timer.text(media.formatTime(time).time);
       }
     },
 

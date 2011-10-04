@@ -1,18 +1,18 @@
 Drupal.media = Drupal.media ? Drupal.media : {};
 (function($, media) {
 
-  // Globally collect all of the elements defined.
-  media.elements = {};
-
   media.display = function(context, options) {
 
     if (context) {
+
+      // Set the display and options.
       this.display = $(context);
       this.options = options;
-    }
 
-    // Extend all display elements.
-    jQuery.extend(media.elements, this.getElements());
+      // Extend all display elements.
+      this.options.elements = this.options.elements || {};
+      jQuery.extend(this.options.elements, this.getElements());
+    }
 
     // Derive from plugin
     media.plugin.call(this, context, options);

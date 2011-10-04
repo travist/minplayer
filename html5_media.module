@@ -115,14 +115,6 @@ function html5_media_register_player($playerId, $settings, $attributes) {
 }
 
 /**
- * Returns the next player Id.
- */
-function html5_media_get_player_id() {
-  static $player_instance = 0;
-  return 'player_' . $player_instance++;
-}
-
-/**
  * Theme a media player.
  */
 function theme_media_player($variables) {
@@ -309,9 +301,9 @@ function html5_media_field_formatter_view($entity_type, $entity, $field, $instan
 
   // If this is an audio or a video player.
   if (in_array($display['type'], array('html5_audio', 'html5_video'))) {
-    $settings['id'] = html5_media_get_player_id();
     html5_media_add_resources($settings['template']);
     foreach ($items as $delta => $item) {
+      $settings['id'] = 'player-' . drupal_clean_css_identifier($field['field_name']) . '-' . $delta;
       $element[$delta] = array(
         '#theme' => 'media_player',
         '#tag' => ($display['type'] == 'html5_video' ? 'video' : 'audio'),
