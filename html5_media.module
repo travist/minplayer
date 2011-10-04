@@ -64,6 +64,37 @@ function html5_media_theme() {
 }
 
 /**
+ * Implements hook_library
+ */
+function html5_media_library() {
+  $path = drupal_get_path('module', 'html5_media') . '/player';
+  return array(
+    'mediaplayer' => array(
+      'title' => 'Media Player',
+      'website' => 'http://drupal.org/project/html5_media',
+      'version' => '1.0',
+      'js' => array(
+        $path . '/js/drupal.media.compatibility.js' => array('group' => JS_LIBRARY),
+        $path . '/js/drupal.media.flags.js' => array('group' => JS_LIBRARY),
+        $path . '/js/drupal.media.plugin.js' => array('group' => JS_LIBRARY),
+        $path . '/js/drupal.media.display.js' => array('group' => JS_LIBRARY),
+        $path . '/js/drupal.media.player.js' => array('group' => JS_LIBRARY),
+        $path . '/js/drupal.media.file.js' => array('group' => JS_LIBRARY),
+        $path . '/js/drupal.media.playLoader.base.js' => array('group' => JS_LIBRARY),
+        $path . '/js/drupal.media.players.base.js' => array('group' => JS_LIBRARY),
+        $path . '/js/drupal.media.players.html5.js' => array('group' => JS_LIBRARY),
+        $path . '/js/drupal.media.players.flash.js' => array('group' => JS_LIBRARY),
+        $path . '/js/drupal.media.controllers.base.js' => array('group' => JS_LIBRARY),
+        $path . '/js/drupal.media.templates.base.js' => array('group' => JS_LIBRARY)
+      ),
+      'dependencies' => array(
+        array('system', 'ui.slider')
+      )
+    )
+  );
+}
+
+/**
  * Register a new media player in JavaScript.
  */
 function html5_media_register_player($playerId, $settings, $attributes) {
@@ -243,24 +274,8 @@ function html5_media_add_resources($template) {
   static $resources_added = FALSE;
   if (!$resources_added) {
 
-    // Add the jQuery UI slider.
-    drupal_add_library('system', 'ui.slider');
-
-    // Add all the media player javascript files.
-    $path = drupal_get_path('module', 'html5_media') . '/player/js/';
-
-    drupal_add_js($path . 'drupal.media.compatibility.js');
-    drupal_add_js($path . 'drupal.media.flags.js');
-    drupal_add_js($path . 'drupal.media.plugin.js');
-    drupal_add_js($path . 'drupal.media.display.js');
-    drupal_add_js($path . 'drupal.media.player.js');
-    drupal_add_js($path . 'drupal.media.file.js');
-    drupal_add_js($path . 'drupal.media.playLoader.base.js');
-    drupal_add_js($path . 'drupal.media.players.base.js');
-    drupal_add_js($path . 'drupal.media.players.html5.js');
-    drupal_add_js($path . 'drupal.media.players.flash.js');
-    drupal_add_js($path . 'drupal.media.controllers.base.js');
-    drupal_add_js($path . 'drupal.media.templates.base.js');
+    // Add the media player library.
+    drupal_add_library('html5_media', 'mediaplayer');
 
     // Get the template information.
     $templates = html5_media_get_template_info();
