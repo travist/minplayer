@@ -24,7 +24,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
 
     // Derive from display
     media.display.call(this, context, options);
-  }
+  };
 
   /**
    * Define the media player interface.
@@ -87,19 +87,20 @@ Drupal.media = Drupal.media ? Drupal.media : {};
     // Returns the best media file to play given a list of files.
     getMediaFile: function(files) {
       if (typeof files == 'string') {
-        return new media.file({"path":file});
+        return new media.file({"path":files});
       }
 
       if (files.path) {
-        return new media.file(file);
+        return new media.file(files);
       }
 
       // Add the files and get the best player to play.
       var i=files.length;
       var bestPriority = 0;
       var mediaFile = null;
+      var file = null;
       while(i--) {
-        var file = files[i];
+        file = files[i];
 
         // Get the media file object.
         file = (typeof file == 'string') ? new media.file({"path":file}) : new media.file(file);
@@ -139,7 +140,9 @@ Drupal.media = Drupal.media ? Drupal.media : {};
         // Iterate through all plugins and add the player to them.
         var id = "";
         for (id in this.plugins) {
-          this.plugins[id].setPlayer(this.media);
+          if (this.plugins.hasOwnProperty(id)) {
+            this.plugins[id].setPlayer(this.media);
+          }
         }
       }
 

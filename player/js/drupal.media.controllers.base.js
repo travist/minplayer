@@ -193,7 +193,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       }
 
       // Register the volume bar to adjust the player volume.
-      player.setVolume(this.options.volume/100)
+      player.setVolume(this.options.volume/100);
 
       // Setup the volume bar.
       if (this.volumeBar) {

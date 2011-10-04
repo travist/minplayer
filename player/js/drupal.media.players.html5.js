@@ -118,7 +118,9 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       var element = document.createElement(this.mediaFile.type);
       var attribute = '';
       for (attribute in this.options.attributes) {
-        element.setAttribute(attribute, attributes[attribute]);
+        if (this.options.attributes.hasOwnProperty(attribute)) {
+          element.setAttribute(attribute, attributes[attribute]);
+        }
       }
       return element;
     },

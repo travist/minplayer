@@ -131,16 +131,20 @@ Drupal.media = Drupal.media ? Drupal.media : {};
     var paramKey = '';
     var param = null;
     for (paramKey in params) {
-      param = document.createElement('param');
-      param.setAttribute('name', paramKey);
-      param.setAttribute('value', params[paramKey]);
-      element.appendChild(param);
+      if (params.hasOwnProperty(paramKey)) {
+        param = document.createElement('param');
+        param.setAttribute('name', paramKey);
+        param.setAttribute('value', params[paramKey]);
+        element.appendChild(param);
+      }
     }
 
     // Add the embed element.
     var embed = document.createElement('embed');
     for (paramKey in params) {
-      embed.setAttribute((paramKey === 'movie') ? 'src' : paramKey, params[paramKey]);
+      if (params.hasOwnProperty(paramKey)) {
+        embed.setAttribute((paramKey === 'movie') ? 'src' : paramKey, params[paramKey]);
+      }
     }
 
     embed.setAttribute('width', width);
@@ -262,7 +266,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       }
       else if (this.player && this.ready) {
         this.duration = this.player.getDuration();
-        return this.player.getDuration()
+        return this.player.getDuration();
       }
       else {
         return media.players.base.prototype.getDuration.call(this);
