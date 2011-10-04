@@ -1,45 +1,6 @@
 <?php
 
 /**
- * Returns all of the media template information.
- */
-function html5_media_get_template_info() {
-
-  // Implement hook_media_template
-  $cache = cache_get('media_template_info');
-  if ($cache) {
-    return $cache->data;
-  }
-  else {
-    // Invoke all media_template_info and then set the cache.
-    $template_info = module_invoke_all('media_template_info');
-    cache_set('media_template_info', $template_info);
-    return $template_info;
-  }
-}
-
-/**
- * Implements hook_media_template_info
- */
-function html5_media_media_template_info() {
-
-  // Add the default template.
-  return array(
-    'default' => array(
-      'path' => drupal_get_path('module', 'html5_media') . '/player/templates/default',
-      'js' => array(
-        'js/drupal.media.playLoader.default.js',
-        'js/drupal.media.controllers.default.js',
-        'js/jquery.media.templates.default.js'
-      ),
-      'css' => array(
-        'css/media_player_default.css'
-      )
-    )
-  );
-}
-
-/**
  * Implements hook_theme
  */
 function html5_media_theme() {
@@ -89,6 +50,44 @@ function html5_media_library() {
       ),
       'dependencies' => array(
         array('system', 'ui.slider')
+      )
+    )
+  );
+}
+
+/**
+ * Returns all of the media template information.
+ */
+function html5_media_get_template_info() {
+
+  // Implement hook_media_template
+  $cache = cache_get('media_template_info');
+  if ($cache) {
+    return $cache->data;
+  }
+  else {
+    // Invoke all media_template_info and then set the cache.
+    $template_info = module_invoke_all('media_template_info');
+    cache_set('media_template_info', $template_info);
+    return $template_info;
+  }
+}
+
+/**
+ * Implements hook_media_template_info
+ */
+function html5_media_media_template_info() {
+  $path = drupal_get_path('module', 'html5_media') . '/player/templates';
+  return array(
+    'default' => array(
+      'path' => $path . '/default',
+      'js' => array(
+        $path . '/default/js/drupal.media.playLoader.default.js' => array('group' => JS_DEFAULT),
+        $path . '/default/js/drupal.media.controllers.default.js' => array('group' => JS_DEFAULT),
+        $path . '/default/js/jquery.media.templates.default.js' => array('group' => JS_DEFAULT)
+      ),
+      'css' => array(
+        $path . '/default/css/media_player_default.css' => array('group' => CSS_DEFAULT)
       )
     )
   );
@@ -288,13 +287,13 @@ function html5_media_add_resources($template) {
 
       // Include all of the template files.
       if ($template['js']) {
-        foreach ($template['js'] as $file) {
-          drupal_add_js($template['path'] . '/' . $file);
+        foreach ($template['js'] as $file => $options) {
+          drupal_add_js($file, $options);
         }
       }
       if ($template['css']) {
-        foreach ($template['css'] as $file) {
-          drupal_add_css($template['path'] . '/' . $file);
+        foreach ($template['css'] as $file => $options) {
+          drupal_add_css($file, $options);
         }
       }
     }
