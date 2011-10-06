@@ -17,12 +17,11 @@ Drupal.media = Drupal.media ? Drupal.media : {};
   media.templates["default"].prototype = new media.templates.base();
   media.templates["default"].prototype.constructor = media.templates["default"];
   media.templates["default"].prototype = jQuery.extend(media.templates["default"].prototype, {
-
     getElements: function() {
       var elements = media.templates.base.prototype.getElements.call(this);
       return jQuery.extend(elements, {
         display:$(".media-player-display", this.display),
-        player:$(this.options.id + "_player", this.display)
+        player:$(this.options.id + "-player", this.display)
       });
     }
   });

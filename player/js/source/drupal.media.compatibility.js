@@ -1,8 +1,8 @@
 /**
  * Drupal.media.compatibility
  *
- * This class is used to define the types of media that can be played within
- * the browser.
+ * This class is used to define the types of media that can be played within the
+ * browser.
  *
  * Usage:
  *
@@ -30,13 +30,14 @@
  *     console.log("This browser can play MP4 audio");
  *   }
  */
-Drupal.media = Drupal.media ? Drupal.media : {};
+Drupal.media = Drupal.media || {};
 (function(media) {
 
   // Private function to check a single element's play type.
-  function checkPlayType( elem, playType ) {
-    if( (typeof elem.canPlayType) == 'function' ) {
-      return ("no" !== elem.canPlayType(playType)) && ("" !== elem.canPlayType(playType));
+  function checkPlayType(elem, playType) {
+    if ((typeof elem.canPlayType) === 'function') {
+      var canPlay = elem.canPlayType(playType);
+      return ('no' !== canPlay) && ('' !== canPlay);
     }
     else {
       return false;
@@ -45,25 +46,25 @@ Drupal.media = Drupal.media ? Drupal.media : {};
 
   // Private function to get the playtypes.
   function getPlayTypes() {
-    var types = {};
+    var types = {}, elem = null;
 
     // Check for video types...
-    var elem = document.createElement("video");
-    types.videoOGG  = checkPlayType(elem, "video/ogg");
-    types.videoH264  = checkPlayType(elem, "video/mp4");
-    types.videoWEBM = checkPlayType(elem, "video/x-webm");
+    elem = document.createElement('video');
+    types.videoOGG = checkPlayType(elem, 'video/ogg');
+    types.videoH264 = checkPlayType(elem, 'video/mp4');
+    types.videoWEBM = checkPlayType(elem, 'video/x-webm');
 
     // Now check for audio types...
-    elem = document.createElement("audio");
-    types.audioOGG = checkPlayType(elem, "audio/ogg");
-    types.audioMP3 = checkPlayType(elem, "audio/mpeg");
+    elem = document.createElement('audio');
+    types.audioOGG = checkPlayType(elem, 'audio/ogg');
+    types.audioMP3 = checkPlayType(elem, 'audio/mpeg');
     types.audioMP4 = checkPlayType(elem, 'audio/mp4');
 
     return types;
   }
 
   // If the playTypes have not yet been determined, do so on script load.
-  if( !media.playTypes ) {
+  if (!media.playTypes) {
     media.playTypes = getPlayTypes();
   }
-})(Drupal.media);
+}(Drupal.media));

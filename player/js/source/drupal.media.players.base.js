@@ -1,8 +1,16 @@
-Drupal.media = Drupal.media ? Drupal.media : {};
+/**
+ * The base media player class where all media players derive from.
+ */
+Drupal.media = Drupal.media || {};
 (function($, media) {
-  media.players = media.players ? media.players : {};
+  media.players = media.players || {};
 
-  // Player constructor.
+  /**
+   * @constructor
+   * @extends media.display
+   * @param {object} context The jQuery context.
+   * @param {object} options This components options.
+   */
   media.players.base = function(context, options, mediaFile) {
 
     // Store the media file.
@@ -26,6 +34,10 @@ Drupal.media = Drupal.media ? Drupal.media : {};
   media.players.base.prototype = new media.display();
   media.players.base.prototype.constructor = media.players.base;
   media.players.base.prototype = jQuery.extend(media.players.base.prototype, {
+
+    /**
+     * @see media.plugin.construct
+     */
     construct: function() {
 
       // Call the media display constructor.
@@ -38,8 +50,8 @@ Drupal.media = Drupal.media ? Drupal.media : {};
         this.display.unbind();
 
         // Remove the media element if found
-        if (this.options.elements.player) {
-          this.options.elements.player.remove();
+        if (this.elements.player) {
+          this.elements.player.remove();
         }
 
         // Create a new media player element.
@@ -61,7 +73,7 @@ Drupal.media = Drupal.media ? Drupal.media : {};
     create: function() { return null; },
     getPlayer: function() { return null; },
     destroy: function() {},
-    load: function( file ) {
+    load: function(file) {
 
       // Store the media file for future lookup.
       this.mediaFile = file;
@@ -69,13 +81,13 @@ Drupal.media = Drupal.media ? Drupal.media : {};
     play: function() {},
     pause: function() {},
     stop: function() {},
-    seek: function( pos ) {},
-    setVolume: function( vol ) {
-      this.trigger("volumeupdate", vol);
+    seek: function(pos) {},
+    setVolume: function(vol) {
+      this.trigger('volumeupdate', vol);
     },
     getVolume: function() { return 0; },
     getDuration: function() { return 0; }
   });
-})(jQuery, Drupal.media);
+}(jQuery, Drupal.media));
 
 

@@ -1,25 +1,32 @@
-Drupal.media = Drupal.media ? Drupal.media : {};
+/**
+ * The Flash media player class to control the flash fallback.
+ */
+Drupal.media = Drupal.media || {};
 (function($, media) {
-  media.players = media.players ? media.players : {};
+  media.players = media.players || {};
 
-  // Player constructor.
+  /**
+   * @constructor
+   * @extends media.display
+   * @param {object} context The jQuery context.
+   * @param {object} options This components options.
+   */
   media.players.flash = function(context, options, mediaFile) {
 
-    var _this = this;
-    var interval = null;
-    var durationInterval = null;
+    var _this = this, interval = null, durationInterval = null;
+
     this.duration = 0;
 
     // Called when the flash player is ready.
     this.onReady = function() {
       this.ready = true;
-      this.trigger("loadstart");
+      this.trigger('loadstart');
 
       // Perform a check for the duration every second until it shows up.
       durationInterval = setInterval(function() {
         if (_this.getDuration()) {
           clearInterval(durationInterval);
-          _this.trigger("durationchange", {duration:_this.getDuration()});
+          _this.trigger('durationchange', {duration: _this.getDuration()});
         }
       }, 1000);
     };
@@ -30,18 +37,21 @@ Drupal.media = Drupal.media ? Drupal.media : {};
         switch (eventType) {
           case 'mediaMeta':
             clearInterval(durationInterval);
-            this.trigger("loadeddata");
-            this.trigger("loadedmetadata");
-            this.trigger("durationchange", {duration:this.getDuration()});
+            this.trigger('loadeddata');
+            this.trigger('loadedmetadata');
+            this.trigger('durationchange', {duration: this.getDuration()});
             break;
           case 'mediaPlaying':
-            this.trigger("playing");
+            this.trigger('playing');
             interval = setInterval(function() {
-              _this.trigger("timeupdate", {currentTime:_this.getCurrentTime(), duration:_this.getDuration()});
+              var cTime = _this.getCurrentTime();
+              var dur = _this.getDuration();
+              var data = {currentTime: cTime, duration: dur};
+              _this.trigger('timeupdate', data);
             }, 1000);
             break;
           case 'mediaPaused':
-            this.trigger("pause");
+            this.trigger('pause');
             clearInterval(interval);
             break;
         }
@@ -52,22 +62,21 @@ Drupal.media = Drupal.media ? Drupal.media : {};
     media.players.base.call(this, context, options, mediaFile);
   };
 
-  window.onFlashPlayerReady = function( id ) {
+  window.onFlashPlayerReady = function(id) {
     if (media.player[id]) {
       media.player[id].media.onReady();
     }
   };
 
-  window.onFlashPlayerUpdate = function( id, eventType ) {
+  window.onFlashPlayerUpdate = function(id, eventType) {
     if (media.player[id]) {
-      media.player[id].media.onMediaUpdate( eventType );
+      media.player[id].media.onMediaUpdate(eventType);
     }
   };
 
-  window.onFlashPlayerDebug = function( debug ) {
-    if( window.console && console.log ) {
-      console.log( debug );
-    }
+  var debugConsole = console || {log: function(data) {}};
+  window.onFlashPlayerDebug = function(debug) {
+    debugConsole.log(debug);
   };
 
   // Get the priority for this player...
@@ -77,18 +86,18 @@ Drupal.media = Drupal.media ? Drupal.media : {};
 
   // See if we can play this player.
   media.players.flash.canPlay = function(file) {
-    switch( file.mimetype ) {
-      case "video/mp4":
-      case "video/x-webm":
-      case "video/quicktime":
-      case "video/3gpp2":
-      case "video/3gpp":
-      case "application/x-shockwave-flash":
-      case "audio/mpeg":
-      case "audio/mp4":
-      case "audio/aac":
-      case "audio/vnd.wave":
-      case "audio/x-ms-wma":
+    switch (file.mimetype) {
+      case 'video/mp4':
+      case 'video/x-webm':
+      case 'video/quicktime':
+      case 'video/3gpp2':
+      case 'video/3gpp':
+      case 'application/x-shockwave-flash':
+      case 'audio/mpeg':
+      case 'audio/mp4':
+      case 'audio/aac':
+      case 'audio/vnd.wave':
+      case 'audio/x-ms-wma':
         return true;
 
       default:
@@ -97,63 +106,62 @@ Drupal.media = Drupal.media ? Drupal.media : {};
   };
 
   // API function to get flash player object.
-  media.players.flash.getFlash = function( swf, id, playerType, width, height, flashvars, wmode ) {
+  media.players.flash.getFlash = function(params) {
     // Get the protocol.
     var protocol = window.location.protocol;
-    if (protocol.charAt(protocol.length - 1) == ':') {
+    var element = null;
+    var embed = null;
+    var paramKey = '';
+    var flashParams = {};
+    var param = null;
+
+    if (protocol.charAt(protocol.length - 1) === ':') {
       protocol = protocol.substring(0, protocol.length - 1);
     }
 
-    // Convert the flashvars object to a string...
-    var flashVarsString = jQuery.param(flashvars);
-
     // Create an object element.
-    var element = document.createElement('object');
-    element.setAttribute('classid', 'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000');
-    element.setAttribute('codebase', protocol + '://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0');
-    element.setAttribute('width', width);
-    element.setAttribute('height', height);
-    element.setAttribute('id', id);
-    element.setAttribute('name', id);
-    element.setAttribute('playerType', playerType);
+    element = document.createElement('object');
+    element.setAttribute('width', params.width);
+    element.setAttribute('height', params.height);
+    element.setAttribute('id', params.id);
+    element.setAttribute('name', params.id);
+    element.setAttribute('playerType', params.playerType);
 
     // Setup a params array to make the param additions eaiser.
-    var params = {
-      "allowScriptAccess":"always",
-      "allowfullscreen":"true",
-      "movie":swf,
-      "wmode":wmode,
-      "quality":"high",
-      "FlashVars":flashVarsString
+    flashParams = {
+      'allowScriptAccess': 'always',
+      'allowfullscreen': 'true',
+      'movie': params.swf,
+      'wmode': params.wmode,
+      'quality': 'high',
+      'FlashVars': jQuery.param(params.flashvars)
     };
 
     // Add the parameters.
-    var paramKey = '';
-    var param = null;
-    for (paramKey in params) {
-      if (params.hasOwnProperty(paramKey)) {
+    for (paramKey in flashParams) {
+      if (flashParams.hasOwnProperty(paramKey)) {
         param = document.createElement('param');
         param.setAttribute('name', paramKey);
-        param.setAttribute('value', params[paramKey]);
+        param.setAttribute('value', flashParams[paramKey]);
         element.appendChild(param);
       }
     }
 
     // Add the embed element.
-    var embed = document.createElement('embed');
-    for (paramKey in params) {
-      if (params.hasOwnProperty(paramKey)) {
-        embed.setAttribute((paramKey === 'movie') ? 'src' : paramKey, params[paramKey]);
+    embed = document.createElement('embed');
+    for (paramKey in flashParams) {
+      if (flashParams.hasOwnProperty(paramKey)) {
+        paramKey = (paramKey === 'movie') ? 'src' : paramKey;
+        embed.setAttribute(paramKey, flashParams[paramKey]);
       }
     }
 
-    embed.setAttribute('width', width);
-    embed.setAttribute('height', height);
-    embed.setAttribute('id', id);
-    embed.setAttribute('name', id);
+    embed.setAttribute('width', params.width);
+    embed.setAttribute('height', params.height);
+    embed.setAttribute('id', params.id);
+    embed.setAttribute('name', params.id);
     embed.setAttribute('swLiveConnect', 'true');
     embed.setAttribute('type', 'application/x-shockwave-flash');
-    embed.setAttribute('pluginspage', protocol + '://www.macromedia.com/go/getflashplayer');
     element.appendChild(embed);
     return element;
   };
@@ -186,23 +194,23 @@ Drupal.media = Drupal.media ? Drupal.media : {};
 
       // The flash variables for this flash player.
       var flashVars = {
-        'id':this.options.id,
-        'debug':this.options.debug,
-        'config':'nocontrols',
-        'file':this.mediaFile.path,
-        'autostart':this.options.settings.autoplay
+        'id': this.options.id,
+        'debug': this.options.settings.debug,
+        'config': 'nocontrols',
+        'file': this.mediaFile.path,
+        'autostart': this.options.settings.autoplay
       };
 
       // Return a flash media player object.
-      return media.players.flash.getFlash(
-        this.options.swfplayer,
-        this.options.id + "_player",
-        "flash",
-        this.options.settings.width,
-        "100%",
-        flashVars,
-        this.options.wmode
-      );
+      return media.players.flash.getFlash({
+        swf: this.options.swfplayer,
+        id: this.options.id + '_player',
+        playerType: 'flash',
+        width: this.options.settings.width,
+        height: '100%',
+        flashvars: flashVars,
+        wmode: this.options.wmode
+      });
     },
 
     // Returns the player object.
@@ -213,41 +221,41 @@ Drupal.media = Drupal.media ? Drupal.media : {};
       return $(object, this.display).eq(0)[0];
     },
 
-    load: function( file ) {
+    load: function(file) {
       this.duration = 0;
       media.players.base.prototype.load.call(this, file);
-      if( this.player && this.ready ) {
-        this.player.loadMedia( mediaFile.path, mediaFile.stream );
+      if (this.player && this.ready) {
+        this.player.loadMedia(this.mediaFile.path, this.mediaFile.stream);
       }
     },
     play: function() {
       media.players.base.prototype.play.call(this);
-      if( this.player && this.ready ) {
+      if (this.player && this.ready) {
         this.player.playMedia();
       }
     },
     pause: function() {
       media.players.base.prototype.pause.call(this);
-      if( this.player && this.ready ) {
+      if (this.player && this.ready) {
         this.player.pauseMedia();
       }
     },
     stop: function() {
       media.players.base.prototype.stop.call(this);
-      if( this.player && this.ready ) {
+      if (this.player && this.ready) {
         this.player.stopMedia();
       }
     },
-    seek: function( pos ) {
+    seek: function(pos) {
       media.players.base.prototype.seek.call(this, pos);
-      if( this.player && this.ready ) {
-        this.player.seekMedia( pos );
+      if (this.player && this.ready) {
+        this.player.seekMedia(pos);
       }
     },
-    setVolume: function( vol ) {
+    setVolume: function(vol) {
       media.players.base.prototype.setVolume.call(this, vol);
-      if( this.player && this.ready ) {
-        this.player.setVolume( vol );
+      if (this.player && this.ready) {
+        this.player.setVolume(vol);
       }
     },
     getVolume: function() {
@@ -272,14 +280,17 @@ Drupal.media = Drupal.media ? Drupal.media : {};
         return media.players.base.prototype.getDuration.call(this);
       }
     },
+    isReady: function() {
+      return (this.player && this.ready);
+    },
     getCurrentTime: function() {
-      return (this.player && this.ready) ? this.player.getCurrentTime() : 0;
+      return this.isReady() ? this.player.getCurrentTime() : 0;
     },
     getBytesLoaded: function() {
-      return (this.player && this.ready) ? this.player.getMediaBytesLoaded() : 0;
+      return this.isReady() ? this.player.getMediaBytesLoaded() : 0;
     },
     getBytesTotal: function() {
-      return (this.player && this.ready) ? this.player.getMediaBytesTotal() : 0;
+      return this.isReady() ? this.player.getMediaBytesTotal() : 0;
     }
   });
-})(jQuery, Drupal.media);
+}(jQuery, Drupal.media));

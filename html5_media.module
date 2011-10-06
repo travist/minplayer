@@ -35,18 +35,29 @@ function html5_media_library() {
       'website' => 'http://drupal.org/project/html5_media',
       'version' => '1.0',
       'js' => array(
-        $path . '/js/drupal.media.compatibility.js' => array('group' => JS_LIBRARY),
-        $path . '/js/drupal.media.flags.js' => array('group' => JS_LIBRARY),
-        $path . '/js/drupal.media.plugin.js' => array('group' => JS_LIBRARY),
-        $path . '/js/drupal.media.display.js' => array('group' => JS_LIBRARY),
-        $path . '/js/drupal.media.player.js' => array('group' => JS_LIBRARY),
-        $path . '/js/drupal.media.file.js' => array('group' => JS_LIBRARY),
-        $path . '/js/drupal.media.playLoader.base.js' => array('group' => JS_LIBRARY),
-        $path . '/js/drupal.media.players.base.js' => array('group' => JS_LIBRARY),
-        $path . '/js/drupal.media.players.html5.js' => array('group' => JS_LIBRARY),
-        $path . '/js/drupal.media.players.flash.js' => array('group' => JS_LIBRARY),
-        $path . '/js/drupal.media.controllers.base.js' => array('group' => JS_LIBRARY),
-        $path . '/js/drupal.media.templates.base.js' => array('group' => JS_LIBRARY)
+        $path . '/js/drupal.media.player.compressed.js' => array('group' => JS_LIBRARY)
+      ),
+      'dependencies' => array(
+        array('system', 'ui.slider')
+      )
+    ),
+    'mediaplayer_debug' => array(
+      'title' => 'Media Player (Debug Mode)',
+      'website' => 'http://drupal.org/project/html5_media',
+      'version' => '1.0',
+      'js' => array(
+        $path . '/js/source/drupal.media.compatibility.js' => array('group' => JS_LIBRARY),
+        $path . '/js/source/drupal.media.flags.js' => array('group' => JS_LIBRARY),
+        $path . '/js/source/drupal.media.plugin.js' => array('group' => JS_LIBRARY),
+        $path . '/js/source/drupal.media.display.js' => array('group' => JS_LIBRARY),
+        $path . '/js/source/drupal.media.player.js' => array('group' => JS_LIBRARY),
+        $path . '/js/source/drupal.media.file.js' => array('group' => JS_LIBRARY),
+        $path . '/js/source/drupal.media.playLoader.base.js' => array('group' => JS_LIBRARY),
+        $path . '/js/source/drupal.media.players.base.js' => array('group' => JS_LIBRARY),
+        $path . '/js/source/drupal.media.players.html5.js' => array('group' => JS_LIBRARY),
+        $path . '/js/source/drupal.media.players.flash.js' => array('group' => JS_LIBRARY),
+        $path . '/js/source/drupal.media.controllers.base.js' => array('group' => JS_LIBRARY),
+        $path . '/js/source/drupal.media.templates.base.js' => array('group' => JS_LIBRARY)
       ),
       'dependencies' => array(
         array('system', 'ui.slider')
@@ -97,15 +108,13 @@ function html5_media_media_template_info() {
  * Register a new media player in JavaScript.
  */
 function html5_media_register_player($playerId, $settings, $attributes) {
-  $playerId = check_plain($playerId);
   $attributes = drupal_json_encode($attributes);
   $settings = drupal_json_encode($settings);
   $swfplayer = url(drupal_get_path('module', 'html5_media') . '/player/minplayer/minplayer.swf');
   drupal_add_js("
     jQuery(function() {
-      var playerId = '#{$playerId}';
-      new Drupal.media.player(jQuery(playerId), {
-        id:playerId,
+      jQuery('#{$playerId}').mediaplayer({
+        id:'#{$playerId}',
         attributes:{$attributes},
         settings:{$settings},
         swfplayer:'{$swfplayer}'
@@ -147,7 +156,8 @@ function html5_media_field_formatter_info() {
         'autoplay' => FALSE,
         'loop' => FALSE,
         'width' => '100%',
-        'height' => '350px'
+        'height' => '350px',
+        'debug' => FALSE
       )
     ),
     'html5_video' => array(
@@ -160,7 +170,8 @@ function html5_media_field_formatter_info() {
         'autoplay' => FALSE,
         'loop' => FALSE,
         'width' => '100%',
-        'height' => '350px'
+        'height' => '350px',
+        'debug' => FALSE
       )
     )
   );
@@ -214,6 +225,12 @@ function html5_media_field_formatter_settings_form($field, $instance, $view_mode
       '#type' => 'textfield',
       '#default_value' => $settings['height']
     );
+
+    $element['debug'] = array(
+      '#title' => t('Debug Mode'),
+      '#type' => 'checkbox',
+      '#default_value' => $settings['debug']
+    );
   }
   return $element;
 }
@@ -251,7 +268,7 @@ function html5_media_get_attributes($item, $settings) {
     }
   }
 
-  $attributes['id'] = $settings['id'] . '_player';
+  $attributes['id'] = $settings['id'] . '-player';
   $attributes['width'] = '100%';
   $attributes['height'] = '100%';
 
@@ -261,12 +278,12 @@ function html5_media_get_attributes($item, $settings) {
 /**
  * Adds the media player resources to the view.
  */
-function html5_media_add_resources($template) {
+function html5_media_add_resources($template, $debug) {
   static $resources_added = FALSE;
   if (!$resources_added) {
 
     // Add the media player library.
-    drupal_add_library('html5_media', 'mediaplayer');
+    drupal_add_library('html5_media', $debug ? 'mediaplayer_debug' : 'mediaplayer');
 
     // Get the template information.
     $templates = html5_media_get_template_info();
@@ -301,7 +318,7 @@ function html5_media_field_formatter_view($entity_type, $entity, $field, $instan
 
   // If this is an audio or a video player.
   if (in_array($display['type'], array('html5_audio', 'html5_video'))) {
-    html5_media_add_resources($settings['template']);
+    html5_media_add_resources($settings['template'], $settings['debug']);
     foreach ($items as $delta => $item) {
       $settings['id'] = 'player-' . drupal_clean_css_identifier($field['field_name']) . '-' . $delta;
       $element[$delta] = array(

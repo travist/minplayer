@@ -28,14 +28,14 @@
  *   // Print out the value of the flags.
  *   console.log(flags.flags);
  */
-Drupal.media = Drupal.media ? Drupal.media : {};
+Drupal.media = Drupal.media || {};
 (function($, media) {
 
   // constructor.
   media.flags = function() {
 
-    // The flags.
-    this.flags = 0;
+    // The flag.
+    this.flag = 0;
 
     // Id map to reference id with the flag index.
     this.ids = {};
@@ -49,6 +49,9 @@ Drupal.media = Drupal.media ? Drupal.media : {};
 
     /**
      * Sets a flag based on boolean logic operators.
+     *
+     * @param {string} id The id of the controller interested in this flag.
+     * @param {boolean} value The value of this flag ( true or false ).
      */
     setFlag: function(id, value) {
 
@@ -60,11 +63,11 @@ Drupal.media = Drupal.media ? Drupal.media : {};
 
       // Use binary operations to keep track of the flag state
       if (value) {
-        this.flags |= (1 << this.ids[id]);
+        this.flag |= (1 << this.ids[id]);
       }
       else {
-        this.flags &= ~(1 << this.ids[id]);
+        this.flag &= ~(1 << this.ids[id]);
       }
     }
   });
-})(jQuery, Drupal.media);
+}(jQuery, Drupal.media));
