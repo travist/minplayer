@@ -30,8 +30,10 @@ jslint: ${files}
 
 # Create an aggregated js file and a compressed js file.
 js: ${files}
-	cat > js/drupal.media.player.js $^
-	java -jar tools/compiler.jar --js js/drupal.media.player.js --js_output_file js/drupal.media.player.compressed.js
+	@echo "Generating aggregated js/drupal.media.player.js file"
+	@cat > js/drupal.media.player.js $^
+	@echo "Generating compressed js/drupal.media.player.compressed file"
+	@java -jar tools/compiler.jar --js js/drupal.media.player.js --js_output_file js/drupal.media.player.compressed.js
 
 # Fix the js style on all the files.
 fixjsstyle: ${files}
