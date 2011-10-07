@@ -1,14 +1,13 @@
-/**
- * The base template class which all templates should derive.
- */
+/** The Drupal namespace. */
 Drupal.media = Drupal.media || {};
 (function($, media) {
 
-  // Define the templates class if need be...
+  /** All of the template implementations */
   media.templates = media.templates || {};
 
   /**
-   * @constructor
+   * @class The base template class which all templates should derive.
+   *
    * @extends media.display
    * @param {object} context The jQuery context.
    * @param {object} options This components options.
@@ -21,28 +20,27 @@ Drupal.media = Drupal.media || {};
 
   // Extend the plugin prototype.
   var templatesBase = media.templates.base;
-  templatesBase.prototype = new media.display();
-  templatesBase.prototype.constructor = templatesBase;
-  templatesBase.prototype = jQuery.extend(templatesBase.prototype, {
+  media.templates.base.prototype = new media.display();
 
-    /**
-     * @see media.display.getElements
-     */
-    getElements: function() {
-      var elements = media.display.prototype.getElements.call(this);
-      return jQuery.extend(elements, {
-        display: null,
-        player: null
-      });
-    },
+  /**
+   * @see media.display#getElements
+   */
+  media.templates.base.prototype.getElements = function() {
+    var elements = media.display.prototype.getElements.call(this);
+    return $.extend(elements, {
+      player: null,
+      display: null,
+      media: null
+    });
+  };
 
-    /**
-     * The player is going into full screen mode.
-     */
-    onFullScreen: function(full) {
-
-    }
-  });
+  /**
+   * Called when the media player goes into full screen mode.
+   *
+   * @param {boolean} full TRUE - The player is in fullscreen, FALSE otherwise.
+   */
+  media.templates.base.prototype.onFullScreen = function(full) {
+  };
 }(jQuery, Drupal.media));
 
 

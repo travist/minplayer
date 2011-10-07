@@ -6,3 +6,6 @@ instructions to run the makefile successfully.
 
   2.)  Install closure-linter tool at by following
        http://code.google.com/closure/utilities/docs/linter_howto.html
+
+  3.)  Download the JSDoc toolkit found at http://code.google.com/p/jsdoc-toolkit
+       and place the jsdoc-toolkit directory within the tools directory.

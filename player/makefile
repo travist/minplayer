@@ -5,6 +5,10 @@
 #
 # 2.)  Install closure-linter tool at by following
 #      http://code.google.com/closure/utilities/docs/linter_howto.html
+#
+# 3.)  Download the JSDoc toolkit found at
+#      http://code.google.com/p/jsdoc-toolkit and place the jsdoc-toolkit
+#      directory within the tools directory.
 
 # Create the list of files
 files =   js/source/drupal.media.compatibility.js\
@@ -22,7 +26,7 @@ files =   js/source/drupal.media.compatibility.js\
 
 .DEFAULT_GOAL := all
 
-all: jslint js
+all: jslint js jsdoc
 
 # Perform a jsLint on all the files.
 jslint: ${files}
@@ -34,6 +38,11 @@ js: ${files}
 	@cat > js/drupal.media.player.js $^
 	@echo "Generating compressed js/drupal.media.player.compressed file"
 	@java -jar tools/compiler.jar --js js/drupal.media.player.js --js_output_file js/drupal.media.player.compressed.js
+
+# Create the documentation from source code.
+jsdoc: ${files}
+	@echo "Generating documetation."
+	@java -jar tools/jsdoc-toolkit/jsrun.jar tools/jsdoc-toolkit/app/run.js -a -t=tools/jsdoc-toolkit/templates/jsdoc -d=doc $^
 
 # Fix the js style on all the files.
 fixjsstyle: ${files}

@@ -1,11 +1,12 @@
-/**
- * The base class for all plugins.
- */
+/** The Drupal namespace. */
 Drupal.media = Drupal.media || {};
-(function($, media) {
+(function(media) {
 
   /**
-   * @constructor
+   * @class The base class for all plugins.
+   *
+   * @param {object} context The jQuery context.
+   * @param {object} options This components options.
    */
   media.plugin = function(context, options) {
 
@@ -18,25 +19,22 @@ Drupal.media = Drupal.media || {};
     }
   };
 
-  // Define the prototype for all controllers.
-  media.plugin.prototype = jQuery.extend(media.plugin.prototype, {
+  /**
+   * The constructor which is called once the context is set.
+   * Any class deriving from the plugin class should place all context
+   * dependant functionality within this function instead of the standard
+   * constructor function since it is called on object derivation as well
+   * as object creation.
+   */
+  media.plugin.prototype.construct = function() {
+  };
 
-    /**
-     * The constructor which is called once the context is set.
-     * Any class deriving from the plugin class should place all context
-     * dependant functionality within this function instead of the standard
-     * constructor function since it is called on object derivation as well
-     * as object creation.
-     */
-    construct: function() {},
-
-    /**
-     * Sets the current media player.
-     *
-     * @param {object} player The current media player.
-     */
-    setPlayer: function(player) {
-      this.player = player;
-    }
-  });
-}(jQuery, Drupal.media));
+  /**
+   * Sets the current media player.
+   *
+   * @param {object} player The current media player.
+   */
+  media.plugin.prototype.setPlayer = function(player) {
+    this.player = player;
+  };
+}(Drupal.media));

@@ -20,8 +20,9 @@ Drupal.media = Drupal.media ? Drupal.media : {};
     getElements: function() {
       var elements = media.templates.base.prototype.getElements.call(this);
       return jQuery.extend(elements, {
+        player:this.display,
         display:$(".media-player-display", this.display),
-        player:$(this.options.id + "-player", this.display)
+        media:$(this.options.id + "-player", this.display)
       });
     }
   });

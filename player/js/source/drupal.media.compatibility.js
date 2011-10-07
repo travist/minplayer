@@ -1,35 +1,4 @@
-/**
- * Drupal.media.compatibility
- *
- * This class is used to define the types of media that can be played within the
- * browser.
- *
- * Usage:
- *
- *   if (Drupal.media.playTypes.videoOGG) {
- *     console.log("This browser can play OGG video");
- *   }
- *
- *   if (Drupal.media.playTypes.videoH264) {
- *     console.log("This browser can play H264 video");
- *   }
- *
- *   if (Drupal.media.playTypes.videoWEBM) {
- *     console.log("This browser can play WebM video");
- *   }
- *
- *   if (Drupal.media.playTypes.audioOGG) {
- *     console.log("This browser can play OGG audio");
- *   }
- *
- *   if (Drupal.media.playTypes.audioMP3) {
- *     console.log("This browser can play MP3 audio");
- *   }
- *
- *   if (Drupal.media.audioMP4) {
- *     console.log("This browser can play MP4 audio");
- *   }
- */
+/** The Drupal namespace. */
 Drupal.media = Drupal.media || {};
 (function(media) {
 
@@ -44,27 +13,69 @@ Drupal.media = Drupal.media || {};
     }
   }
 
-  // Private function to get the playtypes.
-  function getPlayTypes() {
-    var types = {}, elem = null;
+  /**
+   * @class This class is used to define the types of media that can be played
+   * within the browser.
+   * <p>
+   * <strong>Usage:</strong>
+   * <pre><code>
+   *   var playTypes = new media.compatibility();
+   *
+   *   if (playTypes.videoOGG) {
+   *     console.log("This browser can play OGG video");
+   *   }
+   *
+   *   if (playTypes.videoH264) {
+   *     console.log("This browser can play H264 video");
+   *   }
+   *
+   *   if (playTypes.videoWEBM) {
+   *     console.log("This browser can play WebM video");
+   *   }
+   *
+   *   if (playTypes.audioOGG) {
+   *     console.log("This browser can play OGG audio");
+   *   }
+   *
+   *   if (playTypes.audioMP3) {
+   *     console.log("This browser can play MP3 audio");
+   *   }
+   *
+   *   if (playTypes.audioMP4) {
+   *     console.log("This browser can play MP4 audio");
+   *   }
+   * </code></pre>
+   */
+  media.compatibility = function() {
+    var elem = null;
 
-    // Check for video types...
+    // Create a video element.
     elem = document.createElement('video');
-    types.videoOGG = checkPlayType(elem, 'video/ogg');
-    types.videoH264 = checkPlayType(elem, 'video/mp4');
-    types.videoWEBM = checkPlayType(elem, 'video/x-webm');
 
-    // Now check for audio types...
+    /** Can play OGG video */
+    this.videoOGG = checkPlayType(elem, 'video/ogg');
+
+    /** Can play H264 video */
+    this.videoH264 = checkPlayType(elem, 'video/mp4');
+
+    /** Can play WEBM video */
+    this.videoWEBM = checkPlayType(elem, 'video/x-webm');
+
+    // Create an audio element.
     elem = document.createElement('audio');
-    types.audioOGG = checkPlayType(elem, 'audio/ogg');
-    types.audioMP3 = checkPlayType(elem, 'audio/mpeg');
-    types.audioMP4 = checkPlayType(elem, 'audio/mp4');
 
-    return types;
-  }
+    /** Can play audio OGG */
+    this.audioOGG = checkPlayType(elem, 'audio/ogg');
 
-  // If the playTypes have not yet been determined, do so on script load.
+    /** Can play audio MP3 */
+    this.audioMP3 = checkPlayType(elem, 'audio/mpeg');
+
+    /** Can play audio MP4 */
+    this.audioMP4 = checkPlayType(elem, 'audio/mp4');
+  };
+
+  /** Store all the playtypes for this browser */
   if (!media.playTypes) {
-    media.playTypes = getPlayTypes();
+    media.playTypes = new media.compatibility();
   }
 }(Drupal.media));
