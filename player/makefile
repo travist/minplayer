@@ -21,6 +21,8 @@ files =   js/source/drupal.media.compatibility.js\
           js/source/drupal.media.players.base.js\
           js/source/drupal.media.players.html5.js\
           js/source/drupal.media.players.flash.js\
+          js/source/drupal.media.players.minplayer.js\
+          js/source/drupal.media.players.youtube.js\
           js/source/drupal.media.controllers.base.js\
           js/source/drupal.media.templates.base.js
 
