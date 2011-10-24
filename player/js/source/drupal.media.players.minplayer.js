@@ -35,6 +35,10 @@ Drupal.media = Drupal.media || {};
     media.players.flash.call(this, context, options, mediaFile);
   };
 
+  // Define the prototype.
+  media.players.minplayer.prototype = new media.players.flash();
+  media.players.minplayer.prototype.constructor = media.players.minplayer;
+
   window.onFlashPlayerReady = function(id) {
     if (media.player[id]) {
       media.player[id].media.onReady();
@@ -82,16 +86,12 @@ Drupal.media = Drupal.media || {};
     }
   };
 
-  // Define the prototype.
-  media.players.minplayer.prototype = new media.players.flash();
-  media.players.minplayer.prototype.constructor = media.players.minplayer;
-
   /**
    * @see media.players.base#create
    */
   media.players.minplayer.prototype.create = function() {
 
-    media.players.base.prototype.flash.call(this);
+    media.players.flash.prototype.create.call(this);
 
     // The flash variables for this flash player.
     var flashVars = {
@@ -103,7 +103,7 @@ Drupal.media = Drupal.media || {};
     };
 
     // Return a flash media player object.
-    return media.players.minplayer.getFlash({
+    return media.players.flash.getFlash({
       swf: this.options.swfplayer,
       id: this.options.id + '_player',
       playerType: 'flash',

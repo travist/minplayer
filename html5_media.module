@@ -56,6 +56,8 @@ function html5_media_library() {
         $path . '/js/source/drupal.media.players.base.js' => array('group' => JS_LIBRARY),
         $path . '/js/source/drupal.media.players.html5.js' => array('group' => JS_LIBRARY),
         $path . '/js/source/drupal.media.players.flash.js' => array('group' => JS_LIBRARY),
+        $path . '/js/source/drupal.media.players.minplayer.js' => array('group' => JS_LIBRARY),
+        $path . '/js/source/drupal.media.players.youtube.js' => array('group' => JS_LIBRARY),
         $path . '/js/source/drupal.media.controllers.base.js' => array('group' => JS_LIBRARY),
         $path . '/js/source/drupal.media.templates.base.js' => array('group' => JS_LIBRARY)
       ),

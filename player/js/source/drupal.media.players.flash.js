@@ -42,55 +42,6 @@ Drupal.media = Drupal.media || {};
   };
 
   /**
-   * Called when the player is ready.
-   */
-  media.players.flash.prototype.onReady = function() {
-    var _this = this;
-    this.ready = true;
-    this.trigger('loadstart');
-
-    // Perform a check for the duration every second until it shows up.
-    this.durationInterval = setInterval(function() {
-      if (_this.getDuration()) {
-        clearInterval(_this.durationInterval);
-        _this.trigger('durationchange', {duration: _this.getDuration()});
-      }
-    }, 1000);
-  };
-
-  /**
-   * Should be called when the media is playing.
-   */
-  media.players.flash.prototype.onPlaying = function() {
-    var _this = this;
-    this.trigger('playing');
-    this.mediaInterval = setInterval(function() {
-      var cTime = _this.getCurrentTime();
-      var dur = _this.getDuration();
-      var data = {currentTime: cTime, duration: dur};
-      _this.trigger('timeupdate', data);
-    }, 1000);
-  };
-
-  /**
-   * Should be called when the media is paused.
-   */
-  media.players.flash.prototype.onPaused = function() {
-    this.trigger('pause');
-    clearInterval(this.mediaInterval);
-  };
-
-  /**
-   * Should be called when the meta data has finished loading.
-   */
-  media.players.flash.prototype.onMeta = function() {
-    clearInterval(this.durationInterval);
-    this.trigger('loadeddata');
-    this.trigger('loadedmetadata');
-    this.trigger('durationchange', {duration: this.getDuration()});
-  };
-
-  /**
    * API to return the Flash player code provided params.
    *
    * @param {object} params The params used to populate the Flash code.
@@ -155,9 +106,54 @@ Drupal.media = Drupal.media || {};
     return element;
   };
 
-  // Define the prototype.
-  media.players.flash.prototype = new media.players.base();
-  media.players.flash.prototype.constructor = media.players.flash;
+  /**
+   * Called when the player is ready.
+   */
+  media.players.flash.prototype.onReady = function() {
+    var _this = this;
+    this.ready = true;
+    this.trigger('loadstart');
+
+    // Perform a check for the duration every second until it shows up.
+    this.durationInterval = setInterval(function() {
+      if (_this.getDuration()) {
+        clearInterval(_this.durationInterval);
+        _this.trigger('durationchange', {duration: _this.getDuration()});
+      }
+    }, 1000);
+  };
+
+  /**
+   * Should be called when the media is playing.
+   */
+  media.players.flash.prototype.onPlaying = function() {
+    var _this = this;
+    this.trigger('playing');
+    this.mediaInterval = setInterval(function() {
+      var cTime = _this.getCurrentTime();
+      var dur = _this.getDuration();
+      var data = {currentTime: cTime, duration: dur};
+      _this.trigger('timeupdate', data);
+    }, 1000);
+  };
+
+  /**
+   * Should be called when the media is paused.
+   */
+  media.players.flash.prototype.onPaused = function() {
+    this.trigger('pause');
+    clearInterval(this.mediaInterval);
+  };
+
+  /**
+   * Should be called when the meta data has finished loading.
+   */
+  media.players.flash.prototype.onMeta = function() {
+    clearInterval(this.durationInterval);
+    this.trigger('loadeddata');
+    this.trigger('loadedmetadata');
+    this.trigger('durationchange', {duration: this.getDuration()});
+  };
 
   /**
    * Reset the flash player variables.

@@ -18,6 +18,10 @@ Drupal.media = Drupal.media || {};
     media.players.base.call(this, context, options, mediaFile);
   };
 
+  // Define the prototype.
+  media.players.html5.prototype = new media.players.base();
+  media.players.html5.prototype.constructor = media.players.html5;
+
   /**
    * @see media.players.base#getPriority
    */
@@ -46,10 +50,6 @@ Drupal.media = Drupal.media || {};
         return false;
     }
   };
-
-  // Define the prototype.
-  media.players.html5.prototype = new media.players.base();
-  media.players.html5.prototype.constructor = media.players.html5;
 
   /**
    * @see media.plugin.construct

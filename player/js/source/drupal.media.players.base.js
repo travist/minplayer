@@ -21,6 +21,10 @@ Drupal.media = Drupal.media || {};
     media.display.call(this, context, options);
   };
 
+  // Extend the display prototype.
+  media.players.base.prototype = new media.display();
+  media.players.base.prototype.constructor = media.players.base;
+
   /**
    * Get the priority of this media player.
    *
@@ -38,10 +42,6 @@ Drupal.media = Drupal.media || {};
   media.players.base.canPlay = function(file) {
     return false;
   };
-
-  // Extend the display prototype.
-  media.players.base.prototype = new media.display();
-  media.players.base.prototype.constructor = media.players.base;
 
   /**
    * @see media.plugin.construct

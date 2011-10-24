@@ -833,6 +833,10 @@ Drupal.media = Drupal.media || {};
     media.display.call(this, context, options);
   };
 
+  // Extend the display prototype.
+  media.players.base.prototype = new media.display();
+  media.players.base.prototype.constructor = media.players.base;
+
   /**
    * Get the priority of this media player.
    *
@@ -850,10 +854,6 @@ Drupal.media = Drupal.media || {};
   media.players.base.canPlay = function(file) {
     return false;
   };
-
-  // Extend the display prototype.
-  media.players.base.prototype = new media.display();
-  media.players.base.prototype.constructor = media.players.base;
 
   /**
    * @see media.plugin.construct
@@ -1015,6 +1015,10 @@ Drupal.media = Drupal.media || {};
     media.players.base.call(this, context, options, mediaFile);
   };
 
+  // Define the prototype.
+  media.players.html5.prototype = new media.players.base();
+  media.players.html5.prototype.constructor = media.players.html5;
+
   /**
    * @see media.players.base#getPriority
    */
@@ -1043,10 +1047,6 @@ Drupal.media = Drupal.media || {};
         return false;
     }
   };
-
-  // Define the prototype.
-  media.players.html5.prototype = new media.players.base();
-  media.players.html5.prototype.constructor = media.players.html5;
 
   /**
    * @see media.plugin.construct
@@ -1278,55 +1278,6 @@ Drupal.media = Drupal.media || {};
   };
 
   /**
-   * Called when the player is ready.
-   */
-  media.players.flash.prototype.onReady = function() {
-    var _this = this;
-    this.ready = true;
-    this.trigger('loadstart');
-
-    // Perform a check for the duration every second until it shows up.
-    this.durationInterval = setInterval(function() {
-      if (_this.getDuration()) {
-        clearInterval(_this.durationInterval);
-        _this.trigger('durationchange', {duration: _this.getDuration()});
-      }
-    }, 1000);
-  };
-
-  /**
-   * Should be called when the media is playing.
-   */
-  media.players.flash.prototype.onPlaying = function() {
-    var _this = this;
-    this.trigger('playing');
-    this.mediaInterval = setInterval(function() {
-      var cTime = _this.getCurrentTime();
-      var dur = _this.getDuration();
-      var data = {currentTime: cTime, duration: dur};
-      _this.trigger('timeupdate', data);
-    }, 1000);
-  };
-
-  /**
-   * Should be called when the media is paused.
-   */
-  media.players.flash.prototype.onPaused = function() {
-    this.trigger('pause');
-    clearInterval(this.mediaInterval);
-  };
-
-  /**
-   * Should be called when the meta data has finished loading.
-   */
-  media.players.flash.prototype.onMeta = function() {
-    clearInterval(this.durationInterval);
-    this.trigger('loadeddata');
-    this.trigger('loadedmetadata');
-    this.trigger('durationchange', {duration: this.getDuration()});
-  };
-
-  /**
    * API to return the Flash player code provided params.
    *
    * @param {object} params The params used to populate the Flash code.
@@ -1391,9 +1342,54 @@ Drupal.media = Drupal.media || {};
     return element;
   };
 
-  // Define the prototype.
-  media.players.flash.prototype = new media.players.base();
-  media.players.flash.prototype.constructor = media.players.flash;
+  /**
+   * Called when the player is ready.
+   */
+  media.players.flash.prototype.onReady = function() {
+    var _this = this;
+    this.ready = true;
+    this.trigger('loadstart');
+
+    // Perform a check for the duration every second until it shows up.
+    this.durationInterval = setInterval(function() {
+      if (_this.getDuration()) {
+        clearInterval(_this.durationInterval);
+        _this.trigger('durationchange', {duration: _this.getDuration()});
+      }
+    }, 1000);
+  };
+
+  /**
+   * Should be called when the media is playing.
+   */
+  media.players.flash.prototype.onPlaying = function() {
+    var _this = this;
+    this.trigger('playing');
+    this.mediaInterval = setInterval(function() {
+      var cTime = _this.getCurrentTime();
+      var dur = _this.getDuration();
+      var data = {currentTime: cTime, duration: dur};
+      _this.trigger('timeupdate', data);
+    }, 1000);
+  };
+
+  /**
+   * Should be called when the media is paused.
+   */
+  media.players.flash.prototype.onPaused = function() {
+    this.trigger('pause');
+    clearInterval(this.mediaInterval);
+  };
+
+  /**
+   * Should be called when the meta data has finished loading.
+   */
+  media.players.flash.prototype.onMeta = function() {
+    clearInterval(this.durationInterval);
+    this.trigger('loadeddata');
+    this.trigger('loadedmetadata');
+    this.trigger('durationchange', {duration: this.getDuration()});
+  };
 
   /**
    * Reset the flash player variables.
@@ -1514,6 +1510,10 @@ Drupal.media = Drupal.media || {};
     media.players.flash.call(this, context, options, mediaFile);
   };
 
+  // Define the prototype.
+  media.players.minplayer.prototype = new media.players.flash();
+  media.players.minplayer.prototype.constructor = media.players.minplayer;
+
   window.onFlashPlayerReady = function(id) {
     if (media.player[id]) {
       media.player[id].media.onReady();
@@ -1561,16 +1561,12 @@ Drupal.media = Drupal.media || {};
     }
   };
 
-  // Define the prototype.
-  media.players.minplayer.prototype = new media.players.flash();
-  media.players.minplayer.prototype.constructor = media.players.minplayer;
-
   /**
    * @see media.players.base#create
    */
   media.players.minplayer.prototype.create = function() {
 
-    media.players.base.prototype.flash.call(this);
+    media.players.flash.prototype.create.call(this);
 
     // The flash variables for this flash player.
     var flashVars = {
@@ -1582,7 +1578,7 @@ Drupal.media = Drupal.media || {};
     };
 
     // Return a flash media player object.
-    return media.players.minplayer.getFlash({
+    return media.players.flash.getFlash({
       swf: this.options.swfplayer,
       id: this.options.id + '_player',
       playerType: 'flash',
@@ -1716,6 +1712,10 @@ Drupal.media = Drupal.media || {};
     this.quality = 'default';
   };
 
+  // Define the prototype.
+  media.players.youtube.prototype = new media.players.flash();
+  media.players.youtube.prototype.constructor = media.players.youtube;
+
   // Called when the YouTube player is ready.
   window.onYouTubePlayerReady = function(id) {
     if (media.player[id]) {
@@ -1797,10 +1797,6 @@ Drupal.media = Drupal.media || {};
     return (file.path.search(/^http(s)?\:\/\/(www\.)?youtube\.com/i) === 0);
   };
 
-  // Define the prototype.
-  media.players.youtube.prototype = new media.players.flash();
-  media.players.youtube.prototype.constructor = media.players.youtube;
-
   /**
    * @see media.players.base#create
    */
@@ -1819,7 +1815,7 @@ Drupal.media = Drupal.media || {};
     var flashPlayer = 'http://www.youtube.com/apiplayer?rand=' + rand;
     flashPlayer += '&amp;version=3&amp;enablejsapi=1&amp;playerapiid=';
     flashPlayer += this.options.id;
-    return media.players.youtube.getFlash({
+    return media.players.flash.getFlash({
       swf: flashPlayer,
       id: this.options.id + '_player',
       playerType: 'flash',
@@ -1969,6 +1965,11 @@ Drupal.media = Drupal.media || {};
     media.display.call(this, context, options);
   }
 
+  // Define the prototype for all controllers.
+  var controllersBase = media.controllers.base;
+  media.controllers.base.prototype = new media.display();
+  media.controllers.base.prototype.constructor = media.controllers.base;
+
   /**
    * A static function that will format a time value into a string time format.
    *
@@ -1995,11 +1996,6 @@ Drupal.media = Drupal.media || {};
     timeString += (seconds >= 10) ? String(seconds) : ('0' + String(seconds));
     return {time: timeString, units: ''};
   };
-
-  // Define the prototype for all controllers.
-  var controllersBase = media.controllers.base;
-  media.controllers.base.prototype = new media.display();
-  media.controllers.base.prototype.constructor = media.controllers.base;
 
   /**
    * @see media.display#getElements

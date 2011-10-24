@@ -21,6 +21,10 @@ Drupal.media = Drupal.media || {};
     this.quality = 'default';
   };
 
+  // Define the prototype.
+  media.players.youtube.prototype = new media.players.flash();
+  media.players.youtube.prototype.constructor = media.players.youtube;
+
   // Called when the YouTube player is ready.
   window.onYouTubePlayerReady = function(id) {
     if (media.player[id]) {
@@ -102,10 +106,6 @@ Drupal.media = Drupal.media || {};
     return (file.path.search(/^http(s)?\:\/\/(www\.)?youtube\.com/i) === 0);
   };
 
-  // Define the prototype.
-  media.players.youtube.prototype = new media.players.flash();
-  media.players.youtube.prototype.constructor = media.players.youtube;
-
   /**
    * @see media.players.base#create
    */
@@ -124,7 +124,7 @@ Drupal.media = Drupal.media || {};
     var flashPlayer = 'http://www.youtube.com/apiplayer?rand=' + rand;
     flashPlayer += '&amp;version=3&amp;enablejsapi=1&amp;playerapiid=';
     flashPlayer += this.options.id;
-    return media.players.youtube.getFlash({
+    return media.players.flash.getFlash({
       swf: flashPlayer,
       id: this.options.id + '_player',
       playerType: 'flash',

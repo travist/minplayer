@@ -20,6 +20,11 @@ Drupal.media = Drupal.media || {};
     media.display.call(this, context, options);
   }
 
+  // Define the prototype for all controllers.
+  var controllersBase = media.controllers.base;
+  media.controllers.base.prototype = new media.display();
+  media.controllers.base.prototype.constructor = media.controllers.base;
+
   /**
    * A static function that will format a time value into a string time format.
    *
@@ -46,11 +51,6 @@ Drupal.media = Drupal.media || {};
     timeString += (seconds >= 10) ? String(seconds) : ('0' + String(seconds));
     return {time: timeString, units: ''};
   };
-
-  // Define the prototype for all controllers.
-  var controllersBase = media.controllers.base;
-  media.controllers.base.prototype = new media.display();
-  media.controllers.base.prototype.constructor = media.controllers.base;
 
   /**
    * @see media.display#getElements
