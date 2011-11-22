@@ -1,6 +1,3 @@
-MinPlayer - Minimalistic Flash Media Player.
-http://github.com/travist/minplayer
-
 The minplayer is a GPLv3, minimalistic, skinable, plugin based Flash media player.
 
 In addition to being a minimal Flash player, it was built with a solid API so that any 
