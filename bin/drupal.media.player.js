@@ -1327,8 +1327,12 @@ Drupal.media = Drupal.media || {};
     embed = document.createElement('embed');
     for (paramKey in flashParams) {
       if (flashParams.hasOwnProperty(paramKey)) {
-        paramKey = (paramKey === 'movie') ? 'src' : paramKey;
-        embed.setAttribute(paramKey, flashParams[paramKey]);
+        if (paramKey === 'movie') {
+          embed.setAttribute('src', flashParams[paramKey]);
+        }
+        else {
+          embed.setAttribute(paramKey, flashParams[paramKey]);
+        }
       }
     }
 
