@@ -1,94 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>AllPlayers API Unit Tests</title>
+    <title>Drupal Media Player</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel='stylesheet' type='text/css' href='http://code.jquery.com/qunit/qunit-git.css' />
-    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/base/jquery-ui.css" type="text/css" media="all" />
-    <script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.js"></script>
-    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js'></script>
-    <script type='text/javascript' src='http://code.jquery.com/qunit/qunit-git.js'></script>
-    <script type='text/javascript' src='src/drupal.api.js'></script>
-    <script type='text/javascript' src='src/drupal.system.js'></script>
-    <script type='text/javascript' src='src/drupal.system.api.js'></script>
-    <script type='text/javascript' src='src/drupal.entity.js'></script>
-    <script type='text/javascript' src='src/drupal.node.js'></script>
-    <script type='text/javascript' src='src/drupal.node.api.js'></script>
-    <script type='text/javascript' src='src/drupal.user.js'></script>
-    <script type='text/javascript' src='src/drupal.user.api.js'></script>
-
-    <script type='text/javascript' src='tests/drupal.system.test.js'></script>
-    <script type='text/javascript' src='tests/drupal.node.test.js'></script>
-    <script type='text/javascript' src='tests/drupal.user.test.js'></script>
-
-    <script type="text/javascript">
-      $(function() {
-        $("input#submit").click(function(event) {
-          event.preventDefault();
-          var endpoint = $("input#endpoint").val();
-          if (endpoint.indexOf('http') !== 0) {
-            endpoint = 'http://' + endpoint;
-          }
-
-          var username = $("input#username").val();
-          var password = $("input#password").val();
-          if (username && password) {
-
-            var runTests = function(uname, passwd) {
-              runSystemTests();
-              runNodeTests();
-              runUserTests(uname, passwd);
-            };
-
-            // The endpoint for this drupal.
-            drupal.endpoint = endpoint;
-
-            // Connect to the system.
-            new drupal.system(function(system) {
-
-              // If the user is already user 1, then run tests...
-              if (system.user.id == 1) {
-                runTests(username, password);
-              }
-              else {
-
-                // If the user is anonymous, then just login as admin.
-                if (system.user.id == 0) {
-                  new drupal.user({name:username,pass:password}).login(function() {
-                    runTests(username, password);
-                  });
-                }
-                else {
-
-                  // If the user is someone else, logout, then login as admin.
-                  system.user.logout(function() {
-                    new drupal.user({name:username,pass:password}).login(function() {
-                      runTests(username, password);
-                    });
-                  });
-                }
-              }
-            });
-          }
-        });
-      });
-    </script>
   </head>
   <body>
-    <form>
-      <label for="endpoint">Endpoint URL</label>
-      <input type="text" id="endpoint" value="" size="60" maxlength="1024"><br/>
-      <label for="username">Admin Username</label>
-      <input type="text" id="username" value="" size="15" maxlength="60"><br/>
-      <label for="password">Admin Password</label>
-      <input type="password" id="password" name="pass" size="15" maxlength="60"><br/>
-      <input type="submit" id="submit" name="op" value="Run Tests">
-    </form>
-    <h1 id="qunit-header">QUnit example</h1>
-    <h2 id="qunit-banner"></h2>
-    <div id="qunit-testrunner-toolbar"></div>
-    <h2 id="qunit-userAgent"></h2>
-    <ol id="qunit-tests"></ol>
-    <div id="qunit-fixture">test markup, will be hidden</div>
+    TO-DO: Add a media player example here...
   </body>
 </html>
