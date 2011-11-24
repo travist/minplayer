@@ -11,20 +11,20 @@
 #      directory within the tools directory.
 
 # Create the list of files
-files =   src/drupal.media.compatibility.js\
-          src/drupal.media.flags.js\
-          src/drupal.media.plugin.js\
-          src/drupal.media.display.js\
-          src/drupal.media.player.js\
-          src/drupal.media.file.js\
-          src/drupal.media.playLoader.base.js\
-          src/drupal.media.players.base.js\
-          src/drupal.media.players.html5.js\
-          src/drupal.media.players.flash.js\
-          src/drupal.media.players.minplayer.js\
-          src/drupal.media.players.youtube.js\
-          src/drupal.media.controllers.base.js\
-          src/drupal.media.templates.base.js
+files =   src/minplayer.compatibility.js\
+          src/minplayer.flags.js\
+          src/minplayer.plugin.js\
+          src/minplayer.display.js\
+          src/minplayer.player.js\
+          src/minplayer.file.js\
+          src/minplayer.playLoader.base.js\
+          src/minplayer.players.base.js\
+          src/minplayer.players.html5.js\
+          src/minplayer.players.flash.js\
+          src/minplayer.players.minplayer.js\
+          src/minplayer.players.youtube.js\
+          src/minplayer.controllers.base.js\
+          src/minplayer.templates.base.js
 
 .DEFAULT_GOAL := all
 
@@ -36,10 +36,10 @@ jslint: ${files}
 
 # Create an aggregated js file and a compressed js file.
 js: ${files}
-	@echo "Generating aggregated bin/drupal.media.player.js file"
-	@cat > bin/drupal.media.player.js $^
-	@echo "Generating compressed bin/drupal.media.player.compressed file"
-	@java -jar tools/compiler.jar --js bin/drupal.media.player.js --js_output_file bin/drupal.media.player.compressed.js
+	@echo "Generating aggregated bin/minplayer.player.js file"
+	@cat > bin/minplayer.player.js $^
+	@echo "Generating compressed bin/minplayer.player.compressed file"
+	@java -jar tools/compiler.jar --js bin/minplayer.player.js --js_output_file bin/minplayer.player.compressed.js
 
 # Create the documentation from source code.
 jsdoc: ${files}
