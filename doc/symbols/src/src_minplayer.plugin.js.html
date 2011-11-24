@@ -1,0 +1,47 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/** The minplayer namespace. */</span><span class="WHIT">
+<span class='line'>  2</span> </span><span class="NAME">minplayer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">minplayer</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  3</span> 
+<span class='line'>  4</span> </span><span class="COMM">/**
+<span class='line'>  5</span>  * @constructor
+<span class='line'>  6</span>  * @class The base class for all plugins.
+<span class='line'>  7</span>  *
+<span class='line'>  8</span>  * @param {object} context The jQuery context.
+<span class='line'>  9</span>  * @param {object} options This components options.
+<span class='line'> 10</span>  */</span><span class="WHIT">
+<span class='line'> 11</span> </span><span class="NAME">minplayer.plugin</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">context</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">options</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 12</span> 
+<span class='line'> 13</span> </span><span class="WHIT">  </span><span class="COMM">// The media player.</span><span class="WHIT">
+<span class='line'> 14</span> </span><span class="WHIT">  </span><span class="NAME">this.player</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 15</span> 
+<span class='line'> 16</span> </span><span class="WHIT">  </span><span class="COMM">// Only call the constructor if we have a context.</span><span class="WHIT">
+<span class='line'> 17</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">context</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 18</span> </span><span class="WHIT">    </span><span class="NAME">this.construct</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 19</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 20</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 21</span> 
+<span class='line'> 22</span> </span><span class="COMM">/**
+<span class='line'> 23</span>  * The constructor which is called once the context is set.
+<span class='line'> 24</span>  * Any class deriving from the plugin class should place all context
+<span class='line'> 25</span>  * dependant functionality within this function instead of the standard
+<span class='line'> 26</span>  * constructor function since it is called on object derivation as well
+<span class='line'> 27</span>  * as object creation.
+<span class='line'> 28</span>  */</span><span class="WHIT">
+<span class='line'> 29</span> </span><span class="NAME">minplayer.plugin.prototype.construct</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 31</span> 
+<span class='line'> 32</span> </span><span class="COMM">/**
+<span class='line'> 33</span>  * Sets the current media player.
+<span class='line'> 34</span>  *
+<span class='line'> 35</span>  * @param {object} player The current media player.
+<span class='line'> 36</span>  */</span><span class="WHIT">
+<span class='line'> 37</span> </span><span class="NAME">minplayer.plugin.prototype.setPlayer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">player</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 38</span> </span><span class="WHIT">  </span><span class="NAME">this.player</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">player</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 39</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 40</span> </span></pre></body></html>
