@@ -207,12 +207,12 @@ minplayer.display = function(context, options) {
   if (context) {
 
     // Set the display and options.
-    this.display = $(context);
+    this.display = jQuery(context);
     this.options = options;
 
     // Extend all display elements.
     this.options.elements = this.options.elements || {};
-    $.extend(this.options.elements, this.getElements());
+    jQuery.extend(this.options.elements, this.getElements());
     this.elements = this.options.elements;
   }
 
@@ -277,7 +277,7 @@ if (!jQuery.fn.minplayer) {
  * <pre><code>
  *
  *   // Create a media player.
- *   var player = $("#player").minplayer({
+ *   var player = jQuery("#player").minplayer({
  *
  *   });
  *
@@ -290,7 +290,7 @@ if (!jQuery.fn.minplayer) {
 minplayer.player = function(context, options) {
 
   // Make sure we provide default options...
-  options = $.extend({
+  options = jQuery.extend({
     id: 'player',
     controller: 'default',
     template: 'default',
@@ -340,7 +340,7 @@ minplayer.player.prototype.construct = function() {
   while (i--) {
     pluginInfo = minplayer.plugins[i];
     if (pluginInfo.element) {
-      pluginContext = $(pluginInfo.element, this.display);
+      pluginContext = jQuery(pluginInfo.element, this.display);
     }
     else {
       pluginContext = this.display;
@@ -358,17 +358,17 @@ minplayer.player.prototype.construct = function() {
     if (mediaSrc) {
       _files.push({'path': mediaSrc});
     }
-    $('source', this.elements.media).each(function() {
+    jQuery('source', this.elements.media).each(function() {
       _files.push({
-        'path': $(this).attr('src'),
-        'mimetype': $(this).attr('type'),
-        'codecs': $(this).attr('codecs')
+        'path': jQuery(this).attr('src'),
+        'mimetype': jQuery(this).attr('type'),
+        'codecs': jQuery(this).attr('codecs')
       });
     });
   }
 
   // Add key events to the window.
-  $(window).bind('keyup', {obj: this}, function(event) {
+  jQuery(window).bind('keyup', {obj: this}, function(event) {
     // Escape out of fullscreen if they press ESC or Q.
     var isFull = event.data.obj.display.hasClass('fullscreen');
     if (isFull && (event.keyCode === 113 || event.keyCode === 27)) {
@@ -742,7 +742,7 @@ minplayer.playLoader.base.prototype.construct = function() {
   if (this.elements.bigPlay) {
     this.elements.bigPlay.bind('click', {obj: this}, function(event) {
       event.preventDefault();
-      $(this).hide();
+      jQuery(this).hide();
       if (event.data.obj.player) {
         event.data.obj.player.play();
       }
@@ -1338,7 +1338,7 @@ minplayer.players.flash.getFlash = function(params) {
     'movie': params.swf,
     'wmode': params.wmode,
     'quality': 'high',
-    'FlashVars': $.param(params.flashvars)
+    'FlashVars': jQuery.param(params.flashvars)
   };
 
   // Add the parameters.
@@ -1462,8 +1462,8 @@ minplayer.players.flash.prototype.create = function() {
  */
 minplayer.players.flash.prototype.getPlayer = function() {
   // IE needs the object, everyone else just needs embed.
-  var object = $.browser.msie ? 'object' : 'embed';
-  return $(object, this.display).eq(0)[0];
+  var object = jQuery.browser.msie ? 'object' : 'embed';
+  return jQuery(object, this.display).eq(0)[0];
 };
 
 /**
@@ -2086,7 +2086,7 @@ minplayer.formatTime = function(time) {
  */
 minplayer.controllers.base.prototype.getElements = function() {
   var elements = minplayer.display.prototype.getElements.call(this);
-  return $.extend(elements, {
+  return jQuery.extend(elements, {
     play: null,
     pause: null,
     fullscreen: null,
@@ -2284,7 +2284,7 @@ minplayer.templates.base.prototype = new minplayer.display();
  */
 minplayer.templates.base.prototype.getElements = function() {
   var elements = minplayer.display.prototype.getElements.call(this);
-  return $.extend(elements, {
+  return jQuery.extend(elements, {
     player: null,
     display: null,
     media: null
