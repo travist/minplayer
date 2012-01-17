@@ -76,21 +76,48 @@ minplayer.player.prototype.construct = function() {
   // Call the minplayer display constructor.
   minplayer.display.prototype.construct.call(this);
 
-  // Store the this pointer for callbacks.
-  var pluginInfo = {};
-  var plugin = null;
-  var pluginContext = null;
-  var i = minplayer.plugins.length;
-  var _files = [];
-  var mediaSrc = null;
-
   /** The current player. */
   this.media = null;
 
   /** All of the plugin objects. */
   this.allPlugins = {};
 
-  // Iterate through all of our plugins and add them to our plugins array.
+  /** Variable to store the current media player. */
+  this.currentPlayer = 'html5';
+
+  // Add key events to the window.
+  this.addKeyEvents();
+
+  // Load all the plugins.
+  this.loadPlugins();
+
+  // Now load these files.
+  this.load(this.getFiles());
+};
+
+/**
+ * Adds key events to the player.
+ */
+minplayer.player.prototype.addKeyEvents = function() {
+
+  // Bind keyup to the current window.
+  jQuery(window).bind('keyup', {obj: this}, function(event) {
+    // Escape out of fullscreen if they press ESC or Q.
+    var isFull = event.data.obj.display.hasClass('fullscreen');
+    if (isFull && (event.keyCode === 113 || event.keyCode === 27)) {
+      event.data.obj.display.removeClass('fullscreen');
+    }
+  });
+};
+
+/**
+ * Loads all of the available plugins.
+ */
+minplayer.player.prototype.loadPlugins = function() {
+  var plugin = null;
+  var pluginInfo = {};
+  var pluginContext = null;
+  var i = minplayer.plugins.length;
   while (i--) {
     pluginInfo = minplayer.plugins[i];
     if (pluginInfo.element) {
@@ -102,18 +129,25 @@ minplayer.player.prototype.construct = function() {
     plugin = new pluginInfo.object(pluginContext, this.options);
     this.addPlugin(pluginInfo.id, plugin);
   }
+};
 
-  /** Variable to store the current media player. */
-  this.currentPlayer = 'html5';
+/**
+ * Returns all the media files available for this player.
+ *
+ * @return {array} All the media files for this player.
+ */
+minplayer.player.prototype.getFiles = function() {
+  var files = [];
+  var mediaSrc = null;
 
   // Get the files involved...
   if (this.elements.media) {
     mediaSrc = this.elements.media.attr('src');
     if (mediaSrc) {
-      _files.push({'path': mediaSrc});
+      files.push({'path': mediaSrc});
     }
     jQuery('source', this.elements.media).each(function() {
-      _files.push({
+      files.push({
         'path': jQuery(this).attr('src'),
         'mimetype': jQuery(this).attr('type'),
         'codecs': jQuery(this).attr('codecs')
@@ -121,17 +155,7 @@ minplayer.player.prototype.construct = function() {
     });
   }
 
-  // Add key events to the window.
-  jQuery(window).bind('keyup', {obj: this}, function(event) {
-    // Escape out of fullscreen if they press ESC or Q.
-    var isFull = event.data.obj.display.hasClass('fullscreen');
-    if (isFull && (event.keyCode === 113 || event.keyCode === 27)) {
-      event.data.obj.display.removeClass('fullscreen');
-    }
-  });
-
-  // Now load these files.
-  this.load(_files);
+  return files;
 };
 
 /**
@@ -209,7 +233,9 @@ minplayer.player.prototype.load = function(files) {
       }
     }
 
+    // If the media exists, then load it.
     if (this.media) {
+
       // Now load this media.
       this.media.load(mFile);
     }
