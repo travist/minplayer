@@ -22,6 +22,7 @@ minplayer.file = function(file) {
   this.type = file.type || this.getType();
   this.player = file.player || this.getBestPlayer();
   this.priority = file.priority || this.getPriority();
+  this.id = file.id || this.getId();
 };
 
 /**
@@ -138,4 +139,11 @@ minplayer.file.prototype.getType = function() {
     default:
       return 'unknown';
   }
+};
+
+/**
+ * Returns the ID for this media file.
+ */
+minplayer.file.prototype.getId = function() {
+  return minplayer.players[this.player].getMediaId(this);
 };
