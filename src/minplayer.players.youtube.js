@@ -15,29 +15,18 @@ minplayer.players = minplayer.players || {};
  */
 minplayer.players.youtube = function(context, options, mediaFile) {
 
-  // Derive from players flash.
-  minplayer.players.flash.call(this, context, options, mediaFile);
+  // Derive from players base.
+  minplayer.players.base.call(this, context, options, mediaFile);
 
   /** The quality of the YouTube stream. */
   this.quality = 'default';
 };
 
-/** Derive from minplayer.players.flash. */
-minplayer.players.youtube.prototype = new minplayer.players.flash();
+/** Derive from minplayer.players.base. */
+minplayer.players.youtube.prototype = new minplayer.players.base();
 
 /** Reset the constructor. */
 minplayer.players.youtube.prototype.constructor = minplayer.players.youtube;
-
-/**
- * Called when the YouTube player is ready.
- *
- * @param {string} id The media player ID.
- */
-window.onYouTubePlayerReady = function(id) {
-  if (minplayer.player[id]) {
-    minplayer.player[id].media.onReady();
-  }
-};
 
 /**
  * @see minplayer.plugin.construct
@@ -122,38 +111,27 @@ minplayer.players.youtube.canPlay = function(file) {
  */
 minplayer.players.youtube.prototype.create = function() {
 
-  minplayer.players.base.prototype.flash.call(this);
+  // Call the base create first.
+  minplayer.players.base.prototype.create.call(this);
 
-  // The flash variables for this flash player.
-  var flashVars = {
-    'file': this.mediaFile.path,
-    'autostart': this.options.settings.autoplay
-  };
+  // Create an iframe element.
+  var iframe = document.createElement('iframe');
 
-  // Return a flash media player object.
-  var rand = Math.floor(Math.random() * 1000000);
-  var flashPlayer = 'http://www.youtube.com/apiplayer?rand=' + rand;
-  flashPlayer += '&amp;version=3&amp;enablejsapi=1&amp;playerapiid=';
-  flashPlayer += this.options.id;
-  return minplayer.players.flash.getFlash({
-    swf: flashPlayer,
-    id: this.options.id + '_player',
-    playerType: 'flash',
-    width: this.options.settings.width,
-    height: '100%',
-    flashvars: flashVars,
-    wmode: this.options.wmode
-  });
+  // Set the iframe attributes.
+  iframe.setAttribute('id', this.options.id + '_player');
+  iframe.setAttribute('type', 'text/html');
+  iframe.setAttribute('width', this.options.settings.width);
+  iframe.setAttribute('height', this.options.settings.height);
+  iframe.setAttribute('src', 'http://www.youtube.com/embed/');
 };
 
 /**
- * Return the Regular Expression to find a YouTube ID.
- *
- * @return {RegEx} A regular expression to find a YouTube ID.
+ * Return the ID for a provided media file.
  */
-minplayer.players.youtube.prototype.regex = function() {
-  return /^http[s]?\:\/\/(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9]+)/i;
-};
+minplayer.players.youtube.prototype.getMediaId = function(file) {
+  var regex = /^http[s]?\:\/\/(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9]+)/i;
+  return (file.path.search(regex) === 0) ? file.path.replace(regex, '$2') : file.path;
+}
 
 /**
  * @see minplayer.players.base#load
@@ -161,15 +139,7 @@ minplayer.players.youtube.prototype.regex = function() {
 minplayer.players.youtube.prototype.load = function(file) {
   minplayer.players.flash.prototype.load.call(this, file);
   if (this.isReady()) {
-    var regex = this.regex();
-    var id = '';
-    if (this.mediaFile.path.search(regex) === 0) {
-      id = this.mediaFile.path.replace(regex, '$2');
-    }
-    else {
-      id = this.mediaFile.path;
-    }
-    this.player.loadVideoById(id, 0, this.quality);
+    this.player.loadVideoById(this.mediaFile.id, 0, this.quality);
   }
 };
 

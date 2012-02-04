@@ -38,6 +38,13 @@ minplayer.players.base.getPriority = function() {
 };
 
 /**
+ * Returns the ID for the media being played.
+ */
+minplayer.players.base.getMediaId = function(file) {
+  return 0;
+};
+
+/**
  * Determine if we can play the media file.
  *
  * @param {object} file A {@link minplayer.file} object.
