@@ -89,10 +89,6 @@ minplayer.players.youtube.prototype.register = function() {
         // Create a new youtube player object for this instance only.
         var playerId = instance.options.id + '_player';
         instance.media.player = new YT.Player(playerId, {
-          playerVars: {
-            wmode: 'opaque',
-            controls: '0'
-          },
           events: {
             'onReady': function(event) {
               instance.media.onReady(event);
@@ -205,6 +201,7 @@ minplayer.players.youtube.prototype.create = function() {
   // Add the parameters to the src.
   src += jQuery.param({
     'wmode': 'opaque',
+    'controls': 0,
     'enablejsapi': 1,
     'origin': origin
   });
