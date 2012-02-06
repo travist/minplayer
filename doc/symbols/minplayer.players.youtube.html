@@ -394,15 +394,6 @@ ul.inheritsList
 						</tr>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#getPlayerState">getPlayerState</a></b>(playerState)
-								</div>
-								<div class="description">Translates the player state for the YouTube API player.</div>
-							</td>
-						</tr>
-					
-						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">minplayer.players.youtube.<b><a href="../symbols/minplayer.players.youtube.html#.getPriority">getPriority</a></b>()
@@ -459,6 +450,15 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#onReady">onReady</a></b>(event)
+								</div>
+								<div class="description">Called when an error occurs.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#pause">pause</a></b>()
 								</div>
 								<div class="description"></div>
@@ -496,6 +496,15 @@ on the same page without event collision.</div>
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#setPlayerState">setPlayerState</a></b>(playerState)
+								</div>
+								<div class="description">Translates the player state for the YouTube API player.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#setVolume">setVolume</a></b>(vol)
 								</div>
 								<div class="description"></div>
@@ -517,7 +526,7 @@ on the same page without event collision.</div>
 				
 				
 				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/minplayer.players.base.html">minplayer.players.base</a>: </dt><dd><a href="../symbols/minplayer.players.base.html#construct">construct</a>, <a href="../symbols/minplayer.players.base.html#destroy">destroy</a>, <a href="../symbols/minplayer.players.base.html#getDuration">getDuration</a>, <a href="../symbols/minplayer.players.base.html#getPlayer">getPlayer</a>, <a href="../symbols/minplayer.players.base.html#playerFound">playerFound</a>, <a href="../symbols/minplayer.players.base.html#trigger">trigger</a></dd><dt>Methods borrowed from class <a href="../symbols/minplayer.display.html">minplayer.display</a>: </dt><dd><a href="../symbols/minplayer.display.html#getElements">getElements</a>, <a href="../symbols/minplayer.display.html#isValid">isValid</a></dd><dt>Methods borrowed from class <a href="../symbols/minplayer.plugin.html">minplayer.plugin</a>: </dt><dd><a href="../symbols/minplayer.plugin.html#setPlayer">setPlayer</a></dd>
+				<dt>Methods borrowed from class <a href="../symbols/minplayer.players.base.html">minplayer.players.base</a>: </dt><dd><a href="../symbols/minplayer.players.base.html#bind">bind</a>, <a href="../symbols/minplayer.players.base.html#construct">construct</a>, <a href="../symbols/minplayer.players.base.html#destroy">destroy</a>, <a href="../symbols/minplayer.players.base.html#getDuration">getDuration</a>, <a href="../symbols/minplayer.players.base.html#getPlayer">getPlayer</a>, <a href="../symbols/minplayer.players.base.html#hasPlayLoader">hasPlayLoader</a>, <a href="../symbols/minplayer.players.base.html#playerFound">playerFound</a>, <a href="../symbols/minplayer.players.base.html#trigger">trigger</a></dd><dt>Methods borrowed from class <a href="../symbols/minplayer.display.html">minplayer.display</a>: </dt><dd><a href="../symbols/minplayer.display.html#getElements">getElements</a>, <a href="../symbols/minplayer.display.html#isValid">isValid</a></dd><dt>Methods borrowed from class <a href="../symbols/minplayer.plugin.html">minplayer.plugin</a>: </dt><dd><a href="../symbols/minplayer.plugin.html#setPlayer">setPlayer</a></dd>
 				</dl>
 				
 			
@@ -923,49 +932,6 @@ on the same page without event collision.</div>
 
 					<hr />
 				
-					<a name="getPlayerState"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{string}</span>
-					<b>getPlayerState</b>(playerState)
-					
-					</div>
-					<div class="description">
-						Translates the player state for the YouTube API player.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{number}</span> <b>playerState</b>
-									
-								</dt>
-								<dd>The YouTube player state.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{string}</span> The standardized state for this YouTube state.</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
 					<a name=".getPriority"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -1195,6 +1161,42 @@ on the same page without event collision.</div>
 
 					<hr />
 				
+					<a name="onReady"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>onReady</b>(event)
+					
+					</div>
+					<div class="description">
+						Called when an error occurs.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>event</b>
+									
+								</dt>
+								<dd>The onReady event that was triggered.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="pause"> </a>
 					<div class="fixedFont">
 					
@@ -1328,6 +1330,42 @@ on the same page without event collision.
 
 					<hr />
 				
+					<a name="setPlayerState"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setPlayerState</b>(playerState)
+					
+					</div>
+					<div class="description">
+						Translates the player state for the YouTube API player.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{number}</span> <b>playerState</b>
+									
+								</dt>
+								<dd>The YouTube player state.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="setVolume"> </a>
 					<div class="fixedFont">
 					
@@ -1415,7 +1453,7 @@ on the same page without event collision.
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Mon Feb 06 2012 09:30:52 GMT-0600 (CST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Mon Feb 06 2012 10:31:59 GMT-0600 (CST)
 		</div>
 	</body>
 </html>

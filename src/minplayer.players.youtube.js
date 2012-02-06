@@ -87,7 +87,7 @@ minplayer.players.youtube.prototype.register = function() {
       if (instance.currentPlayer == 'youtube') {
 
         // Create a new youtube player object for this instance only.
-        var playerId = instance.options.id + '_player';
+        var playerId = instance.options.id + '-player';
         instance.media.player = new YT.Player(playerId, {
           events: {
             'onReady': function(event) {
@@ -113,27 +113,37 @@ minplayer.players.youtube.prototype.register = function() {
  * Translates the player state for the YouTube API player.
  *
  * @param {number} playerState The YouTube player state.
- * @return {string} The standardized state for this YouTube state.
  */
-minplayer.players.youtube.prototype.getPlayerState = function(playerState) {
+minplayer.players.youtube.prototype.setPlayerState = function(playerState) {
+  console.log(playerState);
   switch (playerState) {
-    case -1:
     case YT.PlayerState.CUED:
-      this.onMeta();
-      return 'ready';
+      break;
     case YT.PlayerState.BUFFERING:
-      return 'waiting';
+      this.trigger('waiting');
+      break;
     case YT.PlayerState.PAUSED:
       this.onPaused();
-      return 'pause';
+      break;
     case YT.PlayerState.PLAYING:
       this.onPlaying();
-      return 'play';
+      break;
     case YT.PlayerState.ENDED:
-      return 'ended';
+      this.trigger('ended');
+      break;
     default:
-      return 'unknown';
+      break;
   }
+};
+
+/**
+ * Called when an error occurs.
+ *
+ * @param {string} event The onReady event that was triggered.
+ */
+minplayer.players.youtube.prototype.onReady = function(event) {
+  minplayer.players.flash.prototype.onReady.call(this);
+  this.onMeta();
 };
 
 /**
@@ -142,7 +152,7 @@ minplayer.players.youtube.prototype.getPlayerState = function(playerState) {
  * @param {object} event A JavaScript Event.
  */
 minplayer.players.youtube.prototype.onPlayerStateChange = function(event) {
-  this.trigger(this.getPlayerState(event.data));
+  this.setPlayerState(event.data);
 };
 
 /**
@@ -161,6 +171,15 @@ minplayer.players.youtube.prototype.onQualityChange = function(newQuality) {
  */
 minplayer.players.youtube.prototype.onError = function(errorCode) {
   this.trigger('error', errorCode);
+};
+
+/**
+ * Determines if the player should show the playloader.
+ *
+ * @return {bool} If this player implements its own playLoader.
+ */
+minplayer.players.base.prototype.hasPlayLoader = function() {
+  return true;
 };
 
 /**
@@ -183,7 +202,7 @@ minplayer.players.youtube.prototype.create = function() {
 
   // Create the iframe for this player.
   var iframe = document.createElement('iframe');
-  iframe.setAttribute('id', this.options.id + '_player');
+  iframe.setAttribute('id', this.options.id + '-player');
   iframe.setAttribute('type', 'text/html');
   iframe.setAttribute('width', this.options.settings.width);
   iframe.setAttribute('height', this.options.settings.height);

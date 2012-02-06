@@ -166,17 +166,17 @@ minplayer.controllers.base.prototype.setTimeString = function(element, time) {
  */
 minplayer.controllers.base.prototype.setPlayer = function(player) {
   minplayer.display.prototype.setPlayer.call(this, player);
-  player.display.bind('pause', {obj: this}, function(event) {
+  player.bind('pause', {obj: this}, function(event) {
     event.data.obj.setPlayPause(true);
     clearInterval(event.data.obj.interval);
   });
-  player.display.bind('playing', {obj: this}, function(event) {
+  player.bind('playing', {obj: this}, function(event) {
     event.data.obj.setPlayPause(false);
   });
-  player.display.bind('durationchange', {obj: this}, function(event, data) {
+  player.bind('durationchange', {obj: this}, function(event, data) {
     event.data.obj.setTimeString('duration', data.duration);
   });
-  player.display.bind('timeupdate', {obj: this}, function(event, data) {
+  player.bind('timeupdate', {obj: this}, function(event, data) {
     if (!event.data.obj.dragging) {
       var value = 0;
       if (data.duration) {

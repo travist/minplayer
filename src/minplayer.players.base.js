@@ -83,19 +83,42 @@ minplayer.players.base.prototype.construct = function() {
 
   // Get the player object...
   this.player = this.getPlayer();
-
-  /**
-   * Trigger a media event.
-   * @this media.players.base.
-   * @param {string} type The event type.
-   * @param {object} data The event data object.
-   */
-  this.trigger = function(type, data) {
-    this.display.trigger(type, data);
-  };
-
   this.duration = 0;
   this.currentTime = 0;
+};
+
+/**
+ * Trigger a media event.
+ *
+ * @param {string} type The event type.
+ * @param {object} data The event data object.
+ * @return {object} The jQuery prototype.
+ */
+minplayer.players.base.prototype.trigger = function(type, data) {
+  return this.display.trigger(type, data);
+};
+
+/**
+ * Bind to a media event.
+ *
+ * @param {string} types The event type.
+ * @param {object} data The data to bind with the event.
+ * @param {function} fn The callback function.
+ * @return {object} The jQuery prototype.
+ **/
+minplayer.players.base.prototype.bind = function(types, data, fn) {
+
+  // We will always unbind first for media events.
+  return this.display.unbind(types, fn).bind(types, data, fn);
+};
+
+/**
+ * Determines if the player should show the playloader.
+ *
+ * @return {bool} If this player implements its own playLoader.
+ */
+minplayer.players.base.prototype.hasPlayLoader = function() {
+  return false;
 };
 
 /**
