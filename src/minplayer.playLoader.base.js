@@ -33,26 +33,6 @@ minplayer.playLoader.base.prototype = new minplayer.display();
 minplayer.playLoader.base.prototype.constructor = minplayer.playLoader.base;
 
 /**
- * @see minplayer.plugin#construct
- */
-minplayer.playLoader.base.prototype.construct = function() {
-
-  // Call the minplayer plugin constructor.
-  minplayer.display.prototype.construct.call(this);
-
-  // Trigger a play event when someone clicks on the controller.
-  if (this.elements.bigPlay) {
-    this.elements.bigPlay.bind('click', {obj: this}, function(event) {
-      event.preventDefault();
-      jQuery(this).hide();
-      if (event.data.obj.player) {
-        event.data.obj.player.play();
-      }
-    });
-  }
-};
-
-/**
  * Hide or show certain elements based on the state of the busy and big play
  * button.
  */
@@ -90,31 +70,62 @@ minplayer.playLoader.base.prototype.checkVisibility = function() {
  */
 minplayer.playLoader.base.prototype.setPlayer = function(player) {
   minplayer.display.prototype.setPlayer.call(this, player);
-  var _this = this;
-  player.display.bind('loadstart', function(event) {
-    _this.busy.setFlag('media', true);
-    _this.bigPlay.setFlag('media', true);
-    _this.checkVisibility();
-  });
-  player.display.bind('waiting', function(event) {
-    _this.busy.setFlag('media', true);
-    _this.checkVisibility();
-  });
-  player.display.bind('loadedmetadata', function(event) {
-    _this.busy.setFlag('media', false);
-    _this.checkVisibility();
-  });
-  player.display.bind('loadeddata', function(event) {
-    _this.busy.setFlag('media', false);
-    _this.checkVisibility();
-  });
-  player.display.bind('playing', function(event) {
-    _this.busy.setFlag('media', false);
-    _this.bigPlay.setFlag('media', false);
-    _this.checkVisibility();
-  });
-  player.display.bind('pause', function(event) {
-    _this.bigPlay.setFlag('media', true);
-    _this.checkVisibility();
-  });
+
+  // Only bind if this player does not have its own play loader.
+  if (!player.hasPlayLoader()) {
+
+    // Trigger a play event when someone clicks on the controller.
+    if (this.elements.bigPlay) {
+      this.elements.bigPlay.unbind();
+      this.elements.bigPlay.bind('click', {player: player}, function(event) {
+        event.preventDefault();
+        jQuery(this).hide();
+        event.data.player.play();
+      });
+    }
+
+    // Bind to the player events to control the play loader.
+    player.bind('loadstart', {obj: this}, function(event) {
+      event.data.obj.busy.setFlag('media', true);
+      event.data.obj.bigPlay.setFlag('media', true);
+      event.data.obj.checkVisibility();
+    });
+    player.bind('waiting', {obj: this}, function(event) {
+      event.data.obj.busy.setFlag('media', true);
+      event.data.obj.checkVisibility();
+    });
+    player.bind('loadedmetadata', {obj: this}, function(event) {
+      event.data.obj.busy.setFlag('media', false);
+      event.data.obj.checkVisibility();
+    });
+    player.bind('loadeddata', {obj: this}, function(event) {
+      event.data.obj.busy.setFlag('media', false);
+      event.data.obj.checkVisibility();
+    });
+    player.bind('playing', {obj: this}, function(event) {
+      event.data.obj.busy.setFlag('media', false);
+      event.data.obj.bigPlay.setFlag('media', false);
+      event.data.obj.checkVisibility();
+    });
+    player.bind('pause', {obj: this}, function(event) {
+      event.data.obj.bigPlay.setFlag('media', true);
+      event.data.obj.checkVisibility();
+    });
+  }
+  else {
+
+    // Hide the busy cursor.
+    if (this.elements.busy) {
+      this.elements.busy.hide();
+    }
+
+    // Hide the big play button.
+    if (this.elements.bigPlay) {
+      this.elements.bigPlay.unbind();
+      this.elements.bigPlay.hide();
+    }
+
+    // Hide the display.
+    this.display.hide();
+  }
 };

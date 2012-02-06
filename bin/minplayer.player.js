@@ -767,26 +767,6 @@ minplayer.playLoader.base.prototype = new minplayer.display();
 minplayer.playLoader.base.prototype.constructor = minplayer.playLoader.base;
 
 /**
- * @see minplayer.plugin#construct
- */
-minplayer.playLoader.base.prototype.construct = function() {
-
-  // Call the minplayer plugin constructor.
-  minplayer.display.prototype.construct.call(this);
-
-  // Trigger a play event when someone clicks on the controller.
-  if (this.elements.bigPlay) {
-    this.elements.bigPlay.bind('click', {obj: this}, function(event) {
-      event.preventDefault();
-      jQuery(this).hide();
-      if (event.data.obj.player) {
-        event.data.obj.player.play();
-      }
-    });
-  }
-};
-
-/**
  * Hide or show certain elements based on the state of the busy and big play
  * button.
  */
@@ -824,33 +804,64 @@ minplayer.playLoader.base.prototype.checkVisibility = function() {
  */
 minplayer.playLoader.base.prototype.setPlayer = function(player) {
   minplayer.display.prototype.setPlayer.call(this, player);
-  var _this = this;
-  player.display.bind('loadstart', function(event) {
-    _this.busy.setFlag('media', true);
-    _this.bigPlay.setFlag('media', true);
-    _this.checkVisibility();
-  });
-  player.display.bind('waiting', function(event) {
-    _this.busy.setFlag('media', true);
-    _this.checkVisibility();
-  });
-  player.display.bind('loadedmetadata', function(event) {
-    _this.busy.setFlag('media', false);
-    _this.checkVisibility();
-  });
-  player.display.bind('loadeddata', function(event) {
-    _this.busy.setFlag('media', false);
-    _this.checkVisibility();
-  });
-  player.display.bind('playing', function(event) {
-    _this.busy.setFlag('media', false);
-    _this.bigPlay.setFlag('media', false);
-    _this.checkVisibility();
-  });
-  player.display.bind('pause', function(event) {
-    _this.bigPlay.setFlag('media', true);
-    _this.checkVisibility();
-  });
+
+  // Only bind if this player does not have its own play loader.
+  if (!player.hasPlayLoader()) {
+
+    // Trigger a play event when someone clicks on the controller.
+    if (this.elements.bigPlay) {
+      this.elements.bigPlay.unbind();
+      this.elements.bigPlay.bind('click', {player: player}, function(event) {
+        event.preventDefault();
+        jQuery(this).hide();
+        event.data.player.play();
+      });
+    }
+
+    // Bind to the player events to control the play loader.
+    player.bind('loadstart', {obj: this}, function(event) {
+      event.data.obj.busy.setFlag('media', true);
+      event.data.obj.bigPlay.setFlag('media', true);
+      event.data.obj.checkVisibility();
+    });
+    player.bind('waiting', {obj: this}, function(event) {
+      event.data.obj.busy.setFlag('media', true);
+      event.data.obj.checkVisibility();
+    });
+    player.bind('loadedmetadata', {obj: this}, function(event) {
+      event.data.obj.busy.setFlag('media', false);
+      event.data.obj.checkVisibility();
+    });
+    player.bind('loadeddata', {obj: this}, function(event) {
+      event.data.obj.busy.setFlag('media', false);
+      event.data.obj.checkVisibility();
+    });
+    player.bind('playing', {obj: this}, function(event) {
+      event.data.obj.busy.setFlag('media', false);
+      event.data.obj.bigPlay.setFlag('media', false);
+      event.data.obj.checkVisibility();
+    });
+    player.bind('pause', {obj: this}, function(event) {
+      event.data.obj.bigPlay.setFlag('media', true);
+      event.data.obj.checkVisibility();
+    });
+  }
+  else {
+
+    // Hide the busy cursor.
+    if (this.elements.busy) {
+      this.elements.busy.hide();
+    }
+
+    // Hide the big play button.
+    if (this.elements.bigPlay) {
+      this.elements.bigPlay.unbind();
+      this.elements.bigPlay.hide();
+    }
+
+    // Hide the display.
+    this.display.hide();
+  }
 };
 /** The minplayer namespace. */
 var minplayer = minplayer || {};
@@ -937,19 +948,42 @@ minplayer.players.base.prototype.construct = function() {
 
   // Get the player object...
   this.player = this.getPlayer();
-
-  /**
-   * Trigger a media event.
-   * @this media.players.base.
-   * @param {string} type The event type.
-   * @param {object} data The event data object.
-   */
-  this.trigger = function(type, data) {
-    this.display.trigger(type, data);
-  };
-
   this.duration = 0;
   this.currentTime = 0;
+};
+
+/**
+ * Trigger a media event.
+ *
+ * @param {string} type The event type.
+ * @param {object} data The event data object.
+ * @return {object} The jQuery prototype.
+ */
+minplayer.players.base.prototype.trigger = function(type, data) {
+  return this.display.trigger(type, data);
+};
+
+/**
+ * Bind to a media event.
+ *
+ * @param {string} types The event type.
+ * @param {object} data The data to bind with the event.
+ * @param {function} fn The callback function.
+ * @return {object} The jQuery prototype.
+ **/
+minplayer.players.base.prototype.bind = function(types, data, fn) {
+
+  // We will always unbind first for media events.
+  return this.display.unbind(types, fn).bind(types, data, fn);
+};
+
+/**
+ * Determines if the player should show the playloader.
+ *
+ * @return {bool} If this player implements its own playLoader.
+ */
+minplayer.players.base.prototype.hasPlayLoader = function() {
+  return false;
 };
 
 /**
@@ -1888,7 +1922,7 @@ minplayer.players.youtube.prototype.register = function() {
       if (instance.currentPlayer == 'youtube') {
 
         // Create a new youtube player object for this instance only.
-        var playerId = instance.options.id + '_player';
+        var playerId = instance.options.id + '-player';
         instance.media.player = new YT.Player(playerId, {
           events: {
             'onReady': function(event) {
@@ -1914,27 +1948,37 @@ minplayer.players.youtube.prototype.register = function() {
  * Translates the player state for the YouTube API player.
  *
  * @param {number} playerState The YouTube player state.
- * @return {string} The standardized state for this YouTube state.
  */
-minplayer.players.youtube.prototype.getPlayerState = function(playerState) {
+minplayer.players.youtube.prototype.setPlayerState = function(playerState) {
+  console.log(playerState);
   switch (playerState) {
-    case -1:
     case YT.PlayerState.CUED:
-      this.onMeta();
-      return 'ready';
+      break;
     case YT.PlayerState.BUFFERING:
-      return 'waiting';
+      this.trigger('waiting');
+      break;
     case YT.PlayerState.PAUSED:
       this.onPaused();
-      return 'pause';
+      break;
     case YT.PlayerState.PLAYING:
       this.onPlaying();
-      return 'play';
+      break;
     case YT.PlayerState.ENDED:
-      return 'ended';
+      this.trigger('ended');
+      break;
     default:
-      return 'unknown';
+      break;
   }
+};
+
+/**
+ * Called when an error occurs.
+ *
+ * @param {string} event The onReady event that was triggered.
+ */
+minplayer.players.youtube.prototype.onReady = function(event) {
+  minplayer.players.flash.prototype.onReady.call(this);
+  this.onMeta();
 };
 
 /**
@@ -1943,7 +1987,7 @@ minplayer.players.youtube.prototype.getPlayerState = function(playerState) {
  * @param {object} event A JavaScript Event.
  */
 minplayer.players.youtube.prototype.onPlayerStateChange = function(event) {
-  this.trigger(this.getPlayerState(event.data));
+  this.setPlayerState(event.data);
 };
 
 /**
@@ -1962,6 +2006,15 @@ minplayer.players.youtube.prototype.onQualityChange = function(newQuality) {
  */
 minplayer.players.youtube.prototype.onError = function(errorCode) {
   this.trigger('error', errorCode);
+};
+
+/**
+ * Determines if the player should show the playloader.
+ *
+ * @return {bool} If this player implements its own playLoader.
+ */
+minplayer.players.base.prototype.hasPlayLoader = function() {
+  return true;
 };
 
 /**
@@ -1984,7 +2037,7 @@ minplayer.players.youtube.prototype.create = function() {
 
   // Create the iframe for this player.
   var iframe = document.createElement('iframe');
-  iframe.setAttribute('id', this.options.id + '_player');
+  iframe.setAttribute('id', this.options.id + '-player');
   iframe.setAttribute('type', 'text/html');
   iframe.setAttribute('width', this.options.settings.width);
   iframe.setAttribute('height', this.options.settings.height);
@@ -2286,17 +2339,17 @@ minplayer.controllers.base.prototype.setTimeString = function(element, time) {
  */
 minplayer.controllers.base.prototype.setPlayer = function(player) {
   minplayer.display.prototype.setPlayer.call(this, player);
-  player.display.bind('pause', {obj: this}, function(event) {
+  player.bind('pause', {obj: this}, function(event) {
     event.data.obj.setPlayPause(true);
     clearInterval(event.data.obj.interval);
   });
-  player.display.bind('playing', {obj: this}, function(event) {
+  player.bind('playing', {obj: this}, function(event) {
     event.data.obj.setPlayPause(false);
   });
-  player.display.bind('durationchange', {obj: this}, function(event, data) {
+  player.bind('durationchange', {obj: this}, function(event, data) {
     event.data.obj.setTimeString('duration', data.duration);
   });
-  player.display.bind('timeupdate', {obj: this}, function(event, data) {
+  player.bind('timeupdate', {obj: this}, function(event, data) {
     if (!event.data.obj.dragging) {
       var value = 0;
       if (data.duration) {
