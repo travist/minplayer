@@ -1817,29 +1817,17 @@ minplayer.players = minplayer.players || {};
 minplayer.players.youtube = function(context, options, mediaFile) {
 
   // Derive from players base.
-  minplayer.players.base.call(this, context, options, mediaFile);
-
-  /** Determine if the player is ready. */
-  this.ready = false;
+  minplayer.players.flash.call(this, context, options, mediaFile);
 
   /** The quality of the YouTube stream. */
   this.quality = 'default';
 };
 
-/** Derive from minplayer.players.base. */
-minplayer.players.youtube.prototype = new minplayer.players.base();
+/** Derive from minplayer.players.flash. */
+minplayer.players.youtube.prototype = new minplayer.players.flash();
 
 /** Reset the constructor. */
 minplayer.players.youtube.prototype.constructor = minplayer.players.youtube;
-
-/**
- * @see minplayer.plugin.construct
- */
-minplayer.players.youtube.prototype.construct = function() {
-
-  // Call base constructor.
-  minplayer.players.base.prototype.construct.call(this);
-};
 
 /**
  * @see minplayer.players.base#getPriority
@@ -1902,13 +1890,13 @@ minplayer.players.youtube.prototype.register = function() {
         // Create a new youtube player object for this instance only.
         var playerId = instance.options.id + '_player';
         instance.media.player = new YT.Player(playerId, {
-          height: instance.options.settings.height,
-          width: instance.options.settings.width,
-          videoId: instance.media.mediaFile.id,
-          playerVars: {controls: '0'},
+          playerVars: {
+            wmode: 'opaque',
+            controls: '0'
+          },
           events: {
             'onReady': function(event) {
-              instance.media.onPlayerReady(event);
+              instance.media.onReady(event);
             },
             'onStateChange': function(event) {
               instance.media.onPlayerStateChange(event);
@@ -1936,27 +1924,21 @@ minplayer.players.youtube.prototype.getPlayerState = function(playerState) {
   switch (playerState) {
     case -1:
     case YT.PlayerState.CUED:
+      this.onMeta();
       return 'ready';
     case YT.PlayerState.BUFFERING:
       return 'waiting';
     case YT.PlayerState.PAUSED:
+      this.onPaused();
       return 'pause';
     case YT.PlayerState.PLAYING:
+      this.onPlaying();
       return 'play';
     case YT.PlayerState.ENDED:
       return 'ended';
     default:
       return 'unknown';
   }
-};
-
-/**
- * Called when the youtube player is ready.
- *
- * @param {object} event A JavaScript Event.
- */
-minplayer.players.youtube.prototype.onPlayerReady = function(event) {
-  this.ready = true;
 };
 
 /**
@@ -1992,8 +1974,8 @@ minplayer.players.youtube.prototype.onError = function(errorCode) {
  */
 minplayer.players.youtube.prototype.create = function() {
 
-  // Call the base create first.
-  minplayer.players.base.prototype.create.call(this);
+  // Call the flash create first.
+  minplayer.players.flash.prototype.create.call(this);
 
   // Insert the YouTube iframe API player.
   var tag = document.createElement('script');
@@ -2004,19 +1986,42 @@ minplayer.players.youtube.prototype.create = function() {
   // Now register this player.
   this.register();
 
-  // Create a div tag for the youtube api to do the rest.
-  var player = document.createElement('div');
-  player.setAttribute('id', this.options.id + '_player');
+  // Create the iframe for this player.
+  var iframe = document.createElement('iframe');
+  iframe.setAttribute('id', this.options.id + '_player');
+  iframe.setAttribute('type', 'text/html');
+  iframe.setAttribute('width', this.options.settings.width);
+  iframe.setAttribute('height', this.options.settings.height);
+  iframe.setAttribute('frameborder', '0');
+
+  // Get the source.
+  var src = 'http://www.youtube.com/embed/';
+  src += this.mediaFile.id + '?';
+
+  // Determine the origin of this script.
+  var origin = location.protocol;
+  origin += '//' + location.hostname;
+  origin += (location.port && ':' + location.port);
+
+  // Add the parameters to the src.
+  src += jQuery.param({
+    'wmode': 'opaque',
+    'enablejsapi': 1,
+    'origin': origin
+  });
+
+  // Set the source of the iframe.
+  iframe.setAttribute('src', src);
 
   // Return the player.
-  return player;
+  return iframe;
 };
 
 /**
  * @see minplayer.players.base#load
  */
 minplayer.players.youtube.prototype.load = function(file) {
-  minplayer.players.base.prototype.load.call(this, file);
+  minplayer.players.flash.prototype.load.call(this, file);
   if (this.ready) {
     this.player.loadVideoById(this.mediaFile.id, 0, this.quality);
   }
@@ -2026,7 +2031,7 @@ minplayer.players.youtube.prototype.load = function(file) {
  * @see minplayer.players.base#play
  */
 minplayer.players.youtube.prototype.play = function() {
-  minplayer.players.base.prototype.play.call(this);
+  minplayer.players.flash.prototype.play.call(this);
   if (this.ready) {
     this.player.playVideo();
   }
@@ -2036,7 +2041,7 @@ minplayer.players.youtube.prototype.play = function() {
  * @see minplayer.players.base#pause
  */
 minplayer.players.youtube.prototype.pause = function() {
-  minplayer.players.base.prototype.pause.call(this);
+  minplayer.players.flash.prototype.pause.call(this);
   if (this.ready) {
     this.player.pauseVideo();
   }
@@ -2046,7 +2051,7 @@ minplayer.players.youtube.prototype.pause = function() {
  * @see minplayer.players.base#stop
  */
 minplayer.players.youtube.prototype.stop = function() {
-  minplayer.players.base.prototype.stop.call(this);
+  minplayer.players.flash.prototype.stop.call(this);
   if (this.ready) {
     this.player.stopVideo();
   }
@@ -2056,7 +2061,7 @@ minplayer.players.youtube.prototype.stop = function() {
  * @see minplayer.players.base#seek
  */
 minplayer.players.youtube.prototype.seek = function(pos) {
-  minplayer.players.base.prototype.seek.call(this, pos);
+  minplayer.players.flash.prototype.seek.call(this, pos);
   if (this.ready) {
     this.player.seekTo(pos, true);
   }
@@ -2066,7 +2071,7 @@ minplayer.players.youtube.prototype.seek = function(pos) {
  * @see minplayer.players.base#setVolume
  */
 minplayer.players.youtube.prototype.setVolume = function(vol) {
-  minplayer.players.base.prototype.setVolume.call(this, vol);
+  minplayer.players.flash.prototype.setVolume.call(this, vol);
   if (this.ready) {
     this.player.setVolume(vol * 100);
   }
@@ -2081,7 +2086,7 @@ minplayer.players.youtube.prototype.getVolume = function() {
     return (this.player.getVolume() / 100);
   }
   else {
-    return minplayer.players.base.prototype.getVolume.call(this);
+    return minplayer.players.flash.prototype.getVolume.call(this);
   }
 };
 
