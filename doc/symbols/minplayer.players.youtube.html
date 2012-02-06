@@ -237,10 +237,10 @@ ul.inheritsList
 			<p class="description">
 				
 				<br />Extends
-					<a href="../symbols/minplayer.display.html">minplayer.display</a>.<br />
+					<a href="../symbols/minplayer.players.base.html">minplayer.players.base</a>.<br />
 				
 			
-				The Flash media player class to control the flash fallback.
+				The YouTube media player.
 				
 				
 					<br /><i>Defined in: </i> <a href="../symbols/src/src_minplayer.players.youtube.js.html">minplayer.players.youtube.js</a>.
@@ -305,13 +305,23 @@ ul.inheritsList
 							</td>
 						</tr>
 					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/minplayer.players.youtube.html#ready">ready</a></b>
+								</div>
+								<div class="description">Determine if the player is ready.</div>
+							</td>
+						</tr>
+					
 					</tbody>
 				</table>
 				
 				
 				
 				<dl class="inheritsList">
-				
+				<dt>Fields borrowed from class <a href="../symbols/minplayer.players.base.html">minplayer.players.base</a>: </dt><dd><a href="../symbols/minplayer.players.base.html#mediaFile">mediaFile</a></dd>
 				</dl>
 				
 			
@@ -385,6 +395,15 @@ ul.inheritsList
 						</tr>
 					
 						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">minplayer.players.youtube.<b><a href="../symbols/minplayer.players.youtube.html#.getMediaId">getMediaId</a></b>(file)
+								</div>
+								<div class="description">Return the ID for a provided media file.</div>
+							</td>
+						</tr>
+					
+						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#getPlayerDuration">getPlayerDuration</a></b>()
@@ -398,7 +417,7 @@ ul.inheritsList
 							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#getPlayerState">getPlayerState</a></b>(playerState)
 								</div>
-								<div class="description"></div>
+								<div class="description">Translates the player state for the YouTube API player.</div>
 							</td>
 						</tr>
 					
@@ -432,6 +451,42 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#onError">onError</a></b>(errorCode)
+								</div>
+								<div class="description">Called when an error occurs.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#onPlayerReady">onPlayerReady</a></b>(event)
+								</div>
+								<div class="description">Called when the youtube player is ready.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#onPlayerStateChange">onPlayerStateChange</a></b>(event)
+								</div>
+								<div class="description">Called when the player state changes.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#onQualityChange">onQualityChange</a></b>(newQuality)
+								</div>
+								<div class="description">Called when the player quality changes.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#pause">pause</a></b>()
 								</div>
 								<div class="description"></div>
@@ -450,9 +505,10 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#regex">regex</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#register">register</a></b>()
 								</div>
-								<div class="description">Return the Regular Expression to find a YouTube ID.</div>
+								<div class="description">Register this youtube player so that multiple players can be present
+on the same page without event collision.</div>
 							</td>
 						</tr>
 					
@@ -489,7 +545,7 @@ ul.inheritsList
 				
 				
 				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/minplayer.display.html">minplayer.display</a>: </dt><dd><a href="../symbols/minplayer.display.html#getElements">getElements</a>, <a href="../symbols/minplayer.display.html#isValid">isValid</a></dd><dt>Methods borrowed from class <a href="../symbols/minplayer.plugin.html">minplayer.plugin</a>: </dt><dd><a href="../symbols/minplayer.plugin.html#setPlayer">setPlayer</a></dd>
+				<dt>Methods borrowed from class <a href="../symbols/minplayer.players.base.html">minplayer.players.base</a>: </dt><dd><a href="../symbols/minplayer.players.base.html#destroy">destroy</a>, <a href="../symbols/minplayer.players.base.html#getDuration">getDuration</a>, <a href="../symbols/minplayer.players.base.html#getPlayer">getPlayer</a>, <a href="../symbols/minplayer.players.base.html#playerFound">playerFound</a>, <a href="../symbols/minplayer.players.base.html#trigger">trigger</a></dd><dt>Methods borrowed from class <a href="../symbols/minplayer.display.html">minplayer.display</a>: </dt><dd><a href="../symbols/minplayer.display.html#getElements">getElements</a>, <a href="../symbols/minplayer.display.html#isValid">isValid</a></dd><dt>Methods borrowed from class <a href="../symbols/minplayer.plugin.html">minplayer.plugin</a>: </dt><dd><a href="../symbols/minplayer.plugin.html#setPlayer">setPlayer</a></dd>
 				</dl>
 				
 			
@@ -586,6 +642,28 @@ ul.inheritsList
 					</div>
 					<div class="description">
 						The quality of the YouTube stream.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="ready"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>ready</b>
+					
+					</div>
+					<div class="description">
+						Determine if the player is ready.
 						
 						
 					</div>
@@ -845,6 +923,49 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name=".getMediaId"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{string}</span>
+					<span class="light">minplayer.players.youtube.</span><b>getMediaId</b>(file)
+					
+					</div>
+					<div class="description">
+						Return the ID for a provided media file.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>file</b>
+									
+								</dt>
+								<dd>A <a href="../symbols/minplayer.file.html">minplayer.file</a> object.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> The ID for the provided media.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name="getPlayerDuration"> </a>
 					<div class="fixedFont">
 					
@@ -887,12 +1008,12 @@ ul.inheritsList
 					<a name="getPlayerState"> </a>
 					<div class="fixedFont">
 					
-					
+					<span class="light">{string}</span>
 					<b>getPlayerState</b>(playerState)
 					
 					</div>
 					<div class="description">
-						
+						Translates the player state for the YouTube API player.
 						
 						
 					</div>
@@ -904,16 +1025,23 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>playerState</b>
+									<span class="light fixedFont">{number}</span> <b>playerState</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>The YouTube player state.</dd>
 							
 							</dl>
 						
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> The standardized state for this YouTube state.</dd>
+							
+							</dl>
 						
 						
 						
@@ -1041,6 +1169,150 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name="onError"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>onError</b>(errorCode)
+					
+					</div>
+					<div class="description">
+						Called when an error occurs.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>errorCode</b>
+									
+								</dt>
+								<dd>The error that was triggered.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="onPlayerReady"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>onPlayerReady</b>(event)
+					
+					</div>
+					<div class="description">
+						Called when the youtube player is ready.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>event</b>
+									
+								</dt>
+								<dd>A JavaScript Event.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="onPlayerStateChange"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>onPlayerStateChange</b>(event)
+					
+					</div>
+					<div class="description">
+						Called when the player state changes.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>event</b>
+									
+								</dt>
+								<dd>A JavaScript Event.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="onQualityChange"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>onQualityChange</b>(newQuality)
+					
+					</div>
+					<div class="description">
+						Called when the player quality changes.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>newQuality</b>
+									
+								</dt>
+								<dd>The new quality for the change.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="pause"> </a>
 					<div class="fixedFont">
 					
@@ -1105,15 +1377,16 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="regex"> </a>
+					<a name="register"> </a>
 					<div class="fixedFont">
 					
-					<span class="light">{RegEx}</span>
-					<b>regex</b>()
+					
+					<b>register</b>()
 					
 					</div>
 					<div class="description">
-						Return the Regular Expression to find a YouTube ID.
+						Register this youtube player so that multiple players can be present
+on the same page without event collision.
 						
 						
 					</div>
@@ -1124,13 +1397,6 @@ ul.inheritsList
 						
 						
 						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{RegEx}</span> A regular expression to find a YouTube ID.</dd>
-							
-							</dl>
 						
 						
 						
@@ -1267,7 +1533,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Tue Jan 17 2012 21:48:50 GMT+0100 (CET)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sun Feb 05 2012 23:46:49 GMT-0600 (CST)
 		</div>
 	</body>
 </html>

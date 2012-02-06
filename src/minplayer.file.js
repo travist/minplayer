@@ -143,6 +143,8 @@ minplayer.file.prototype.getType = function() {
 
 /**
  * Returns the ID for this media file.
+ *
+ * @return {string} The id for this media file which is provided by the player.
  */
 minplayer.file.prototype.getId = function() {
   return minplayer.players[this.player].getMediaId(this);
