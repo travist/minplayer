@@ -66,10 +66,18 @@ minplayer.players.youtube.canPlay = function(file) {
 
 /**
  * Return the ID for a provided media file.
+ *
+ * @param {object} file A {@link minplayer.file} object.
+ * @return {string} The ID for the provided media.
  */
 minplayer.players.youtube.getMediaId = function(file) {
   var regex = /^http[s]?\:\/\/(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9]+)/i;
-  return (file.path.search(regex) === 0) ? file.path.replace(regex, '$2') : file.path;
+  if (file.path.search(regex) === 0) {
+    return file.path.replace(regex, '$2');
+  }
+  else {
+    return file.path;
+  }
 };
 
 /**
@@ -78,7 +86,9 @@ minplayer.players.youtube.getMediaId = function(file) {
  */
 minplayer.players.youtube.prototype.register = function() {
 
-  // Register the standard youtube api ready callback.
+  /**
+   * Register the standard youtube api ready callback.
+   */
   window.onYouTubePlayerAPIReady = function() {
 
     // Iterate through all of the player instances.
@@ -91,21 +101,21 @@ minplayer.players.youtube.prototype.register = function() {
         // Create a new youtube player object for this instance only.
         var playerId = instance.options.id + '_player';
         instance.media.player = new YT.Player(playerId, {
-          height:instance.options.settings.height,
-          width:instance.options.settings.width,
-          videoId:instance.media.mediaFile.id,
+          height: instance.options.settings.height,
+          width: instance.options.settings.width,
+          videoId: instance.media.mediaFile.id,
           playerVars: {controls: '0'},
           events: {
-            'onReady':function(event) {
+            'onReady': function(event) {
               instance.media.onPlayerReady(event);
             },
-            'onStateChange':function(event) {
+            'onStateChange': function(event) {
               instance.media.onPlayerStateChange(event);
             },
-            'onPlaybackQualityChange':function(newQuality) {
+            'onPlaybackQualityChange': function(newQuality) {
               instance.media.onQualityChange(newQuality);
             },
-            'onError':function(errorCode) {
+            'onError': function(errorCode) {
               instance.media.onError(errorCode);
             }
           }
@@ -115,7 +125,12 @@ minplayer.players.youtube.prototype.register = function() {
   }
 };
 
-// Translates the player state for the YouTube API player.
+/**
+ * Translates the player state for the YouTube API player.
+ *
+ * @param {number} playerState The YouTube player state.
+ * @return {string} The standardized state for this YouTube state.
+ */
 minplayer.players.youtube.prototype.getPlayerState = function(playerState) {
   switch (playerState) {
     case -1:
@@ -136,6 +151,8 @@ minplayer.players.youtube.prototype.getPlayerState = function(playerState) {
 
 /**
  * Called when the youtube player is ready.
+ *
+ * @param {object} event A JavaScript Event.
  */
 minplayer.players.youtube.prototype.onPlayerReady = function(event) {
   this.ready = true;
@@ -143,6 +160,8 @@ minplayer.players.youtube.prototype.onPlayerReady = function(event) {
 
 /**
  * Called when the player state changes.
+ *
+ * @param {object} event A JavaScript Event.
  */
 minplayer.players.youtube.prototype.onPlayerStateChange = function(event) {
   this.trigger(this.getPlayerState(event.data));
@@ -150,6 +169,8 @@ minplayer.players.youtube.prototype.onPlayerStateChange = function(event) {
 
 /**
  * Called when the player quality changes.
+ *
+ * @param {string} newQuality The new quality for the change.
  */
 minplayer.players.youtube.prototype.onQualityChange = function(newQuality) {
   this.quality = newQuality;
@@ -157,6 +178,8 @@ minplayer.players.youtube.prototype.onQualityChange = function(newQuality) {
 
 /**
  * Called when an error occurs.
+ *
+ * @param {string} errorCode The error that was triggered.
  */
 minplayer.players.youtube.prototype.onError = function(errorCode) {
   this.trigger('error', errorCode);
@@ -173,7 +196,7 @@ minplayer.players.youtube.prototype.create = function() {
 
   // Insert the YouTube iframe API player.
   var tag = document.createElement('script');
-  tag.src = "http://www.youtube.com/player_api?enablejsapi=1";
+  tag.src = 'http://www.youtube.com/player_api?enablejsapi=1';
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
