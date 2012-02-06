@@ -6,8 +6,8 @@ minplayer.players = minplayer.players || {};
 
 /**
  * @constructor
- * @extends minplayer.display
- * @class The Flash media player class to control the flash fallback.
+ * @extends minplayer.players.base
+ * @class The YouTube media player.
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
@@ -17,6 +17,9 @@ minplayer.players.youtube = function(context, options, mediaFile) {
 
   // Derive from players base.
   minplayer.players.base.call(this, context, options, mediaFile);
+
+  /** Determine if the player is ready. */
+  this.ready = false;
 
   /** The quality of the YouTube stream. */
   this.quality = 'default';
@@ -33,52 +36,8 @@ minplayer.players.youtube.prototype.constructor = minplayer.players.youtube;
  */
 minplayer.players.youtube.prototype.construct = function() {
 
-  // Call flash constructor.
-  minplayer.players.flash.prototype.construct.call(this);
-
-  // Translates the player state for the YouTube API player.
-  this.getPlayerState = function(playerState) {
-    switch (playerState) {
-      case 5:
-        return 'ready';
-      case 3:
-        return 'waiting';
-      case 2:
-        return 'pause';
-      case 1:
-        return 'play';
-      case 0:
-        return 'ended';
-      case -1:
-        return 'abort';
-      default:
-        return 'unknown';
-    }
-  };
-
-  // Create our callback functions.
-  var _this = this;
-  window[this.options.id + 'StateChange'] = function(newState) {
-    _this.trigger(_this.getPlayerState(newState));
-  };
-
-  window[this.options.id + 'PlayerError'] = function(errorCode) {
-    _this.trigger('error', errorCode);
-  };
-
-  window[this.options.id + 'QualityChange'] = function(newQuality) {
-    _this.quality = newQuality;
-  };
-
-  // Add our event listeners.
-  if (this.player) {
-    var onStateChange = this.options.id + 'StateChange';
-    var onError = this.options.id + 'PlayerError';
-    var onQuality = this.options.id + 'QualityChange';
-    this.player.addEventListener('onStateChange', onStateChange);
-    this.player.addEventListener('onError', onError);
-    this.player.addEventListener('onPlaybackQualityChange', onQuality);
-  }
+  // Call base constructor.
+  minplayer.players.base.prototype.construct.call(this);
 };
 
 /**
@@ -106,6 +65,104 @@ minplayer.players.youtube.canPlay = function(file) {
 };
 
 /**
+ * Return the ID for a provided media file.
+ */
+minplayer.players.youtube.getMediaId = function(file) {
+  var regex = /^http[s]?\:\/\/(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9]+)/i;
+  return (file.path.search(regex) === 0) ? file.path.replace(regex, '$2') : file.path;
+};
+
+/**
+ * Register this youtube player so that multiple players can be present
+ * on the same page without event collision.
+ */
+minplayer.players.youtube.prototype.register = function() {
+
+  // Register the standard youtube api ready callback.
+  window.onYouTubePlayerAPIReady = function() {
+
+    // Iterate through all of the player instances.
+    for (var id in minplayer.player) {
+
+      // Get the instance and check to see if it is a youtube player.
+      var instance = minplayer.player[id];
+      if (instance.currentPlayer == 'youtube') {
+
+        // Create a new youtube player object for this instance only.
+        var playerId = instance.options.id + '_player';
+        instance.media.player = new YT.Player(playerId, {
+          height:instance.options.settings.height,
+          width:instance.options.settings.width,
+          videoId:instance.media.mediaFile.id,
+          playerVars: {controls: '0'},
+          events: {
+            'onReady':function(event) {
+              instance.media.onPlayerReady(event);
+            },
+            'onStateChange':function(event) {
+              instance.media.onPlayerStateChange(event);
+            },
+            'onPlaybackQualityChange':function(newQuality) {
+              instance.media.onQualityChange(newQuality);
+            },
+            'onError':function(errorCode) {
+              instance.media.onError(errorCode);
+            }
+          }
+        });
+      }
+    }
+  }
+};
+
+// Translates the player state for the YouTube API player.
+minplayer.players.youtube.prototype.getPlayerState = function(playerState) {
+  switch (playerState) {
+    case -1:
+    case YT.PlayerState.CUED:
+      return 'ready';
+    case YT.PlayerState.BUFFERING:
+      return 'waiting';
+    case YT.PlayerState.PAUSED:
+      return 'pause';
+    case YT.PlayerState.PLAYING:
+      return 'play';
+    case YT.PlayerState.ENDED:
+      return 'ended';
+    default:
+      return 'unknown';
+  }
+};
+
+/**
+ * Called when the youtube player is ready.
+ */
+minplayer.players.youtube.prototype.onPlayerReady = function(event) {
+  this.ready = true;
+};
+
+/**
+ * Called when the player state changes.
+ */
+minplayer.players.youtube.prototype.onPlayerStateChange = function(event) {
+  this.trigger(this.getPlayerState(event.data));
+};
+
+/**
+ * Called when the player quality changes.
+ */
+minplayer.players.youtube.prototype.onQualityChange = function(newQuality) {
+  this.quality = newQuality;
+};
+
+/**
+ * Called when an error occurs.
+ */
+minplayer.players.youtube.prototype.onError = function(errorCode) {
+  this.trigger('error', errorCode);
+};
+
+/**
  * @see minplayer.players.base#create
  * @return {object} The media player entity.
  */
@@ -114,31 +171,29 @@ minplayer.players.youtube.prototype.create = function() {
   // Call the base create first.
   minplayer.players.base.prototype.create.call(this);
 
-  // Create an iframe element.
-  var iframe = document.createElement('iframe');
+  // Insert the YouTube iframe API player.
+  var tag = document.createElement('script');
+  tag.src = "http://www.youtube.com/player_api?enablejsapi=1";
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-  // Set the iframe attributes.
-  iframe.setAttribute('id', this.options.id + '_player');
-  iframe.setAttribute('type', 'text/html');
-  iframe.setAttribute('width', this.options.settings.width);
-  iframe.setAttribute('height', this.options.settings.height);
-  iframe.setAttribute('src', 'http://www.youtube.com/embed/');
+  // Now register this player.
+  this.register();
+
+  // Create a div tag for the youtube api to do the rest.
+  var player = document.createElement('div');
+  player.setAttribute('id', this.options.id + '_player');
+
+  // Return the player.
+  return player;
 };
-
-/**
- * Return the ID for a provided media file.
- */
-minplayer.players.youtube.prototype.getMediaId = function(file) {
-  var regex = /^http[s]?\:\/\/(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9]+)/i;
-  return (file.path.search(regex) === 0) ? file.path.replace(regex, '$2') : file.path;
-}
 
 /**
  * @see minplayer.players.base#load
  */
 minplayer.players.youtube.prototype.load = function(file) {
-  minplayer.players.flash.prototype.load.call(this, file);
-  if (this.isReady()) {
+  minplayer.players.base.prototype.load.call(this, file);
+  if (this.ready) {
     this.player.loadVideoById(this.mediaFile.id, 0, this.quality);
   }
 };
@@ -147,8 +202,8 @@ minplayer.players.youtube.prototype.load = function(file) {
  * @see minplayer.players.base#play
  */
 minplayer.players.youtube.prototype.play = function() {
-  minplayer.players.flash.prototype.play.call(this);
-  if (this.isReady()) {
+  minplayer.players.base.prototype.play.call(this);
+  if (this.ready) {
     this.player.playVideo();
   }
 };
@@ -157,8 +212,8 @@ minplayer.players.youtube.prototype.play = function() {
  * @see minplayer.players.base#pause
  */
 minplayer.players.youtube.prototype.pause = function() {
-  minplayer.players.flash.prototype.pause.call(this);
-  if (this.isReady()) {
+  minplayer.players.base.prototype.pause.call(this);
+  if (this.ready) {
     this.player.pauseVideo();
   }
 };
@@ -167,8 +222,8 @@ minplayer.players.youtube.prototype.pause = function() {
  * @see minplayer.players.base#stop
  */
 minplayer.players.youtube.prototype.stop = function() {
-  minplayer.players.flash.prototype.stop.call(this);
-  if (this.isReady()) {
+  minplayer.players.base.prototype.stop.call(this);
+  if (this.ready) {
     this.player.stopVideo();
   }
 };
@@ -177,8 +232,8 @@ minplayer.players.youtube.prototype.stop = function() {
  * @see minplayer.players.base#seek
  */
 minplayer.players.youtube.prototype.seek = function(pos) {
-  minplayer.players.flash.prototype.seek.call(this, pos);
-  if (this.isReady()) {
+  minplayer.players.base.prototype.seek.call(this, pos);
+  if (this.ready) {
     this.player.seekTo(pos, true);
   }
 };
@@ -187,8 +242,8 @@ minplayer.players.youtube.prototype.seek = function(pos) {
  * @see minplayer.players.base#setVolume
  */
 minplayer.players.youtube.prototype.setVolume = function(vol) {
-  minplayer.players.flash.prototype.setVolume.call(this, vol);
-  if (this.isReady()) {
+  minplayer.players.base.prototype.setVolume.call(this, vol);
+  if (this.ready) {
     this.player.setVolume(vol * 100);
   }
 };
@@ -198,11 +253,11 @@ minplayer.players.youtube.prototype.setVolume = function(vol) {
  * @return {number} The volume of the media; 0 to 1.
  */
 minplayer.players.youtube.prototype.getVolume = function() {
-  if (this.isReady()) {
+  if (this.ready) {
     return (this.player.getVolume() / 100);
   }
   else {
-    return minplayer.players.flash.prototype.getVolume.call(this);
+    return minplayer.players.base.prototype.getVolume.call(this);
   }
 };
 
@@ -211,7 +266,7 @@ minplayer.players.youtube.prototype.getVolume = function() {
  * @return {int} The player duration.
  */
 minplayer.players.youtube.prototype.getPlayerDuration = function() {
-  return this.isReady() ? this.player.getDuration() : 0;
+  return this.ready ? this.player.getDuration() : 0;
 };
 
 /**
@@ -219,7 +274,7 @@ minplayer.players.youtube.prototype.getPlayerDuration = function() {
  * @return {number} The current playhead time.
  */
 minplayer.players.youtube.prototype.getCurrentTime = function() {
-  return this.isReady() ? this.player.getCurrentTime() : 0;
+  return this.ready ? this.player.getCurrentTime() : 0;
 };
 
 /**
@@ -227,7 +282,7 @@ minplayer.players.youtube.prototype.getCurrentTime = function() {
  * @return {number} Returns the bytes loaded from the media.
  */
 minplayer.players.youtube.prototype.getBytesLoaded = function() {
-  return this.isReady() ? this.player.getVideoBytesLoaded() : 0;
+  return this.ready ? this.player.getVideoBytesLoaded() : 0;
 };
 
 /**
@@ -235,5 +290,5 @@ minplayer.players.youtube.prototype.getBytesLoaded = function() {
  * @return {number} The total number of bytes of the loaded media.
  */
 minplayer.players.youtube.prototype.getBytesTotal = function() {
-  return this.isReady() ? this.player.getVideoBytesTotal() : 0;
+  return this.ready ? this.player.getVideoBytesTotal() : 0;
 };
