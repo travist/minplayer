@@ -11,12 +11,12 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
- * @param {object} mediaFile The media file for this player.
+ * @param {function} ready The callback function when the player is ready.
  */
-minplayer.players.base = function(context, options, mediaFile) {
+minplayer.players.base = function(context, options, ready) {
 
-  /** The currently loaded media file. */
-  this.mediaFile = mediaFile;
+  /** The ready pointer to be called when the player is ready. */
+  this.readyCallback = ready;
 
   // Derive from display
   minplayer.display.call(this, context, options);
@@ -66,6 +66,9 @@ minplayer.players.base.prototype.construct = function() {
   // Call the media display constructor.
   minplayer.display.prototype.construct.call(this);
 
+  /** The currently loaded media file. */
+  this.mediaFile = this.options.file;
+
   // Get the player display object.
   if (!this.playerFound()) {
 
@@ -83,8 +86,54 @@ minplayer.players.base.prototype.construct = function() {
 
   // Get the player object...
   this.player = this.getPlayer();
-  this.duration = 0;
-  this.currentTime = 0;
+
+  // Reset the player params.
+  this.reset();
+};
+
+/**
+ * Resets all variables.
+ */
+minplayer.players.base.prototype.reset = function() {
+
+  // Reset the ready flag.
+  this.ready = false;
+
+  // The duration of the player.
+  this.duration = new minplayer.async();
+
+  // The current play time of the player.
+  this.currentTime = new minplayer.async();
+
+  // The current volume of the player.
+  this.volume = new minplayer.async();
+};
+
+/**
+ * Called when the player is ready to recieve events and commands.
+ */
+minplayer.players.base.prototype.onReady = function() {
+
+  // Set the ready flag.
+  this.ready = true;
+
+  // Set the volume to the default.
+  this.setVolume(this.options.volume / 100);
+
+  // Call the callback to let this person know we are ready.
+  if (this.readyCallback) {
+    this.readyCallback(this);
+  }
+};
+
+/**
+ * @see minplayer.players.base#isReady
+ * @return {boolean} Checks to see if the Flash is ready.
+ */
+minplayer.players.base.prototype.isReady = function() {
+
+  // Return that the player is set and the ready flag is good.
+  return (this.player && this.ready);
 };
 
 /**
@@ -149,12 +198,6 @@ minplayer.players.base.prototype.getPlayer = function() {
 };
 
 /**
- * Destroy the media player instance from the DOM.
- */
-minplayer.players.base.prototype.destroy = function() {
-};
-
-/**
  * Loads a new media player.
  *
  * @param {object} file A {@link minplayer.file} object.
@@ -162,7 +205,10 @@ minplayer.players.base.prototype.destroy = function() {
 minplayer.players.base.prototype.load = function(file) {
 
   // Store the media file for future lookup.
-  this.mediaFile = file;
+  if (file) {
+    this.reset();
+    this.mediaFile = file;
+  }
 };
 
 /**
@@ -204,17 +250,29 @@ minplayer.players.base.prototype.setVolume = function(vol) {
 /**
  * Get the volume from the loaded media.
  *
+ * @param {function} callback Called when the volume is determined.
  * @return {number} The volume of the media; 0 to 1.
  */
-minplayer.players.base.prototype.getVolume = function() {
-  return 0;
+minplayer.players.base.prototype.getVolume = function(callback) {
+  return this.volume.get(callback);
+};
+
+/**
+ * Get the current time for the media being played.
+ *
+ * @param {function} callback Called when the time is determined.
+ * @return {number} The volume of the media; 0 to 1.
+ */
+minplayer.players.base.prototype.getCurrentTime = function(callback) {
+  return this.currentTime.get(callback);
 };
 
 /**
  * Return the duration of the loaded media.
  *
+ * @param {function} callback Called when the duration is determined.
  * @return {number} The duration of the loaded media.
  */
-minplayer.players.base.prototype.getDuration = function() {
-  return 0;
+minplayer.players.base.prototype.getDuration = function(callback) {
+  return this.duration.get(callback);
 };

@@ -11,12 +11,12 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
- * @param {object} mediaFile The media file for this player.
+ * @param {function} ready Called when the player is ready.
  */
-minplayer.players.html5 = function(context, options, mediaFile) {
+minplayer.players.html5 = function(context, options, ready) {
 
   // Derive players base.
-  minplayer.players.base.call(this, context, options, mediaFile);
+  minplayer.players.base.call(this, context, options, ready);
 };
 
 /** Derive from minplayer.players.base. */
@@ -65,9 +65,6 @@ minplayer.players.html5.prototype.construct = function() {
   // Call base constructor.
   minplayer.players.base.prototype.construct.call(this);
 
-  // See if we are loaded.
-  this.loaded = false;
-
   // Store the this pointer...
   var _this = this;
 
@@ -109,12 +106,12 @@ minplayer.players.html5.prototype.construct = function() {
     this.player.addEventListener('timeupdate', function(event) {
       var dur = this.duration;
       var cTime = this.currentTime;
-      _this.duration = dur;
-      _this.currentTime = cTime;
+      _this.duration.set(dur);
+      _this.currentTime.set(cTime);
       _this.trigger('timeupdate', {currentTime: cTime, duration: dur});
     }, true);
     this.player.addEventListener('durationchange', function() {
-      _this.duration = this.duration;
+      _this.duration.set(this.duration);
       _this.trigger('durationchange', {duration: this.duration});
     }, true);
     this.player.addEventListener('progress', function(event) {
@@ -127,6 +124,9 @@ minplayer.players.html5.prototype.construct = function() {
       this.player.autobuffer = false;
       this.player.preload = 'none';
     }
+
+    // Say that we are ready.
+    this.onReady();
   }
 };
 
@@ -178,19 +178,25 @@ minplayer.players.html5.prototype.getPlayer = function() {
  * @see minplayer.players.base#load
  */
 minplayer.players.html5.prototype.load = function(file) {
-  // Always call the base first on load...
-  minplayer.players.base.prototype.load.call(this, file);
 
-  if (this.loaded) {
-    // Change the source...
-    var code = '<source src="' + file.path + '" ';
-    code += 'type="' + file.mimetype + '"';
-    code += file.codecs ? ' codecs="' + file.path + '">' : '>';
-    this.options.elements.player.attr('src', '').empty().html(code);
+  if (file) {
+
+    // Get the current source.
+    var src = this.options.elements.player.attr('src');
+
+    // If the source is different.
+    if (src != file.path) {
+
+      // Change the source...
+      var code = '<source src="' + file.path + '" ';
+      code += 'type="' + file.mimetype + '"';
+      code += file.codecs ? ' codecs="' + file.path + '">' : '>';
+      this.options.elements.player.attr('src', '').empty().html(code);
+    }
   }
 
-  // Set the loaded flag.
-  this.loaded = true;
+  // Always call the base first on load...
+  minplayer.players.base.prototype.load.call(this, file);
 };
 
 /**
@@ -238,7 +244,8 @@ minplayer.players.html5.prototype.setVolume = function(vol) {
  * @see minplayer.players.base#getVolume
  * @return {number} The volume of the media; 0 to 1.
  */
-minplayer.players.html5.prototype.getVolume = function() {
+minplayer.players.html5.prototype.getVolume = function(callback) {
+  callback(this.player.volume);
   return this.player.volume;
 };
 
@@ -246,7 +253,8 @@ minplayer.players.html5.prototype.getVolume = function() {
  * @see minplayer.players.base#getDuration
  * @return {number} The duration of the loaded media.
  */
-minplayer.players.html5.prototype.getDuration = function() {
+minplayer.players.html5.prototype.getDuration = function(callback) {
   var dur = this.player.duration;
+  callback(dur);
   return (dur === Infinity) ? 0 : dur;
 };

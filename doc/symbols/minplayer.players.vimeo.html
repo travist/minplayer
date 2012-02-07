@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - minplayer.player</title>
+		<title>JsDoc Reference - minplayer.players.vimeo</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -234,38 +234,26 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class minplayer.player
+				Class minplayer.players.vimeo
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
 			<p class="description">
 				
 				<br />Extends
-					<a href="../symbols/minplayer.display.html">minplayer.display</a>.<br />
+					<a href="../symbols/minplayer.players.flash.html">minplayer.players.flash</a>.<br />
 				
 			
-				The core media player class which governs the media player
-functionality.
-
-<p><strong>Usage:</strong>
-<pre><code>
-
-  // Create a media player.
-  var player = jQuery("#player").minplayer({
-
-  });
-
-</code></pre>
-</p>
+				The vimeo media player.
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/src_minplayer.player.js.html">minplayer.player.js</a>.
+					<br /><i>Defined in: </i> <a href="../symbols/src/src_minplayer.players.vimeo.js.html">minplayer.players.vimeo.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class minplayer.player.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class minplayer.players.vimeo.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -278,7 +266,7 @@ functionality.
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/minplayer.player.html#constructor">minplayer.player</a></b>(context, options)
+								<b><a href="../symbols/minplayer.players.vimeo.html#constructor">minplayer.players.vimeo</a></b>(context, options, ready)
 							</div>
 							<div class="description"></div>
 						</td>
@@ -291,7 +279,7 @@ functionality.
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class minplayer.player.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class minplayer.players.vimeo.">
 					<caption>Field Summary</caption>
 					<thead>
 						<tr>
@@ -305,39 +293,9 @@ functionality.
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								<b><a href="../symbols/minplayer.player.html#allPlugins">allPlugins</a></b>
-								</div>
-								<div class="description">All of the plugin objects.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/minplayer.player.html#constructor">constructor</a></b>
+								<b><a href="../symbols/minplayer.players.vimeo.html#constructor">constructor</a></b>
 								</div>
 								<div class="description">Reset the constructor.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/minplayer.player.html#currentPlayer">currentPlayer</a></b>
-								</div>
-								<div class="description">Variable to store the current media player.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont">
-								<b><a href="../symbols/minplayer.player.html#media">media</a></b>
-								</div>
-								<div class="description">The current player.</div>
 							</td>
 						</tr>
 					
@@ -356,7 +314,7 @@ functionality.
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class minplayer.player.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class minplayer.players.vimeo.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -367,27 +325,9 @@ functionality.
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.player.html#addKeyEvents">addKeyEvents</a></b>()
-								</div>
-								<div class="description">Adds key events to the player.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.player.html#addPlugin">addPlugin</a></b>(id, plugin)
-								</div>
-								<div class="description">Add a new plugin to the media player.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.player.html#construct">construct</a></b>()
+								<div class="fixedFont">minplayer.players.vimeo.<b><a href="../symbols/minplayer.players.vimeo.html#.canPlay">canPlay</a></b>(file)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -396,108 +336,153 @@ functionality.
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.player.html#getDuration">getDuration</a></b>(callback)
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.vimeo.html#create">create</a></b>()
 								</div>
-								<div class="description">Get the current media duration.</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.player.html#getFiles">getFiles</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.vimeo.html#getBytesLoaded">getBytesLoaded</a></b>()
 								</div>
-								<div class="description">Returns all the media files available for this player.</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.player.html#getMediaFile">getMediaFile</a></b>(files)
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.vimeo.html#getBytesTotal">getBytesTotal</a></b>()
 								</div>
-								<div class="description">Returns the full media player object.</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">minplayer.players.vimeo.<b><a href="../symbols/minplayer.players.vimeo.html#.getMediaId">getMediaId</a></b>(file)
+								</div>
+								<div class="description">Return the ID for a provided media file.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.player.html#getPlugin">getPlugin</a></b>(id)
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.vimeo.html#getPlayer">getPlayer</a></b>()
 								</div>
-								<div class="description">Returns a plugin provided a plugin ID.</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.player.html#getVolume">getVolume</a></b>(callback)
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.vimeo.html#getPlayerCurrentTime">getPlayerCurrentTime</a></b>()
 								</div>
-								<div class="description">Get the current volume setting.</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.player.html#load">load</a></b>(files)
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.vimeo.html#getPlayerDuration">getPlayerDuration</a></b>()
 								</div>
-								<div class="description">Load a set of files or a single file for the media player.</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">minplayer.players.vimeo.<b><a href="../symbols/minplayer.players.vimeo.html#.getPriority">getPriority</a></b>()
+								</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.player.html#loadPlugins">loadPlugins</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.vimeo.html#getVolume">getVolume</a></b>(Called)
 								</div>
-								<div class="description">Loads all of the available plugins.</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.player.html#pause">pause</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.vimeo.html#onReady">onReady</a></b>(player_id)
 								</div>
-								<div class="description">Pause the media.</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.player.html#play">play</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.vimeo.html#pause">pause</a></b>()
 								</div>
-								<div class="description">Play the currently loaded media file.</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.player.html#seek">seek</a></b>(pos)
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.vimeo.html#play">play</a></b>()
 								</div>
-								<div class="description">Seek the media to the provided position.</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.player.html#setVolume">setVolume</a></b>(vol)
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.vimeo.html#playerFound">playerFound</a></b>()
 								</div>
-								<div class="description">Set the volume of the media being played.</div>
+								<div class="description">Checks to see if this player can be found.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.player.html#stop">stop</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.vimeo.html#reset">reset</a></b>()
 								</div>
-								<div class="description">Stop the media.</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.vimeo.html#seek">seek</a></b>(pos)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.vimeo.html#setVolume">setVolume</a></b>(vol)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.vimeo.html#stop">stop</a></b>()
+								</div>
+								<div class="description"></div>
 							</td>
 						</tr>
 					
@@ -507,7 +492,7 @@ functionality.
 				
 				
 				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/minplayer.display.html">minplayer.display</a>: </dt><dd><a href="../symbols/minplayer.display.html#getElements">getElements</a>, <a href="../symbols/minplayer.display.html#isValid">isValid</a></dd><dt>Methods borrowed from class <a href="../symbols/minplayer.plugin.html">minplayer.plugin</a>: </dt><dd><a href="../symbols/minplayer.plugin.html#setPlayer">setPlayer</a></dd>
+				<dt>Methods borrowed from class <a href="../symbols/minplayer.players.flash.html">minplayer.players.flash</a>: </dt><dd><a href="../symbols/minplayer.players.flash.html#getCurrentTime">getCurrentTime</a>, <a href="../symbols/minplayer.players.flash.html#getDuration">getDuration</a>, <a href="../symbols/minplayer.players.flash.html#onMeta">onMeta</a>, <a href="../symbols/minplayer.players.flash.html#onPaused">onPaused</a>, <a href="../symbols/minplayer.players.flash.html#onPlaying">onPlaying</a></dd><dt>Methods borrowed from class <a href="../symbols/minplayer.display.html">minplayer.display</a>: </dt><dd><a href="../symbols/minplayer.display.html#getElements">getElements</a>, <a href="../symbols/minplayer.display.html#isValid">isValid</a></dd><dt>Methods borrowed from class <a href="../symbols/minplayer.plugin.html">minplayer.plugin</a>: </dt><dd><a href="../symbols/minplayer.plugin.html#construct">construct</a>, <a href="../symbols/minplayer.plugin.html#setPlayer">setPlayer</a></dd>
 				</dl>
 				
 			
@@ -522,7 +507,7 @@ functionality.
 				</div>
 				
 				<div class="fixedFont">
-						<b>minplayer.player</b>(context, options)
+						<b>minplayer.players.vimeo</b>(context, options, ready)
 				</div>
 				
 				<div class="description">
@@ -549,6 +534,12 @@ functionality.
 							</dt>
 								<dd>This components options.</dd>
 						
+							<dt>
+								<span class="light fixedFont">{function}</span>  <b>ready</b>
+								
+							</dt>
+								<dd>Called when the player is ready.</dd>
+						
 						</dl>
 					
 					
@@ -566,28 +557,6 @@ functionality.
 				<div class="sectionTitle">
 					Field Detail
 				</div>
-				
-					<a name="allPlugins"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>allPlugins</b>
-					
-					</div>
-					<div class="description">
-						All of the plugin objects.
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
 				
 					<a name="constructor"> </a>
 					<div class="fixedFont">
@@ -609,50 +578,6 @@ functionality.
 						
 						
 
-					<hr />
-				
-					<a name="currentPlayer"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>currentPlayer</b>
-					
-					</div>
-					<div class="description">
-						Variable to store the current media player.
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="media"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>media</b>
-					
-					</div>
-					<div class="description">
-						The current player.
-						
-						
-					</div>
-					
-					
-
-						
-						
-						
-						
-
 					
 				
 			
@@ -663,40 +588,15 @@ functionality.
 					Method Detail
 				</div>
 				
-					<a name="addKeyEvents"> </a>
-					<div class="fixedFont">
+					<a name=".canPlay"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
-					
-					<b>addKeyEvents</b>()
-					
-					</div>
-					<div class="description">
-						Adds key events to the player.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="addPlugin"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>addPlugin</b>(id, plugin)
+					<span class="light">{boolean}</span>
+					<span class="light">minplayer.players.vimeo.</span><b>canPlay</b>(file)
 					
 					</div>
 					<div class="description">
-						Add a new plugin to the media player.
+						
 						
 						
 					</div>
@@ -708,16 +608,376 @@ functionality.
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{string}</span> <b>id</b>
+									<span class="light fixedFont">{object}</span> <b>file</b>
 									
 								</dt>
-								<dd>The plugin ID.</dd>
+								<dd>A <a href="../symbols/minplayer.file.html">minplayer.file</a> object.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{boolean}</span> If this player can play this media type.</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd>minplayer.players.flash#canPlay</dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="create"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{object}</span>
+					<b>create</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{object}</span> The media player entity.</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/minplayer.players.flash.html#create">minplayer.players.flash#create</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getBytesLoaded"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{number}</span>
+					<b>getBytesLoaded</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{number}</span> Returns the bytes loaded from the media.</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd>minplayer.players.flash#getBytesLoaded.</dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getBytesTotal"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{number}</span>
+					<b>getBytesTotal</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{number}</span> The total number of bytes of the loaded media.</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd>minplayer.players.flash#getBytesTotal.</dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name=".getMediaId"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{string}</span>
+					<span class="light">minplayer.players.vimeo.</span><b>getMediaId</b>(file)
+					
+					</div>
+					<div class="description">
+						Return the ID for a provided media file.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{object}</span> <b>plugin</b>
+									<span class="light fixedFont">{object}</span> <b>file</b>
 									
 								</dt>
-								<dd>A new plugin object, derived from media.plugin.</dd>
+								<dd>A <a href="../symbols/minplayer.file.html">minplayer.file</a> object.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{string}</span> The ID for the provided media.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="getPlayer"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{object}</span>
+					<b>getPlayer</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{object}</span> The media player object.</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/minplayer.players.flash.html#getPlayer">minplayer.players.flash#getPlayer</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getPlayerCurrentTime"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{number}</span>
+					<b>getPlayerCurrentTime</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{number}</span> The current playhead time.</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd>minplayer.players.base#getPlayerCurrentTime</dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getPlayerDuration"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{int}</span>
+					<b>getPlayerDuration</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{int}</span> The player duration.</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd>minplayer.players.flash#getPlayerDuration.</dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name=".getPriority"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{number}</span>
+					<span class="light">minplayer.players.vimeo.</span><b>getPriority</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{number}</span> The priority of this media player.</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd>minplayer.players.flash#getPriority</dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getVolume"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getVolume</b>(Called)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{function}</span> <b>Called</b>
+									
+								</dt>
+								<dd>when the volume is determined.</dd>
 							
 							</dl>
 						
@@ -727,14 +987,64 @@ functionality.
 						
 						
 						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/minplayer.players.base.html#getVolume">minplayer.players.base#getVolume</a></dd>
+							
+							</dl>
+						
 
 					<hr />
 				
-					<a name="construct"> </a>
+					<a name="onReady"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>construct</b>()
+					<b>onReady</b>(player_id)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>player_id</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd><a href="../symbols/minplayer.players.flash.html#onReady">minplayer.players.flash#onReady</a></dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="pause"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>pause</b>()
 					
 					</div>
 					<div class="description">
@@ -755,301 +1065,9 @@ functionality.
 							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd>minplayer.plugin.construct</dd>
+								<dd>minplayer.players.flash#pause</dd>
 							
 							</dl>
-						
-
-					<hr />
-				
-					<a name="getDuration"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{number}</span>
-					<b>getDuration</b>(callback)
-					
-					</div>
-					<div class="description">
-						Get the current media duration.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{function}</span> <b>callback</b>
-									
-								</dt>
-								<dd>The callback that is called when the duration
-is known.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{number}</span> The current media duration.</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="getFiles"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{array}</span>
-					<b>getFiles</b>()
-					
-					</div>
-					<div class="description">
-						Returns all the media files available for this player.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{array}</span> All the media files for this player.</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="getMediaFile"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{object}</span>
-					<b>getMediaFile</b>(files)
-					
-					</div>
-					<div class="description">
-						Returns the full media player object.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{array}</span> <b>files</b>
-									
-								</dt>
-								<dd>An array of files to chose from.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{object}</span> The best media file to play in the current browser.</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="getPlugin"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{object}</span>
-					<b>getPlugin</b>(id)
-					
-					</div>
-					<div class="description">
-						Returns a plugin provided a plugin ID.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{string}</span> <b>id</b>
-									
-								</dt>
-								<dd>The plugin ID to retrieve.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{object}</span> The plugin matching the provided ID.</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="getVolume"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{number}</span>
-					<b>getVolume</b>(callback)
-					
-					</div>
-					<div class="description">
-						Get the current volume setting.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{function}</span> <b>callback</b>
-									
-								</dt>
-								<dd>The callback that is called when the volume
-is known.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{number}</span> The current volume level. 0 to 1.</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
-				
-					<a name="load"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>load</b>(files)
-					
-					</div>
-					<div class="description">
-						Load a set of files or a single file for the media player.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{array}</span> <b>files</b>
-									
-								</dt>
-								<dd>An array of files to chose from to load.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="loadPlugins"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>loadPlugins</b>()
-					
-					</div>
-					<div class="description">
-						Loads all of the available plugins.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
-					<hr />
-				
-					<a name="pause"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>pause</b>()
-					
-					</div>
-					<div class="description">
-						Pause the media.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
 						
 
 					<hr />
@@ -1062,8 +1080,7 @@ is known.</dd>
 					
 					</div>
 					<div class="description">
-						Play the currently loaded media file.  Use load first to load a
-media file into the media player.
+						
 						
 						
 					</div>
@@ -1076,6 +1093,77 @@ media file into the media player.
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd>minplayer.players.flash#play</dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="playerFound"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{bool}</span>
+					<b>playerFound</b>()
+					
+					</div>
+					<div class="description">
+						Checks to see if this player can be found.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{bool}</span> TRUE - Player is found, FALSE - otherwise.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="reset"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>reset</b>()
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd>minplayer.players.flash#reset</dd>
+							
+							</dl>
 						
 
 					<hr />
@@ -1088,7 +1176,7 @@ media file into the media player.
 					
 					</div>
 					<div class="description">
-						Seek the media to the provided position.
+						
 						
 						
 					</div>
@@ -1100,10 +1188,10 @@ media file into the media player.
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{number}</span> <b>pos</b>
+									<b>pos</b>
 									
 								</dt>
-								<dd>The position to seek.  0 to 1.</dd>
+								<dd></dd>
 							
 							</dl>
 						
@@ -1112,6 +1200,13 @@ media file into the media player.
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd>minplayer.players.flash#seek</dd>
+							
+							</dl>
 						
 
 					<hr />
@@ -1124,7 +1219,7 @@ media file into the media player.
 					
 					</div>
 					<div class="description">
-						Set the volume of the media being played.
+						
 						
 						
 					</div>
@@ -1136,10 +1231,10 @@ media file into the media player.
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{number}</span> <b>vol</b>
+									<b>vol</b>
 									
 								</dt>
-								<dd>The volume to set.  0 to 1.</dd>
+								<dd></dd>
 							
 							</dl>
 						
@@ -1148,6 +1243,13 @@ media file into the media player.
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd>minplayer.players.flash#setVolume</dd>
+							
+							</dl>
 						
 
 					<hr />
@@ -1160,7 +1262,7 @@ media file into the media player.
 					
 					</div>
 					<div class="description">
-						Stop the media.
+						
 						
 						
 					</div>
@@ -1173,6 +1275,13 @@ media file into the media player.
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd>minplayer.players.flash#stop</dd>
+							
+							</dl>
 						
 
 					

@@ -52,7 +52,8 @@ minplayer.player = function(context, options) {
     swfplayer: '',
     wmode: 'transparent',
     attributes: {},
-    settings: {}
+    settings: {},
+    file: null
   }, options);
 
   // Store this player instance.
@@ -164,10 +165,18 @@ minplayer.player.prototype.getFiles = function() {
  * @return {object} The best media file to play in the current browser.
  */
 minplayer.player.prototype.getMediaFile = function(files) {
+
+  // If there are no files then return null.
+  if (!files) {
+    return null;
+  }
+
+  // If the file is a single string, then return the file object.
   if (typeof files === 'string') {
     return new minplayer.file({'path': files});
   }
 
+  // If the file is already a file object then just return.
   if (files.path) {
     return new minplayer.file(files);
   }
@@ -191,7 +200,7 @@ minplayer.player.prototype.getMediaFile = function(files) {
     }
   }
 
-  // Return the minplayer file.
+  // Return the best minplayer file.
   return mFile;
 };
 
@@ -202,43 +211,57 @@ minplayer.player.prototype.getMediaFile = function(files) {
  */
 minplayer.player.prototype.load = function(files) {
 
-  // Get the best media file.
-  var mFile = this.getMediaFile(files), id = '', pClass = '';
+  // Set the id and class.
+  var id = '', pClass = '';
 
-  // Only do something if we have a valid file.
-  if (mFile) {
+  // If no file was provided, then get it.
+  files = files || this.options.file;
+  this.options.file = this.getMediaFile(files);
 
-    // Only destroy if the current player is different than the new player.
-    if (!this.media || (mFile.player.toString() !== this.currentPlayer)) {
+  // Do nothing if there isn't a file.
+  if (!this.options.file) {
+    return;
+  }
 
-      // Set the current media player.
-      this.currentPlayer = mFile.player.toString();
+  // Only destroy if the current player is different than the new player.
+  var player = this.options.file.player.toString();
 
-      // Make sure the player has an option to cleanup.
-      if (this.media) {
-        this.media.destroy();
-      }
+  // If there isn't media or if the players are different.
+  if (!this.media || (player !== this.currentPlayer)) {
 
-      // Create a new media player for this file.
-      if (this.elements.display) {
-        pClass = minplayer.players[mFile.player];
-        this.media = new pClass(this.elements.display, this.options, mFile);
-      }
+    // Set the current media player.
+    this.currentPlayer = player;
+
+    // The display for this media player.
+    var display = this.elements.display;
+
+    // Do nothing if we don't have a display.
+    if (!display) {
+      return;
+    }
+
+    // Get the class name and create the new player.
+    var _this = this;
+    pClass = minplayer.players[this.options.file.player];
+    this.media = new pClass(display, this.options, function(player) {
 
       // Iterate through all plugins and add the player to them.
-      for (id in this.allPlugins) {
-        if (this.allPlugins.hasOwnProperty(id)) {
-          this.allPlugins[id].setPlayer(this.media);
+      for (id in _this.allPlugins) {
+        if (_this.allPlugins.hasOwnProperty(id)) {
+          _this.allPlugins[id].setPlayer(player);
         }
       }
-    }
-
-    // If the media exists, then load it.
-    if (this.media) {
 
       // Now load this media.
-      this.media.load(mFile);
-    }
+      player.load();
+    });
+  }
+
+  // If the media object already exists...
+  else if (this.media) {
+
+    // Now load the different media file.
+    this.media.load(this.options.file);
   }
 };
 
@@ -321,17 +344,21 @@ minplayer.player.prototype.setVolume = function(vol) {
 /**
  * Get the current volume setting.
  *
+ * @param {function} callback The callback that is called when the volume
+ * is known.
  * @return {number} The current volume level. 0 to 1.
  */
-minplayer.player.prototype.getVolume = function() {
-  return this.media ? this.media.getVolume() : 0;
+minplayer.player.prototype.getVolume = function(callback) {
+  return this.media ? this.media.getVolume(callback) : 0;
 };
 
 /**
  * Get the current media duration.
  *
+ * @param {function} callback The callback that is called when the duration
+ * is known.
  * @return {number} The current media duration.
  */
-minplayer.player.prototype.getDuration = function() {
-  return this.media ? this.media.getDuration() : 0;
+minplayer.player.prototype.getDuration = function(callback) {
+  return this.media ? this.media.getDuration(callback) : 0;
 };

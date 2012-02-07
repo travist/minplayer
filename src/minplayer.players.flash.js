@@ -11,17 +11,14 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
- * @param {object} mediaFile The media file for this player.
+ * @param {function} ready Called when the player is ready.
  */
-minplayer.players.flash = function(context, options, mediaFile) {
+minplayer.players.flash = function(context, options, ready) {
 
-  this.durationInterval = null;
   this.mediaInterval = null;
-  this.duration = 0;
-  this.ready = false;
 
   // Derive from players base.
-  minplayer.players.base.call(this, context, options, mediaFile);
+  minplayer.players.base.call(this, context, options, ready);
 };
 
 /** Derive from minplayer.players.base. */
@@ -121,17 +118,12 @@ minplayer.players.flash.getFlash = function(params) {
  * Called when the player is ready.
  */
 minplayer.players.flash.prototype.onReady = function() {
-  var _this = this;
-  this.ready = true;
-  this.trigger('loadstart');
 
-  // Perform a check for the duration every second until it shows up.
-  this.durationInterval = setInterval(function() {
-    if (_this.getDuration()) {
-      clearInterval(_this.durationInterval);
-      _this.trigger('durationchange', {duration: _this.getDuration()});
-    }
-  }, 1000);
+  // Call the base on ready.
+  minplayer.players.base.prototype.onReady.call(this);
+
+  // Trigger that the load has started.
+  this.trigger('loadstart');
 };
 
 /**
@@ -141,10 +133,10 @@ minplayer.players.flash.prototype.onPlaying = function() {
   var _this = this;
   this.trigger('playing');
   this.mediaInterval = setInterval(function() {
-    var cTime = _this.getCurrentTime();
-    var dur = _this.getDuration();
-    var data = {currentTime: cTime, duration: dur};
-    _this.trigger('timeupdate', data);
+    _this.trigger('timeupdate', {
+      currentTime: _this.getPlayerCurrentTime(),
+      duration: _this.getPlayerDuration()
+    });
   }, 1000);
 };
 
@@ -153,32 +145,15 @@ minplayer.players.flash.prototype.onPlaying = function() {
  */
 minplayer.players.flash.prototype.onPaused = function() {
   this.trigger('pause');
-  clearInterval(this.minplayerInterval);
+  clearInterval(this.mediaInterval);
 };
 
 /**
  * Should be called when the meta data has finished loading.
  */
 minplayer.players.flash.prototype.onMeta = function() {
-  clearInterval(this.durationInterval);
   this.trigger('loadeddata');
   this.trigger('loadedmetadata');
-  this.trigger('durationchange', {duration: this.getDuration()});
-};
-
-/**
- * Reset the flash player variables.
- */
-minplayer.players.flash.prototype.reset = function() {
-  this.ready = false;
-  this.duration = 0;
-};
-
-/**
- * @see minplayer.players.base#destroy
- */
-minplayer.players.flash.prototype.destroy = function() {
-  this.reset();
 };
 
 /**
@@ -210,11 +185,23 @@ minplayer.players.flash.prototype.getPlayer = function() {
 };
 
 /**
- * @see minplayer.players.base#load
+ * Return the players current time.
+ *
+ * @return {number} The players current time.
  */
-minplayer.players.flash.prototype.load = function(file) {
-  this.duration = 0;
-  minplayer.players.base.prototype.load.call(this, file);
+minplayer.players.flash.prototype.getPlayerCurrentTime = function() {
+  return 0;
+};
+
+/**
+ * @see minplayer.players.base#getPlayTime
+ * @return {number} The duration of the loaded media.
+ */
+minplayer.players.flash.prototype.getCurrentTime = function(callback) {
+  var _this = this;
+  return this.currentTime.get(callback, function() {
+    return _this.getPlayerCurrentTime();
+  });
 };
 
 /**
@@ -230,25 +217,9 @@ minplayer.players.flash.prototype.getPlayerDuration = function() {
  * @see minplayer.players.base#getDuration
  * @return {number} The duration of the loaded media.
  */
-minplayer.players.flash.prototype.getDuration = function() {
-
-  // Make sure to cache the duration since it is called often.
-  if (this.duration) {
-    return this.duration;
-  }
-  else if (this.isReady()) {
-    this.duration = this.getPlayerDuration();
-    return this.duration;
-  }
-  else {
-    return minplayer.players.base.prototype.getDuration.call(this);
-  }
-};
-
-/**
- * @see minplayer.players.base#isReady
- * @return {boolean} Checks to see if the Flash is ready.
- */
-minplayer.players.flash.prototype.isReady = function() {
-  return (this.player && this.ready);
+minplayer.players.flash.prototype.getDuration = function(callback) {
+  var _this = this;
+  return this.duration.get(callback, function() {
+    return _this.getPlayerDuration();
+  });
 };

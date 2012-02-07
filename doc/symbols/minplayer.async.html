@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - _global_</title>
+		<title>JsDoc Reference - minplayer.async</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -234,7 +234,7 @@ ul.inheritsList
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Built-In Namespace _global_
+				Class minplayer.async
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -242,19 +242,43 @@ ul.inheritsList
 				
 				
 			
+				This class keeps track of asynchronous get requests for certain
+variables within the player.
 				
 				
+					<br /><i>Defined in: </i> <a href="../symbols/src/src_minplayer.async.js.html">minplayer.async.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
+			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class minplayer.async.">
+				<caption>Class Summary</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/minplayer.async.html#constructor">minplayer.async</a></b>()
+							</div>
+							<div class="description"></div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 			
 
 <!-- ============================== properties summary ===================== -->
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class _global_.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class minplayer.async.">
 					<caption>Field Summary</caption>
 					<thead>
 						<tr>
@@ -268,9 +292,29 @@ ul.inheritsList
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
-								<b><a href="../symbols/_global_.html#minplayer">minplayer</a></b>
+								<b><a href="../symbols/minplayer.async.html#queue">queue</a></b>
 								</div>
-								<div class="description">The minplayer namespace.</div>
+								<div class="description">The queue of callbacks to call when this value is determined.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/minplayer.async.html#queueInt">queueInt</a></b>
+								</div>
+								<div class="description">The setInterval id for the polling timer.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/minplayer.async.html#value">value</a></b>
+								</div>
+								<div class="description">The final value of this asynchronous variable.</div>
 							</td>
 						</tr>
 					
@@ -285,7 +329,7 @@ ul.inheritsList
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class _global_.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class minplayer.async.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -298,9 +342,18 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/_global_.html#checkPlayType">checkPlayType</a></b>(elem, playType)
+								<div class="fixedFont"><b><a href="../symbols/minplayer.async.html#get">get</a></b>(callback, pollValue)
 								</div>
-								<div class="description"></div>
+								<div class="description">Retrieve the value of this variable.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.async.html#set">set</a></b>(val)
+								</div>
+								<div class="description">Sets the value of an asynchronous value.</div>
 							</td>
 						</tr>
 					
@@ -315,6 +368,33 @@ ul.inheritsList
 
 <!-- ============================== constructor details ==================== -->		
 			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>minplayer.async</b>()
+				</div>
+				
+				<div class="description">
+					
+					
+				</div>
+				
+				
+				
+				
+					
+					
+					
+					
+					
+					
+					
+
+			</div>
+			
 
 <!-- ============================== field details ========================== -->		
 			
@@ -322,18 +402,59 @@ ul.inheritsList
 					Field Detail
 				</div>
 				
-					<a name="minplayer"> </a>
+					<a name="queue"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>minplayer</b>
+					<b>queue</b>
 					
 					</div>
 					<div class="description">
-						The minplayer namespace.
+						The queue of callbacks to call when this value is determined.
 						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/src_minplayer.compatibility.js.html">minplayer.compatibility.js</a>.
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="queueInt"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>queueInt</b>
+					
+					</div>
+					<div class="description">
+						The setInterval id for the polling timer.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="value"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>value</b>
+					
+					</div>
+					<div class="description">
+						The final value of this asynchronous variable.
 						
 						
 					</div>
@@ -355,18 +476,15 @@ ul.inheritsList
 					Method Detail
 				</div>
 				
-					<a name="checkPlayType"> </a>
+					<a name="get"> </a>
 					<div class="fixedFont">
 					
 					
-					<b>checkPlayType</b>(elem, playType)
+					<b>get</b>(callback, pollValue)
 					
 					</div>
 					<div class="description">
-						
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/src_minplayer.compatibility.js.html">minplayer.compatibility.js</a>.
+						Retrieve the value of this variable.
 						
 						
 					</div>
@@ -378,16 +496,53 @@ ul.inheritsList
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>elem</b>
+									<span class="light fixedFont">{function}</span> <b>callback</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>The function to call when the value is determined.</dd>
 							
 								<dt>
-									<b>playType</b>
+									<span class="light fixedFont">{function}</span> <b>pollValue</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>The poll function to try and get the value every
+1 second if the value is not set.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="set"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>set</b>(val)
+					
+					</div>
+					<div class="description">
+						Sets the value of an asynchronous value.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{void}</span> <b>val</b>
+									
+								</dt>
+								<dd>The value to set.</dd>
 							
 							</dl>
 						
