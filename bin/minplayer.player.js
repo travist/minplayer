@@ -1817,7 +1817,7 @@ window.onFlashPlayerDebug = function(debug) {
  * @return {number} The priority of this media player.
  */
 minplayer.players.minplayer.getPriority = function() {
-  return 20;
+  return 1;
 };
 
 /**
