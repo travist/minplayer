@@ -74,6 +74,7 @@ minplayer.players.html5.prototype.construct = function() {
       _this.trigger('abort');
     }, true);
     this.player.addEventListener('loadstart', function() {
+      _this.onReady();
       _this.trigger('loadstart');
     }, true);
     this.player.addEventListener('loadeddata', function() {
@@ -124,9 +125,6 @@ minplayer.players.html5.prototype.construct = function() {
       this.player.autobuffer = false;
       this.player.preload = 'none';
     }
-
-    // Say that we are ready.
-    this.onReady();
   }
 };
 

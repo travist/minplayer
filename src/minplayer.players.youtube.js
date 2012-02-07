@@ -304,6 +304,7 @@ minplayer.players.youtube.prototype.seek = function(pos) {
 minplayer.players.youtube.prototype.setVolume = function(vol) {
   minplayer.players.flash.prototype.setVolume.call(this, vol);
   if (this.isReady()) {
+    this.volume.set(vol * 100);
     this.player.setVolume(vol * 100);
   }
 };
@@ -312,9 +313,12 @@ minplayer.players.youtube.prototype.setVolume = function(vol) {
  * @see minplayer.players.base#getVolume
  * @return {number} The volume of the media; 0 to 1.
  */
-minplayer.players.youtube.prototype.getVolume = function() {
+minplayer.players.youtube.prototype.getVolume = function(callback) {
   if (this.isReady()) {
-    return (this.player.getVolume() / 100);
+    var vol = this.volume.value || this.player.getVolume();
+    vol = vol / 100;
+    callback(vol);
+    return vol;
   }
   else {
     return minplayer.players.flash.prototype.getVolume.call(this);
