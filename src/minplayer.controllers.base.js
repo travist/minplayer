@@ -166,6 +166,8 @@ minplayer.controllers.base.prototype.setTimeString = function(element, time) {
  */
 minplayer.controllers.base.prototype.setPlayer = function(player) {
   minplayer.display.prototype.setPlayer.call(this, player);
+
+  var _this = this;
   player.bind('pause', {obj: this}, function(event) {
     event.data.obj.setPlayPause(true);
     clearInterval(event.data.obj.interval);
@@ -192,39 +194,48 @@ minplayer.controllers.base.prototype.setPlayer = function(player) {
     }
   });
 
+  // Set the timestring to match that of the duration of the player.
+  player.getDuration(function(duration) {
+    _this.setTimeString('duration', duration);
+  });
+
   // Register the events for the control bar to control the media.
   if (this.seekBar) {
-    var _this = this;
     this.seekBar.slider({
       start: function(event, ui) {
         _this.dragging = true;
       },
       stop: function(event, ui) {
         _this.dragging = false;
-        var time = (ui.value / 100) * player.getDuration();
-        player.seek(time);
+        player.getDuration(function(duration) {
+          player.seek((ui.value / 100) * duration);
+        });
       },
       slide: function(event, ui) {
-        var time = (ui.value / 100) * player.getDuration();
-        if (!_this.dragging) {
-          player.seek(time);
-        }
-
-        _this.setTimeString('timer', time);
+        player.getDuration(function(duration) {
+          var time = (ui.value / 100) * duration;
+          if (!_this.dragging) {
+            player.seek(time);
+          }
+          _this.setTimeString('timer', time);
+        });
       }
     });
   }
 
-  // Register the volume bar to adjust the player volume.
-  player.setVolume(this.options.volume / 100);
-
   // Setup the volume bar.
   if (this.volumeBar) {
-    this.volumeBar.slider('option', 'value', this.options.volume);
+
+    // Create the slider.
     this.volumeBar.slider({
       slide: function(event, ui) {
         player.setVolume(ui.value / 100);
       }
+    });
+
+    // Set the volume to match that of the player.
+    player.getVolume(function(vol) {
+      _this.volumeBar.slider('option', 'value', (vol * 100));
     });
   }
 };

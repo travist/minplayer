@@ -12,6 +12,7 @@
 
 # Create the list of files
 files =   src/minplayer.compatibility.js\
+          src/minplayer.async.js\
           src/minplayer.flags.js\
           src/minplayer.plugin.js\
           src/minplayer.display.js\
@@ -23,6 +24,7 @@ files =   src/minplayer.compatibility.js\
           src/minplayer.players.flash.js\
           src/minplayer.players.minplayer.js\
           src/minplayer.players.youtube.js\
+          src/minplayer.players.vimeo.js\
           src/minplayer.controllers.base.js\
           src/minplayer.templates.base.js
 

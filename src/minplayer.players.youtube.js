@@ -11,15 +11,15 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
- * @param {object} mediaFile The media file for this player.
+ * @param {function} ready Called when the player is ready.
  */
-minplayer.players.youtube = function(context, options, mediaFile) {
-
-  // Derive from players base.
-  minplayer.players.flash.call(this, context, options, mediaFile);
+minplayer.players.youtube = function(context, options, ready) {
 
   /** The quality of the YouTube stream. */
   this.quality = 'default';
+
+  // Derive from players base.
+  minplayer.players.flash.call(this, context, options, ready);
 };
 
 /** Derive from minplayer.players.flash. */
@@ -115,7 +115,6 @@ minplayer.players.youtube.prototype.register = function() {
  * @param {number} playerState The YouTube player state.
  */
 minplayer.players.youtube.prototype.setPlayerState = function(playerState) {
-  console.log(playerState);
   switch (playerState) {
     case YT.PlayerState.CUED:
       break;
@@ -144,6 +143,15 @@ minplayer.players.youtube.prototype.setPlayerState = function(playerState) {
 minplayer.players.youtube.prototype.onReady = function(event) {
   minplayer.players.flash.prototype.onReady.call(this);
   this.onMeta();
+};
+
+/**
+ * Checks to see if this player can be found.
+ * @return {bool} TRUE - Player is found, FALSE - otherwise.
+ */
+minplayer.players.youtube.prototype.playerFound = function() {
+  var iframe = this.display.find('iframe#' + this.options.id + '-player');
+  return (iframe.length > 0);
 };
 
 /**
@@ -178,7 +186,7 @@ minplayer.players.youtube.prototype.onError = function(errorCode) {
  *
  * @return {bool} If this player implements its own playLoader.
  */
-minplayer.players.base.prototype.hasPlayLoader = function() {
+minplayer.players.youtube.prototype.hasPlayLoader = function() {
   return true;
 };
 
@@ -204,8 +212,8 @@ minplayer.players.youtube.prototype.create = function() {
   var iframe = document.createElement('iframe');
   iframe.setAttribute('id', this.options.id + '-player');
   iframe.setAttribute('type', 'text/html');
-  iframe.setAttribute('width', this.options.settings.width);
-  iframe.setAttribute('height', this.options.settings.height);
+  iframe.setAttribute('width', '100%');
+  iframe.setAttribute('height', '100%');
   iframe.setAttribute('frameborder', '0');
 
   // Get the source.
@@ -233,12 +241,20 @@ minplayer.players.youtube.prototype.create = function() {
 };
 
 /**
+ * @see minplayer.players.base#getPlayer
+ * @return {object} The media player object.
+ */
+minplayer.players.youtube.prototype.getPlayer = function() {
+  return this.player;
+};
+
+/**
  * @see minplayer.players.base#load
  */
 minplayer.players.youtube.prototype.load = function(file) {
   minplayer.players.flash.prototype.load.call(this, file);
-  if (this.ready) {
-    this.player.loadVideoById(this.mediaFile.id, 0, this.quality);
+  if (file && this.isReady()) {
+    this.player.loadVideoById(file.id, 0, this.quality);
   }
 };
 
@@ -247,7 +263,7 @@ minplayer.players.youtube.prototype.load = function(file) {
  */
 minplayer.players.youtube.prototype.play = function() {
   minplayer.players.flash.prototype.play.call(this);
-  if (this.ready) {
+  if (this.isReady()) {
     this.player.playVideo();
   }
 };
@@ -257,7 +273,7 @@ minplayer.players.youtube.prototype.play = function() {
  */
 minplayer.players.youtube.prototype.pause = function() {
   minplayer.players.flash.prototype.pause.call(this);
-  if (this.ready) {
+  if (this.isReady()) {
     this.player.pauseVideo();
   }
 };
@@ -267,7 +283,7 @@ minplayer.players.youtube.prototype.pause = function() {
  */
 minplayer.players.youtube.prototype.stop = function() {
   minplayer.players.flash.prototype.stop.call(this);
-  if (this.ready) {
+  if (this.isReady()) {
     this.player.stopVideo();
   }
 };
@@ -277,7 +293,7 @@ minplayer.players.youtube.prototype.stop = function() {
  */
 minplayer.players.youtube.prototype.seek = function(pos) {
   minplayer.players.flash.prototype.seek.call(this, pos);
-  if (this.ready) {
+  if (this.isReady()) {
     this.player.seekTo(pos, true);
   }
 };
@@ -287,7 +303,7 @@ minplayer.players.youtube.prototype.seek = function(pos) {
  */
 minplayer.players.youtube.prototype.setVolume = function(vol) {
   minplayer.players.flash.prototype.setVolume.call(this, vol);
-  if (this.ready) {
+  if (this.isReady()) {
     this.player.setVolume(vol * 100);
   }
 };
@@ -297,7 +313,7 @@ minplayer.players.youtube.prototype.setVolume = function(vol) {
  * @return {number} The volume of the media; 0 to 1.
  */
 minplayer.players.youtube.prototype.getVolume = function() {
-  if (this.ready) {
+  if (this.isReady()) {
     return (this.player.getVolume() / 100);
   }
   else {
@@ -310,15 +326,15 @@ minplayer.players.youtube.prototype.getVolume = function() {
  * @return {int} The player duration.
  */
 minplayer.players.youtube.prototype.getPlayerDuration = function() {
-  return this.ready ? this.player.getDuration() : 0;
+  return this.isReady() ? this.player.getDuration() : 0;
 };
 
 /**
- * @see minplayer.players.base#getCurrentTime
+ * @see minplayer.players.base#getPlayerCurrentTime
  * @return {number} The current playhead time.
  */
-minplayer.players.youtube.prototype.getCurrentTime = function() {
-  return this.ready ? this.player.getCurrentTime() : 0;
+minplayer.players.youtube.prototype.getPlayerCurrentTime = function() {
+  return this.isReady() ? this.player.getCurrentTime() : 0;
 };
 
 /**
@@ -326,7 +342,7 @@ minplayer.players.youtube.prototype.getCurrentTime = function() {
  * @return {number} Returns the bytes loaded from the media.
  */
 minplayer.players.youtube.prototype.getBytesLoaded = function() {
-  return this.ready ? this.player.getVideoBytesLoaded() : 0;
+  return this.isReady() ? this.player.getVideoBytesLoaded() : 0;
 };
 
 /**
@@ -334,5 +350,5 @@ minplayer.players.youtube.prototype.getBytesLoaded = function() {
  * @return {number} The total number of bytes of the loaded media.
  */
 minplayer.players.youtube.prototype.getBytesTotal = function() {
-  return this.ready ? this.player.getVideoBytesTotal() : 0;
+  return this.isReady() ? this.player.getVideoBytesTotal() : 0;
 };

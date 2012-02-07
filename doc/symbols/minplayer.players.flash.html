@@ -193,6 +193,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/jQuery.fn.minplayer.html">jQuery.fn.minplayer</a></li>
 	
+	<li><a href="../symbols/minplayer.async.html">minplayer.async</a></li>
+	
 	<li><a href="../symbols/minplayer.compatibility.html">minplayer.compatibility</a></li>
 	
 	<li><a href="../symbols/minplayer.controllers.base.html">minplayer.controllers.base</a></li>
@@ -212,6 +214,8 @@ ul.inheritsList
 	<li><a href="../symbols/minplayer.players.html5.html">minplayer.players.html5</a></li>
 	
 	<li><a href="../symbols/minplayer.players.minplayer.html">minplayer.players.minplayer</a></li>
+	
+	<li><a href="../symbols/minplayer.players.vimeo.html">minplayer.players.vimeo</a></li>
 	
 	<li><a href="../symbols/minplayer.players.youtube.html">minplayer.players.youtube</a></li>
 	
@@ -262,7 +266,7 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/minplayer.players.flash.html#constructor">minplayer.players.flash</a></b>(context, options, mediaFile)
+								<b><a href="../symbols/minplayer.players.flash.html#constructor">minplayer.players.flash</a></b>(context, options, ready)
 							</div>
 							<div class="description"></div>
 						</td>
@@ -341,7 +345,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.players.flash.html#destroy">destroy</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.flash.html#getCurrentTime">getCurrentTime</a></b>(callback)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -350,7 +354,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.players.flash.html#getDuration">getDuration</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.flash.html#getDuration">getDuration</a></b>(callback)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -377,6 +381,15 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.flash.html#getPlayerCurrentTime">getPlayerCurrentTime</a></b>()
+								</div>
+								<div class="description">Return the players current time.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/minplayer.players.flash.html#getPlayerDuration">getPlayerDuration</a></b>()
 								</div>
 								<div class="description">Return the player time duration.</div>
@@ -387,24 +400,6 @@ ul.inheritsList
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">minplayer.players.flash.<b><a href="../symbols/minplayer.players.flash.html#.getPriority">getPriority</a></b>()
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.players.flash.html#isReady">isReady</a></b>()
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.players.flash.html#load">load</a></b>(file)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -455,15 +450,6 @@ ul.inheritsList
 							</td>
 						</tr>
 					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.players.flash.html#reset">reset</a></b>()
-								</div>
-								<div class="description">Reset the flash player variables.</div>
-							</td>
-						</tr>
-					
 					</tbody>
 				</table>
 				
@@ -485,7 +471,7 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>minplayer.players.flash</b>(context, options, mediaFile)
+						<b>minplayer.players.flash</b>(context, options, ready)
 				</div>
 				
 				<div class="description">
@@ -513,10 +499,10 @@ ul.inheritsList
 								<dd>This components options.</dd>
 						
 							<dt>
-								<span class="light fixedFont">{object}</span>  <b>mediaFile</b>
+								<span class="light fixedFont">{function}</span>  <b>ready</b>
 								
 							</dt>
-								<dd>The media file for this player.</dd>
+								<dd>Called when the player is ready.</dd>
 						
 						</dl>
 					
@@ -655,11 +641,11 @@ ul.inheritsList
 
 					<hr />
 				
-					<a name="destroy"> </a>
+					<a name="getCurrentTime"> </a>
 					<div class="fixedFont">
 					
-					
-					<b>destroy</b>()
+					<span class="light">{number}</span>
+					<b>getCurrentTime</b>(callback)
 					
 					</div>
 					<div class="description">
@@ -671,16 +657,34 @@ ul.inheritsList
 					
 					
 						
-						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>callback</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
 						
 						
 						
 						
 						
 							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{number}</span> The duration of the loaded media.</dd>
+							
+							</dl>
+						
+						
+						
+							<dl class="detailList">
 							<dt class="heading">See:</dt>
 							
-								<dd><a href="../symbols/minplayer.players.base.html#destroy">minplayer.players.base#destroy</a></dd>
+								<dd>minplayer.players.base#getPlayTime</dd>
 							
 							</dl>
 						
@@ -691,7 +695,7 @@ ul.inheritsList
 					<div class="fixedFont">
 					
 					<span class="light">{number}</span>
-					<b>getDuration</b>()
+					<b>getDuration</b>(callback)
 					
 					</div>
 					<div class="description">
@@ -702,6 +706,17 @@ ul.inheritsList
 					
 					
 					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>callback</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
 						
 						
 						
@@ -808,6 +823,38 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name="getPlayerCurrentTime"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{number}</span>
+					<b>getPlayerCurrentTime</b>()
+					
+					</div>
+					<div class="description">
+						Return the players current time.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{number}</span> The players current time.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name="getPlayerDuration"> </a>
 					<div class="fixedFont">
 					
@@ -873,88 +920,6 @@ ul.inheritsList
 							<dt class="heading">See:</dt>
 							
 								<dd>minplayer.players.base#getPriority</dd>
-							
-							</dl>
-						
-
-					<hr />
-				
-					<a name="isReady"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{boolean}</span>
-					<b>isReady</b>()
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{boolean}</span> Checks to see if the Flash is ready.</dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-								<dd>minplayer.players.base#isReady</dd>
-							
-							</dl>
-						
-
-					<hr />
-				
-					<a name="load"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>load</b>(file)
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>file</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-								<dd><a href="../symbols/minplayer.players.base.html#load">minplayer.players.base#load</a></dd>
 							
 							</dl>
 						
@@ -1098,31 +1063,6 @@ ul.inheritsList
 							</dl>
 						
 
-					<hr />
-				
-					<a name="reset"> </a>
-					<div class="fixedFont">
-					
-					
-					<b>reset</b>()
-					
-					</div>
-					<div class="description">
-						Reset the flash player variables.
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-						
-						
-
 					
 				
 			
@@ -1137,7 +1077,7 @@ ul.inheritsList
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Mon Feb 06 2012 10:31:59 GMT-0600 (CST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Mon Feb 06 2012 22:19:37 GMT-0600 (CST)
 		</div>
 	</body>
 </html>

@@ -11,9 +11,9 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
- * @param {object} mediaFile The media file for this player.
+ * @param {function} ready Called when the player is ready.
  */
-minplayer.players.minplayer = function(context, options, mediaFile) {
+minplayer.players.minplayer = function(context, options, ready) {
 
   // Called when the flash provides a media update.
   this.onMediaUpdate = function(eventType) {
@@ -33,7 +33,7 @@ minplayer.players.minplayer = function(context, options, mediaFile) {
   };
 
   // Derive from players flash.
-  minplayer.players.flash.call(this, context, options, mediaFile);
+  minplayer.players.flash.call(this, context, options, ready);
 };
 
 /** Derive from minplayer.players.flash. */
@@ -81,7 +81,7 @@ window.onFlashPlayerDebug = function(debug) {
  * @return {number} The priority of this media player.
  */
 minplayer.players.minplayer.getPriority = function() {
-  return 1;
+  return 20;
 };
 
 /**
@@ -143,8 +143,8 @@ minplayer.players.minplayer.prototype.create = function() {
  */
 minplayer.players.minplayer.prototype.load = function(file) {
   minplayer.players.flash.prototype.load.call(this, file);
-  if (this.isReady()) {
-    this.player.loadMedia(this.mediaFile.path, this.mediaFile.stream);
+  if (file && this.isReady()) {
+    this.player.loadMedia(file.path, file.stream);
   }
 };
 
@@ -220,10 +220,10 @@ minplayer.players.minplayer.prototype.getPlayerDuration = function() {
 };
 
 /**
- * @see minplayer.players.base#getCurrentTime
+ * @see minplayer.players.base#getPlayerCurrentTime
  * @return {number} The current playhead time.
  */
-minplayer.players.minplayer.prototype.getCurrentTime = function() {
+minplayer.players.minplayer.prototype.getPlayerCurrentTime = function() {
   return this.isReady() ? this.player.getCurrentTime() : 0;
 };
 

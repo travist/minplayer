@@ -18,9 +18,9 @@
 <span class='line'> 11</span>  *
 <span class='line'> 12</span>  * @param {object} context The jQuery context.
 <span class='line'> 13</span>  * @param {object} options This components options.
-<span class='line'> 14</span>  * @param {object} mediaFile The media file for this player.
+<span class='line'> 14</span>  * @param {function} ready Called when the player is ready.
 <span class='line'> 15</span>  */</span><span class="WHIT">
-<span class='line'> 16</span> </span><span class="NAME">minplayer.players.minplayer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">context</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">options</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">mediaFile</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 16</span> </span><span class="NAME">minplayer.players.minplayer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">context</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">options</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ready</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 17</span> 
 <span class='line'> 18</span> </span><span class="WHIT">  </span><span class="COMM">// Called when the flash provides a media update.</span><span class="WHIT">
 <span class='line'> 19</span> </span><span class="WHIT">  </span><span class="NAME">this.onMediaUpdate</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">eventType</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
@@ -40,7 +40,7 @@
 <span class='line'> 33</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 34</span> 
 <span class='line'> 35</span> </span><span class="WHIT">  </span><span class="COMM">// Derive from players flash.</span><span class="WHIT">
-<span class='line'> 36</span> </span><span class="WHIT">  </span><span class="NAME">minplayer.players.flash.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">context</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">options</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">mediaFile</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 36</span> </span><span class="WHIT">  </span><span class="NAME">minplayer.players.flash.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">context</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">options</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ready</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 37</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 38</span> 
 <span class='line'> 39</span> </span><span class="COMM">/** Derive from minplayer.players.flash. */</span><span class="WHIT">
@@ -88,7 +88,7 @@
 <span class='line'> 81</span>  * @return {number} The priority of this media player.
 <span class='line'> 82</span>  */</span><span class="WHIT">
 <span class='line'> 83</span> </span><span class="NAME">minplayer.players.minplayer.getPriority</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 84</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 84</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NUMB">20</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 85</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 86</span> 
 <span class='line'> 87</span> </span><span class="COMM">/**
@@ -150,8 +150,8 @@
 <span class='line'>143</span>  */</span><span class="WHIT">
 <span class='line'>144</span> </span><span class="NAME">minplayer.players.minplayer.prototype.load</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">file</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>145</span> </span><span class="WHIT">  </span><span class="NAME">minplayer.players.flash.prototype.load.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">file</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>146</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.isReady</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>147</span> </span><span class="WHIT">    </span><span class="NAME">this.player.loadMedia</span><span class="PUNC">(</span><span class="NAME">this.mediaFile.path</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.mediaFile.stream</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">file</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">this.isReady</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>147</span> </span><span class="WHIT">    </span><span class="NAME">this.player.loadMedia</span><span class="PUNC">(</span><span class="NAME">file.path</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">file.stream</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>148</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>149</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>150</span> 
@@ -227,10 +227,10 @@
 <span class='line'>220</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>221</span> 
 <span class='line'>222</span> </span><span class="COMM">/**
-<span class='line'>223</span>  * @see minplayer.players.base#getCurrentTime
+<span class='line'>223</span>  * @see minplayer.players.base#getPlayerCurrentTime
 <span class='line'>224</span>  * @return {number} The current playhead time.
 <span class='line'>225</span>  */</span><span class="WHIT">
-<span class='line'>226</span> </span><span class="NAME">minplayer.players.minplayer.prototype.getCurrentTime</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>226</span> </span><span class="NAME">minplayer.players.minplayer.prototype.getPlayerCurrentTime</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>227</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.isReady</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">this.player.getCurrentTime</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>228</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>229</span> 
