@@ -288,6 +288,59 @@ minplayer.display.prototype = new minplayer.plugin();
 minplayer.display.prototype.constructor = minplayer.display;
 
 /**
+ * Trigger a media event.
+ *
+ * @param {string} type The event type.
+ * @param {object} data The event data object.
+ * @return {object} The jQuery prototype.
+ */
+minplayer.display.prototype.trigger = function(type, data) {
+  return this.display.trigger(type, data);
+};
+
+/**
+ * Bind to a media event.
+ *
+ * @param {string} types The event type.
+ * @param {object} data The data to bind with the event.
+ * @param {function} fn The callback function.
+ * @return {object} The jQuery prototype.
+ **/
+minplayer.display.prototype.bind = function(types, data, fn) {
+
+  // We will always unbind first for media events.
+  return this.display.unbind(types, fn).bind(types, data, fn);
+};
+
+/**
+ * Returns a scaled rectangle provided a ratio and the container rect.
+ *
+ * @param {number} ratio The width/height ratio of what is being scaled.
+ * @param {object} rect The bounding rectangle for scaling.
+ * @return {object} The Rectangle object of the scaled rectangle.
+ */
+minplayer.display.prototype.getScaledRect = function(ratio, rect) {
+  var scaledRect = {};
+  scaledRect.x = rect.x ? rect.x : 0;
+  scaledRect.y = rect.y ? rect.y : 0;
+  scaledRect.width = rect.width ? rect.width : 0;
+  scaledRect.height = rect.height ? rect.height : 0;
+  if (ratio) {
+    if ((rect.width / rect.height) > ratio) {
+      scaledRect.height = rect.height;
+      scaledRect.width = Math.floor(rect.height * ratio);
+    }
+    else {
+      scaledRect.height = Math.floor(rect.width / ratio);
+      scaledRect.width = rect.width;
+    }
+    scaledRect.x = Math.floor((rect.width - scaledRect.width) / 2);
+    scaledRect.y = Math.floor((rect.height - scaledRect.height) / 2);
+  }
+  return scaledRect;
+};
+
+/**
  * Returns all the jQuery elements that this component uses.
  *
  * @return {object} An object which defines all the jQuery elements that
@@ -304,6 +357,130 @@ minplayer.display.prototype.getElements = function() {
  */
 minplayer.display.prototype.isValid = function() {
   return (this.display.length > 0);
+};
+/** The minplayer namespace. */
+var minplayer = minplayer || {};
+
+/**
+ * @constructor
+ * @class A class to easily handle images.
+ * @param {object} context The jQuery context.
+ * @param {object} options This components options.
+ */
+minplayer.image = function(context, options) {
+
+  // Determine if the image is loaded.
+  this.loaded = false;
+
+  // The image loader.
+  this.loader = null;
+
+  // The ratio of the image.
+  this.ratio = 0;
+
+  // The image element.
+  this.image = null;
+
+  // Derive from display
+  minplayer.display.call(this, context, options);
+};
+
+/** Derive from minplayer.display. */
+minplayer.image.prototype = new minplayer.display();
+
+/** Reset the constructor. */
+minplayer.image.prototype.constructor = minplayer.image;
+
+/**
+ * @see minplayer.plugin.construct
+ */
+minplayer.image.prototype.construct = function() {
+
+  // Call the media display constructor.
+  minplayer.display.prototype.construct.call(this);
+
+  // Set the container to not show any overflow...
+  this.display.css('overflow', 'hidden');
+
+  // Create the image loader.
+  var _this = this;
+  this.loader = new Image();
+  this.loader.onload = function() {
+    _this.loaded = true;
+    _this.ratio = (_this.loader.width / _this.loader.height);
+    _this.resize();
+    _this.trigger('loaded');
+  };
+};
+
+/**
+ * Loads an image.
+ *
+ * @param {string} src The source of the image to load.
+ */
+minplayer.image.prototype.load = function(src) {
+
+  // First clear the previous image.
+  this.clear(function() {
+
+    // Create the new image, and append to the display.
+    this.image = jQuery(document.createElement('img')).attr({src: ''}).hide();
+    this.display.append(this.image);
+    this.loader.src = src;
+  });
+};
+
+/**
+ * Clears an image.
+ *
+ * @param {function} callback Called when the image is done clearing.
+ */
+minplayer.image.prototype.clear = function(callback) {
+  this.loaded = false;
+  if (this.image) {
+    var _this = this;
+    this.image.fadeOut(function() {
+      _this.image.attr('src', '');
+      _this.loader.src = '';
+      $(this).remove();
+      callback.call(_this);
+    });
+  }
+  else {
+    callback.call(this);
+  }
+};
+
+/**
+ * Resize the image provided a width and height or nothing.
+ *
+ * @param {integer} width (optional) The width of the container.
+ * @param {integer} height (optional) The height of the container.
+ */
+minplayer.image.prototype.resize = function(width, height) {
+  width = width || this.display.width();
+  height = height || this.display.height();
+  if (width && height && this.loaded) {
+
+    // Get the scaled rectangle.
+    var rect = this.getScaledRect(this.ratio, {
+      width: width,
+      height: height
+    });
+
+    // Now set this image to the new size.
+    if (this.image) {
+      this.image.attr('src', this.loader.src).css({
+        marginLeft: rect.x,
+        marginTop: rect.y,
+        width: rect.width,
+        height: rect.height
+      });
+    }
+
+    // Show the container.
+    this.image.fadeIn();
+  }
 };
 /** The minplayer namespace. */
 var minplayer = minplayer || {};
@@ -360,7 +537,8 @@ minplayer.player = function(context, options) {
     wmode: 'transparent',
     attributes: {},
     settings: {},
-    file: null
+    file: null,
+    preview: ''
   }, options);
 
   // Store this player instance.
@@ -450,6 +628,12 @@ minplayer.player.prototype.getFiles = function() {
 
   // Get the files involved...
   if (this.elements.media) {
+
+    // Get the poster image.
+    if (!this.options.preview) {
+      this.options.preview = this.elements.media.attr('poster');
+    }
+
     mediaSrc = this.elements.media.attr('src');
     if (mediaSrc) {
       files.push({'path': mediaSrc});
@@ -848,6 +1032,9 @@ minplayer.playLoader.base = function(context, options) {
   // Define the flags that control the big play button.
   this.bigPlay = new minplayer.flags();
 
+  // The preview image.
+  this.preview = null;
+
   // Derive from display
   minplayer.display.call(this, context, options);
 };
@@ -857,6 +1044,28 @@ minplayer.playLoader.base.prototype = new minplayer.display();
 
 /** Reset the constructor. */
 minplayer.playLoader.base.prototype.constructor = minplayer.playLoader.base;
+
+/**
+ * The constructor.
+ */
+minplayer.playLoader.base.prototype.construct = function() {
+
+  // Call the media display constructor.
+  minplayer.display.prototype.construct.call(this);
+
+  // Add the preview to the options.
+  if (this.options.preview && this.elements.preview) {
+
+    // Say that this has a preview.
+    this.elements.preview.addClass('has-preview');
+
+    // Create a new preview image.
+    this.preview = new minplayer.image(this.elements.preview, this.options);
+
+    // Create the image.
+    this.preview.load(this.options.preview);
+  }
+};
 
 /**
  * Hide or show certain elements based on the state of the busy and big play
@@ -914,6 +1123,7 @@ minplayer.playLoader.base.prototype.setPlayer = function(player) {
     player.bind('loadstart', {obj: this}, function(event) {
       event.data.obj.busy.setFlag('media', true);
       event.data.obj.bigPlay.setFlag('media', true);
+      event.data.obj.elements.preview.show();
       event.data.obj.checkVisibility();
     });
     player.bind('waiting', {obj: this}, function(event) {
@@ -927,6 +1137,7 @@ minplayer.playLoader.base.prototype.setPlayer = function(player) {
     player.bind('playing', {obj: this}, function(event) {
       event.data.obj.busy.setFlag('media', false);
       event.data.obj.bigPlay.setFlag('media', false);
+      event.data.obj.elements.preview.hide();
       event.data.obj.checkVisibility();
     });
     player.bind('pause', {obj: this}, function(event) {
@@ -1227,31 +1438,6 @@ minplayer.players.base.prototype.isReady = function() {
 
   // Return that the player is set and the ready flag is good.
   return (this.player && this.ready);
-};
-
-/**
- * Trigger a media event.
- *
- * @param {string} type The event type.
- * @param {object} data The event data object.
- * @return {object} The jQuery prototype.
- */
-minplayer.players.base.prototype.trigger = function(type, data) {
-  return this.display.trigger(type, data);
-};
-
-/**
- * Bind to a media event.
- *
- * @param {string} types The event type.
- * @param {object} data The data to bind with the event.
- * @param {function} fn The callback function.
- * @return {object} The jQuery prototype.
- **/
-minplayer.players.base.prototype.bind = function(types, data, fn) {
-
-  // We will always unbind first for media events.
-  return this.display.unbind(types, fn).bind(types, data, fn);
 };
 
 /**

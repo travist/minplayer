@@ -53,7 +53,8 @@ minplayer.player = function(context, options) {
     wmode: 'transparent',
     attributes: {},
     settings: {},
-    file: null
+    file: null,
+    preview: ''
   }, options);
 
   // Store this player instance.
@@ -143,6 +144,12 @@ minplayer.player.prototype.getFiles = function() {
 
   // Get the files involved...
   if (this.elements.media) {
+
+    // Get the poster image.
+    if (!this.options.preview) {
+      this.options.preview = this.elements.media.attr('poster');
+    }
+
     mediaSrc = this.elements.media.attr('src');
     if (mediaSrc) {
       files.push({'path': mediaSrc});

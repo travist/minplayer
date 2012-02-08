@@ -36,6 +36,59 @@ minplayer.display.prototype = new minplayer.plugin();
 minplayer.display.prototype.constructor = minplayer.display;
 
 /**
+ * Trigger a media event.
+ *
+ * @param {string} type The event type.
+ * @param {object} data The event data object.
+ * @return {object} The jQuery prototype.
+ */
+minplayer.display.prototype.trigger = function(type, data) {
+  return this.display.trigger(type, data);
+};
+
+/**
+ * Bind to a media event.
+ *
+ * @param {string} types The event type.
+ * @param {object} data The data to bind with the event.
+ * @param {function} fn The callback function.
+ * @return {object} The jQuery prototype.
+ **/
+minplayer.display.prototype.bind = function(types, data, fn) {
+
+  // We will always unbind first for media events.
+  return this.display.unbind(types, fn).bind(types, data, fn);
+};
+
+/**
+ * Returns a scaled rectangle provided a ratio and the container rect.
+ *
+ * @param {number} ratio The width/height ratio of what is being scaled.
+ * @param {object} rect The bounding rectangle for scaling.
+ * @return {object} The Rectangle object of the scaled rectangle.
+ */
+minplayer.display.prototype.getScaledRect = function(ratio, rect) {
+  var scaledRect = {};
+  scaledRect.x = rect.x ? rect.x : 0;
+  scaledRect.y = rect.y ? rect.y : 0;
+  scaledRect.width = rect.width ? rect.width : 0;
+  scaledRect.height = rect.height ? rect.height : 0;
+  if (ratio) {
+    if ((rect.width / rect.height) > ratio) {
+      scaledRect.height = rect.height;
+      scaledRect.width = Math.floor(rect.height * ratio);
+    }
+    else {
+      scaledRect.height = Math.floor(rect.width / ratio);
+      scaledRect.width = rect.width;
+    }
+    scaledRect.x = Math.floor((rect.width - scaledRect.width) / 2);
+    scaledRect.y = Math.floor((rect.height - scaledRect.height) / 2);
+  }
+  return scaledRect;
+};
+
+/**
  * Returns all the jQuery elements that this component uses.
  *
  * @return {object} An object which defines all the jQuery elements that

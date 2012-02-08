@@ -23,6 +23,7 @@
   <div class="media-player-play-loader">
     <div class="media-player-big-play"><span></span></div>
     <div class="media-player-loader">&nbsp;</div>
+    <div class="media-player-preview"></div>
   </div>
   <div class="media-player-display">
     <?php print $player; ?>

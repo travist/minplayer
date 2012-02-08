@@ -22,6 +22,9 @@ minplayer.playLoader.base = function(context, options) {
   // Define the flags that control the big play button.
   this.bigPlay = new minplayer.flags();
 
+  // The preview image.
+  this.preview = null;
+
   // Derive from display
   minplayer.display.call(this, context, options);
 };
@@ -31,6 +34,28 @@ minplayer.playLoader.base.prototype = new minplayer.display();
 
 /** Reset the constructor. */
 minplayer.playLoader.base.prototype.constructor = minplayer.playLoader.base;
+
+/**
+ * The constructor.
+ */
+minplayer.playLoader.base.prototype.construct = function() {
+
+  // Call the media display constructor.
+  minplayer.display.prototype.construct.call(this);
+
+  // Add the preview to the options.
+  if (this.options.preview && this.elements.preview) {
+
+    // Say that this has a preview.
+    this.elements.preview.addClass('has-preview');
+
+    // Create a new preview image.
+    this.preview = new minplayer.image(this.elements.preview, this.options);
+
+    // Create the image.
+    this.preview.load(this.options.preview);
+  }
+};
 
 /**
  * Hide or show certain elements based on the state of the busy and big play
@@ -88,6 +113,7 @@ minplayer.playLoader.base.prototype.setPlayer = function(player) {
     player.bind('loadstart', {obj: this}, function(event) {
       event.data.obj.busy.setFlag('media', true);
       event.data.obj.bigPlay.setFlag('media', true);
+      event.data.obj.elements.preview.show();
       event.data.obj.checkVisibility();
     });
     player.bind('waiting', {obj: this}, function(event) {
@@ -101,6 +127,7 @@ minplayer.playLoader.base.prototype.setPlayer = function(player) {
     player.bind('playing', {obj: this}, function(event) {
       event.data.obj.busy.setFlag('media', false);
       event.data.obj.bigPlay.setFlag('media', false);
+      event.data.obj.elements.preview.hide();
       event.data.obj.checkVisibility();
     });
     player.bind('pause', {obj: this}, function(event) {

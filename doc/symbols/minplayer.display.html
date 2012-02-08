@@ -205,6 +205,8 @@ ul.inheritsList
 	
 	<li><a href="../symbols/minplayer.flags.html">minplayer.flags</a></li>
 	
+	<li><a href="../symbols/minplayer.image.html">minplayer.image</a></li>
+	
 	<li><a href="../symbols/minplayer.player.html">minplayer.player</a></li>
 	
 	<li><a href="../symbols/minplayer.players.base.html">minplayer.players.base</a></li>
@@ -329,6 +331,15 @@ the elements that they define by implementing the getElements method.
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.display.html#bind">bind</a></b>(types, data, fn)
+								</div>
+								<div class="description">Bind to a media event.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/minplayer.display.html#getElements">getElements</a></b>()
 								</div>
 								<div class="description">Returns all the jQuery elements that this component uses.</div>
@@ -338,9 +349,27 @@ the elements that they define by implementing the getElements method.
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.display.html#getScaledRect">getScaledRect</a></b>(ratio, rect)
+								</div>
+								<div class="description">Returns a scaled rectangle provided a ratio and the container rect.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/minplayer.display.html#isValid">isValid</a></b>()
 								</div>
 								<div class="description">Returns if this component is valid and exists within the DOM.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.display.html#trigger">trigger</a></b>(type, data)
+								</div>
+								<div class="description">Trigger a media event.</div>
 							</td>
 						</tr>
 					
@@ -440,6 +469,61 @@ the elements that they define by implementing the getElements method.
 					Method Detail
 				</div>
 				
+					<a name="bind"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{object}</span>
+					<b>bind</b>(types, data, fn)
+					
+					</div>
+					<div class="description">
+						Bind to a media event.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>types</b>
+									
+								</dt>
+								<dd>The event type.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>data</b>
+									
+								</dt>
+								<dd>The data to bind with the event.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{function}</span> <b>fn</b>
+									
+								</dt>
+								<dd>The callback function.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{object}</span> The jQuery prototype.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name="getElements"> </a>
 					<div class="fixedFont">
 					
@@ -465,6 +549,55 @@ the elements that they define by implementing the getElements method.
 							
 								<dd><span class="light fixedFont">{object}</span> An object which defines all the jQuery elements that
 this component uses.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="getScaledRect"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{object}</span>
+					<b>getScaledRect</b>(ratio, rect)
+					
+					</div>
+					<div class="description">
+						Returns a scaled rectangle provided a ratio and the container rect.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{number}</span> <b>ratio</b>
+									
+								</dt>
+								<dd>The width/height ratio of what is being scaled.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>rect</b>
+									
+								</dt>
+								<dd>The bounding rectangle for scaling.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{object}</span> The Rectangle object of the scaled rectangle.</dd>
 							
 							</dl>
 						
@@ -503,6 +636,55 @@ this component uses.</dd>
 						
 						
 
+					<hr />
+				
+					<a name="trigger"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{object}</span>
+					<b>trigger</b>(type, data)
+					
+					</div>
+					<div class="description">
+						Trigger a media event.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>type</b>
+									
+								</dt>
+								<dd>The event type.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>data</b>
+									
+								</dt>
+								<dd>The event data object.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{object}</span> The jQuery prototype.</dd>
+							
+							</dl>
+						
+						
+						
+
 					
 				
 			
@@ -517,7 +699,7 @@ this component uses.</dd>
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Tue Feb 07 2012 22:10:23 GMT-0600 (CST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Wed Feb 08 2012 08:30:19 GMT-0600 (CST)
 		</div>
 	</body>
 </html>
