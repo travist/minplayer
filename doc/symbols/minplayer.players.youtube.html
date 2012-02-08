@@ -355,7 +355,7 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#getBytesLoaded">getBytesLoaded</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#getBytesLoaded">getBytesLoaded</a></b>(callback)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -364,7 +364,34 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#getBytesTotal">getBytesTotal</a></b>()
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#getBytesStart">getBytesStart</a></b>(callback)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#getBytesTotal">getBytesTotal</a></b>(callback)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#getCurrentTime">getCurrentTime</a></b>(callback)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#getDuration">getDuration</a></b>(callback)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -376,33 +403,6 @@ ul.inheritsList
 								<div class="fixedFont">minplayer.players.youtube.<b><a href="../symbols/minplayer.players.youtube.html#.getMediaId">getMediaId</a></b>(file)
 								</div>
 								<div class="description">Return the ID for a provided media file.</div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#getPlayer">getPlayer</a></b>()
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#getPlayerCurrentTime">getPlayerCurrentTime</a></b>()
-								</div>
-								<div class="description"></div>
-							</td>
-						</tr>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.players.youtube.html#getPlayerDuration">getPlayerDuration</a></b>()
-								</div>
-								<div class="description"></div>
 							</td>
 						</tr>
 					
@@ -557,7 +557,7 @@ on the same page without event collision.</div>
 				
 				
 				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/minplayer.players.base.html">minplayer.players.base</a>: </dt><dd><a href="../symbols/minplayer.players.base.html#bind">bind</a>, <a href="../symbols/minplayer.players.base.html#construct">construct</a>, <a href="../symbols/minplayer.players.base.html#getCurrentTime">getCurrentTime</a>, <a href="../symbols/minplayer.players.base.html#getDuration">getDuration</a>, <a href="../symbols/minplayer.players.base.html#isReady">isReady</a>, <a href="../symbols/minplayer.players.base.html#reset">reset</a>, <a href="../symbols/minplayer.players.base.html#trigger">trigger</a></dd><dt>Methods borrowed from class <a href="../symbols/minplayer.display.html">minplayer.display</a>: </dt><dd><a href="../symbols/minplayer.display.html#getElements">getElements</a>, <a href="../symbols/minplayer.display.html#isValid">isValid</a></dd><dt>Methods borrowed from class <a href="../symbols/minplayer.plugin.html">minplayer.plugin</a>: </dt><dd><a href="../symbols/minplayer.plugin.html#setPlayer">setPlayer</a></dd>
+				<dt>Methods borrowed from class <a href="../symbols/minplayer.players.base.html">minplayer.players.base</a>: </dt><dd><a href="../symbols/minplayer.players.base.html#bind">bind</a>, <a href="../symbols/minplayer.players.base.html#clearIntervals">clearIntervals</a>, <a href="../symbols/minplayer.players.base.html#construct">construct</a>, <a href="../symbols/minplayer.players.base.html#getPlayer">getPlayer</a>, <a href="../symbols/minplayer.players.base.html#isReady">isReady</a>, <a href="../symbols/minplayer.players.base.html#onComplete">onComplete</a>, <a href="../symbols/minplayer.players.base.html#onLoaded">onLoaded</a>, <a href="../symbols/minplayer.players.base.html#onPaused">onPaused</a>, <a href="../symbols/minplayer.players.base.html#onPlaying">onPlaying</a>, <a href="../symbols/minplayer.players.base.html#onWaiting">onWaiting</a>, <a href="../symbols/minplayer.players.base.html#reset">reset</a>, <a href="../symbols/minplayer.players.base.html#trigger">trigger</a></dd><dt>Methods borrowed from class <a href="../symbols/minplayer.display.html">minplayer.display</a>: </dt><dd><a href="../symbols/minplayer.display.html#getElements">getElements</a>, <a href="../symbols/minplayer.display.html#isValid">isValid</a></dd><dt>Methods borrowed from class <a href="../symbols/minplayer.plugin.html">minplayer.plugin</a>: </dt><dd><a href="../symbols/minplayer.plugin.html#setPlayer">setPlayer</a></dd>
 				</dl>
 				
 			
@@ -695,10 +695,10 @@ on the same page without event collision.</div>
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{object}</span> <b>file</b>
+									<b>file</b>
 									
 								</dt>
-								<dd>A <a href="../symbols/minplayer.file.html">minplayer.file</a> object.</dd>
+								<dd></dd>
 							
 							</dl>
 						
@@ -767,8 +767,8 @@ on the same page without event collision.</div>
 					<a name="getBytesLoaded"> </a>
 					<div class="fixedFont">
 					
-					<span class="light">{number}</span>
-					<b>getBytesLoaded</b>()
+					
+					<b>getBytesLoaded</b>(callback)
 					
 					</div>
 					<div class="description">
@@ -780,16 +780,20 @@ on the same page without event collision.</div>
 					
 					
 						
-						
-						
-						
-						
 							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
+							<dt class="heading">Parameters:</dt>
 							
-								<dd><span class="light fixedFont">{number}</span> Returns the bytes loaded from the media.</dd>
+								<dt>
+									<b>callback</b>
+									
+								</dt>
+								<dd></dd>
 							
 							</dl>
+						
+						
+						
+						
 						
 						
 						
@@ -803,11 +807,11 @@ on the same page without event collision.</div>
 
 					<hr />
 				
-					<a name="getBytesTotal"> </a>
+					<a name="getBytesStart"> </a>
 					<div class="fixedFont">
 					
-					<span class="light">{number}</span>
-					<b>getBytesTotal</b>()
+					
+					<b>getBytesStart</b>(callback)
 					
 					</div>
 					<div class="description">
@@ -819,16 +823,63 @@ on the same page without event collision.</div>
 					
 					
 						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>callback</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
 						
 						
 						
 						
 							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
+							<dt class="heading">See:</dt>
 							
-								<dd><span class="light fixedFont">{number}</span> The total number of bytes of the loaded media.</dd>
+								<dd>minplayer.players.base#getBytesStart.</dd>
 							
 							</dl>
+						
+
+					<hr />
+				
+					<a name="getBytesTotal"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getBytesTotal</b>(callback)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>callback</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
 						
 						
 						
@@ -836,6 +887,92 @@ on the same page without event collision.</div>
 							<dt class="heading">See:</dt>
 							
 								<dd>minplayer.players.base#getBytesTotal.</dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getCurrentTime"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getCurrentTime</b>(callback)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>callback</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd>minplayer.players.base#getPlayerCurrentTime</dd>
+							
+							</dl>
+						
+
+					<hr />
+				
+					<a name="getDuration"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>getDuration</b>(callback)
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>callback</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">See:</dt>
+							
+								<dd>minplayer.players.flash#getPlayerDuration.</dd>
 							
 							</dl>
 						
@@ -885,123 +1022,6 @@ on the same page without event collision.</div>
 
 					<hr />
 				
-					<a name="getPlayer"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{object}</span>
-					<b>getPlayer</b>()
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{object}</span> The media player object.</dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-								<dd><a href="../symbols/minplayer.players.base.html#getPlayer">minplayer.players.base#getPlayer</a></dd>
-							
-							</dl>
-						
-
-					<hr />
-				
-					<a name="getPlayerCurrentTime"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{number}</span>
-					<b>getPlayerCurrentTime</b>()
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{number}</span> The current playhead time.</dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-								<dd>minplayer.players.base#getPlayerCurrentTime</dd>
-							
-							</dl>
-						
-
-					<hr />
-				
-					<a name="getPlayerDuration"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{int}</span>
-					<b>getPlayerDuration</b>()
-					
-					</div>
-					<div class="description">
-						
-						
-						
-					</div>
-					
-					
-					
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{int}</span> The player duration.</dd>
-							
-							</dl>
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">See:</dt>
-							
-								<dd>minplayer.players.flash#getPlayerDuration.</dd>
-							
-							</dl>
-						
-
-					<hr />
-				
 					<a name=".getPriority"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -1044,7 +1064,7 @@ on the same page without event collision.</div>
 					<a name="getVolume"> </a>
 					<div class="fixedFont">
 					
-					<span class="light">{number}</span>
+					
 					<b>getVolume</b>(callback)
 					
 					</div>
@@ -1071,13 +1091,6 @@ on the same page without event collision.</div>
 						
 						
 						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{number}</span> The volume of the media; 0 to 1.</dd>
-							
-							</dl>
 						
 						
 						
@@ -1598,7 +1611,7 @@ on the same page without event collision.
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Mon Feb 06 2012 22:44:36 GMT-0600 (CST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Tue Feb 07 2012 21:52:19 GMT-0600 (CST)
 		</div>
 	</body>
 </html>

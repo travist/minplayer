@@ -15,7 +15,9 @@
       </div>
     </div>
     <div class="media-player-controls-mid">
-      <div class="media-player-seek"></div>
+      <div class="media-player-seek">
+        <div class="media-player-progress"></div>
+      </div>
     </div>
   </div>
   <div class="media-player-play-loader">

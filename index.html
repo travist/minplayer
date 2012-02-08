@@ -5,27 +5,19 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="src/minplayer.compatibility.js"></script>
-    <script type="text/javascript" src="src/minplayer.flags.js"></script>
-    <script type="text/javascript" src="src/minplayer.plugin.js"></script>
-    <script type="text/javascript" src="src/minplayer.display.js"></script>
-    <script type="text/javascript" src="src/minplayer.player.js"></script>
-    <script type="text/javascript" src="src/minplayer.file.js"></script>
-    <script type="text/javascript" src="src/minplayer.playLoader.base.js"></script>
-    <script type="text/javascript" src="src/minplayer.players.base.js"></script>
-    <script type="text/javascript" src="src/minplayer.players.html5.js"></script>
-    <script type="text/javascript" src="src/minplayer.players.flash.js"></script>
-    <script type="text/javascript" src="src/minplayer.players.minplayer.js"></script>
-    <script type="text/javascript" src="src/minplayer.players.youtube.js"></script>
-    <script type="text/javascript" src="src/minplayer.controllers.base.js"></script>
-    <script type="text/javascript" src="src/minplayer.templates.base.js"></script>
+    <script type="text/javascript" src="bin/minplayer.player.js"></script>
     <script type="text/javascript" src="templates/default/js/minplayer.playLoader.default.js"></script>
     <script type="text/javascript" src="templates/default/js/minplayer.controllers.default.js"></script>
     <script type="text/javascript" src="templates/default/js/minplayer.templates.default.js"></script>
     <script type="text/javascript">
-      $("#media-player").mediaplayer();
+      $(function() {
+        $("#media").minplayer();
+      });
     </script>
   </head>
   <body>
+    <div id="media">
+      <video id="media-player" src="http://www.youtube.com/watch?v=hLQl3WQQoQ0&ob=av2e" width="640px" height="350px"></video>
+    </div>
   </body>
 </html>

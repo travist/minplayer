@@ -22,11 +22,12 @@ minplayer.controllers["default"].prototype.getElements = function() {
   var elements = minplayer.controllers.base.prototype.getElements.call(this);
   var timer = jQuery(".media-player-timer", this.display);
   return jQuery.extend(elements, {
-    play:jQuery(".media-player-play", this.display),
-    pause:jQuery(".media-player-pause", this.display),
-    fullscreen:jQuery(".media-player-fullscreen", this.display),
-    seek:jQuery(".media-player-seek", this.display),
-    volume:jQuery(".media-player-volume-slider", this.display),
+    play: jQuery(".media-player-play", this.display),
+    pause: jQuery(".media-player-pause", this.display),
+    fullscreen: jQuery(".media-player-fullscreen", this.display),
+    seek: jQuery(".media-player-seek", this.display),
+    progress: jQuery(".media-player-progress", this.display),
+    volume: jQuery(".media-player-volume-slider", this.display),
     timer:timer,
     duration:timer
   });
