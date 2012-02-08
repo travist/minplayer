@@ -298,122 +298,139 @@
 <span class='line'>291</span> </span><span class="WHIT">      </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">id</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">_this.allPlugins</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>292</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">_this.allPlugins.hasOwnProperty</span><span class="PUNC">(</span><span class="NAME">id</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>293</span> </span><span class="WHIT">          </span><span class="NAME">_this.allPlugins</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">setPlayer</span><span class="PUNC">(</span><span class="NAME">player</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>294</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>295</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>296</span> 
-<span class='line'>297</span> </span><span class="WHIT">      </span><span class="COMM">// Trigger on error events.</span><span class="WHIT">
-<span class='line'>298</span> </span><span class="WHIT">      </span><span class="NAME">player.bind</span><span class="PUNC">(</span><span class="STRN">'error'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>299</span> </span><span class="WHIT">        </span><span class="NAME">_this.error</span><span class="PUNC">(</span><span class="NAME">data</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>300</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>301</span> 
-<span class='line'>302</span> </span><span class="WHIT">      </span><span class="COMM">// Now load this media.</span><span class="WHIT">
-<span class='line'>303</span> </span><span class="WHIT">      </span><span class="NAME">player.load</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>304</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>305</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>306</span> 
-<span class='line'>307</span> </span><span class="WHIT">  </span><span class="COMM">// If the media object already exists...</span><span class="WHIT">
-<span class='line'>308</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.media</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>309</span> 
-<span class='line'>310</span> </span><span class="WHIT">    </span><span class="COMM">// Now load the different media file.</span><span class="WHIT">
-<span class='line'>311</span> </span><span class="WHIT">    </span><span class="NAME">this.media.load</span><span class="PUNC">(</span><span class="NAME">this.options.file</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>294</span> 
+<span class='line'>295</span> </span><span class="WHIT">          </span><span class="COMM">// Trigger on any fullscreen events.</span><span class="WHIT">
+<span class='line'>296</span> </span><span class="WHIT">          </span><span class="NAME">_this.allPlugins</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="STRN">'fullscreen'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>297</span> 
+<span class='line'>298</span> </span><span class="WHIT">            </span><span class="COMM">// Call the resize events.</span><span class="WHIT">
+<span class='line'>299</span> </span><span class="WHIT">            </span><span class="NAME">_this.resize</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>300</span> </span><span class="WHIT">          </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>301</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>302</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>303</span> 
+<span class='line'>304</span> </span><span class="WHIT">      </span><span class="COMM">// Trigger on error events.</span><span class="WHIT">
+<span class='line'>305</span> </span><span class="WHIT">      </span><span class="NAME">player.bind</span><span class="PUNC">(</span><span class="STRN">'error'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>306</span> </span><span class="WHIT">        </span><span class="NAME">_this.error</span><span class="PUNC">(</span><span class="NAME">data</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>307</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>308</span> 
+<span class='line'>309</span> </span><span class="WHIT">      </span><span class="COMM">// Now load this media.</span><span class="WHIT">
+<span class='line'>310</span> </span><span class="WHIT">      </span><span class="NAME">player.load</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>311</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>312</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>313</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>314</span> 
-<span class='line'>315</span> </span><span class="COMM">/**
-<span class='line'>316</span>  * Add a new plugin to the media player.
-<span class='line'>317</span>  *
-<span class='line'>318</span>  * @param {string} id The plugin ID.
-<span class='line'>319</span>  * @param {object} plugin A new plugin object, derived from media.plugin.
-<span class='line'>320</span>  */</span><span class="WHIT">
-<span class='line'>321</span> </span><span class="NAME">minplayer.player.prototype.addPlugin</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>322</span> 
-<span class='line'>323</span> </span><span class="WHIT">  </span><span class="COMM">// Only continue if the plugin exists.</span><span class="WHIT">
-<span class='line'>324</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">plugin.isValid</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>325</span> 
-<span class='line'>326</span> </span><span class="WHIT">    </span><span class="COMM">// Add to plugins.</span><span class="WHIT">
-<span class='line'>327</span> </span><span class="WHIT">    </span><span class="NAME">this.allPlugins</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>328</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>329</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>330</span> 
-<span class='line'>331</span> </span><span class="COMM">/**
-<span class='line'>332</span>  * Returns a plugin provided a plugin ID.
-<span class='line'>333</span>  *
-<span class='line'>334</span>  * @param {string} id The plugin ID to retrieve.
-<span class='line'>335</span>  * @return {object} The plugin matching the provided ID.
-<span class='line'>336</span>  */</span><span class="WHIT">
-<span class='line'>337</span> </span><span class="NAME">minplayer.player.prototype.getPlugin</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">id</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>338</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.allPlugins</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>339</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>340</span> 
-<span class='line'>341</span> </span><span class="COMM">/**
-<span class='line'>342</span>  * Play the currently loaded media file.  Use load first to load a
-<span class='line'>343</span>  * media file into the media player.
-<span class='line'>344</span>  */</span><span class="WHIT">
-<span class='line'>345</span> </span><span class="NAME">minplayer.player.prototype.play</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>346</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.media</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>347</span> </span><span class="WHIT">    </span><span class="NAME">this.media.play</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>348</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>349</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>350</span> 
-<span class='line'>351</span> </span><span class="COMM">/**
-<span class='line'>352</span>  * Pause the media.
+<span class='line'>313</span> 
+<span class='line'>314</span> </span><span class="WHIT">  </span><span class="COMM">// If the media object already exists...</span><span class="WHIT">
+<span class='line'>315</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.media</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>316</span> 
+<span class='line'>317</span> </span><span class="WHIT">    </span><span class="COMM">// Now load the different media file.</span><span class="WHIT">
+<span class='line'>318</span> </span><span class="WHIT">    </span><span class="NAME">this.media.load</span><span class="PUNC">(</span><span class="NAME">this.options.file</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>319</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>320</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>321</span> 
+<span class='line'>322</span> </span><span class="COMM">/**
+<span class='line'>323</span>  * Called when the player is resized.
+<span class='line'>324</span>  */</span><span class="WHIT">
+<span class='line'>325</span> </span><span class="NAME">minplayer.player.prototype.resize</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>326</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">minplayer.plugin_registry</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>327</span> </span><span class="WHIT">  </span><span class="KEYW">while</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">--</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>328</span> </span><span class="WHIT">    </span><span class="NAME">minplayer.plugin_registry</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">onResize</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>329</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>330</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>331</span> 
+<span class='line'>332</span> </span><span class="COMM">/**
+<span class='line'>333</span>  * Add a new plugin to the media player.
+<span class='line'>334</span>  *
+<span class='line'>335</span>  * @param {string} id The plugin ID.
+<span class='line'>336</span>  * @param {object} plugin A new plugin object, derived from media.plugin.
+<span class='line'>337</span>  */</span><span class="WHIT">
+<span class='line'>338</span> </span><span class="NAME">minplayer.player.prototype.addPlugin</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>339</span> 
+<span class='line'>340</span> </span><span class="WHIT">  </span><span class="COMM">// Only continue if the plugin exists.</span><span class="WHIT">
+<span class='line'>341</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">plugin.isValid</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>342</span> 
+<span class='line'>343</span> </span><span class="WHIT">    </span><span class="COMM">// Add to plugins.</span><span class="WHIT">
+<span class='line'>344</span> </span><span class="WHIT">    </span><span class="NAME">this.allPlugins</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>345</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>346</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>347</span> 
+<span class='line'>348</span> </span><span class="COMM">/**
+<span class='line'>349</span>  * Returns a plugin provided a plugin ID.
+<span class='line'>350</span>  *
+<span class='line'>351</span>  * @param {string} id The plugin ID to retrieve.
+<span class='line'>352</span>  * @return {object} The plugin matching the provided ID.
 <span class='line'>353</span>  */</span><span class="WHIT">
-<span class='line'>354</span> </span><span class="NAME">minplayer.player.prototype.pause</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>355</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.media</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>356</span> </span><span class="WHIT">    </span><span class="NAME">this.media.pause</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>357</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>358</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>359</span> 
-<span class='line'>360</span> </span><span class="COMM">/**
-<span class='line'>361</span>  * Stop the media.
-<span class='line'>362</span>  */</span><span class="WHIT">
-<span class='line'>363</span> </span><span class="NAME">minplayer.player.prototype.stop</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>364</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.media</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>365</span> </span><span class="WHIT">    </span><span class="NAME">this.media.stop</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>366</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>367</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>368</span> 
-<span class='line'>369</span> </span><span class="COMM">/**
-<span class='line'>370</span>  * Seek the media to the provided position.
-<span class='line'>371</span>  *
-<span class='line'>372</span>  * @param {number} pos The position to seek.  0 to 1.
-<span class='line'>373</span>  */</span><span class="WHIT">
-<span class='line'>374</span> </span><span class="NAME">minplayer.player.prototype.seek</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pos</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>375</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.media</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>376</span> </span><span class="WHIT">    </span><span class="NAME">this.media.seek</span><span class="PUNC">(</span><span class="NAME">pos</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>377</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>378</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>379</span> 
-<span class='line'>380</span> </span><span class="COMM">/**
-<span class='line'>381</span>  * Set the volume of the media being played.
-<span class='line'>382</span>  *
-<span class='line'>383</span>  * @param {number} vol The volume to set.  0 to 1.
-<span class='line'>384</span>  */</span><span class="WHIT">
-<span class='line'>385</span> </span><span class="NAME">minplayer.player.prototype.setVolume</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">vol</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>386</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.media</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>387</span> </span><span class="WHIT">    </span><span class="NAME">this.media.setVolume</span><span class="PUNC">(</span><span class="NAME">vol</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>388</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>389</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>390</span> 
-<span class='line'>391</span> </span><span class="COMM">/**
-<span class='line'>392</span>  * Get the current volume setting.
-<span class='line'>393</span>  *
-<span class='line'>394</span>  * @param {function} callback The callback that is called when the volume
-<span class='line'>395</span>  * is known.
-<span class='line'>396</span>  * @return {number} The current volume level. 0 to 1.
-<span class='line'>397</span>  */</span><span class="WHIT">
-<span class='line'>398</span> </span><span class="NAME">minplayer.player.prototype.getVolume</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>399</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.media</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">this.media.getVolume</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>400</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>401</span> 
-<span class='line'>402</span> </span><span class="COMM">/**
-<span class='line'>403</span>  * Get the current media duration.
-<span class='line'>404</span>  *
-<span class='line'>405</span>  * @param {function} callback The callback that is called when the duration
-<span class='line'>406</span>  * is known.
-<span class='line'>407</span>  * @return {number} The current media duration.
-<span class='line'>408</span>  */</span><span class="WHIT">
-<span class='line'>409</span> </span><span class="NAME">minplayer.player.prototype.getDuration</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>410</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.media</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">this.media.getDuration</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>411</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>412</span> </span></pre></body></html>
+<span class='line'>354</span> </span><span class="NAME">minplayer.player.prototype.getPlugin</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">id</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>355</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.allPlugins</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>356</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>357</span> 
+<span class='line'>358</span> </span><span class="COMM">/**
+<span class='line'>359</span>  * Play the currently loaded media file.  Use load first to load a
+<span class='line'>360</span>  * media file into the media player.
+<span class='line'>361</span>  */</span><span class="WHIT">
+<span class='line'>362</span> </span><span class="NAME">minplayer.player.prototype.play</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>363</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.media</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>364</span> </span><span class="WHIT">    </span><span class="NAME">this.media.play</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>365</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>366</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>367</span> 
+<span class='line'>368</span> </span><span class="COMM">/**
+<span class='line'>369</span>  * Pause the media.
+<span class='line'>370</span>  */</span><span class="WHIT">
+<span class='line'>371</span> </span><span class="NAME">minplayer.player.prototype.pause</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>372</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.media</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>373</span> </span><span class="WHIT">    </span><span class="NAME">this.media.pause</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>374</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>375</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>376</span> 
+<span class='line'>377</span> </span><span class="COMM">/**
+<span class='line'>378</span>  * Stop the media.
+<span class='line'>379</span>  */</span><span class="WHIT">
+<span class='line'>380</span> </span><span class="NAME">minplayer.player.prototype.stop</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>381</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.media</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>382</span> </span><span class="WHIT">    </span><span class="NAME">this.media.stop</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>383</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>384</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>385</span> 
+<span class='line'>386</span> </span><span class="COMM">/**
+<span class='line'>387</span>  * Seek the media to the provided position.
+<span class='line'>388</span>  *
+<span class='line'>389</span>  * @param {number} pos The position to seek.  0 to 1.
+<span class='line'>390</span>  */</span><span class="WHIT">
+<span class='line'>391</span> </span><span class="NAME">minplayer.player.prototype.seek</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">pos</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>392</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.media</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>393</span> </span><span class="WHIT">    </span><span class="NAME">this.media.seek</span><span class="PUNC">(</span><span class="NAME">pos</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>394</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>395</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>396</span> 
+<span class='line'>397</span> </span><span class="COMM">/**
+<span class='line'>398</span>  * Set the volume of the media being played.
+<span class='line'>399</span>  *
+<span class='line'>400</span>  * @param {number} vol The volume to set.  0 to 1.
+<span class='line'>401</span>  */</span><span class="WHIT">
+<span class='line'>402</span> </span><span class="NAME">minplayer.player.prototype.setVolume</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">vol</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>403</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.media</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>404</span> </span><span class="WHIT">    </span><span class="NAME">this.media.setVolume</span><span class="PUNC">(</span><span class="NAME">vol</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>405</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>406</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>407</span> 
+<span class='line'>408</span> </span><span class="COMM">/**
+<span class='line'>409</span>  * Get the current volume setting.
+<span class='line'>410</span>  *
+<span class='line'>411</span>  * @param {function} callback The callback that is called when the volume
+<span class='line'>412</span>  * is known.
+<span class='line'>413</span>  * @return {number} The current volume level. 0 to 1.
+<span class='line'>414</span>  */</span><span class="WHIT">
+<span class='line'>415</span> </span><span class="NAME">minplayer.player.prototype.getVolume</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>416</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.media</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">this.media.getVolume</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>417</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>418</span> 
+<span class='line'>419</span> </span><span class="COMM">/**
+<span class='line'>420</span>  * Get the current media duration.
+<span class='line'>421</span>  *
+<span class='line'>422</span>  * @param {function} callback The callback that is called when the duration
+<span class='line'>423</span>  * is known.
+<span class='line'>424</span>  * @return {number} The current media duration.
+<span class='line'>425</span>  */</span><span class="WHIT">
+<span class='line'>426</span> </span><span class="NAME">minplayer.player.prototype.getDuration</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>427</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.media</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">this.media.getDuration</span><span class="PUNC">(</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>428</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>429</span> </span></pre></body></html>
