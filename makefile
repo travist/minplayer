@@ -16,6 +16,7 @@ files =   src/minplayer.compatibility.js\
           src/minplayer.flags.js\
           src/minplayer.plugin.js\
           src/minplayer.display.js\
+          src/minplayer.image.js\
           src/minplayer.player.js\
           src/minplayer.file.js\
           src/minplayer.playLoader.base.js\
