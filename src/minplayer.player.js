@@ -48,13 +48,19 @@ minplayer.player = function(context, options) {
     id: 'player',
     controller: 'default',
     template: 'default',
-    volume: 80,
     swfplayer: '',
     wmode: 'transparent',
-    attributes: {},
-    settings: {},
-    file: null,
-    preview: ''
+    preload: true,
+    autoplay: false,
+    loop: false,
+    width: '100%',
+    height: '350px',
+    debug: false,
+    volume: 80,
+    files: [],
+    file: '',
+    preview: '',
+    attributes: {}
   }, options);
 
   // Store this player instance.
@@ -95,6 +101,28 @@ minplayer.player.prototype.construct = function() {
 
   // Now load these files.
   this.load(this.getFiles());
+};
+
+/**
+ * Sets an error on the player.
+ *
+ * @param {string} error The error to display on the player.
+ */
+minplayer.player.prototype.error = function(error) {
+  if (this.elements.error) {
+
+    // Set the error text.
+    this.elements.error.text(error);
+    if (error) {
+      this.elements.error.show();
+    }
+    else {
+      this.elements.error.hide();
+    }
+
+    // Retrigger this event.
+    this.trigger('error', error);
+  }
 };
 
 /**
@@ -222,13 +250,22 @@ minplayer.player.prototype.load = function(files) {
   var id = '', pClass = '';
 
   // If no file was provided, then get it.
-  files = files || this.options.file;
-  this.options.file = this.getMediaFile(files);
+  this.options.files = files || this.options.files;
+  this.options.file = this.getMediaFile(this.options.files);
 
   // Do nothing if there isn't a file.
   if (!this.options.file) {
+    this.error('No media found.');
     return;
   }
+
+  if (!this.options.file.player) {
+    this.error('Cannot play media: ' + this.options.file.mimetype);
+    return;
+  }
+
+  // Reset the error.
+  this.error();
 
   // Only destroy if the current player is different than the new player.
   var player = this.options.file.player.toString();
@@ -244,6 +281,7 @@ minplayer.player.prototype.load = function(files) {
 
     // Do nothing if we don't have a display.
     if (!display) {
+      this.error('No media display found.');
       return;
     }
 
@@ -261,6 +299,11 @@ minplayer.player.prototype.load = function(files) {
           _this.allPlugins[id].setPlayer(player);
         }
       }
+
+      // Trigger on error events.
+      player.bind('error', function(event, data) {
+        _this.error(data);
+      });
 
       // Now load this media.
       player.load();
