@@ -94,10 +94,6 @@ minplayer.playLoader.base.prototype.setPlayer = function(player) {
       event.data.obj.busy.setFlag('media', true);
       event.data.obj.checkVisibility();
     });
-    player.bind('loadedmetadata', {obj: this}, function(event) {
-      event.data.obj.busy.setFlag('media', false);
-      event.data.obj.checkVisibility();
-    });
     player.bind('loadeddata', {obj: this}, function(event) {
       event.data.obj.busy.setFlag('media', false);
       event.data.obj.checkVisibility();

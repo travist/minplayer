@@ -67,6 +67,7 @@ minplayer.controllers.base.prototype.getElements = function() {
     pause: null,
     fullscreen: null,
     seek: null,
+    progress: null,
     volume: null,
     timer: null
   });
@@ -168,36 +169,61 @@ minplayer.controllers.base.prototype.setPlayer = function(player) {
   minplayer.display.prototype.setPlayer.call(this, player);
 
   var _this = this;
-  player.bind('pause', {obj: this}, function(event) {
-    event.data.obj.setPlayPause(true);
-    clearInterval(event.data.obj.interval);
-  });
-  player.bind('playing', {obj: this}, function(event) {
-    event.data.obj.setPlayPause(false);
-  });
-  player.bind('durationchange', {obj: this}, function(event, data) {
-    event.data.obj.setTimeString('duration', data.duration);
-  });
-  player.bind('timeupdate', {obj: this}, function(event, data) {
-    if (!event.data.obj.dragging) {
-      var value = 0;
-      if (data.duration) {
-        value = (data.currentTime / data.duration) * 100;
+
+  // If they have a pause button, then bind to the pause event.
+  if (this.elements.pause) {
+    player.bind('pause', {obj: this}, function(event) {
+      event.data.obj.setPlayPause(true);
+    });
+  }
+
+  // If they have a play button, then bind to playing.
+  if (this.elements.play) {
+    player.bind('playing', {obj: this}, function(event) {
+      event.data.obj.setPlayPause(false);
+    });
+  }
+
+  // If they have a duration, then trigger on duration change.
+  if (this.elements.duration) {
+
+    // Bind to the duration change event.
+    player.bind('durationchange', {obj: this}, function(event, data) {
+      event.data.obj.setTimeString('duration', data.duration);
+    });
+
+    // Set the timestring to the duration.
+    player.getDuration(function(duration) {
+      _this.setTimeString('duration', duration);
+    });
+  }
+
+  // If they have a progress, then bind to the progress.
+  if (this.elements.progress) {
+    player.bind('progress', {obj: this}, function(event, data) {
+      var percent = data.total ? (data.loaded / data.total) * 100 : 0;
+      _this.elements.progress.width(percent + '%');
+    });
+  }
+
+  // If they have a seek bar or timer, bind to the timeupdate.
+  if (this.seekBar || this.elements.timer) {
+    player.bind('timeupdate', {obj: this}, function(event, data) {
+      if (!event.data.obj.dragging) {
+        var value = 0;
+        if (data.duration) {
+          value = (data.currentTime / data.duration) * 100;
+        }
+
+        // Update the seek bar if it exists.
+        if (event.data.obj.seekBar) {
+          event.data.obj.seekBar.slider('option', 'value', value);
+        }
+
+        event.data.obj.setTimeString('timer', data.currentTime);
       }
-
-      // Update the seek bar if it exists.
-      if (event.data.obj.seekBar) {
-        event.data.obj.seekBar.slider('option', 'value', value);
-      }
-
-      event.data.obj.setTimeString('timer', data.currentTime);
-    }
-  });
-
-  // Set the timestring to match that of the duration of the player.
-  player.getDuration(function(duration) {
-    _this.setTimeString('duration', duration);
-  });
+    });
+  }
 
   // Register the events for the control bar to control the media.
   if (this.seekBar) {

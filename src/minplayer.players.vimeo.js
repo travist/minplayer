@@ -6,7 +6,7 @@ minplayer.players = minplayer.players || {};
 
 /**
  * @constructor
- * @extends minplayer.players.flash
+ * @extends minplayer.players.base
  * @class The vimeo media player.
  *
  * @param {object} context The jQuery context.
@@ -15,21 +15,18 @@ minplayer.players = minplayer.players || {};
  */
 minplayer.players.vimeo = function(context, options, ready) {
 
-  // Reset the variables to initial state.
-  this.reset();
-
   // Derive from players base.
-  minplayer.players.flash.call(this, context, options, ready);
+  minplayer.players.base.call(this, context, options, ready);
 };
 
-/** Derive from minplayer.players.flash. */
-minplayer.players.vimeo.prototype = new minplayer.players.flash();
+/** Derive from minplayer.players.base. */
+minplayer.players.vimeo.prototype = new minplayer.players.base();
 
 /** Reset the constructor. */
 minplayer.players.vimeo.prototype.constructor = minplayer.players.vimeo;
 
 /**
- * @see minplayer.players.flash#getPriority
+ * @see minplayer.players.base#getPriority
  * @return {number} The priority of this media player.
  */
 minplayer.players.vimeo.getPriority = function() {
@@ -37,8 +34,7 @@ minplayer.players.vimeo.getPriority = function() {
 };
 
 /**
- * @see minplayer.players.flash#canPlay
- * @param {object} file A {@link minplayer.file} object.
+ * @see minplayer.players.base#canPlay
  * @return {boolean} If this player can play this media type.
  */
 minplayer.players.vimeo.canPlay = function(file) {
@@ -69,31 +65,20 @@ minplayer.players.vimeo.getMediaId = function(file) {
 };
 
 /**
- * @see minplayer.players.flash#reset
+ * @see minplayer.players.base#reset
  */
 minplayer.players.vimeo.prototype.reset = function() {
 
   // Reset the flash variables..
-  minplayer.players.flash.prototype.reset.call(this);
-
-  // Store the bytes loaded.
-  this.bytesLoaded = new minplayer.async();
-
-  // Store the bytes total.
-  this.bytesTotal = new minplayer.async();
+  minplayer.players.base.prototype.reset.call(this);
 };
 
 /**
- * @see minplayer.players.flash#create
+ * @see minplayer.players.base#create
  * @return {object} The media player entity.
  */
 minplayer.players.vimeo.prototype.create = function() {
-
-  // Call the flash create first.
-  minplayer.players.flash.prototype.create.call(this);
-
-  // Reset all variables.
-  this.reset();
+  minplayer.players.base.prototype.create.call(this);
 
   // Insert the Vimeo Froogaloop player.
   var tag = document.createElement('script');
@@ -146,15 +131,7 @@ minplayer.players.vimeo.prototype.create = function() {
 };
 
 /**
- * @see minplayer.players.flash#getPlayer
- * @return {object} The media player object.
- */
-minplayer.players.vimeo.prototype.getPlayer = function() {
-  return this.player;
-};
-
-/**
- * @see minplayer.players.flash#onReady
+ * @see minplayer.players.base#onReady
  */
 minplayer.players.vimeo.prototype.onReady = function(player_id) {
   // Store the this pointer within this context.
@@ -162,12 +139,16 @@ minplayer.players.vimeo.prototype.onReady = function(player_id) {
 
   // Add the other listeners.
   this.player.addEvent('loadProgress', function(progress) {
+
+    // Set the duration, bytesLoaded, and bytesTotal.
     _this.duration.set(parseFloat(progress.duration));
     _this.bytesLoaded.set(progress.bytesLoaded);
     _this.bytesTotal.set(progress.bytesTotal);
   });
 
   this.player.addEvent('playProgress', function(progress) {
+
+    // Set the duration and current time.
     _this.duration.set(parseFloat(progress.duration));
     _this.currentTime.set(parseFloat(progress.seconds));
   });
@@ -181,11 +162,11 @@ minplayer.players.vimeo.prototype.onReady = function(player_id) {
   });
 
   this.player.addEvent('finish', function() {
-    _this.trigger('ended');
+    _this.onComplete();
   });
 
-  minplayer.players.flash.prototype.onReady.call(this);
-  this.onMeta();
+  minplayer.players.base.prototype.onReady.call(this);
+  this.onLoaded();
 };
 
 /**
@@ -198,50 +179,50 @@ minplayer.players.vimeo.prototype.playerFound = function() {
 };
 
 /**
- * @see minplayer.players.flash#play
+ * @see minplayer.players.base#play
  */
 minplayer.players.vimeo.prototype.play = function() {
-  minplayer.players.flash.prototype.play.call(this);
+  minplayer.players.base.prototype.play.call(this);
   if (this.isReady()) {
     this.player.api('play');
   }
 };
 
 /**
- * @see minplayer.players.flash#pause
+ * @see minplayer.players.base#pause
  */
 minplayer.players.vimeo.prototype.pause = function() {
-  minplayer.players.flash.prototype.pause.call(this);
+  minplayer.players.base.prototype.pause.call(this);
   if (this.isReady()) {
     this.player.api('pause');
   }
 };
 
 /**
- * @see minplayer.players.flash#stop
+ * @see minplayer.players.base#stop
  */
 minplayer.players.vimeo.prototype.stop = function() {
-  minplayer.players.flash.prototype.stop.call(this);
+  minplayer.players.base.prototype.stop.call(this);
   if (this.isReady()) {
     this.player.api('unload');
   }
 };
 
 /**
- * @see minplayer.players.flash#seek
+ * @see minplayer.players.base#seek
  */
 minplayer.players.vimeo.prototype.seek = function(pos) {
-  minplayer.players.flash.prototype.seek.call(this, pos);
+  minplayer.players.base.prototype.seek.call(this, pos);
   if (this.isReady()) {
     this.player.api('seekTo', pos);
   }
 };
 
 /**
- * @see minplayer.players.flash#setVolume
+ * @see minplayer.players.base#setVolume
  */
 minplayer.players.vimeo.prototype.setVolume = function(vol) {
-  minplayer.players.flash.prototype.setVolume.call(this, vol);
+  minplayer.players.base.prototype.setVolume.call(this, vol);
   if (this.isReady()) {
     this.volume.set(vol);
     this.player.api('setVolume', vol);
@@ -250,44 +231,10 @@ minplayer.players.vimeo.prototype.setVolume = function(vol) {
 
 /**
  * @see minplayer.players.base#getVolume
- *
- * @param {function} Called when the volume is determined.
  */
 minplayer.players.vimeo.prototype.getVolume = function(callback) {
   var _this = this;
   this.player.api('getVolume', function(vol) {
     callback(vol);
   });
-};
-
-/**
- * @see minplayer.players.flash#getPlayerDuration.
- * @return {int} The player duration.
- */
-minplayer.players.vimeo.prototype.getPlayerDuration = function() {
-  return this.isReady() ? this.duration.value : 0;
-};
-
-/**
- * @see minplayer.players.base#getPlayerCurrentTime
- * @return {number} The current playhead time.
- */
-minplayer.players.vimeo.prototype.getPlayerCurrentTime = function() {
-  return this.isReady() ? this.currentTime.value : 0;
-};
-
-/**
- * @see minplayer.players.flash#getBytesLoaded.
- * @return {number} Returns the bytes loaded from the media.
- */
-minplayer.players.vimeo.prototype.getBytesLoaded = function() {
-  return this.isReady() ? this.bytesLoaded.value : 0;
-};
-
-/**
- * @see minplayer.players.flash#getBytesTotal.
- * @return {number} The total number of bytes of the loaded media.
- */
-minplayer.players.vimeo.prototype.getBytesTotal = function() {
-  return this.isReady() ? this.bytesTotal.value : 0;
 };

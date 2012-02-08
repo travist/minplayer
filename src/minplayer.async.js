@@ -13,9 +13,6 @@ minplayer.async = function() {
 
   /** The queue of callbacks to call when this value is determined. */
   this.queue = [];
-
-  /** The setInterval id for the polling timer. */
-  this.queueInt = 0;
 };
 
 /**
@@ -36,23 +33,7 @@ minplayer.async.prototype.get = function(callback, pollValue) {
 
     // Add this callback to the queue.
     this.queue.push(callback);
-
-    // If they provide a pollValue callback, then we need to setup a polling
-    // timer to check the value at a set interval.
-    if (pollValue && !this.queueInt) {
-      var _this = this;
-      clearInterval(_this.queueInt);
-      this.queueInt = setInterval(function() {
-        var val = pollValue();
-        if (val) {
-          _this.set(val);
-          clearInterval(_this.queueInt);
-        }
-      }, 1000);
-    }
   }
-
-
 };
 
 /**

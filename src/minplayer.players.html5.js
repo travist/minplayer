@@ -35,7 +35,6 @@ minplayer.players.html5.getPriority = function() {
 
 /**
  * @see minplayer.players.base#canPlay
- * @param {object} file A {@link minplayer.file} object.
  * @return {boolean} If this player can play this media type.
  */
 minplayer.players.html5.canPlay = function(file) {
@@ -72,53 +71,45 @@ minplayer.players.html5.prototype.construct = function() {
   if (this.player) {
     this.player.addEventListener('abort', function() {
       _this.trigger('abort');
-    }, true);
+    }, false);
     this.player.addEventListener('loadstart', function() {
       _this.onReady();
-      _this.trigger('loadstart');
-    }, true);
+    }, false);
     this.player.addEventListener('loadeddata', function() {
-      _this.trigger('loadeddata');
-    }, true);
+      _this.onLoaded();
+    }, false);
     this.player.addEventListener('loadedmetadata', function() {
-      _this.trigger('loadedmetadata');
-    }, true);
+      _this.onLoaded();
+    }, false);
     this.player.addEventListener('canplaythrough', function() {
-      _this.trigger('canplaythrough');
-    }, true);
+      _this.onLoaded();
+    }, false);
     this.player.addEventListener('ended', function() {
-      _this.trigger('ended');
-    }, true);
+      _this.onComplete();
+    }, false);
     this.player.addEventListener('pause', function() {
-      _this.trigger('pause');
-    }, true);
+      _this.onPaused();
+    }, false);
     this.player.addEventListener('play', function() {
-      _this.trigger('play');
-    }, true);
+      _this.onPlaying();
+    }, false);
     this.player.addEventListener('playing', function() {
-      _this.trigger('playing');
-    }, true);
+      _this.onPlaying();
+    }, false);
     this.player.addEventListener('error', function() {
       _this.trigger('error');
-    }, true);
+    }, false);
     this.player.addEventListener('waiting', function() {
-      _this.trigger('waiting');
-    }, true);
-    this.player.addEventListener('timeupdate', function(event) {
-      var dur = this.duration;
-      var cTime = this.currentTime;
-      _this.duration.set(dur);
-      _this.currentTime.set(cTime);
-      _this.trigger('timeupdate', {currentTime: cTime, duration: dur});
-    }, true);
+      _this.onWaiting();
+    }, false);
     this.player.addEventListener('durationchange', function() {
       _this.duration.set(this.duration);
       _this.trigger('durationchange', {duration: this.duration});
-    }, true);
+    }, false);
     this.player.addEventListener('progress', function(event) {
-      _this.trigger('progress', {loaded: event.loaded, total: event.total});
-    }, true);
-
+      _this.bytesTotal.set(event.total);
+      _this.bytesLoaded.set(event.loaded);
+    }, false);
     if (this.autoBuffer()) {
       this.player.autobuffer = true;
     } else {
@@ -155,6 +146,7 @@ minplayer.players.html5.prototype.playerFound = function() {
  * @return {object} The media player entity.
  */
 minplayer.players.html5.prototype.create = function() {
+  minplayer.players.base.prototype.create.call(this);
   var element = document.createElement(this.mediaFile.type), attribute = '';
   for (attribute in this.options.attributes) {
     if (this.options.attributes.hasOwnProperty(attribute)) {
@@ -177,7 +169,7 @@ minplayer.players.html5.prototype.getPlayer = function() {
  */
 minplayer.players.html5.prototype.load = function(file) {
 
-  if (file) {
+  if (file && this.isReady()) {
 
     // Get the current source.
     var src = this.options.elements.player.attr('src');
@@ -202,7 +194,9 @@ minplayer.players.html5.prototype.load = function(file) {
  */
 minplayer.players.html5.prototype.play = function() {
   minplayer.players.base.prototype.play.call(this);
-  this.player.play();
+  if (this.isReady()) {
+    this.player.play();
+  }
 };
 
 /**
@@ -210,7 +204,9 @@ minplayer.players.html5.prototype.play = function() {
  */
 minplayer.players.html5.prototype.pause = function() {
   minplayer.players.base.prototype.pause.call(this);
-  this.player.pause();
+  if (this.isReady()) {
+    this.player.pause();
+  }
 };
 
 /**
@@ -218,8 +214,10 @@ minplayer.players.html5.prototype.pause = function() {
  */
 minplayer.players.html5.prototype.stop = function() {
   minplayer.players.base.prototype.stop.call(this);
-  this.player.pause();
-  this.player.src = '';
+  if (this.isReady()) {
+    this.player.pause();
+    this.player.src = '';
+  }
 };
 
 /**
@@ -227,7 +225,9 @@ minplayer.players.html5.prototype.stop = function() {
  */
 minplayer.players.html5.prototype.seek = function(pos) {
   minplayer.players.base.prototype.seek.call(this, pos);
-  this.player.currentTime = pos;
+  if (this.isReady()) {
+    this.player.currentTime = pos;
+  }
 };
 
 /**
@@ -235,24 +235,91 @@ minplayer.players.html5.prototype.seek = function(pos) {
  */
 minplayer.players.html5.prototype.setVolume = function(vol) {
   minplayer.players.base.prototype.setVolume.call(this, vol);
-  this.player.volume = vol;
+  if (this.isReady()) {
+    this.player.volume = vol;
+  }
 };
 
 /**
  * @see minplayer.players.base#getVolume
- * @return {number} The volume of the media; 0 to 1.
  */
 minplayer.players.html5.prototype.getVolume = function(callback) {
-  callback(this.player.volume);
-  return this.player.volume;
+  if (this.isReady()) {
+    callback(this.player.volume);
+  }
 };
 
 /**
  * @see minplayer.players.base#getDuration
- * @return {number} The duration of the loaded media.
  */
 minplayer.players.html5.prototype.getDuration = function(callback) {
-  var dur = this.player.duration;
-  callback(dur);
-  return (dur === Infinity) ? 0 : dur;
+  if (this.isReady()) {
+    callback(this.player.duration);
+  }
+};
+
+/**
+ * @see minplayer.players.base#getCurrentTime
+ */
+minplayer.players.html5.prototype.getCurrentTime = function(callback) {
+  if (this.isReady()) {
+    callback(this.player.currentTime);
+  }
+};
+
+/**
+ * @see minplayer.players.base#getBytesLoaded
+ */
+minplayer.players.html5.prototype.getBytesLoaded = function(callback) {
+  if (this.isReady()) {
+    var loaded = 0;
+
+    // Check several different possibilities.
+    if (this.bytesLoaded.value) {
+      loaded = this.bytesLoaded.value;
+    }
+    else if (this.player.buffered &&
+        this.player.buffered.length > 0 &&
+        this.player.buffered.end &&
+        this.player.duration) {
+      loaded = this.player.buffered.end(0);
+    }
+    else if (this.player.bytesTotal != undefined &&
+             this.player.bytesTotal > 0 &&
+             this.player.bufferedBytes != undefined) {
+      loaded = this.player.bufferedBytes;
+    }
+
+    // Return the loaded amount.
+    callback(loaded);
+  }
+};
+
+/**
+ * @see minplayer.players.base#getBytesTotal
+ */
+minplayer.players.html5.prototype.getBytesTotal = function(callback) {
+  if (this.isReady()) {
+
+    var total = 0;
+
+    // Check several different possibilities.
+    if (this.bytesTotal.value) {
+      total = this.bytesTotal.value;
+    }
+    else if (this.player.buffered &&
+        this.player.buffered.length > 0 &&
+        this.player.buffered.end &&
+        this.player.duration) {
+      total = this.player.duration;
+    }
+    else if (this.player.bytesTotal != undefined &&
+             this.player.bytesTotal > 0 &&
+             this.player.bufferedBytes != undefined) {
+      total = this.player.bytesTotal;
+    }
+
+    // Return the loaded amount.
+    callback(total);
+  }
 };

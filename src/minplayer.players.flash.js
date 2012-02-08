@@ -15,8 +15,6 @@ minplayer.players = minplayer.players || {};
  */
 minplayer.players.flash = function(context, options, ready) {
 
-  this.mediaInterval = null;
-
   // Derive from players base.
   minplayer.players.base.call(this, context, options, ready);
 };
@@ -37,7 +35,6 @@ minplayer.players.flash.getPriority = function() {
 
 /**
  * @see minplayer.players.base#canPlay
- * @param {object} file A {@link minplayer.file} object.
  * @return {boolean} If this player can play this media type.
  */
 minplayer.players.flash.canPlay = function(file) {
@@ -115,63 +112,11 @@ minplayer.players.flash.getFlash = function(params) {
 };
 
 /**
- * Called when the player is ready.
- */
-minplayer.players.flash.prototype.onReady = function() {
-
-  // Call the base on ready.
-  minplayer.players.base.prototype.onReady.call(this);
-
-  // Trigger that the load has started.
-  this.trigger('loadstart');
-};
-
-/**
- * Should be called when the media is playing.
- */
-minplayer.players.flash.prototype.onPlaying = function() {
-  var _this = this;
-  this.trigger('playing');
-  this.mediaInterval = setInterval(function() {
-    _this.trigger('timeupdate', {
-      currentTime: _this.getPlayerCurrentTime(),
-      duration: _this.getPlayerDuration()
-    });
-  }, 1000);
-};
-
-/**
- * Should be called when the minplayer is paused.
- */
-minplayer.players.flash.prototype.onPaused = function() {
-  this.trigger('pause');
-  clearInterval(this.mediaInterval);
-};
-
-/**
- * Should be called when the meta data has finished loading.
- */
-minplayer.players.flash.prototype.onMeta = function() {
-  this.trigger('loadeddata');
-  this.trigger('loadedmetadata');
-};
-
-/**
  * @see minplayer.players.base#playerFound
  * @return {boolean} TRUE - if the player is in the DOM, FALSE otherwise.
  */
 minplayer.players.flash.prototype.playerFound = function() {
   return (this.display.find('object[playerType="flash"]').length > 0);
-};
-
-/**
- * @see minplayer.players.base#create
- * @return {object} The media player entity.
- */
-minplayer.players.flash.prototype.create = function() {
-  // Reset the variables.
-  this.reset();
-  return null;
 };
 
 /**
@@ -182,44 +127,4 @@ minplayer.players.flash.prototype.getPlayer = function() {
   // IE needs the object, everyone else just needs embed.
   var object = jQuery.browser.msie ? 'object' : 'embed';
   return jQuery(object, this.display).eq(0)[0];
-};
-
-/**
- * Return the players current time.
- *
- * @return {number} The players current time.
- */
-minplayer.players.flash.prototype.getPlayerCurrentTime = function() {
-  return 0;
-};
-
-/**
- * @see minplayer.players.base#getPlayTime
- * @return {number} The duration of the loaded media.
- */
-minplayer.players.flash.prototype.getCurrentTime = function(callback) {
-  var _this = this;
-  return this.currentTime.get(callback, function() {
-    return _this.getPlayerCurrentTime();
-  });
-};
-
-/**
- * Return the player time duration.
- *
- * @return {int} The player duration.
- */
-minplayer.players.flash.prototype.getPlayerDuration = function() {
-  return 0;
-};
-
-/**
- * @see minplayer.players.base#getDuration
- * @return {number} The duration of the loaded media.
- */
-minplayer.players.flash.prototype.getDuration = function(callback) {
-  var _this = this;
-  return this.duration.get(callback, function() {
-    return _this.getPlayerDuration();
-  });
 };
