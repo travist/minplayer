@@ -656,12 +656,6 @@ minplayer.player.prototype.getFiles = function() {
 
   // Get the files involved...
   if (this.elements.media) {
-
-    // Get the poster image.
-    if (!this.options.preview) {
-      this.options.preview = this.elements.media.attr('poster');
-    }
-
     mediaSrc = this.elements.media.attr('src');
     if (mediaSrc) {
       files.push({'path': mediaSrc});
@@ -1105,16 +1099,33 @@ minplayer.playLoader.base.prototype.construct = function() {
   minplayer.display.prototype.construct.call(this);
 
   // Add the preview to the options.
-  if (this.options.preview && this.elements.preview) {
+  if (this.elements.preview) {
 
-    // Say that this has a preview.
-    this.elements.preview.addClass('has-preview');
+    // Get the poster image.
+    if (!this.options.preview) {
+      this.options.preview = this.elements.media.attr('poster');
+    }
 
-    // Create a new preview image.
-    this.preview = new minplayer.image(this.elements.preview, this.options);
+    // Reset the media's poster image.
+    this.elements.media.attr('poster', '');
 
-    // Create the image.
-    this.preview.load(this.options.preview);
+    // If there is a preview to show...
+    if (this.options.preview) {
+
+      // Say that this has a preview.
+      this.elements.preview.addClass('has-preview').show();
+
+      // Create a new preview image.
+      this.preview = new minplayer.image(this.elements.preview, this.options);
+
+      // Create the image.
+      this.preview.load(this.options.preview);
+    }
+    else {
+
+      // Hide the preview.
+      this.elements.preview.hide();
+    }
   }
 };
 
@@ -1174,7 +1185,9 @@ minplayer.playLoader.base.prototype.setPlayer = function(player) {
     player.bind('loadstart', {obj: this}, function(event) {
       event.data.obj.busy.setFlag('media', true);
       event.data.obj.bigPlay.setFlag('media', true);
-      event.data.obj.elements.preview.show();
+      if (event.data.obj.preview) {
+        event.data.obj.elements.preview.show();
+      }
       event.data.obj.checkVisibility();
     });
     player.bind('waiting', {obj: this}, function(event) {
@@ -1188,7 +1201,9 @@ minplayer.playLoader.base.prototype.setPlayer = function(player) {
     player.bind('playing', {obj: this}, function(event) {
       event.data.obj.busy.setFlag('media', false);
       event.data.obj.bigPlay.setFlag('media', false);
-      event.data.obj.elements.preview.hide();
+      if (event.data.obj.preview) {
+        event.data.obj.elements.preview.hide();
+      }
       event.data.obj.checkVisibility();
     });
     player.bind('pause', {obj: this}, function(event) {
