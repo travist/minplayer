@@ -97,7 +97,19 @@ minplayer.players.html5.prototype.construct = function() {
       _this.onPlaying();
     }, false);
     this.player.addEventListener('error', function() {
-      _this.trigger('error');
+      var error = '';
+      switch (this.error.code) {
+         case MEDIA_ERR_NETWORK:
+            error = 'Network error - please try again later.';
+            break;
+         case MEDIA_ERR_DECODE:
+            error = 'Video is broken..';
+            break;
+         case MEDIA_ERR_SRC_NOT_SUPPORTED:
+            error = 'Sorry, your browser can\'t play this video.';
+            break;
+       }
+      _this.trigger('error', error);
     }, false);
     this.player.addEventListener('waiting', function() {
       _this.onWaiting();

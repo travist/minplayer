@@ -227,7 +227,9 @@ minplayer.players.youtube.prototype.create = function() {
     'wmode': 'opaque',
     'controls': 0,
     'enablejsapi': 1,
-    'origin': origin
+    'origin': origin,
+    'autoplay': this.options.autoplay,
+    'loop': this.options.loop
   });
 
   // Set the source of the iframe.

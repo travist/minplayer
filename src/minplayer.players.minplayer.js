@@ -101,10 +101,10 @@ minplayer.players.minplayer.prototype.create = function() {
   // The flash variables for this flash player.
   var flashVars = {
     'id': this.options.id,
-    'debug': this.options.settings.debug,
+    'debug': this.options.debug,
     'config': 'nocontrols',
     'file': this.mediaFile.path,
-    'autostart': this.options.settings.autoplay
+    'autostart': this.options.autoplay
   };
 
   // Return a flash media player object.
@@ -112,7 +112,7 @@ minplayer.players.minplayer.prototype.create = function() {
     swf: this.options.swfplayer,
     id: this.options.id + '_player',
     playerType: 'flash',
-    width: this.options.settings.width,
+    width: this.options.width,
     height: '100%',
     flashvars: flashVars,
     wmode: this.options.wmode

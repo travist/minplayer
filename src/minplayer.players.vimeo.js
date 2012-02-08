@@ -105,7 +105,9 @@ minplayer.players.vimeo.prototype.create = function() {
     'player_id': this.options.id + '-player',
     'title': 0,
     'byline': 0,
-    'portrait': 0
+    'portrait': 0,
+    'autoplay': this.options.autoplay,
+    'loop': this.options.loop
   });
 
   // Set the source of the iframe.

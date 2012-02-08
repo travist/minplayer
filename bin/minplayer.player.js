@@ -532,13 +532,19 @@ minplayer.player = function(context, options) {
     id: 'player',
     controller: 'default',
     template: 'default',
-    volume: 80,
     swfplayer: '',
     wmode: 'transparent',
-    attributes: {},
-    settings: {},
-    file: null,
-    preview: ''
+    preload: true,
+    autoplay: false,
+    loop: false,
+    width: '100%',
+    height: '350px',
+    debug: false,
+    volume: 80,
+    files: [],
+    file: '',
+    preview: '',
+    attributes: {}
   }, options);
 
   // Store this player instance.
@@ -579,6 +585,28 @@ minplayer.player.prototype.construct = function() {
 
   // Now load these files.
   this.load(this.getFiles());
+};
+
+/**
+ * Sets an error on the player.
+ *
+ * @param {string} error The error to display on the player.
+ */
+minplayer.player.prototype.error = function(error) {
+  if (this.elements.error) {
+
+    // Set the error text.
+    this.elements.error.text(error);
+    if (error) {
+      this.elements.error.show();
+    }
+    else {
+      this.elements.error.hide();
+    }
+
+    // Retrigger this event.
+    this.trigger('error', error);
+  }
 };
 
 /**
@@ -706,13 +734,22 @@ minplayer.player.prototype.load = function(files) {
   var id = '', pClass = '';
 
   // If no file was provided, then get it.
-  files = files || this.options.file;
-  this.options.file = this.getMediaFile(files);
+  this.options.files = files || this.options.files;
+  this.options.file = this.getMediaFile(this.options.files);
 
   // Do nothing if there isn't a file.
   if (!this.options.file) {
+    this.error('No media found.');
     return;
   }
+
+  if (!this.options.file.player) {
+    this.error('Cannot play media: ' + this.options.file.mimetype);
+    return;
+  }
+
+  // Reset the error.
+  this.error();
 
   // Only destroy if the current player is different than the new player.
   var player = this.options.file.player.toString();
@@ -728,6 +765,7 @@ minplayer.player.prototype.load = function(files) {
 
     // Do nothing if we don't have a display.
     if (!display) {
+      this.error('No media display found.');
       return;
     }
 
@@ -745,6 +783,11 @@ minplayer.player.prototype.load = function(files) {
           _this.allPlugins[id].setPlayer(player);
         }
       }
+
+      // Trigger on error events.
+      player.bind('error', function(event, data) {
+        _this.error(data);
+      });
 
       // Now load this media.
       player.load();
@@ -876,8 +919,16 @@ minplayer.file = function(file) {
 
   // These should be provided, but just in case...
   this.extension = file.extension || this.getFileExtension();
-  this.mimetype = file.mimetype || this.getMimeType();
+  this.mimetype = file.mimetype || file.filemime || this.getMimeType();
   this.type = file.type || this.getType();
+
+  // Fail safe to try and guess the mimetype and media type.
+  if (!this.type) {
+    this.mimetype = this.getMimeType();
+    this.type = this.getType();
+  }
+
+  // Get the player.
   this.player = file.player || this.getBestPlayer();
   this.priority = file.priority || this.getPriority();
   this.id = file.id || this.getId();
@@ -995,7 +1046,7 @@ minplayer.file.prototype.getType = function() {
     case 'audio/ogg':
       return 'audio';
     default:
-      return 'unknown';
+      return '';
   }
 };
 
@@ -1006,7 +1057,7 @@ minplayer.file.prototype.getType = function() {
  */
 minplayer.file.prototype.getId = function() {
   var player = minplayer.players[this.player];
-  return player.getMediaId ? player.getMediaId(this) : '';
+  return (player && player.getMediaId) ? player.getMediaId(this) : '';
 };
 /** The minplayer namespace. */
 var minplayer = minplayer || {};
@@ -1688,7 +1739,19 @@ minplayer.players.html5.prototype.construct = function() {
       _this.onPlaying();
     }, false);
     this.player.addEventListener('error', function() {
-      _this.trigger('error');
+      var error = '';
+      switch (this.error.code) {
+         case MEDIA_ERR_NETWORK:
+            error = 'Network error - please try again later.';
+            break;
+         case MEDIA_ERR_DECODE:
+            error = 'Video is broken..';
+            break;
+         case MEDIA_ERR_SRC_NOT_SUPPORTED:
+            error = 'Sorry, your browser can\'t play this video.';
+            break;
+       }
+      _this.trigger('error', error);
     }, false);
     this.player.addEventListener('waiting', function() {
       _this.onWaiting();
@@ -2147,10 +2210,10 @@ minplayer.players.minplayer.prototype.create = function() {
   // The flash variables for this flash player.
   var flashVars = {
     'id': this.options.id,
-    'debug': this.options.settings.debug,
+    'debug': this.options.debug,
     'config': 'nocontrols',
     'file': this.mediaFile.path,
-    'autostart': this.options.settings.autoplay
+    'autostart': this.options.autoplay
   };
 
   // Return a flash media player object.
@@ -2158,7 +2221,7 @@ minplayer.players.minplayer.prototype.create = function() {
     swf: this.options.swfplayer,
     id: this.options.id + '_player',
     playerType: 'flash',
-    width: this.options.settings.width,
+    width: this.options.width,
     height: '100%',
     flashvars: flashVars,
     wmode: this.options.wmode
@@ -2520,7 +2583,9 @@ minplayer.players.youtube.prototype.create = function() {
     'wmode': 'opaque',
     'controls': 0,
     'enablejsapi': 1,
-    'origin': origin
+    'origin': origin,
+    'autoplay': this.options.autoplay,
+    'loop': this.options.loop
   });
 
   // Set the source of the iframe.
@@ -2750,7 +2815,9 @@ minplayer.players.vimeo.prototype.create = function() {
     'player_id': this.options.id + '-player',
     'title': 0,
     'byline': 0,
-    'portrait': 0
+    'portrait': 0,
+    'autoplay': this.options.autoplay,
+    'loop': this.options.loop
   });
 
   // Set the source of the iframe.

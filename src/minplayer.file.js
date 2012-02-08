@@ -18,8 +18,16 @@ minplayer.file = function(file) {
 
   // These should be provided, but just in case...
   this.extension = file.extension || this.getFileExtension();
-  this.mimetype = file.mimetype || this.getMimeType();
+  this.mimetype = file.mimetype || file.filemime || this.getMimeType();
   this.type = file.type || this.getType();
+
+  // Fail safe to try and guess the mimetype and media type.
+  if (!this.type) {
+    this.mimetype = this.getMimeType();
+    this.type = this.getType();
+  }
+
+  // Get the player.
   this.player = file.player || this.getBestPlayer();
   this.priority = file.priority || this.getPriority();
   this.id = file.id || this.getId();
@@ -137,7 +145,7 @@ minplayer.file.prototype.getType = function() {
     case 'audio/ogg':
       return 'audio';
     default:
-      return 'unknown';
+      return '';
   }
 };
 
@@ -148,5 +156,5 @@ minplayer.file.prototype.getType = function() {
  */
 minplayer.file.prototype.getId = function() {
   var player = minplayer.players[this.player];
-  return player.getMediaId ? player.getMediaId(this) : '';
+  return (player && player.getMediaId) ? player.getMediaId(this) : '';
 };
