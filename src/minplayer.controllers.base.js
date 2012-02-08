@@ -117,6 +117,7 @@ minplayer.controllers.base.prototype.construct = function() {
       else {
         _this.elements.player.addClass('fullscreen');
       }
+      _this.trigger('fullscreen', !isFull);
     }).css({'pointer' : 'hand'});
   }
 

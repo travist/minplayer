@@ -13,6 +13,9 @@ minplayer = minplayer || {};
  */
 minplayer.display = function(context, options) {
 
+  // See if we allow resize on this display.
+  this.allowResize = false;
+
   if (context) {
 
     // Set the display and options.
@@ -34,6 +37,38 @@ minplayer.display.prototype = new minplayer.plugin();
 
 /** Reset the constructor. */
 minplayer.display.prototype.constructor = minplayer.display;
+
+/**
+ * @see minplayer.plugin.construct
+ */
+minplayer.display.prototype.construct = function() {
+
+  // Call the plugin constructor.
+  minplayer.plugin.prototype.construct.call(this);
+
+  // Only do this if they allow resize for this display.
+  if (this.allowResize) {
+
+    // Set the resize timeout and this pointer.
+    var resizeTimeout = 0;
+    var _this = this;
+
+    // Add a handler to trigger a resize event.
+    jQuery(window).resize(function() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(function() {
+        _this.onResize();
+      }, 200);
+    });
+  }
+};
+
+/**
+ * Called when the window resizes.
+ */
+minplayer.display.prototype.onResize = function() {
+};
+
 
 /**
  * Trigger a media event.

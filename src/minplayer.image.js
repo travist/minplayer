@@ -36,6 +36,9 @@ minplayer.image.prototype.constructor = minplayer.image;
  */
 minplayer.image.prototype.construct = function() {
 
+  // Say we need to resize.
+  this.allowResize = true;
+
   // Call the media display constructor.
   minplayer.display.prototype.construct.call(this);
 
@@ -121,4 +124,13 @@ minplayer.image.prototype.resize = function(width, height) {
     // Show the container.
     this.image.fadeIn();
   }
+};
+
+/**
+ * @see minplayer.display#onResize
+ */
+minplayer.image.prototype.onResize = function() {
+
+  // Resize the image to fit.
+  this.resize();
 };

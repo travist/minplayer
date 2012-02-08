@@ -1,6 +1,9 @@
 /** The minplayer namespace. */
 minplayer = minplayer || {};
 
+/** Store all plugins. */
+minplayer.plugin_registry = {};
+
 /**
  * @constructor
  * @class The base class for all plugins.
@@ -27,6 +30,11 @@ minplayer.plugin = function(context, options) {
  * as object creation.
  */
 minplayer.plugin.prototype.construct = function() {
+  // Add this plugin to the plugin registry.
+  if (!minplayer.plugin_registry[this.options.id]) {
+    minplayer.plugin_registry[this.options.id] = [];
+  }
+  minplayer.plugin_registry[this.options.id].push(this);
 };
 
 /**

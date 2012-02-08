@@ -214,6 +214,9 @@ minplayer.flags.prototype.setFlag = function(id, value) {
 /** The minplayer namespace. */
 minplayer = minplayer || {};
 
+/** Store all plugins. */
+minplayer.plugin_registry = {};
+
 /**
  * @constructor
  * @class The base class for all plugins.
@@ -240,6 +243,11 @@ minplayer.plugin = function(context, options) {
  * as object creation.
  */
 minplayer.plugin.prototype.construct = function() {
+  // Add this plugin to the plugin registry.
+  if (!minplayer.plugin_registry[this.options.id]) {
+    minplayer.plugin_registry[this.options.id] = [];
+  }
+  minplayer.plugin_registry[this.options.id].push(this);
 };
 
 /**
@@ -265,6 +273,9 @@ minplayer = minplayer || {};
  */
 minplayer.display = function(context, options) {
 
+  // See if we allow resize on this display.
+  this.allowResize = false;
+
   if (context) {
 
     // Set the display and options.
@@ -286,6 +297,38 @@ minplayer.display.prototype = new minplayer.plugin();
 
 /** Reset the constructor. */
 minplayer.display.prototype.constructor = minplayer.display;
+
+/**
+ * @see minplayer.plugin.construct
+ */
+minplayer.display.prototype.construct = function() {
+
+  // Call the plugin constructor.
+  minplayer.plugin.prototype.construct.call(this);
+
+  // Only do this if they allow resize for this display.
+  if (this.allowResize) {
+
+    // Set the resize timeout and this pointer.
+    var resizeTimeout = 0;
+    var _this = this;
+
+    // Add a handler to trigger a resize event.
+    jQuery(window).resize(function() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(function() {
+        _this.onResize();
+      }, 200);
+    });
+  }
+};
+
+/**
+ * Called when the window resizes.
+ */
+minplayer.display.prototype.onResize = function() {
+};
+
 
 /**
  * Trigger a media event.
@@ -396,6 +439,9 @@ minplayer.image.prototype.constructor = minplayer.image;
  */
 minplayer.image.prototype.construct = function() {
 
+  // Say we need to resize.
+  this.allowResize = true;
+
   // Call the media display constructor.
   minplayer.display.prototype.construct.call(this);
 
@@ -481,6 +527,15 @@ minplayer.image.prototype.resize = function(width, height) {
     // Show the container.
     this.image.fadeIn();
   }
+};
+
+/**
+ * @see minplayer.display#onResize
+ */
+minplayer.image.prototype.onResize = function() {
+
+  // Resize the image to fit.
+  this.resize();
 };
 /** The minplayer namespace. */
 var minplayer = minplayer || {};
@@ -775,6 +830,13 @@ minplayer.player.prototype.load = function(files) {
       for (id in _this.allPlugins) {
         if (_this.allPlugins.hasOwnProperty(id)) {
           _this.allPlugins[id].setPlayer(player);
+
+          // Trigger on any fullscreen events.
+          _this.allPlugins[id].bind('fullscreen', function(event, data) {
+
+            // Call the resize events.
+            _this.resize();
+          });
         }
       }
 
@@ -793,6 +855,16 @@ minplayer.player.prototype.load = function(files) {
 
     // Now load the different media file.
     this.media.load(this.options.file);
+  }
+};
+
+/**
+ * Called when the player is resized.
+ */
+minplayer.player.prototype.resize = function() {
+  var i = minplayer.plugin_registry[this.options.id].length;
+  while (i--) {
+    minplayer.plugin_registry[this.options.id][i].onResize();
   }
 };
 
@@ -3084,6 +3156,7 @@ minplayer.controllers.base.prototype.construct = function() {
       else {
         _this.elements.player.addClass('fullscreen');
       }
+      _this.trigger('fullscreen', !isFull);
     }).css({'pointer' : 'hand'});
   }
 

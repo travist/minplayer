@@ -291,6 +291,13 @@ minplayer.player.prototype.load = function(files) {
       for (id in _this.allPlugins) {
         if (_this.allPlugins.hasOwnProperty(id)) {
           _this.allPlugins[id].setPlayer(player);
+
+          // Trigger on any fullscreen events.
+          _this.allPlugins[id].bind('fullscreen', function(event, data) {
+
+            // Call the resize events.
+            _this.resize();
+          });
         }
       }
 
@@ -309,6 +316,16 @@ minplayer.player.prototype.load = function(files) {
 
     // Now load the different media file.
     this.media.load(this.options.file);
+  }
+};
+
+/**
+ * Called when the player is resized.
+ */
+minplayer.player.prototype.resize = function() {
+  var i = minplayer.plugin_registry[this.options.id].length;
+  while (i--) {
+    minplayer.plugin_registry[this.options.id][i].onResize();
   }
 };
 
