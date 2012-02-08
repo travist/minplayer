@@ -240,9 +240,12 @@ minplayer.player.prototype.load = function(files) {
       return;
     }
 
-    // Get the class name and create the new player.
     var _this = this;
+
+    // Get the class name and create the new player.
     pClass = minplayer.players[this.options.file.player];
+
+    // Create the new media player.
     this.media = new pClass(display, this.options, function(player) {
 
       // Iterate through all plugins and add the player to them.
