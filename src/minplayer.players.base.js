@@ -84,7 +84,7 @@ minplayer.players.base.prototype.construct = function() {
   }
 
   // Get the player object...
-  this.media = this.getMedia();
+  this.player = this.getPlayer();
 };
 
 /**
@@ -107,7 +107,7 @@ minplayer.players.base.prototype.clearIntervals = function() {
 minplayer.players.base.prototype.reset = function() {
 
   // Reset the ready flag.
-  this.mediaReady = false;
+  this.playerReady = false;
 
   // The duration of the player.
   this.duration = new minplayer.async();
@@ -143,7 +143,7 @@ minplayer.players.base.prototype.onReady = function() {
   var _this = this;
 
   // Set the ready flag.
-  this.mediaReady = true;
+  this.playerReady = true;
 
   // Set the volume to the default.
   this.setVolume(this.options.volume / 100);
@@ -264,7 +264,7 @@ minplayer.players.base.prototype.onWaiting = function() {
 minplayer.players.base.prototype.isReady = function() {
 
   // Return that the player is set and the ready flag is good.
-  return (this.media && this.mediaReady);
+  return (this.player && this.playerReady);
 };
 
 /**
@@ -300,8 +300,8 @@ minplayer.players.base.prototype.create = function() {
  *
  * @return {object} The media player object.
  */
-minplayer.players.base.prototype.getMedia = function() {
-  return this.media;
+minplayer.players.base.prototype.getPlayer = function() {
+  return this.player;
 };
 
 /**

@@ -19,7 +19,7 @@ minplayer.image = function(context, options) {
   this.ratio = 0;
 
   // The image element.
-  this.image = null;
+  this.img = null;
 
   // Derive from display
   minplayer.display.call(this, 'image', context, options);
@@ -74,8 +74,8 @@ minplayer.image.prototype.load = function(src) {
   this.clear(function() {
 
     // Create the new image, and append to the display.
-    this.image = jQuery(document.createElement('img')).attr({src: ''}).hide();
-    this.display.append(this.image);
+    this.img = jQuery(document.createElement('img')).attr({src: ''}).hide();
+    this.display.append(this.img);
     this.loader.src = src;
   });
 };
@@ -87,10 +87,10 @@ minplayer.image.prototype.load = function(src) {
  */
 minplayer.image.prototype.clear = function(callback) {
   this.loaded = false;
-  if (this.image) {
+  if (this.img) {
     var _this = this;
-    this.image.fadeOut(function() {
-      _this.image.attr('src', '');
+    this.img.fadeOut(function() {
+      _this.img.attr('src', '');
       _this.loader.src = '';
       $(this).remove();
       callback.call(_this);
@@ -119,8 +119,8 @@ minplayer.image.prototype.resize = function(width, height) {
     });
 
     // Now set this image to the new size.
-    if (this.image) {
-      this.image.attr('src', this.loader.src).css({
+    if (this.img) {
+      this.img.attr('src', this.loader.src).css({
         marginLeft: rect.x,
         marginTop: rect.y,
         width: rect.width,
@@ -129,7 +129,7 @@ minplayer.image.prototype.resize = function(width, height) {
     }
 
     // Show the container.
-    this.image.fadeIn();
+    this.img.fadeIn();
   }
 };
 

@@ -768,8 +768,20 @@ minplayer.prototype.initialize = function() {
     });
   });
 
-  // Load the media.
-  this.getPlugin('media').load();
+  // If the media exists.
+  if (this.media) {
+
+    // Copy over all functions.
+    for (var name in this.media) {
+      var prop = this.media[name];
+      if (typeof prop == 'function' && !this[name]) {
+        this[name] = prop;
+      }
+    }
+
+    // Get the media plugin.
+    this.media.load();
+  }
 };
 
 /**
@@ -804,7 +816,7 @@ minplayer.prototype.load = function(files) {
   var player = this.options.file.player.toString();
 
   // If there isn't media or if the players are different.
-  if (!this.player || (player !== this.currentPlayer)) {
+  if (!this.media || (player !== this.currentPlayer)) {
 
     // Set the current media player.
     this.currentPlayer = player;
@@ -816,22 +828,22 @@ minplayer.prototype.load = function(files) {
     }
 
     // If the media exists, then destroy it.
-    if (this.player) {
-      this.player.destory();
+    if (this.media) {
+      this.media.destory();
     }
 
     // Get the class name and create the new player.
     pClass = minplayer.players[this.options.file.player];
 
     // Create the new media player.
-    this.player = new pClass(this.elements.display, this.options);
+    this.media = new pClass(this.elements.display, this.options);
   }
 
   // If the media object already exists...
-  else if (this.player) {
+  else if (this.media) {
 
     // Now load the different media file.
-    this.player.load(this.options.file);
+    this.media.load(this.options.file);
   }
 };
 
@@ -844,78 +856,6 @@ minplayer.prototype.resize = function() {
   this.eachPlugin(function(name, plugin) {
     plugin.onResize();
   });
-};
-
-/**
- * Play the currently loaded media file.  Use load first to load a
- * media file into the media player.
- */
-minplayer.prototype.play = function() {
-  if (this.player) {
-    this.player.play();
-  }
-};
-
-/**
- * Pause the media.
- */
-minplayer.prototype.pause = function() {
-  if (this.player) {
-    this.player.pause();
-  }
-};
-
-/**
- * Stop the media.
- */
-minplayer.prototype.stop = function() {
-  if (this.player) {
-    this.player.stop();
-  }
-};
-
-/**
- * Seek the media to the provided position.
- *
- * @param {number} pos The position to seek.  0 to 1.
- */
-minplayer.prototype.seek = function(pos) {
-  if (this.player) {
-    this.player.seek(pos);
-  }
-};
-
-/**
- * Set the volume of the media being played.
- *
- * @param {number} vol The volume to set.  0 to 1.
- */
-minplayer.prototype.setVolume = function(vol) {
-  if (this.player) {
-    this.player.setVolume(vol);
-  }
-};
-
-/**
- * Get the current volume setting.
- *
- * @param {function} callback The callback that is called when the volume
- * is known.
- * @return {number} The current volume level. 0 to 1.
- */
-minplayer.prototype.getVolume = function(callback) {
-  return this.player ? this.player.getVolume(callback) : 0;
-};
-
-/**
- * Get the current media duration.
- *
- * @param {function} callback The callback that is called when the duration
- * is known.
- * @return {number} The current media duration.
- */
-minplayer.prototype.getDuration = function(callback) {
-  return this.player ? this.player.getDuration(callback) : 0;
 };
 /** The minplayer namespace. */
 var minplayer = minplayer || {};
@@ -938,7 +878,7 @@ minplayer.image = function(context, options) {
   this.ratio = 0;
 
   // The image element.
-  this.image = null;
+  this.img = null;
 
   // Derive from display
   minplayer.display.call(this, 'image', context, options);
@@ -993,8 +933,8 @@ minplayer.image.prototype.load = function(src) {
   this.clear(function() {
 
     // Create the new image, and append to the display.
-    this.image = jQuery(document.createElement('img')).attr({src: ''}).hide();
-    this.display.append(this.image);
+    this.img = jQuery(document.createElement('img')).attr({src: ''}).hide();
+    this.display.append(this.img);
     this.loader.src = src;
   });
 };
@@ -1006,10 +946,10 @@ minplayer.image.prototype.load = function(src) {
  */
 minplayer.image.prototype.clear = function(callback) {
   this.loaded = false;
-  if (this.image) {
+  if (this.img) {
     var _this = this;
-    this.image.fadeOut(function() {
-      _this.image.attr('src', '');
+    this.img.fadeOut(function() {
+      _this.img.attr('src', '');
       _this.loader.src = '';
       $(this).remove();
       callback.call(_this);
@@ -1038,8 +978,8 @@ minplayer.image.prototype.resize = function(width, height) {
     });
 
     // Now set this image to the new size.
-    if (this.image) {
-      this.image.attr('src', this.loader.src).css({
+    if (this.img) {
+      this.img.attr('src', this.loader.src).css({
         marginLeft: rect.x,
         marginTop: rect.y,
         width: rect.width,
@@ -1048,7 +988,7 @@ minplayer.image.prototype.resize = function(width, height) {
     }
 
     // Show the container.
-    this.image.fadeIn();
+    this.img.fadeIn();
   }
 };
 
@@ -1489,7 +1429,7 @@ minplayer.players.base.prototype.construct = function() {
   }
 
   // Get the player object...
-  this.media = this.getMedia();
+  this.player = this.getPlayer();
 };
 
 /**
@@ -1512,7 +1452,7 @@ minplayer.players.base.prototype.clearIntervals = function() {
 minplayer.players.base.prototype.reset = function() {
 
   // Reset the ready flag.
-  this.mediaReady = false;
+  this.playerReady = false;
 
   // The duration of the player.
   this.duration = new minplayer.async();
@@ -1548,7 +1488,7 @@ minplayer.players.base.prototype.onReady = function() {
   var _this = this;
 
   // Set the ready flag.
-  this.mediaReady = true;
+  this.playerReady = true;
 
   // Set the volume to the default.
   this.setVolume(this.options.volume / 100);
@@ -1669,7 +1609,7 @@ minplayer.players.base.prototype.onWaiting = function() {
 minplayer.players.base.prototype.isReady = function() {
 
   // Return that the player is set and the ready flag is good.
-  return (this.media && this.mediaReady);
+  return (this.player && this.playerReady);
 };
 
 /**
@@ -1705,8 +1645,8 @@ minplayer.players.base.prototype.create = function() {
  *
  * @return {object} The media player object.
  */
-minplayer.players.base.prototype.getMedia = function() {
-  return this.media;
+minplayer.players.base.prototype.getPlayer = function() {
+  return this.player;
 };
 
 /**
@@ -1890,35 +1830,35 @@ minplayer.players.html5.prototype.construct = function() {
   var _this = this;
 
   // For the HTML5 player, we will just pass events along...
-  if (this.media) {
-    this.media.addEventListener('abort', function() {
+  if (this.player) {
+    this.player.addEventListener('abort', function() {
       _this.trigger('abort');
     }, false);
-    this.media.addEventListener('loadstart', function() {
+    this.player.addEventListener('loadstart', function() {
       _this.onReady();
     }, false);
-    this.media.addEventListener('loadeddata', function() {
+    this.player.addEventListener('loadeddata', function() {
       _this.onLoaded();
     }, false);
-    this.media.addEventListener('loadedmetadata', function() {
+    this.player.addEventListener('loadedmetadata', function() {
       _this.onLoaded();
     }, false);
-    this.media.addEventListener('canplaythrough', function() {
+    this.player.addEventListener('canplaythrough', function() {
       _this.onLoaded();
     }, false);
-    this.media.addEventListener('ended', function() {
+    this.player.addEventListener('ended', function() {
       _this.onComplete();
     }, false);
-    this.media.addEventListener('pause', function() {
+    this.player.addEventListener('pause', function() {
       _this.onPaused();
     }, false);
-    this.media.addEventListener('play', function() {
+    this.player.addEventListener('play', function() {
       _this.onPlaying();
     }, false);
-    this.media.addEventListener('playing', function() {
+    this.player.addEventListener('playing', function() {
       _this.onPlaying();
     }, false);
-    this.media.addEventListener('error', function() {
+    this.player.addEventListener('error', function() {
       var error = '';
       switch (this.error.code) {
          case MEDIA_ERR_NETWORK:
@@ -1933,22 +1873,22 @@ minplayer.players.html5.prototype.construct = function() {
        }
       _this.trigger('error', error);
     }, false);
-    this.media.addEventListener('waiting', function() {
+    this.player.addEventListener('waiting', function() {
       _this.onWaiting();
     }, false);
-    this.media.addEventListener('durationchange', function() {
+    this.player.addEventListener('durationchange', function() {
       _this.duration.set(this.duration);
       _this.trigger('durationchange', {duration: this.duration});
     }, false);
-    this.media.addEventListener('progress', function(event) {
+    this.player.addEventListener('progress', function(event) {
       _this.bytesTotal.set(event.total);
       _this.bytesLoaded.set(event.loaded);
     }, false);
     if (this.autoBuffer()) {
-      this.media.autobuffer = true;
+      this.player.autobuffer = true;
     } else {
-      this.media.autobuffer = false;
-      this.media.preload = 'none';
+      this.player.autobuffer = false;
+      this.player.preload = 'none';
     }
   }
 };
@@ -1958,9 +1898,9 @@ minplayer.players.html5.prototype.construct = function() {
  * @return {boolean} TRUE - the player is able to autobuffer.
  */
 minplayer.players.html5.prototype.autoBuffer = function() {
-  var preload = this.media.preload !== 'none';
-  if (typeof this.media.hasAttribute === 'function') {
-    return this.media.hasAttribute('preload') && preload;
+  var preload = this.player.preload !== 'none';
+  if (typeof this.player.hasAttribute === 'function') {
+    return this.player.hasAttribute('preload') && preload;
   }
   else {
     return false;
@@ -1991,10 +1931,10 @@ minplayer.players.html5.prototype.create = function() {
 };
 
 /**
- * @see minplayer.players.base#getMedia
+ * @see minplayer.players.base#getPlayer
  * @return {object} The media player object.
  */
-minplayer.players.html5.prototype.getMedia = function() {
+minplayer.players.html5.prototype.getPlayer = function() {
   return this.options.elements.media.eq(0)[0];
 };
 
@@ -2029,7 +1969,7 @@ minplayer.players.html5.prototype.load = function(file) {
 minplayer.players.html5.prototype.play = function() {
   minplayer.players.base.prototype.play.call(this);
   if (this.isReady()) {
-    this.media.play();
+    this.player.play();
   }
 };
 
@@ -2039,7 +1979,7 @@ minplayer.players.html5.prototype.play = function() {
 minplayer.players.html5.prototype.pause = function() {
   minplayer.players.base.prototype.pause.call(this);
   if (this.isReady()) {
-    this.media.pause();
+    this.player.pause();
   }
 };
 
@@ -2049,8 +1989,8 @@ minplayer.players.html5.prototype.pause = function() {
 minplayer.players.html5.prototype.stop = function() {
   minplayer.players.base.prototype.stop.call(this);
   if (this.isReady()) {
-    this.media.pause();
-    this.media.src = '';
+    this.player.pause();
+    this.player.src = '';
   }
 };
 
@@ -2060,7 +2000,7 @@ minplayer.players.html5.prototype.stop = function() {
 minplayer.players.html5.prototype.seek = function(pos) {
   minplayer.players.base.prototype.seek.call(this, pos);
   if (this.isReady()) {
-    this.media.currentTime = pos;
+    this.player.currentTime = pos;
   }
 };
 
@@ -2070,7 +2010,7 @@ minplayer.players.html5.prototype.seek = function(pos) {
 minplayer.players.html5.prototype.setVolume = function(vol) {
   minplayer.players.base.prototype.setVolume.call(this, vol);
   if (this.isReady()) {
-    this.media.volume = vol;
+    this.player.volume = vol;
   }
 };
 
@@ -2079,7 +2019,7 @@ minplayer.players.html5.prototype.setVolume = function(vol) {
  */
 minplayer.players.html5.prototype.getVolume = function(callback) {
   if (this.isReady()) {
-    callback(this.media.volume);
+    callback(this.player.volume);
   }
 };
 
@@ -2088,7 +2028,7 @@ minplayer.players.html5.prototype.getVolume = function(callback) {
  */
 minplayer.players.html5.prototype.getDuration = function(callback) {
   if (this.isReady()) {
-    callback(this.media.duration);
+    callback(this.player.duration);
   }
 };
 
@@ -2097,7 +2037,7 @@ minplayer.players.html5.prototype.getDuration = function(callback) {
  */
 minplayer.players.html5.prototype.getCurrentTime = function(callback) {
   if (this.isReady()) {
-    callback(this.media.currentTime);
+    callback(this.player.currentTime);
   }
 };
 
@@ -2112,16 +2052,16 @@ minplayer.players.html5.prototype.getBytesLoaded = function(callback) {
     if (this.bytesLoaded.value) {
       loaded = this.bytesLoaded.value;
     }
-    else if (this.media.buffered &&
-        this.media.buffered.length > 0 &&
-        this.media.buffered.end &&
-        this.media.duration) {
-      loaded = this.media.buffered.end(0);
+    else if (this.player.buffered &&
+        this.player.buffered.length > 0 &&
+        this.player.buffered.end &&
+        this.player.duration) {
+      loaded = this.player.buffered.end(0);
     }
-    else if (this.media.bytesTotal != undefined &&
-             this.media.bytesTotal > 0 &&
-             this.media.bufferedBytes != undefined) {
-      loaded = this.media.bufferedBytes;
+    else if (this.player.bytesTotal != undefined &&
+             this.player.bytesTotal > 0 &&
+             this.player.bufferedBytes != undefined) {
+      loaded = this.player.bufferedBytes;
     }
 
     // Return the loaded amount.
@@ -2141,16 +2081,16 @@ minplayer.players.html5.prototype.getBytesTotal = function(callback) {
     if (this.bytesTotal.value) {
       total = this.bytesTotal.value;
     }
-    else if (this.media.buffered &&
-        this.media.buffered.length > 0 &&
-        this.media.buffered.end &&
-        this.media.duration) {
-      total = this.media.duration;
+    else if (this.player.buffered &&
+        this.player.buffered.length > 0 &&
+        this.player.buffered.end &&
+        this.player.duration) {
+      total = this.player.duration;
     }
-    else if (this.media.bytesTotal != undefined &&
-             this.media.bytesTotal > 0 &&
-             this.media.bufferedBytes != undefined) {
-      total = this.media.bytesTotal;
+    else if (this.player.bytesTotal != undefined &&
+             this.player.bytesTotal > 0 &&
+             this.player.bufferedBytes != undefined) {
+      total = this.player.bytesTotal;
     }
 
     // Return the loaded amount.
@@ -2278,10 +2218,10 @@ minplayer.players.flash.prototype.playerFound = function() {
 };
 
 /**
- * @see minplayer.players.base#getMedia
+ * @see minplayer.players.base#getPlayer
  * @return {object} The media player object.
  */
-minplayer.players.flash.prototype.getMedia = function() {
+minplayer.players.flash.prototype.getPlayer = function() {
   // IE needs the object, everyone else just needs embed.
   var object = jQuery.browser.msie ? 'object' : 'embed';
   return jQuery(object, this.display).eq(0)[0];
@@ -2434,7 +2374,7 @@ minplayer.players.minplayer.prototype.onMediaUpdate = function(eventType) {
 minplayer.players.minplayer.prototype.load = function(file) {
   minplayer.players.flash.prototype.load.call(this, file);
   if (file && this.isReady()) {
-    this.media.loadMedia(file.path, file.stream);
+    this.player.loadMedia(file.path, file.stream);
   }
 };
 
@@ -2444,7 +2384,7 @@ minplayer.players.minplayer.prototype.load = function(file) {
 minplayer.players.minplayer.prototype.play = function() {
   minplayer.players.flash.prototype.play.call(this);
   if (this.isReady()) {
-    this.media.playMedia();
+    this.player.playMedia();
   }
 };
 
@@ -2454,7 +2394,7 @@ minplayer.players.minplayer.prototype.play = function() {
 minplayer.players.minplayer.prototype.pause = function() {
   minplayer.players.flash.prototype.pause.call(this);
   if (this.isReady()) {
-    this.media.pauseMedia();
+    this.player.pauseMedia();
   }
 };
 
@@ -2464,7 +2404,7 @@ minplayer.players.minplayer.prototype.pause = function() {
 minplayer.players.minplayer.prototype.stop = function() {
   minplayer.players.flash.prototype.stop.call(this);
   if (this.isReady()) {
-    this.media.stopMedia();
+    this.player.stopMedia();
   }
 };
 
@@ -2474,7 +2414,7 @@ minplayer.players.minplayer.prototype.stop = function() {
 minplayer.players.minplayer.prototype.seek = function(pos) {
   minplayer.players.flash.prototype.seek.call(this, pos);
   if (this.isReady()) {
-    this.media.seekMedia(pos);
+    this.player.seekMedia(pos);
   }
 };
 
@@ -2484,7 +2424,7 @@ minplayer.players.minplayer.prototype.seek = function(pos) {
 minplayer.players.minplayer.prototype.setVolume = function(vol) {
   minplayer.players.flash.prototype.setVolume.call(this, vol);
   if (this.isReady()) {
-    this.media.setVolume(vol);
+    this.player.setVolume(vol);
   }
 };
 
@@ -2493,7 +2433,7 @@ minplayer.players.minplayer.prototype.setVolume = function(vol) {
  */
 minplayer.players.minplayer.prototype.getVolume = function(callback) {
   if (this.isReady()) {
-    callback(this.media.getVolume());
+    callback(this.player.getVolume());
   }
 };
 
@@ -2502,7 +2442,7 @@ minplayer.players.minplayer.prototype.getVolume = function(callback) {
  */
 minplayer.players.minplayer.prototype.getDuration = function(callback) {
   if (this.isReady()) {
-    callback(this.media.getDuration());
+    callback(this.player.getDuration());
   }
 };
 
@@ -2511,7 +2451,7 @@ minplayer.players.minplayer.prototype.getDuration = function(callback) {
  */
 minplayer.players.minplayer.prototype.getCurrentTime = function(callback) {
   if (this.isReady()) {
-    callback(this.media.getCurrentTime());
+    callback(this.player.getCurrentTime());
   }
 };
 
@@ -2520,7 +2460,7 @@ minplayer.players.minplayer.prototype.getCurrentTime = function(callback) {
  */
 minplayer.players.minplayer.prototype.getBytesLoaded = function(callback) {
   if (this.isReady()) {
-    callback(this.media.getMediaBytesLoaded());
+    callback(this.player.getMediaBytesLoaded());
   }
 };
 
@@ -2529,7 +2469,7 @@ minplayer.players.minplayer.prototype.getBytesLoaded = function(callback) {
  */
 minplayer.players.minplayer.prototype.getBytesTotal = function(callback) {
   if (this.isReady()) {
-    callback(this.media.getMediaBytesTotal());
+    callback(this.player.getMediaBytesTotal());
   }
 };
 /** The minplayer namespace. */
@@ -2782,7 +2722,7 @@ minplayer.players.youtube.prototype.create = function() {
 minplayer.players.youtube.prototype.load = function(file) {
   minplayer.players.base.prototype.load.call(this, file);
   if (file && this.isReady()) {
-    this.media.loadVideoById(file.id, 0, this.quality);
+    this.player.loadVideoById(file.id, 0, this.quality);
   }
 };
 
@@ -2792,7 +2732,7 @@ minplayer.players.youtube.prototype.load = function(file) {
 minplayer.players.youtube.prototype.play = function() {
   minplayer.players.base.prototype.play.call(this);
   if (this.isReady()) {
-    this.media.playVideo();
+    this.player.playVideo();
   }
 };
 
@@ -2802,7 +2742,7 @@ minplayer.players.youtube.prototype.play = function() {
 minplayer.players.youtube.prototype.pause = function() {
   minplayer.players.base.prototype.pause.call(this);
   if (this.isReady()) {
-    this.media.pauseVideo();
+    this.player.pauseVideo();
   }
 };
 
@@ -2812,7 +2752,7 @@ minplayer.players.youtube.prototype.pause = function() {
 minplayer.players.youtube.prototype.stop = function() {
   minplayer.players.base.prototype.stop.call(this);
   if (this.isReady()) {
-    this.media.stopVideo();
+    this.player.stopVideo();
   }
 };
 
@@ -2822,7 +2762,7 @@ minplayer.players.youtube.prototype.stop = function() {
 minplayer.players.youtube.prototype.seek = function(pos) {
   minplayer.players.base.prototype.seek.call(this, pos);
   if (this.isReady()) {
-    this.media.seekTo(pos, true);
+    this.player.seekTo(pos, true);
   }
 };
 
@@ -2832,7 +2772,7 @@ minplayer.players.youtube.prototype.seek = function(pos) {
 minplayer.players.youtube.prototype.setVolume = function(vol) {
   minplayer.players.base.prototype.setVolume.call(this, vol);
   if (this.isReady()) {
-    this.media.setVolume(vol * 100);
+    this.player.setVolume(vol * 100);
   }
 };
 
@@ -2841,7 +2781,7 @@ minplayer.players.youtube.prototype.setVolume = function(vol) {
  */
 minplayer.players.youtube.prototype.getVolume = function(callback) {
   if (this.isReady()) {
-    callback(this.media.getVolume());
+    callback(this.player.getVolume());
   }
 };
 
@@ -2850,7 +2790,7 @@ minplayer.players.youtube.prototype.getVolume = function(callback) {
  */
 minplayer.players.youtube.prototype.getDuration = function(callback) {
   if (this.isReady()) {
-    callback(this.media.getDuration());
+    callback(this.player.getDuration());
   }
 };
 
@@ -2859,7 +2799,7 @@ minplayer.players.youtube.prototype.getDuration = function(callback) {
  */
 minplayer.players.youtube.prototype.getCurrentTime = function(callback) {
   if (this.isReady()) {
-    callback(this.media.getCurrentTime());
+    callback(this.player.getCurrentTime());
   }
 };
 
@@ -2868,7 +2808,7 @@ minplayer.players.youtube.prototype.getCurrentTime = function(callback) {
  */
 minplayer.players.youtube.prototype.getBytesStart = function(callback) {
   if (this.isReady()) {
-    callback(this.media.getVideoStartBytes());
+    callback(this.player.getVideoStartBytes());
   }
 };
 
@@ -2877,7 +2817,7 @@ minplayer.players.youtube.prototype.getBytesStart = function(callback) {
  */
 minplayer.players.youtube.prototype.getBytesLoaded = function(callback) {
   if (this.isReady()) {
-    callback(this.media.getVideoBytesLoaded());
+    callback(this.player.getVideoBytesLoaded());
   }
 };
 
@@ -2886,7 +2826,7 @@ minplayer.players.youtube.prototype.getBytesLoaded = function(callback) {
  */
 minplayer.players.youtube.prototype.getBytesTotal = function(callback) {
   if (this.isReady()) {
-    callback(this.media.getVideoBytesTotal());
+    callback(this.player.getVideoBytesTotal());
   }
 };
 /** The minplayer namespace. */
@@ -3008,8 +2948,8 @@ minplayer.players.vimeo.prototype.create = function() {
   var check = setInterval(function() {
     if (window.Froogaloop) {
       clearInterval(check);
-      _this.media = window.Froogaloop(iframe);
-      _this.media.addEvent('ready', function() {
+      _this.player = window.Froogaloop(iframe);
+      _this.player.addEvent('ready', function() {
         _this.onReady();
       });
     }
@@ -3030,7 +2970,7 @@ minplayer.players.vimeo.prototype.onReady = function(player_id) {
   var _this = this;
 
   // Add the other listeners.
-  this.media.addEvent('loadProgress', function(progress) {
+  this.player.addEvent('loadProgress', function(progress) {
 
     // Set the duration, bytesLoaded, and bytesTotal.
     _this.duration.set(parseFloat(progress.duration));
@@ -3038,22 +2978,22 @@ minplayer.players.vimeo.prototype.onReady = function(player_id) {
     _this.bytesTotal.set(progress.bytesTotal);
   });
 
-  this.media.addEvent('playProgress', function(progress) {
+  this.player.addEvent('playProgress', function(progress) {
 
     // Set the duration and current time.
     _this.duration.set(parseFloat(progress.duration));
     _this.currentTime.set(parseFloat(progress.seconds));
   });
 
-  this.media.addEvent('play', function() {
+  this.player.addEvent('play', function() {
     _this.onPlaying();
   });
 
-  this.media.addEvent('pause', function() {
+  this.player.addEvent('pause', function() {
     _this.onPaused();
   });
 
-  this.media.addEvent('finish', function() {
+  this.player.addEvent('finish', function() {
     _this.onComplete();
   });
 
@@ -3076,7 +3016,7 @@ minplayer.players.vimeo.prototype.playerFound = function() {
 minplayer.players.vimeo.prototype.play = function() {
   minplayer.players.base.prototype.play.call(this);
   if (this.isReady()) {
-    this.media.api('play');
+    this.player.api('play');
   }
 };
 
@@ -3086,7 +3026,7 @@ minplayer.players.vimeo.prototype.play = function() {
 minplayer.players.vimeo.prototype.pause = function() {
   minplayer.players.base.prototype.pause.call(this);
   if (this.isReady()) {
-    this.media.api('pause');
+    this.player.api('pause');
   }
 };
 
@@ -3096,7 +3036,7 @@ minplayer.players.vimeo.prototype.pause = function() {
 minplayer.players.vimeo.prototype.stop = function() {
   minplayer.players.base.prototype.stop.call(this);
   if (this.isReady()) {
-    this.media.api('unload');
+    this.player.api('unload');
   }
 };
 
@@ -3106,7 +3046,7 @@ minplayer.players.vimeo.prototype.stop = function() {
 minplayer.players.vimeo.prototype.seek = function(pos) {
   minplayer.players.base.prototype.seek.call(this, pos);
   if (this.isReady()) {
-    this.media.api('seekTo', pos);
+    this.player.api('seekTo', pos);
   }
 };
 
@@ -3117,7 +3057,7 @@ minplayer.players.vimeo.prototype.setVolume = function(vol) {
   minplayer.players.base.prototype.setVolume.call(this, vol);
   if (this.isReady()) {
     this.volume.set(vol);
-    this.media.api('setVolume', vol);
+    this.player.api('setVolume', vol);
   }
 };
 
@@ -3126,7 +3066,7 @@ minplayer.players.vimeo.prototype.setVolume = function(vol) {
  */
 minplayer.players.vimeo.prototype.getVolume = function(callback) {
   var _this = this;
-  this.media.api('getVolume', function(vol) {
+  this.player.api('getVolume', function(vol) {
     callback(vol);
   });
 };

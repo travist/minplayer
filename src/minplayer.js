@@ -217,8 +217,20 @@ minplayer.prototype.initialize = function() {
     });
   });
 
-  // Load the media.
-  this.getPlugin('media').load();
+  // If the media exists.
+  if (this.media) {
+
+    // Copy over all functions.
+    for (var name in this.media) {
+      var prop = this.media[name];
+      if (typeof prop == 'function' && !this[name]) {
+        this[name] = prop;
+      }
+    }
+
+    // Get the media plugin.
+    this.media.load();
+  }
 };
 
 /**
@@ -253,7 +265,7 @@ minplayer.prototype.load = function(files) {
   var player = this.options.file.player.toString();
 
   // If there isn't media or if the players are different.
-  if (!this.player || (player !== this.currentPlayer)) {
+  if (!this.media || (player !== this.currentPlayer)) {
 
     // Set the current media player.
     this.currentPlayer = player;
@@ -265,22 +277,22 @@ minplayer.prototype.load = function(files) {
     }
 
     // If the media exists, then destroy it.
-    if (this.player) {
-      this.player.destory();
+    if (this.media) {
+      this.media.destory();
     }
 
     // Get the class name and create the new player.
     pClass = minplayer.players[this.options.file.player];
 
     // Create the new media player.
-    this.player = new pClass(this.elements.display, this.options);
+    this.media = new pClass(this.elements.display, this.options);
   }
 
   // If the media object already exists...
-  else if (this.player) {
+  else if (this.media) {
 
     // Now load the different media file.
-    this.player.load(this.options.file);
+    this.media.load(this.options.file);
   }
 };
 
@@ -293,76 +305,4 @@ minplayer.prototype.resize = function() {
   this.eachPlugin(function(name, plugin) {
     plugin.onResize();
   });
-};
-
-/**
- * Play the currently loaded media file.  Use load first to load a
- * media file into the media player.
- */
-minplayer.prototype.play = function() {
-  if (this.player) {
-    this.player.play();
-  }
-};
-
-/**
- * Pause the media.
- */
-minplayer.prototype.pause = function() {
-  if (this.player) {
-    this.player.pause();
-  }
-};
-
-/**
- * Stop the media.
- */
-minplayer.prototype.stop = function() {
-  if (this.player) {
-    this.player.stop();
-  }
-};
-
-/**
- * Seek the media to the provided position.
- *
- * @param {number} pos The position to seek.  0 to 1.
- */
-minplayer.prototype.seek = function(pos) {
-  if (this.player) {
-    this.player.seek(pos);
-  }
-};
-
-/**
- * Set the volume of the media being played.
- *
- * @param {number} vol The volume to set.  0 to 1.
- */
-minplayer.prototype.setVolume = function(vol) {
-  if (this.player) {
-    this.player.setVolume(vol);
-  }
-};
-
-/**
- * Get the current volume setting.
- *
- * @param {function} callback The callback that is called when the volume
- * is known.
- * @return {number} The current volume level. 0 to 1.
- */
-minplayer.prototype.getVolume = function(callback) {
-  return this.player ? this.player.getVolume(callback) : 0;
-};
-
-/**
- * Get the current media duration.
- *
- * @param {function} callback The callback that is called when the duration
- * is known.
- * @return {number} The current media duration.
- */
-minplayer.prototype.getDuration = function(callback) {
-  return this.player ? this.player.getDuration(callback) : 0;
 };

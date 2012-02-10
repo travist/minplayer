@@ -126,10 +126,10 @@
 <span class='line'>119</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>120</span> 
 <span class='line'>121</span> </span><span class="COMM">/**
-<span class='line'>122</span>  * @see minplayer.players.base#getMedia
+<span class='line'>122</span>  * @see minplayer.players.base#getPlayer
 <span class='line'>123</span>  * @return {object} The media player object.
 <span class='line'>124</span>  */</span><span class="WHIT">
-<span class='line'>125</span> </span><span class="NAME">minplayer.players.flash.prototype.getMedia</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>125</span> </span><span class="NAME">minplayer.players.flash.prototype.getPlayer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>126</span> </span><span class="WHIT">  </span><span class="COMM">// IE needs the object, everyone else just needs embed.</span><span class="WHIT">
 <span class='line'>127</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">object</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">jQuery.browser.msie</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="STRN">'object'</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'embed'</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>128</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">jQuery</span><span class="PUNC">(</span><span class="NAME">object</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.display</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">eq</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">[</span><span class="NUMB">0</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
