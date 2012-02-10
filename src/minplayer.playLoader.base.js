@@ -26,7 +26,7 @@ minplayer.playLoader.base = function(context, options) {
   this.preview = null;
 
   // Derive from display
-  minplayer.display.call(this, context, options);
+  minplayer.display.call(this, 'playLoader', context, options);
 };
 
 /** Derive from minplayer.display. */
@@ -39,9 +39,6 @@ minplayer.playLoader.base.prototype.constructor = minplayer.playLoader.base;
  * The constructor.
  */
 minplayer.playLoader.base.prototype.construct = function() {
-
-  // Set the name of this plugin.
-  this.options.name = 'playLoader';
 
   // Call the media display constructor.
   minplayer.display.prototype.construct.call(this);
@@ -75,6 +72,9 @@ minplayer.playLoader.base.prototype.construct = function() {
       this.elements.preview.hide();
     }
   }
+
+  // We are now ready.
+  this.ready();
 };
 
 /**

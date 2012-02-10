@@ -17,7 +17,7 @@ minplayer.controllers = minplayer.controllers || {};
 minplayer.controllers.base = function(context, options) {
 
   // Derive from display
-  minplayer.display.call(this, context, options);
+  minplayer.display.call(this, 'controller', context, options);
 };
 
 // Define the prototype for all controllers.
@@ -78,9 +78,6 @@ minplayer.controllers.base.prototype.getElements = function() {
  */
 minplayer.controllers.base.prototype.construct = function() {
 
-  // Set the name of this plugin.
-  this.options.name = 'controller';
-
   // Call the minplayer plugin constructor.
   minplayer.display.prototype.construct.call(this);
 
@@ -121,6 +118,9 @@ minplayer.controllers.base.prototype.construct = function() {
       orientation: 'vertical'
     });
   }
+
+  // We are now ready.
+  this.ready();
 };
 
 /**

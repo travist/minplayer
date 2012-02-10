@@ -8,10 +8,11 @@ minplayer = minplayer || {};
  * deriving from this class.  Components who derive are expected to provide
  * the elements that they define by implementing the getElements method.
  *
+ * @param {string} name The name of this plugin.
  * @param {object} context The jQuery context this component resides.
  * @param {object} options The options for this component.
  */
-minplayer.display = function(context, options) {
+minplayer.display = function(name, context, options) {
 
   // See if we allow resize on this display.
   this.allowResize = false;
@@ -29,7 +30,7 @@ minplayer.display = function(context, options) {
   }
 
   // Derive from plugin
-  minplayer.plugin.call(this, context, options);
+  minplayer.plugin.call(this, name, context, options);
 };
 
 /** Derive from minplayer.plugin. */

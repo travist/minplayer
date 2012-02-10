@@ -22,7 +22,7 @@ minplayer.image = function(context, options) {
   this.image = null;
 
   // Derive from display
-  minplayer.display.call(this, context, options);
+  minplayer.display.call(this, 'image', context, options);
 };
 
 /** Derive from minplayer.display. */
@@ -36,9 +36,6 @@ minplayer.image.prototype.constructor = minplayer.image;
  */
 minplayer.image.prototype.construct = function() {
 
-  // Set the name of this plugin.
-  this.options.name = 'image';
-
   // Say we need to resize.
   this.allowResize = true;
 
@@ -50,13 +47,20 @@ minplayer.image.prototype.construct = function() {
 
   // Create the image loader.
   var _this = this;
+
+  /** The loader for the image. */
   this.loader = new Image();
+
+  /** Register for when the image is loaded within the loader. */
   this.loader.onload = function() {
     _this.loaded = true;
     _this.ratio = (_this.loader.width / _this.loader.height);
     _this.resize();
     _this.trigger('loaded');
   };
+
+  // We are now ready.
+  this.ready();
 };
 
 /**

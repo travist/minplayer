@@ -64,7 +64,7 @@ minplayer.player = function(context, options) {
   }, options);
 
   // Derive from display
-  minplayer.display.call(this, context, options);
+  minplayer.display.call(this, 'player', context, options);
 };
 
 /** Derive from minplayer.display. */
@@ -78,9 +78,6 @@ minplayer.player.prototype.constructor = minplayer.player;
  */
 minplayer.player.prototype.construct = function() {
 
-  // Set the name of this plugin.
-  this.options.name = 'player';
-
   // Call the minplayer display constructor.
   minplayer.display.prototype.construct.call(this);
 
@@ -92,6 +89,9 @@ minplayer.player.prototype.construct = function() {
 
   // Now load these files.
   this.load(this.getFiles());
+
+  // We are now ready.
+  this.ready();
 };
 
 /**
@@ -201,6 +201,30 @@ minplayer.player.prototype.getMediaFile = function(files) {
 };
 
 /**
+ * Called when the player initializes.
+ */
+minplayer.player.prototype.initialize = function() {
+
+  // Iterate through each plugin.
+  var _this = this;
+  this.eachPlugin(function(name, plugin) {
+
+    // Bind to the error event.
+    plugin.bind('error', function(event, data) {
+      _this.error(data);
+    });
+
+    // Bind to the fullscreen event.
+    plugin.bind('fullscreen', function(event, data) {
+      _this.resize();
+    });
+  });
+
+  // Load the media.
+  this.getPlugin('media').load();
+};
+
+/**
  * Load a set of files or a single file for the media player.
  *
  * @param {array} files An array of files to chose from to load.
@@ -237,11 +261,8 @@ minplayer.player.prototype.load = function(files) {
     // Set the current media player.
     this.currentPlayer = player;
 
-    // The display for this media player.
-    var display = this.elements.display;
-
     // Do nothing if we don't have a display.
-    if (!display) {
+    if (!this.elements.display) {
       this.error('No media display found.');
       return;
     }
@@ -255,29 +276,7 @@ minplayer.player.prototype.load = function(files) {
     pClass = minplayer.players[this.options.file.player];
 
     // Create the new media player.
-    var _this = this;
-    this.player = new pClass(display, this.options, function(player) {
-
-      // Iterate through each plugin.
-      _this.eachPlugin(function(plugin) {
-
-        // Initialize the plugin.
-        plugin.initialize();
-
-        // Bind to the error event.
-        plugin.bind('error', function(event, data) {
-          _this.error(data);
-        });
-
-        // Bind to the fullscreen event.
-        plugin.bind('fullscreen', function(event, data) {
-          _this.resize();
-        });
-      });
-
-      // Now load this media.
-      player.load();
-    });
+    this.player = new pClass(this.elements.display, this.options);
   }
 
   // If the media object already exists...
@@ -294,7 +293,7 @@ minplayer.player.prototype.load = function(files) {
 minplayer.player.prototype.resize = function() {
 
   // Call onRezie for each plugin.
-  this.eachPlugin(function(plugin) {
+  this.eachPlugin(function(name, plugin) {
     plugin.onResize();
   });
 };

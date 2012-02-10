@@ -218,19 +218,20 @@ minplayer = minplayer || {};
  * @constructor
  * @class The base class for all plugins.
  *
+ * @param {string} name The name of this plugin.
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
  */
-minplayer.plugin = function(context, options) {
+minplayer.plugin = function(name, context, options) {
+
+  // The name of this plugin.
+  this.name = name;
 
   // Only call the constructor if we have a context.
   if (context) {
     this.construct();
   }
 };
-
-/** Static array to keep track of plugin instances. */
-minplayer.plugin.instances = {};
 
 /**
  * The constructor which is called once the context is set.
@@ -241,53 +242,16 @@ minplayer.plugin.instances = {};
  */
 minplayer.plugin.prototype.construct = function() {
 
-  // If this is a player, then it needs a new plugin
-  if (this.options.name == 'player') {
-    this.loadPlugins();
-    this.options.name = 'player';
-  }
-
-  // Add this plugin.
-  this.addPlugin(this.options.name, this);
+  // Adds this as a plugin.
+  this.addPlugin();
 };
 
 /**
  * Destructor.
  */
 minplayer.plugin.prototype.destroy = function() {
-  // Remove the pointer to the plugins array so it will be garbage collected.
-  if (minplayer.plugin.instances[this.options.id][this.options.name]) {
-    minplayer.plugin.instances[this.options.id][this.options.name] = null;
-  }
-};
-
-/**
- * Adds a new plugin to this player.
- *
- * @param {string} name The name of this plugin.
- * @param {object} plugin A new plugin object, derived from media.plugin.
- */
-minplayer.plugin.prototype.addPlugin = function(name, plugin) {
-
-  // Only continue if the plugin exists.
-  if (plugin.isValid()) {
-
-    // Add this to the plugins.
-    minplayer.plugin.instances[this.options.id][name] = plugin;
-  }
-};
-
-/**
- * Gets a plugin by name.
- *
- * @param {string} name The name of the plugin.
- * @return {object} The plugin for the provided name.
- */
-minplayer.plugin.prototype.getPlugin = function(name) {
-  if (minplayer.plugin.instances[this.options.id][name]) {
-    return minplayer.plugin.instances[this.options.id][name];
-  }
-  return null;
+  var plugin = this.getPlugin();
+  plugin = null;
 };
 
 /**
@@ -297,9 +261,6 @@ minplayer.plugin.prototype.loadPlugins = function() {
   var plugin = null;
   var pluginInfo = {};
   var pluginContext = null;
-
-  // Initialize this plugins array.
-  minplayer.plugin.instances[this.options.id] = {};
 
   // Iterate through all the plugins.
   var i = minplayer.plugins.length;
@@ -320,15 +281,22 @@ minplayer.plugin.prototype.loadPlugins = function() {
 };
 
 /**
- * Iterate over each plugin.
- *
- * @param {function} callback Called for each plugin in this player.
+ * Plugins should call this method when they are ready.
  */
-minplayer.plugin.prototype.eachPlugin = function(callback) {
-  for (var name in minplayer.plugin.instances[this.options.id]) {
-    if (minplayer.plugin.instances[this.options.id].hasOwnProperty(name)) {
-      callback.call(this, minplayer.plugin.instances[this.options.id][name]);
-    }
+minplayer.plugin.prototype.ready = function() {
+
+  // Set the loading flag.
+  this.setLoading(false);
+
+  // Check to see if all loading flags are 0.
+  if (!this.loading()) {
+
+    // Iterate through all plugins.
+    this.eachPlugin(function(name, plugin) {
+
+      // Initialize this plugin.
+      plugin.initialize();
+    });
   }
 };
 
@@ -336,6 +304,106 @@ minplayer.plugin.prototype.eachPlugin = function(callback) {
  * Initializes the plugin.
  */
 minplayer.plugin.prototype.initialize = function() {
+};
+
+/**
+ * Iterate over each plugin.
+ *
+ * @param {function} callback Called for each plugin in this player.
+ */
+minplayer.plugin.prototype.eachPlugin = function(callback) {
+  var plugins = this.getPlugins();
+  for (var name in plugins) {
+    if (plugins.hasOwnProperty(name)) {
+      callback.call(this, name, plugins[name]);
+    }
+  }
+};
+
+/**
+ * Adds a new plugin to this player.
+ *
+ * @param {string} name The name of this plugin.
+ * @param {object} plugin A new plugin object, derived from media.plugin.
+ */
+minplayer.plugin.prototype.addPlugin = function(name, plugin) {
+  name = name || this.name;
+  plugin = plugin || this;
+
+  // Make sure the plugin is valid.
+  if (plugin.isValid()) {
+
+    // Set the plugin as loading.
+    plugin.setLoading(true);
+
+    // Add the plugin to the plugins array.
+    this.getPlugins()[name] = plugin;
+  }
+};
+
+/**
+ * Gets a plugin by name.
+ *
+ * @param {string} name The name of the plugin.
+ * @return {object} The plugin for the provided name.
+ */
+minplayer.plugin.prototype.getPlugin = function(name) {
+  name = name || this.name;
+  var plugins = this.getPlugins();
+  if (plugins[name]) {
+    return plugins[name];
+  }
+  return null;
+};
+
+/** Static array to keep track of plugin instances. */
+minplayer.plugin.instances = {};
+
+/** Static variable to keep track of loading states for each widget. */
+minplayer.plugin.loading = {};
+
+/**
+ * Sets the loading flag.
+ *
+ * @param {boolean} state If this plugin is loading or not.
+ */
+minplayer.plugin.prototype.setLoading = function(state) {
+  if (!minplayer.plugin.loading[this.options.id]) {
+    minplayer.plugin.loading[this.options.id] = new minplayer.flags();
+  }
+
+  // Set this loading flag.
+  minplayer.plugin.loading[this.options.id].setFlag(this.name, state);
+};
+
+/**
+ * Determine if this widget is still loading.
+ *
+ * @return {number} 0 => Widget is done loading, >0 => Widget is still loading.
+ */
+minplayer.plugin.prototype.loading = function() {
+  return minplayer.plugin.loading[this.options.id].flag;
+};
+
+/**
+ * Returns the plugins for this ID.
+ *
+ * @return {array} An array of plugins.
+ */
+minplayer.plugin.prototype.getPlugins = function() {
+
+  // If the plugins for this instance do not exist.
+  if (!minplayer.plugin.instances[this.options.id]) {
+
+    // Initialize the instances.
+    minplayer.plugin.instances[this.options.id] = {};
+
+    // Now load all plugins.
+    this.loadPlugins();
+  }
+
+  // Return the plugins for this instance.
+  return minplayer.plugin.instances[this.options.id];
 };
 /** The minplayer namespace. */
 minplayer = minplayer || {};
@@ -347,10 +415,11 @@ minplayer = minplayer || {};
  * deriving from this class.  Components who derive are expected to provide
  * the elements that they define by implementing the getElements method.
  *
+ * @param {string} name The name of this plugin.
  * @param {object} context The jQuery context this component resides.
  * @param {object} options The options for this component.
  */
-minplayer.display = function(context, options) {
+minplayer.display = function(name, context, options) {
 
   // See if we allow resize on this display.
   this.allowResize = false;
@@ -368,7 +437,7 @@ minplayer.display = function(context, options) {
   }
 
   // Derive from plugin
-  minplayer.plugin.call(this, context, options);
+  minplayer.plugin.call(this, name, context, options);
 };
 
 /** Derive from minplayer.plugin. */
@@ -504,7 +573,7 @@ minplayer.image = function(context, options) {
   this.image = null;
 
   // Derive from display
-  minplayer.display.call(this, context, options);
+  minplayer.display.call(this, 'image', context, options);
 };
 
 /** Derive from minplayer.display. */
@@ -518,9 +587,6 @@ minplayer.image.prototype.constructor = minplayer.image;
  */
 minplayer.image.prototype.construct = function() {
 
-  // Set the name of this plugin.
-  this.options.name = 'image';
-
   // Say we need to resize.
   this.allowResize = true;
 
@@ -532,13 +598,20 @@ minplayer.image.prototype.construct = function() {
 
   // Create the image loader.
   var _this = this;
+
+  /** The loader for the image. */
   this.loader = new Image();
+
+  /** Register for when the image is loaded within the loader. */
   this.loader.onload = function() {
     _this.loaded = true;
     _this.ratio = (_this.loader.width / _this.loader.height);
     _this.resize();
     _this.trigger('loaded');
   };
+
+  // We are now ready.
+  this.ready();
 };
 
 /**
@@ -685,7 +758,7 @@ minplayer.player = function(context, options) {
   }, options);
 
   // Derive from display
-  minplayer.display.call(this, context, options);
+  minplayer.display.call(this, 'player', context, options);
 };
 
 /** Derive from minplayer.display. */
@@ -699,9 +772,6 @@ minplayer.player.prototype.constructor = minplayer.player;
  */
 minplayer.player.prototype.construct = function() {
 
-  // Set the name of this plugin.
-  this.options.name = 'player';
-
   // Call the minplayer display constructor.
   minplayer.display.prototype.construct.call(this);
 
@@ -713,6 +783,9 @@ minplayer.player.prototype.construct = function() {
 
   // Now load these files.
   this.load(this.getFiles());
+
+  // We are now ready.
+  this.ready();
 };
 
 /**
@@ -822,6 +895,30 @@ minplayer.player.prototype.getMediaFile = function(files) {
 };
 
 /**
+ * Called when the player initializes.
+ */
+minplayer.player.prototype.initialize = function() {
+
+  // Iterate through each plugin.
+  var _this = this;
+  this.eachPlugin(function(name, plugin) {
+
+    // Bind to the error event.
+    plugin.bind('error', function(event, data) {
+      _this.error(data);
+    });
+
+    // Bind to the fullscreen event.
+    plugin.bind('fullscreen', function(event, data) {
+      _this.resize();
+    });
+  });
+
+  // Load the media.
+  this.getPlugin('media').load();
+};
+
+/**
  * Load a set of files or a single file for the media player.
  *
  * @param {array} files An array of files to chose from to load.
@@ -858,11 +955,8 @@ minplayer.player.prototype.load = function(files) {
     // Set the current media player.
     this.currentPlayer = player;
 
-    // The display for this media player.
-    var display = this.elements.display;
-
     // Do nothing if we don't have a display.
-    if (!display) {
+    if (!this.elements.display) {
       this.error('No media display found.');
       return;
     }
@@ -876,29 +970,7 @@ minplayer.player.prototype.load = function(files) {
     pClass = minplayer.players[this.options.file.player];
 
     // Create the new media player.
-    var _this = this;
-    this.player = new pClass(display, this.options, function(player) {
-
-      // Iterate through each plugin.
-      _this.eachPlugin(function(plugin) {
-
-        // Initialize the plugin.
-        plugin.initialize();
-
-        // Bind to the error event.
-        plugin.bind('error', function(event, data) {
-          _this.error(data);
-        });
-
-        // Bind to the fullscreen event.
-        plugin.bind('fullscreen', function(event, data) {
-          _this.resize();
-        });
-      });
-
-      // Now load this media.
-      player.load();
-    });
+    this.player = new pClass(this.elements.display, this.options);
   }
 
   // If the media object already exists...
@@ -915,7 +987,7 @@ minplayer.player.prototype.load = function(files) {
 minplayer.player.prototype.resize = function() {
 
   // Call onRezie for each plugin.
-  this.eachPlugin(function(plugin) {
+  this.eachPlugin(function(name, plugin) {
     plugin.onResize();
   });
 };
@@ -1179,7 +1251,7 @@ minplayer.playLoader.base = function(context, options) {
   this.preview = null;
 
   // Derive from display
-  minplayer.display.call(this, context, options);
+  minplayer.display.call(this, 'playLoader', context, options);
 };
 
 /** Derive from minplayer.display. */
@@ -1192,9 +1264,6 @@ minplayer.playLoader.base.prototype.constructor = minplayer.playLoader.base;
  * The constructor.
  */
 minplayer.playLoader.base.prototype.construct = function() {
-
-  // Set the name of this plugin.
-  this.options.name = 'playLoader';
 
   // Call the media display constructor.
   minplayer.display.prototype.construct.call(this);
@@ -1228,6 +1297,9 @@ minplayer.playLoader.base.prototype.construct = function() {
       this.elements.preview.hide();
     }
   }
+
+  // We are now ready.
+  this.ready();
 };
 
 /**
@@ -1347,15 +1419,11 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
- * @param {function} ready The callback function when the player is ready.
  */
-minplayer.players.base = function(context, options, ready) {
-
-  /** The ready pointer to be called when the player is ready. */
-  this.readyCallback = ready;
+minplayer.players.base = function(context, options) {
 
   // Derive from display
-  minplayer.display.call(this, context, options);
+  minplayer.display.call(this, 'media', context, options);
 };
 
 /** Derive from minplayer.display. */
@@ -1398,9 +1466,6 @@ minplayer.players.base.canPlay = function(file) {
  * @this minplayer.players.base
  */
 minplayer.players.base.prototype.construct = function() {
-
-  // Set the name of this plugin.
-  this.options.name = 'media';
 
   // Call the media display constructor.
   minplayer.display.prototype.construct.call(this);
@@ -1450,7 +1515,7 @@ minplayer.players.base.prototype.clearIntervals = function() {
 minplayer.players.base.prototype.reset = function() {
 
   // Reset the ready flag.
-  this.ready = false;
+  this.mediaReady = false;
 
   // The duration of the player.
   this.duration = new minplayer.async();
@@ -1486,7 +1551,7 @@ minplayer.players.base.prototype.onReady = function() {
   var _this = this;
 
   // Set the ready flag.
-  this.ready = true;
+  this.mediaReady = true;
 
   // Set the volume to the default.
   this.setVolume(this.options.volume / 100);
@@ -1521,10 +1586,8 @@ minplayer.players.base.prototype.onReady = function() {
     });
   }, 1000);
 
-  // Call the callback to let this person know we are ready.
-  if (this.readyCallback) {
-    this.readyCallback(this);
-  }
+  // We are now ready.
+  this.ready();
 
   // Trigger that the load has started.
   this.trigger('loadstart');
@@ -1609,7 +1672,7 @@ minplayer.players.base.prototype.onWaiting = function() {
 minplayer.players.base.prototype.isReady = function() {
 
   // Return that the player is set and the ready flag is good.
-  return (this.media && this.ready);
+  return (this.media && this.mediaReady);
 };
 
 /**
@@ -1774,12 +1837,11 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
- * @param {function} ready Called when the player is ready.
  */
-minplayer.players.html5 = function(context, options, ready) {
+minplayer.players.html5 = function(context, options) {
 
   // Derive players base.
-  minplayer.players.base.call(this, context, options, ready);
+  minplayer.players.base.call(this, context, options);
 };
 
 /** Derive from minplayer.players.base. */
@@ -1947,7 +2009,7 @@ minplayer.players.html5.prototype.load = function(file) {
   if (file && this.isReady()) {
 
     // Get the current source.
-    var src = this.options.elements.player.attr('src');
+    var src = this.options.elements.media.attr('src');
 
     // If the source is different.
     if (src != file.path) {
@@ -1956,7 +2018,7 @@ minplayer.players.html5.prototype.load = function(file) {
       var code = '<source src="' + file.path + '" ';
       code += 'type="' + file.mimetype + '"';
       code += file.codecs ? ' codecs="' + file.path + '">' : '>';
-      this.options.elements.player.attr('src', '').empty().html(code);
+      this.options.elements.media.attr('src', '').empty().html(code);
     }
   }
 
@@ -2111,12 +2173,11 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
- * @param {function} ready Called when the player is ready.
  */
-minplayer.players.flash = function(context, options, ready) {
+minplayer.players.flash = function(context, options) {
 
   // Derive from players base.
-  minplayer.players.base.call(this, context, options, ready);
+  minplayer.players.base.call(this, context, options);
 };
 
 /** Derive from minplayer.players.base. */
@@ -2241,12 +2302,11 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
- * @param {function} ready Called when the player is ready.
  */
-minplayer.players.minplayer = function(context, options, ready) {
+minplayer.players.minplayer = function(context, options) {
 
   // Derive from players flash.
-  minplayer.players.flash.call(this, context, options, ready);
+  minplayer.players.flash.call(this, context, options);
 };
 
 /** Derive from minplayer.players.flash. */
@@ -2488,15 +2548,14 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
- * @param {function} ready Called when the player is ready.
  */
-minplayer.players.youtube = function(context, options, ready) {
+minplayer.players.youtube = function(context, options) {
 
   /** The quality of the YouTube stream. */
   this.quality = 'default';
 
   // Derive from players base.
-  minplayer.players.base.call(this, context, options, ready);
+  minplayer.players.base.call(this, context, options);
 };
 
 /** Derive from minplayer.players.base. */
@@ -2846,12 +2905,11 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
- * @param {function} ready Called when the player is ready.
  */
-minplayer.players.vimeo = function(context, options, ready) {
+minplayer.players.vimeo = function(context, options) {
 
   // Derive from players base.
-  minplayer.players.base.call(this, context, options, ready);
+  minplayer.players.base.call(this, context, options);
 };
 
 /** Derive from minplayer.players.base. */
@@ -3094,7 +3152,7 @@ minplayer.controllers = minplayer.controllers || {};
 minplayer.controllers.base = function(context, options) {
 
   // Derive from display
-  minplayer.display.call(this, context, options);
+  minplayer.display.call(this, 'controller', context, options);
 };
 
 // Define the prototype for all controllers.
@@ -3155,9 +3213,6 @@ minplayer.controllers.base.prototype.getElements = function() {
  */
 minplayer.controllers.base.prototype.construct = function() {
 
-  // Set the name of this plugin.
-  this.options.name = 'controller';
-
   // Call the minplayer plugin constructor.
   minplayer.display.prototype.construct.call(this);
 
@@ -3198,6 +3253,9 @@ minplayer.controllers.base.prototype.construct = function() {
       orientation: 'vertical'
     });
   }
+
+  // We are now ready.
+  this.ready();
 };
 
 /**
@@ -3391,7 +3449,7 @@ minplayer.templates = minplayer.templates || {};
 minplayer.templates.base = function(context, options) {
 
   // Derive from display
-  minplayer.display.call(this, context, options);
+  minplayer.display.call(this, 'template', context, options);
 };
 
 /** Derive from minplayer.display. */
@@ -3405,11 +3463,11 @@ minplayer.templates.base.prototype.constructor = minplayer.templates.base;
  */
 minplayer.templates.base.prototype.construct = function() {
 
-  // Set the name of this plugin.
-  this.options.name = 'template';
-
   // Call the minplayer display constructor.
   minplayer.display.prototype.construct.call(this);
+
+  // We are now ready.
+  this.ready();
 };
 
 /**

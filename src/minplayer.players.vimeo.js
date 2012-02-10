@@ -11,12 +11,11 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
- * @param {function} ready Called when the player is ready.
  */
-minplayer.players.vimeo = function(context, options, ready) {
+minplayer.players.vimeo = function(context, options) {
 
   // Derive from players base.
-  minplayer.players.base.call(this, context, options, ready);
+  minplayer.players.base.call(this, context, options);
 };
 
 /** Derive from minplayer.players.base. */
