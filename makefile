@@ -16,8 +16,8 @@ files =   src/minplayer.compatibility.js\
           src/minplayer.flags.js\
           src/minplayer.plugin.js\
           src/minplayer.display.js\
+          src/minplayer.js\
           src/minplayer.image.js\
-          src/minplayer.player.js\
           src/minplayer.file.js\
           src/minplayer.playLoader.base.js\
           src/minplayer.players.base.js\
@@ -39,10 +39,10 @@ jslint: ${files}
 
 # Create an aggregated js file and a compressed js file.
 js: ${files}
-	@echo "Generating aggregated bin/minplayer.player.js file"
-	@cat > bin/minplayer.player.js $^
-	@echo "Generating compressed bin/minplayer.player.compressed file"
-	@java -jar tools/compiler.jar --js bin/minplayer.player.js --js_output_file bin/minplayer.player.compressed.js
+	@echo "Generating aggregated bin/minplayer.js file"
+	@cat > bin/minplayer.js $^
+	@echo "Generating compressed bin/minplayer.compressed file"
+	@java -jar tools/compiler.jar --js bin/minplayer.js --js_output_file bin/minplayer.compressed.js
 
 # Create the documentation from source code.
 jsdoc: ${files}
