@@ -111,26 +111,31 @@ minplayer.playLoader.base.prototype.checkVisibility = function() {
 };
 
 /**
- * @see minplayer.plugin#setPlayer
+ * @see minplayer.plugin#initialize
  */
-minplayer.playLoader.base.prototype.setPlayer = function(player) {
-  minplayer.display.prototype.setPlayer.call(this, player);
+minplayer.playLoader.base.prototype.initialize = function() {
+
+  // Call the display initialize method.
+  minplayer.display.prototype.initialize.call(this);
+
+  // Get the media plugin.
+  var media = this.getPlugin('media');
 
   // Only bind if this player does not have its own play loader.
-  if (!player.hasPlayLoader()) {
+  if (!media.hasPlayLoader()) {
 
     // Trigger a play event when someone clicks on the controller.
     if (this.elements.bigPlay) {
       this.elements.bigPlay.unbind();
-      this.elements.bigPlay.bind('click', {player: player}, function(event) {
+      this.elements.bigPlay.bind('click', function(event) {
         event.preventDefault();
         jQuery(this).hide();
-        event.data.player.play();
+        media.play();
       });
     }
 
     // Bind to the player events to control the play loader.
-    player.bind('loadstart', {obj: this}, function(event) {
+    media.bind('loadstart', {obj: this}, function(event) {
       event.data.obj.busy.setFlag('media', true);
       event.data.obj.bigPlay.setFlag('media', true);
       if (event.data.obj.preview) {
@@ -138,15 +143,15 @@ minplayer.playLoader.base.prototype.setPlayer = function(player) {
       }
       event.data.obj.checkVisibility();
     });
-    player.bind('waiting', {obj: this}, function(event) {
+    media.bind('waiting', {obj: this}, function(event) {
       event.data.obj.busy.setFlag('media', true);
       event.data.obj.checkVisibility();
     });
-    player.bind('loadeddata', {obj: this}, function(event) {
+    media.bind('loadeddata', {obj: this}, function(event) {
       event.data.obj.busy.setFlag('media', false);
       event.data.obj.checkVisibility();
     });
-    player.bind('playing', {obj: this}, function(event) {
+    media.bind('playing', {obj: this}, function(event) {
       event.data.obj.busy.setFlag('media', false);
       event.data.obj.bigPlay.setFlag('media', false);
       if (event.data.obj.preview) {
@@ -154,7 +159,7 @@ minplayer.playLoader.base.prototype.setPlayer = function(player) {
       }
       event.data.obj.checkVisibility();
     });
-    player.bind('pause', {obj: this}, function(event) {
+    media.bind('pause', {obj: this}, function(event) {
       event.data.obj.bigPlay.setFlag('media', true);
       event.data.obj.checkVisibility();
     });

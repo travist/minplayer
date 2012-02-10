@@ -261,8 +261,8 @@ minplayer.player.prototype.load = function(files) {
       // Iterate through each plugin.
       _this.eachPlugin(function(plugin) {
 
-        // Set the player.
-        plugin.setPlayer(player);
+        // Initialize the plugin.
+        plugin.initialize();
 
         // Bind to the error event.
         plugin.bind('error', function(event, data) {
