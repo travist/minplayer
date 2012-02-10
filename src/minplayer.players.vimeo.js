@@ -118,8 +118,8 @@ minplayer.players.vimeo.prototype.create = function() {
   var check = setInterval(function() {
     if (window.Froogaloop) {
       clearInterval(check);
-      _this.player = window.Froogaloop(iframe);
-      _this.player.addEvent('ready', function() {
+      _this.media = window.Froogaloop(iframe);
+      _this.media.addEvent('ready', function() {
         _this.onReady();
       });
     }
@@ -140,7 +140,7 @@ minplayer.players.vimeo.prototype.onReady = function(player_id) {
   var _this = this;
 
   // Add the other listeners.
-  this.player.addEvent('loadProgress', function(progress) {
+  this.media.addEvent('loadProgress', function(progress) {
 
     // Set the duration, bytesLoaded, and bytesTotal.
     _this.duration.set(parseFloat(progress.duration));
@@ -148,22 +148,22 @@ minplayer.players.vimeo.prototype.onReady = function(player_id) {
     _this.bytesTotal.set(progress.bytesTotal);
   });
 
-  this.player.addEvent('playProgress', function(progress) {
+  this.media.addEvent('playProgress', function(progress) {
 
     // Set the duration and current time.
     _this.duration.set(parseFloat(progress.duration));
     _this.currentTime.set(parseFloat(progress.seconds));
   });
 
-  this.player.addEvent('play', function() {
+  this.media.addEvent('play', function() {
     _this.onPlaying();
   });
 
-  this.player.addEvent('pause', function() {
+  this.media.addEvent('pause', function() {
     _this.onPaused();
   });
 
-  this.player.addEvent('finish', function() {
+  this.media.addEvent('finish', function() {
     _this.onComplete();
   });
 
@@ -186,7 +186,7 @@ minplayer.players.vimeo.prototype.playerFound = function() {
 minplayer.players.vimeo.prototype.play = function() {
   minplayer.players.base.prototype.play.call(this);
   if (this.isReady()) {
-    this.player.api('play');
+    this.media.api('play');
   }
 };
 
@@ -196,7 +196,7 @@ minplayer.players.vimeo.prototype.play = function() {
 minplayer.players.vimeo.prototype.pause = function() {
   minplayer.players.base.prototype.pause.call(this);
   if (this.isReady()) {
-    this.player.api('pause');
+    this.media.api('pause');
   }
 };
 
@@ -206,7 +206,7 @@ minplayer.players.vimeo.prototype.pause = function() {
 minplayer.players.vimeo.prototype.stop = function() {
   minplayer.players.base.prototype.stop.call(this);
   if (this.isReady()) {
-    this.player.api('unload');
+    this.media.api('unload');
   }
 };
 
@@ -216,7 +216,7 @@ minplayer.players.vimeo.prototype.stop = function() {
 minplayer.players.vimeo.prototype.seek = function(pos) {
   minplayer.players.base.prototype.seek.call(this, pos);
   if (this.isReady()) {
-    this.player.api('seekTo', pos);
+    this.media.api('seekTo', pos);
   }
 };
 
@@ -227,7 +227,7 @@ minplayer.players.vimeo.prototype.setVolume = function(vol) {
   minplayer.players.base.prototype.setVolume.call(this, vol);
   if (this.isReady()) {
     this.volume.set(vol);
-    this.player.api('setVolume', vol);
+    this.media.api('setVolume', vol);
   }
 };
 
@@ -236,7 +236,7 @@ minplayer.players.vimeo.prototype.setVolume = function(vol) {
  */
 minplayer.players.vimeo.prototype.getVolume = function(callback) {
   var _this = this;
-  this.player.api('getVolume', function(vol) {
+  this.media.api('getVolume', function(vol) {
     callback(vol);
   });
 };

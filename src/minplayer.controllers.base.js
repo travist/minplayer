@@ -78,31 +78,34 @@ minplayer.controllers.base.prototype.getElements = function() {
  */
 minplayer.controllers.base.prototype.construct = function() {
 
+  // Set the name of this plugin.
+  this.options.name = 'controller';
+
   // Call the minplayer plugin constructor.
   minplayer.display.prototype.construct.call(this);
 
   // Play or pause the player.
-  function playPause(controller, state) {
+  this.playPause = function(state) {
     var type = state ? 'play' : 'pause';
-    controller.display.trigger(type);
-    controller.setPlayPause(state);
-    if (controller.player) {
-      controller.player[type]();
+    this.display.trigger(type);
+    this.setPlayPause(state);
+    if (this.player) {
+      this.player[type]();
     }
-  }
+  };
 
   // Trigger the controller events.
   if (this.elements.play) {
     this.elements.play.bind('click', {obj: this}, function(event) {
       event.preventDefault();
-      playPause(event.data.obj, true);
+      event.data.obj.playPause(true);
     });
   }
 
   if (this.elements.pause) {
     this.elements.pause.bind('click', {obj: this}, function(event) {
       event.preventDefault();
-      playPause(event.data.obj, false);
+      event.data.obj.playPause(false);
     });
   }
 

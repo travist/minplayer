@@ -14,7 +14,7 @@ if (!jQuery.fn.minplayer) {
    */
   jQuery.fn.minplayer = function(options) {
     return jQuery(this).each(function() {
-      if (!minplayer.player[jQuery(this).selector]) {
+      if (!minplayer.plugin.instances[options.id]) {
         new minplayer.player(jQuery(this), options);
       }
     });
@@ -63,9 +63,6 @@ minplayer.player = function(context, options) {
     attributes: {}
   }, options);
 
-  // Store this player instance.
-  minplayer.player[options.id] = this;
-
   // Derive from display
   minplayer.display.call(this, context, options);
 };
@@ -81,23 +78,17 @@ minplayer.player.prototype.constructor = minplayer.player;
  */
 minplayer.player.prototype.construct = function() {
 
+  // Set the name of this plugin.
+  this.options.name = 'player';
+
   // Call the minplayer display constructor.
   minplayer.display.prototype.construct.call(this);
-
-  /** The current player. */
-  this.media = null;
-
-  /** All of the plugin objects. */
-  this.allPlugins = {};
 
   /** Variable to store the current media player. */
   this.currentPlayer = 'html5';
 
   // Add key events to the window.
   this.addKeyEvents();
-
-  // Load all the plugins.
-  this.loadPlugins();
 
   // Now load these files.
   this.load(this.getFiles());
@@ -119,9 +110,6 @@ minplayer.player.prototype.error = function(error) {
     else {
       this.elements.error.hide();
     }
-
-    // Retrigger this event.
-    this.trigger('error', error);
   }
 };
 
@@ -138,27 +126,6 @@ minplayer.player.prototype.addKeyEvents = function() {
       event.data.obj.display.removeClass('fullscreen');
     }
   });
-};
-
-/**
- * Loads all of the available plugins.
- */
-minplayer.player.prototype.loadPlugins = function() {
-  var plugin = null;
-  var pluginInfo = {};
-  var pluginContext = null;
-  var i = minplayer.plugins.length;
-  while (i--) {
-    pluginInfo = minplayer.plugins[i];
-    if (pluginInfo.element) {
-      pluginContext = jQuery(pluginInfo.element, this.display);
-    }
-    else {
-      pluginContext = this.display;
-    }
-    plugin = new pluginInfo.object(pluginContext, this.options);
-    this.addPlugin(pluginInfo.id, plugin);
-  }
 };
 
 /**
@@ -265,7 +232,7 @@ minplayer.player.prototype.load = function(files) {
   var player = this.options.file.player.toString();
 
   // If there isn't media or if the players are different.
-  if (!this.media || (player !== this.currentPlayer)) {
+  if (!this.player || (player !== this.currentPlayer)) {
 
     // Set the current media player.
     this.currentPlayer = player;
@@ -279,31 +246,33 @@ minplayer.player.prototype.load = function(files) {
       return;
     }
 
-    var _this = this;
+    // If the media exists, then destroy it.
+    if (this.player) {
+      this.player.destory();
+    }
 
     // Get the class name and create the new player.
     pClass = minplayer.players[this.options.file.player];
 
     // Create the new media player.
-    this.media = new pClass(display, this.options, function(player) {
+    var _this = this;
+    this.player = new pClass(display, this.options, function(player) {
 
-      // Iterate through all plugins and add the player to them.
-      for (id in _this.allPlugins) {
-        if (_this.allPlugins.hasOwnProperty(id)) {
-          _this.allPlugins[id].setPlayer(player);
+      // Iterate through each plugin.
+      _this.eachPlugin(function(plugin) {
 
-          // Trigger on any fullscreen events.
-          _this.allPlugins[id].bind('fullscreen', function(event, data) {
+        // Set the player.
+        plugin.setPlayer(player);
 
-            // Call the resize events.
-            _this.resize();
-          });
-        }
-      }
+        // Bind to the error event.
+        plugin.bind('error', function(event, data) {
+          _this.error(data);
+        });
 
-      // Trigger on error events.
-      player.bind('error', function(event, data) {
-        _this.error(data);
+        // Bind to the fullscreen event.
+        plugin.bind('fullscreen', function(event, data) {
+          _this.resize();
+        });
       });
 
       // Now load this media.
@@ -312,10 +281,10 @@ minplayer.player.prototype.load = function(files) {
   }
 
   // If the media object already exists...
-  else if (this.media) {
+  else if (this.player) {
 
     // Now load the different media file.
-    this.media.load(this.options.file);
+    this.player.load(this.options.file);
   }
 };
 
@@ -323,36 +292,11 @@ minplayer.player.prototype.load = function(files) {
  * Called when the player is resized.
  */
 minplayer.player.prototype.resize = function() {
-  var i = minplayer.plugin_registry[this.options.id].length;
-  while (i--) {
-    minplayer.plugin_registry[this.options.id][i].onResize();
-  }
-};
 
-/**
- * Add a new plugin to the media player.
- *
- * @param {string} id The plugin ID.
- * @param {object} plugin A new plugin object, derived from media.plugin.
- */
-minplayer.player.prototype.addPlugin = function(id, plugin) {
-
-  // Only continue if the plugin exists.
-  if (plugin.isValid()) {
-
-    // Add to plugins.
-    this.allPlugins[id] = plugin;
-  }
-};
-
-/**
- * Returns a plugin provided a plugin ID.
- *
- * @param {string} id The plugin ID to retrieve.
- * @return {object} The plugin matching the provided ID.
- */
-minplayer.player.prototype.getPlugin = function(id) {
-  return this.allPlugins[id];
+  // Call onRezie for each plugin.
+  this.eachPlugin(function(plugin) {
+    plugin.onResize();
+  });
 };
 
 /**
@@ -360,8 +304,8 @@ minplayer.player.prototype.getPlugin = function(id) {
  * media file into the media player.
  */
 minplayer.player.prototype.play = function() {
-  if (this.media) {
-    this.media.play();
+  if (this.player) {
+    this.player.play();
   }
 };
 
@@ -369,8 +313,8 @@ minplayer.player.prototype.play = function() {
  * Pause the media.
  */
 minplayer.player.prototype.pause = function() {
-  if (this.media) {
-    this.media.pause();
+  if (this.player) {
+    this.player.pause();
   }
 };
 
@@ -378,8 +322,8 @@ minplayer.player.prototype.pause = function() {
  * Stop the media.
  */
 minplayer.player.prototype.stop = function() {
-  if (this.media) {
-    this.media.stop();
+  if (this.player) {
+    this.player.stop();
   }
 };
 
@@ -389,8 +333,8 @@ minplayer.player.prototype.stop = function() {
  * @param {number} pos The position to seek.  0 to 1.
  */
 minplayer.player.prototype.seek = function(pos) {
-  if (this.media) {
-    this.media.seek(pos);
+  if (this.player) {
+    this.player.seek(pos);
   }
 };
 
@@ -400,8 +344,8 @@ minplayer.player.prototype.seek = function(pos) {
  * @param {number} vol The volume to set.  0 to 1.
  */
 minplayer.player.prototype.setVolume = function(vol) {
-  if (this.media) {
-    this.media.setVolume(vol);
+  if (this.player) {
+    this.player.setVolume(vol);
   }
 };
 
@@ -413,7 +357,7 @@ minplayer.player.prototype.setVolume = function(vol) {
  * @return {number} The current volume level. 0 to 1.
  */
 minplayer.player.prototype.getVolume = function(callback) {
-  return this.media ? this.media.getVolume(callback) : 0;
+  return this.player ? this.player.getVolume(callback) : 0;
 };
 
 /**
@@ -424,5 +368,5 @@ minplayer.player.prototype.getVolume = function(callback) {
  * @return {number} The current media duration.
  */
 minplayer.player.prototype.getDuration = function(callback) {
-  return this.media ? this.media.getDuration(callback) : 0;
+  return this.player ? this.player.getDuration(callback) : 0;
 };

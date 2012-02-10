@@ -18,11 +18,23 @@ minplayer.templates.base = function(context, options) {
   minplayer.display.call(this, context, options);
 };
 
-// Extend the plugin prototype.
-var templatesBase = minplayer.templates.base;
-
-/** Derive from minplayer.templates.base. */
+/** Derive from minplayer.display. */
 minplayer.templates.base.prototype = new minplayer.display();
+
+/** Reset the constructor. */
+minplayer.templates.base.prototype.constructor = minplayer.templates.base;
+
+/**
+ * @see minplayer.plugin#construct
+ */
+minplayer.templates.base.prototype.construct = function() {
+
+  // Set the name of this plugin.
+  this.options.name = 'template';
+
+  // Call the minplayer display constructor.
+  minplayer.display.prototype.construct.call(this);
+};
 
 /**
  * @see minplayer.display#getElements

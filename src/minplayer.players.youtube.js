@@ -79,30 +79,34 @@ minplayer.players.youtube.prototype.register = function() {
   window.onYouTubePlayerAPIReady = function() {
 
     // Iterate through all of the player instances.
-    for (var id in minplayer.player) {
+    for (var id in minplayer.plugin.instances) {
 
-      // Get the instance and check to see if it is a youtube player.
-      var instance = minplayer.player[id];
-      if (instance.currentPlayer == 'youtube') {
+      // Make sure this is a property.
+      if (minplayer.plugin.instances.hasOwnProperty(id)) {
 
-        // Create a new youtube player object for this instance only.
-        var playerId = instance.options.id + '-player';
-        instance.media.player = new YT.Player(playerId, {
-          events: {
-            'onReady': function(event) {
-              instance.media.onReady(event);
-            },
-            'onStateChange': function(event) {
-              instance.media.onPlayerStateChange(event);
-            },
-            'onPlaybackQualityChange': function(newQuality) {
-              instance.media.onQualityChange(newQuality);
-            },
-            'onError': function(errorCode) {
-              instance.media.onError(errorCode);
+        // Get the instance and check to see if it is a youtube player.
+        var instance = minplayer.plugin.instances[id]['player'];
+        if (instance.currentPlayer == 'youtube') {
+
+          // Create a new youtube player object for this instance only.
+          var playerId = instance.options.id + '-player';
+          instance.player.media = new YT.Player(playerId, {
+            events: {
+              'onReady': function(event) {
+                instance.player.onReady(event);
+              },
+              'onStateChange': function(event) {
+                instance.player.onPlayerStateChange(event);
+              },
+              'onPlaybackQualityChange': function(newQuality) {
+                instance.player.onQualityChange(newQuality);
+              },
+              'onError': function(errorCode) {
+                instance.player.onError(errorCode);
+              }
             }
-          }
-        });
+          });
+        }
       }
     }
   }
@@ -245,7 +249,7 @@ minplayer.players.youtube.prototype.create = function() {
 minplayer.players.youtube.prototype.load = function(file) {
   minplayer.players.base.prototype.load.call(this, file);
   if (file && this.isReady()) {
-    this.player.loadVideoById(file.id, 0, this.quality);
+    this.media.loadVideoById(file.id, 0, this.quality);
   }
 };
 
@@ -255,7 +259,7 @@ minplayer.players.youtube.prototype.load = function(file) {
 minplayer.players.youtube.prototype.play = function() {
   minplayer.players.base.prototype.play.call(this);
   if (this.isReady()) {
-    this.player.playVideo();
+    this.media.playVideo();
   }
 };
 
@@ -265,7 +269,7 @@ minplayer.players.youtube.prototype.play = function() {
 minplayer.players.youtube.prototype.pause = function() {
   minplayer.players.base.prototype.pause.call(this);
   if (this.isReady()) {
-    this.player.pauseVideo();
+    this.media.pauseVideo();
   }
 };
 
@@ -275,7 +279,7 @@ minplayer.players.youtube.prototype.pause = function() {
 minplayer.players.youtube.prototype.stop = function() {
   minplayer.players.base.prototype.stop.call(this);
   if (this.isReady()) {
-    this.player.stopVideo();
+    this.media.stopVideo();
   }
 };
 
@@ -285,7 +289,7 @@ minplayer.players.youtube.prototype.stop = function() {
 minplayer.players.youtube.prototype.seek = function(pos) {
   minplayer.players.base.prototype.seek.call(this, pos);
   if (this.isReady()) {
-    this.player.seekTo(pos, true);
+    this.media.seekTo(pos, true);
   }
 };
 
@@ -295,7 +299,7 @@ minplayer.players.youtube.prototype.seek = function(pos) {
 minplayer.players.youtube.prototype.setVolume = function(vol) {
   minplayer.players.base.prototype.setVolume.call(this, vol);
   if (this.isReady()) {
-    this.player.setVolume(vol * 100);
+    this.media.setVolume(vol * 100);
   }
 };
 
@@ -304,25 +308,25 @@ minplayer.players.youtube.prototype.setVolume = function(vol) {
  */
 minplayer.players.youtube.prototype.getVolume = function(callback) {
   if (this.isReady()) {
-    callback(this.player.getVolume());
+    callback(this.media.getVolume());
   }
 };
 
 /**
- * @see minplayer.players.flash#getPlayerDuration.
+ * @see minplayer.players.flash#getDuration.
  */
 minplayer.players.youtube.prototype.getDuration = function(callback) {
   if (this.isReady()) {
-    callback(this.player.getDuration());
+    callback(this.media.getDuration());
   }
 };
 
 /**
- * @see minplayer.players.base#getPlayerCurrentTime
+ * @see minplayer.players.base#getCurrentTime
  */
 minplayer.players.youtube.prototype.getCurrentTime = function(callback) {
   if (this.isReady()) {
-    callback(this.player.getCurrentTime());
+    callback(this.media.getCurrentTime());
   }
 };
 
@@ -331,7 +335,7 @@ minplayer.players.youtube.prototype.getCurrentTime = function(callback) {
  */
 minplayer.players.youtube.prototype.getBytesStart = function(callback) {
   if (this.isReady()) {
-    callback(this.player.getVideoStartBytes());
+    callback(this.media.getVideoStartBytes());
   }
 };
 
@@ -340,7 +344,7 @@ minplayer.players.youtube.prototype.getBytesStart = function(callback) {
  */
 minplayer.players.youtube.prototype.getBytesLoaded = function(callback) {
   if (this.isReady()) {
-    callback(this.player.getVideoBytesLoaded());
+    callback(this.media.getVideoBytesLoaded());
   }
 };
 
@@ -349,6 +353,6 @@ minplayer.players.youtube.prototype.getBytesLoaded = function(callback) {
  */
 minplayer.players.youtube.prototype.getBytesTotal = function(callback) {
   if (this.isReady()) {
-    callback(this.player.getVideoBytesTotal());
+    callback(this.media.getVideoBytesTotal());
   }
 };

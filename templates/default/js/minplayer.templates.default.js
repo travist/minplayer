@@ -30,6 +30,5 @@ minplayer.templates["default"].prototype.getElements = function() {
 // Add this to the minplayer.plugins array.
 minplayer.plugins = minplayer.plugins || [];
 minplayer.plugins.push({
-  id:"default_template",
   object:minplayer.templates["default"]
 });

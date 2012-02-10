@@ -277,6 +277,34 @@ ul.inheritsList
 
 <!-- ============================== properties summary ===================== -->
 			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class minplayer.plugin.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								minplayer.plugin.<b><a href="../symbols/minplayer.plugin.html#.instances">instances</a></b>
+								</div>
+								<div class="description">Static array to keep track of plugin instances.</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
+			
 
 <!-- ============================== methods summary ======================== -->
 			
@@ -295,9 +323,54 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.plugin.html#addPlugin">addPlugin</a></b>(name, plugin)
+								</div>
+								<div class="description">Adds a new plugin to this player.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/minplayer.plugin.html#construct">construct</a></b>()
 								</div>
 								<div class="description">The constructor which is called once the context is set.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.plugin.html#destroy">destroy</a></b>()
+								</div>
+								<div class="description">Destructor.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.plugin.html#eachPlugin">eachPlugin</a></b>(callback)
+								</div>
+								<div class="description">Iterate over each plugin.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.plugin.html#getPlugin">getPlugin</a></b>(name)
+								</div>
+								<div class="description">Gets a plugin by name.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.plugin.html#loadPlugins">loadPlugins</a></b>()
+								</div>
+								<div class="description">Loads all of the available plugins.</div>
 							</td>
 						</tr>
 					
@@ -368,12 +441,81 @@ ul.inheritsList
 
 <!-- ============================== field details ========================== -->		
 			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name=".instances"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">minplayer.plugin.</span><b>instances</b>
+					
+					</div>
+					<div class="description">
+						Static array to keep track of plugin instances.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
+			
 
 <!-- ============================== method details ========================= -->		
 			
 				<div class="sectionTitle">
 					Method Detail
 				</div>
+				
+					<a name="addPlugin"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>addPlugin</b>(name, plugin)
+					
+					</div>
+					<div class="description">
+						Adds a new plugin to this player.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>name</b>
+									
+								</dt>
+								<dd>The name of this plugin.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>plugin</b>
+									
+								</dt>
+								<dd>A new plugin object, derived from media.plugin.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
 				
 					<a name="construct"> </a>
 					<div class="fixedFont">
@@ -388,6 +530,135 @@ Any class deriving from the plugin class should place all context
 dependant functionality within this function instead of the standard
 constructor function since it is called on object derivation as well
 as object creation.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="destroy"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>destroy</b>()
+					
+					</div>
+					<div class="description">
+						Destructor.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="eachPlugin"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>eachPlugin</b>(callback)
+					
+					</div>
+					<div class="description">
+						Iterate over each plugin.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{function}</span> <b>callback</b>
+									
+								</dt>
+								<dd>Called for each plugin in this player.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="getPlugin"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{object}</span>
+					<b>getPlugin</b>(name)
+					
+					</div>
+					<div class="description">
+						Gets a plugin by name.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>name</b>
+									
+								</dt>
+								<dd>The name of the plugin.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{object}</span> The plugin for the provided name.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="loadPlugins"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>loadPlugins</b>()
+					
+					</div>
+					<div class="description">
+						Loads all of the available plugins.
 						
 						
 					</div>
@@ -452,7 +723,7 @@ as object creation.
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Wed Feb 08 2012 21:48:30 GMT+0100 (CET)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri Feb 10 2012 02:13:36 GMT+0100 (CET)
 		</div>
 	</body>
 </html>

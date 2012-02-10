@@ -147,7 +147,7 @@ minplayer.players.minplayer.prototype.onMediaUpdate = function(eventType) {
 minplayer.players.minplayer.prototype.load = function(file) {
   minplayer.players.flash.prototype.load.call(this, file);
   if (file && this.isReady()) {
-    this.player.loadMedia(file.path, file.stream);
+    this.media.loadMedia(file.path, file.stream);
   }
 };
 
@@ -157,7 +157,7 @@ minplayer.players.minplayer.prototype.load = function(file) {
 minplayer.players.minplayer.prototype.play = function() {
   minplayer.players.flash.prototype.play.call(this);
   if (this.isReady()) {
-    this.player.playMedia();
+    this.media.playMedia();
   }
 };
 
@@ -167,7 +167,7 @@ minplayer.players.minplayer.prototype.play = function() {
 minplayer.players.minplayer.prototype.pause = function() {
   minplayer.players.flash.prototype.pause.call(this);
   if (this.isReady()) {
-    this.player.pauseMedia();
+    this.media.pauseMedia();
   }
 };
 
@@ -177,7 +177,7 @@ minplayer.players.minplayer.prototype.pause = function() {
 minplayer.players.minplayer.prototype.stop = function() {
   minplayer.players.flash.prototype.stop.call(this);
   if (this.isReady()) {
-    this.player.stopMedia();
+    this.media.stopMedia();
   }
 };
 
@@ -187,7 +187,7 @@ minplayer.players.minplayer.prototype.stop = function() {
 minplayer.players.minplayer.prototype.seek = function(pos) {
   minplayer.players.flash.prototype.seek.call(this, pos);
   if (this.isReady()) {
-    this.player.seekMedia(pos);
+    this.media.seekMedia(pos);
   }
 };
 
@@ -197,7 +197,7 @@ minplayer.players.minplayer.prototype.seek = function(pos) {
 minplayer.players.minplayer.prototype.setVolume = function(vol) {
   minplayer.players.flash.prototype.setVolume.call(this, vol);
   if (this.isReady()) {
-    this.player.setVolume(vol);
+    this.media.setVolume(vol);
   }
 };
 
@@ -206,7 +206,7 @@ minplayer.players.minplayer.prototype.setVolume = function(vol) {
  */
 minplayer.players.minplayer.prototype.getVolume = function(callback) {
   if (this.isReady()) {
-    callback(this.player.getVolume());
+    callback(this.media.getVolume());
   }
 };
 
@@ -215,7 +215,7 @@ minplayer.players.minplayer.prototype.getVolume = function(callback) {
  */
 minplayer.players.minplayer.prototype.getDuration = function(callback) {
   if (this.isReady()) {
-    callback(this.player.getDuration());
+    callback(this.media.getDuration());
   }
 };
 
@@ -224,7 +224,7 @@ minplayer.players.minplayer.prototype.getDuration = function(callback) {
  */
 minplayer.players.minplayer.prototype.getCurrentTime = function(callback) {
   if (this.isReady()) {
-    callback(this.player.getCurrentTime());
+    callback(this.media.getCurrentTime());
   }
 };
 
@@ -233,7 +233,7 @@ minplayer.players.minplayer.prototype.getCurrentTime = function(callback) {
  */
 minplayer.players.minplayer.prototype.getBytesLoaded = function(callback) {
   if (this.isReady()) {
-    callback(this.player.getMediaBytesLoaded());
+    callback(this.media.getMediaBytesLoaded());
   }
 };
 
@@ -242,6 +242,6 @@ minplayer.players.minplayer.prototype.getBytesLoaded = function(callback) {
  */
 minplayer.players.minplayer.prototype.getBytesTotal = function(callback) {
   if (this.isReady()) {
-    callback(this.player.getMediaBytesTotal());
+    callback(this.media.getMediaBytesTotal());
   }
 };
