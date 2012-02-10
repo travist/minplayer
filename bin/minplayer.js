@@ -1145,6 +1145,7 @@ minplayer.file.prototype.getType = function() {
     case 'audio/mp3':
     case 'audio/mp4':
     case 'audio/ogg':
+    case 'audio/mpeg':
       return 'audio';
     default:
       return '';
