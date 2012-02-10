@@ -268,8 +268,8 @@
 <span class='line'>261</span> </span><span class="WHIT">      </span><span class="COMM">// Iterate through each plugin.</span><span class="WHIT">
 <span class='line'>262</span> </span><span class="WHIT">      </span><span class="NAME">_this.eachPlugin</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">plugin</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>263</span> 
-<span class='line'>264</span> </span><span class="WHIT">        </span><span class="COMM">// Set the player.</span><span class="WHIT">
-<span class='line'>265</span> </span><span class="WHIT">        </span><span class="NAME">plugin.setPlayer</span><span class="PUNC">(</span><span class="NAME">player</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>264</span> </span><span class="WHIT">        </span><span class="COMM">// Initialize the plugin.</span><span class="WHIT">
+<span class='line'>265</span> </span><span class="WHIT">        </span><span class="NAME">plugin.initialize</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>266</span> 
 <span class='line'>267</span> </span><span class="WHIT">        </span><span class="COMM">// Bind to the error event.</span><span class="WHIT">
 <span class='line'>268</span> </span><span class="WHIT">        </span><span class="NAME">plugin.bind</span><span class="PUNC">(</span><span class="STRN">'error'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">

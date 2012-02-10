@@ -84,56 +84,42 @@ minplayer.controllers.base.prototype.construct = function() {
   // Call the minplayer plugin constructor.
   minplayer.display.prototype.construct.call(this);
 
-  // Play or pause the player.
-  this.playPause = function(state) {
-    var type = state ? 'play' : 'pause';
-    this.display.trigger(type);
-    this.setPlayPause(state);
-    if (this.player) {
-      this.player[type]();
-    }
-  };
-
-  // Trigger the controller events.
-  if (this.elements.play) {
-    this.elements.play.bind('click', {obj: this}, function(event) {
-      event.preventDefault();
-      event.data.obj.playPause(true);
-    });
-  }
-
-  if (this.elements.pause) {
-    this.elements.pause.bind('click', {obj: this}, function(event) {
-      event.preventDefault();
-      event.data.obj.playPause(false);
-    });
-  }
-
-  // Fullscreen button.
-  var _this = this, sliderOptions = {};
+  // If they have a fullscreen button.
   if (this.elements.fullscreen) {
-    this.elements.fullscreen.click(function() {
-      var isFull = _this.elements.player.hasClass('fullscreen');
+
+    // Bind to the click event.
+    this.elements.fullscreen.bind('click', {obj: this}, function(event) {
+      var isFull = event.data.obj.elements.player.hasClass('fullscreen');
       if (isFull) {
-        _this.elements.player.removeClass('fullscreen');
+        event.data.obj.elements.player.removeClass('fullscreen');
       }
       else {
-        _this.elements.player.addClass('fullscreen');
+        event.data.obj.elements.player.addClass('fullscreen');
       }
-      _this.trigger('fullscreen', !isFull);
+      event.data.obj.trigger('fullscreen', !isFull);
     }).css({'pointer' : 'hand'});
   }
 
-  // Create the slider.
+  // Keep track of if we are dragging...
   this.dragging = false;
 
-  // Add a seekBar and volumeBar using jQuery UI Slider.
+  // If they have a seek bar.
   if (this.elements.seek) {
-    this.seekBar = this.elements.seek.slider({range: 'min'});
+
+    // Create the seek bar slider control.
+    this.seekBar = this.elements.seek.slider({
+      range: 'min'
+    });
   }
+
+  // If they have a volume bar.
   if (this.elements.volume) {
-    sliderOptions = {range: 'min', orientation: 'vertical'};
-    this.volumeBar = this.elements.volume.slider(sliderOptions);
+
+    // Create the volume bar slider control.
+    this.volumeBar = this.elements.volume.slider({
+      range: 'min',
+      orientation: 'vertical'
+    });
   }
 };
 
@@ -155,6 +141,21 @@ minplayer.controllers.base.prototype.setPlayPause = function(state) {
 };
 
 /**
+ * Plays or pauses the media.
+ *
+ * @param {bool} state true => play, false => pause.
+ * @param {object} media The media player object.
+ */
+minplayer.controllers.base.prototype.playPause = function(state, media) {
+  var type = state ? 'play' : 'pause';
+  this.display.trigger(type);
+  this.setPlayPause(state);
+  if (media) {
+    media[type]();
+  }
+};
+
+/**
  * Sets the time string on the control bar.
  *
  * @param {string} element The name of the element to set.
@@ -167,23 +168,44 @@ minplayer.controllers.base.prototype.setTimeString = function(element, time) {
 };
 
 /**
- * @see minplayer.plugin#setPlayer
+ * @see minplayer.plugin#initialize
  */
-minplayer.controllers.base.prototype.setPlayer = function(player) {
-  minplayer.display.prototype.setPlayer.call(this, player);
+minplayer.controllers.base.prototype.initialize = function() {
+
+  // Initialize the display.
+  minplayer.display.prototype.initialize.call(this);
+
+  // Get the media player.
+  var media = this.getPlugin('media');
 
   var _this = this;
 
-  // If they have a pause button, then bind to the pause event.
+  // If they have a pause button
   if (this.elements.pause) {
-    player.bind('pause', {obj: this}, function(event) {
+
+    // Bind to the click on this button.
+    this.elements.pause.bind('click', {obj: this}, function(event) {
+      event.preventDefault();
+      event.data.obj.playPause(false, media);
+    });
+
+    // Bind to the pause event of the media.
+    media.bind('pause', {obj: this}, function(event) {
       event.data.obj.setPlayPause(true);
     });
   }
 
-  // If they have a play button, then bind to playing.
+  // If they have a play button
   if (this.elements.play) {
-    player.bind('playing', {obj: this}, function(event) {
+
+    // Bind to the click on this button.
+    this.elements.play.bind('click', {obj: this}, function(event) {
+      event.preventDefault();
+      event.data.obj.playPause(true, media);
+    });
+
+    // Bind to the play event of the media.
+    media.bind('playing', {obj: this}, function(event) {
       event.data.obj.setPlayPause(false);
     });
   }
@@ -192,27 +214,31 @@ minplayer.controllers.base.prototype.setPlayer = function(player) {
   if (this.elements.duration) {
 
     // Bind to the duration change event.
-    player.bind('durationchange', {obj: this}, function(event, data) {
+    media.bind('durationchange', {obj: this}, function(event, data) {
       event.data.obj.setTimeString('duration', data.duration);
     });
 
     // Set the timestring to the duration.
-    player.getDuration(function(duration) {
+    media.getDuration(function(duration) {
       _this.setTimeString('duration', duration);
     });
   }
 
-  // If they have a progress, then bind to the progress.
+  // If they have a progress element.
   if (this.elements.progress) {
-    player.bind('progress', {obj: this}, function(event, data) {
+
+    // Bind to the progress event.
+    media.bind('progress', {obj: this}, function(event, data) {
       var percent = data.total ? (data.loaded / data.total) * 100 : 0;
-      _this.elements.progress.width(percent + '%');
+      event.data.obj.elements.progress.width(percent + '%');
     });
   }
 
   // If they have a seek bar or timer, bind to the timeupdate.
   if (this.seekBar || this.elements.timer) {
-    player.bind('timeupdate', {obj: this}, function(event, data) {
+
+    // Bind to the time update event.
+    media.bind('timeupdate', {obj: this}, function(event, data) {
       if (!event.data.obj.dragging) {
         var value = 0;
         if (data.duration) {
@@ -229,23 +255,25 @@ minplayer.controllers.base.prototype.setPlayer = function(player) {
     });
   }
 
-  // Register the events for the control bar to control the media.
+  // If they have a seekBar element.
   if (this.seekBar) {
+
+    // Register the events for the control bar to control the media.
     this.seekBar.slider({
       start: function(event, ui) {
         _this.dragging = true;
       },
       stop: function(event, ui) {
         _this.dragging = false;
-        player.getDuration(function(duration) {
-          player.seek((ui.value / 100) * duration);
+        media.getDuration(function(duration) {
+          media.seek((ui.value / 100) * duration);
         });
       },
       slide: function(event, ui) {
-        player.getDuration(function(duration) {
+        media.getDuration(function(duration) {
           var time = (ui.value / 100) * duration;
           if (!_this.dragging) {
-            player.seek(time);
+            media.seek(time);
           }
           _this.setTimeString('timer', time);
         });
@@ -259,12 +287,12 @@ minplayer.controllers.base.prototype.setPlayer = function(player) {
     // Create the slider.
     this.volumeBar.slider({
       slide: function(event, ui) {
-        player.setVolume(ui.value / 100);
+        media.setVolume(ui.value / 100);
       }
     });
 
     // Set the volume to match that of the player.
-    player.getVolume(function(vol) {
+    media.getVolume(function(vol) {
       _this.volumeBar.slider('option', 'value', (vol * 100));
     });
   }

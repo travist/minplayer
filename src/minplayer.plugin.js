@@ -10,9 +10,6 @@ minplayer = minplayer || {};
  */
 minplayer.plugin = function(context, options) {
 
-  // The media player.
-  this.player = null;
-
   // Only call the constructor if we have a context.
   if (context) {
     this.construct();
@@ -123,10 +120,7 @@ minplayer.plugin.prototype.eachPlugin = function(callback) {
 };
 
 /**
- * Sets the current media player.
- *
- * @param {object} player The current media player.
+ * Initializes the plugin.
  */
-minplayer.plugin.prototype.setPlayer = function(player) {
-  this.player = player;
+minplayer.plugin.prototype.initialize = function() {
 };
