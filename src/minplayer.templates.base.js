@@ -15,7 +15,7 @@ minplayer.templates = minplayer.templates || {};
 minplayer.templates.base = function(context, options) {
 
   // Derive from display
-  minplayer.display.call(this, context, options);
+  minplayer.display.call(this, 'template', context, options);
 };
 
 /** Derive from minplayer.display. */
@@ -29,11 +29,11 @@ minplayer.templates.base.prototype.constructor = minplayer.templates.base;
  */
 minplayer.templates.base.prototype.construct = function() {
 
-  // Set the name of this plugin.
-  this.options.name = 'template';
-
   // Call the minplayer display constructor.
   minplayer.display.prototype.construct.call(this);
+
+  // We are now ready.
+  this.ready();
 };
 
 /**

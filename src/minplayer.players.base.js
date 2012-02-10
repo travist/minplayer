@@ -11,15 +11,11 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
- * @param {function} ready The callback function when the player is ready.
  */
-minplayer.players.base = function(context, options, ready) {
-
-  /** The ready pointer to be called when the player is ready. */
-  this.readyCallback = ready;
+minplayer.players.base = function(context, options) {
 
   // Derive from display
-  minplayer.display.call(this, context, options);
+  minplayer.display.call(this, 'media', context, options);
 };
 
 /** Derive from minplayer.display. */
@@ -62,9 +58,6 @@ minplayer.players.base.canPlay = function(file) {
  * @this minplayer.players.base
  */
 minplayer.players.base.prototype.construct = function() {
-
-  // Set the name of this plugin.
-  this.options.name = 'media';
 
   // Call the media display constructor.
   minplayer.display.prototype.construct.call(this);
@@ -114,7 +107,7 @@ minplayer.players.base.prototype.clearIntervals = function() {
 minplayer.players.base.prototype.reset = function() {
 
   // Reset the ready flag.
-  this.ready = false;
+  this.mediaReady = false;
 
   // The duration of the player.
   this.duration = new minplayer.async();
@@ -150,7 +143,7 @@ minplayer.players.base.prototype.onReady = function() {
   var _this = this;
 
   // Set the ready flag.
-  this.ready = true;
+  this.mediaReady = true;
 
   // Set the volume to the default.
   this.setVolume(this.options.volume / 100);
@@ -185,10 +178,8 @@ minplayer.players.base.prototype.onReady = function() {
     });
   }, 1000);
 
-  // Call the callback to let this person know we are ready.
-  if (this.readyCallback) {
-    this.readyCallback(this);
-  }
+  // We are now ready.
+  this.ready();
 
   // Trigger that the load has started.
   this.trigger('loadstart');
@@ -273,7 +264,7 @@ minplayer.players.base.prototype.onWaiting = function() {
 minplayer.players.base.prototype.isReady = function() {
 
   // Return that the player is set and the ready flag is good.
-  return (this.media && this.ready);
+  return (this.media && this.mediaReady);
 };
 
 /**

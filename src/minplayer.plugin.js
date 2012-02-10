@@ -5,19 +5,20 @@ minplayer = minplayer || {};
  * @constructor
  * @class The base class for all plugins.
  *
+ * @param {string} name The name of this plugin.
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
  */
-minplayer.plugin = function(context, options) {
+minplayer.plugin = function(name, context, options) {
+
+  // The name of this plugin.
+  this.name = name;
 
   // Only call the constructor if we have a context.
   if (context) {
     this.construct();
   }
 };
-
-/** Static array to keep track of plugin instances. */
-minplayer.plugin.instances = {};
 
 /**
  * The constructor which is called once the context is set.
@@ -28,53 +29,16 @@ minplayer.plugin.instances = {};
  */
 minplayer.plugin.prototype.construct = function() {
 
-  // If this is a player, then it needs a new plugin
-  if (this.options.name == 'player') {
-    this.loadPlugins();
-    this.options.name = 'player';
-  }
-
-  // Add this plugin.
-  this.addPlugin(this.options.name, this);
+  // Adds this as a plugin.
+  this.addPlugin();
 };
 
 /**
  * Destructor.
  */
 minplayer.plugin.prototype.destroy = function() {
-  // Remove the pointer to the plugins array so it will be garbage collected.
-  if (minplayer.plugin.instances[this.options.id][this.options.name]) {
-    minplayer.plugin.instances[this.options.id][this.options.name] = null;
-  }
-};
-
-/**
- * Adds a new plugin to this player.
- *
- * @param {string} name The name of this plugin.
- * @param {object} plugin A new plugin object, derived from media.plugin.
- */
-minplayer.plugin.prototype.addPlugin = function(name, plugin) {
-
-  // Only continue if the plugin exists.
-  if (plugin.isValid()) {
-
-    // Add this to the plugins.
-    minplayer.plugin.instances[this.options.id][name] = plugin;
-  }
-};
-
-/**
- * Gets a plugin by name.
- *
- * @param {string} name The name of the plugin.
- * @return {object} The plugin for the provided name.
- */
-minplayer.plugin.prototype.getPlugin = function(name) {
-  if (minplayer.plugin.instances[this.options.id][name]) {
-    return minplayer.plugin.instances[this.options.id][name];
-  }
-  return null;
+  var plugin = this.getPlugin();
+  plugin = null;
 };
 
 /**
@@ -84,9 +48,6 @@ minplayer.plugin.prototype.loadPlugins = function() {
   var plugin = null;
   var pluginInfo = {};
   var pluginContext = null;
-
-  // Initialize this plugins array.
-  minplayer.plugin.instances[this.options.id] = {};
 
   // Iterate through all the plugins.
   var i = minplayer.plugins.length;
@@ -107,15 +68,22 @@ minplayer.plugin.prototype.loadPlugins = function() {
 };
 
 /**
- * Iterate over each plugin.
- *
- * @param {function} callback Called for each plugin in this player.
+ * Plugins should call this method when they are ready.
  */
-minplayer.plugin.prototype.eachPlugin = function(callback) {
-  for (var name in minplayer.plugin.instances[this.options.id]) {
-    if (minplayer.plugin.instances[this.options.id].hasOwnProperty(name)) {
-      callback.call(this, minplayer.plugin.instances[this.options.id][name]);
-    }
+minplayer.plugin.prototype.ready = function() {
+
+  // Set the loading flag.
+  this.setLoading(false);
+
+  // Check to see if all loading flags are 0.
+  if (!this.loading()) {
+
+    // Iterate through all plugins.
+    this.eachPlugin(function(name, plugin) {
+
+      // Initialize this plugin.
+      plugin.initialize();
+    });
   }
 };
 
@@ -123,4 +91,104 @@ minplayer.plugin.prototype.eachPlugin = function(callback) {
  * Initializes the plugin.
  */
 minplayer.plugin.prototype.initialize = function() {
+};
+
+/**
+ * Iterate over each plugin.
+ *
+ * @param {function} callback Called for each plugin in this player.
+ */
+minplayer.plugin.prototype.eachPlugin = function(callback) {
+  var plugins = this.getPlugins();
+  for (var name in plugins) {
+    if (plugins.hasOwnProperty(name)) {
+      callback.call(this, name, plugins[name]);
+    }
+  }
+};
+
+/**
+ * Adds a new plugin to this player.
+ *
+ * @param {string} name The name of this plugin.
+ * @param {object} plugin A new plugin object, derived from media.plugin.
+ */
+minplayer.plugin.prototype.addPlugin = function(name, plugin) {
+  name = name || this.name;
+  plugin = plugin || this;
+
+  // Make sure the plugin is valid.
+  if (plugin.isValid()) {
+
+    // Set the plugin as loading.
+    plugin.setLoading(true);
+
+    // Add the plugin to the plugins array.
+    this.getPlugins()[name] = plugin;
+  }
+};
+
+/**
+ * Gets a plugin by name.
+ *
+ * @param {string} name The name of the plugin.
+ * @return {object} The plugin for the provided name.
+ */
+minplayer.plugin.prototype.getPlugin = function(name) {
+  name = name || this.name;
+  var plugins = this.getPlugins();
+  if (plugins[name]) {
+    return plugins[name];
+  }
+  return null;
+};
+
+/** Static array to keep track of plugin instances. */
+minplayer.plugin.instances = {};
+
+/** Static variable to keep track of loading states for each widget. */
+minplayer.plugin.loading = {};
+
+/**
+ * Sets the loading flag.
+ *
+ * @param {boolean} state If this plugin is loading or not.
+ */
+minplayer.plugin.prototype.setLoading = function(state) {
+  if (!minplayer.plugin.loading[this.options.id]) {
+    minplayer.plugin.loading[this.options.id] = new minplayer.flags();
+  }
+
+  // Set this loading flag.
+  minplayer.plugin.loading[this.options.id].setFlag(this.name, state);
+};
+
+/**
+ * Determine if this widget is still loading.
+ *
+ * @return {number} 0 => Widget is done loading, >0 => Widget is still loading.
+ */
+minplayer.plugin.prototype.loading = function() {
+  return minplayer.plugin.loading[this.options.id].flag;
+};
+
+/**
+ * Returns the plugins for this ID.
+ *
+ * @return {array} An array of plugins.
+ */
+minplayer.plugin.prototype.getPlugins = function() {
+
+  // If the plugins for this instance do not exist.
+  if (!minplayer.plugin.instances[this.options.id]) {
+
+    // Initialize the instances.
+    minplayer.plugin.instances[this.options.id] = {};
+
+    // Now load all plugins.
+    this.loadPlugins();
+  }
+
+  // Return the plugins for this instance.
+  return minplayer.plugin.instances[this.options.id];
 };

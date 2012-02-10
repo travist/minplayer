@@ -11,12 +11,11 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
- * @param {function} ready Called when the player is ready.
  */
-minplayer.players.html5 = function(context, options, ready) {
+minplayer.players.html5 = function(context, options) {
 
   // Derive players base.
-  minplayer.players.base.call(this, context, options, ready);
+  minplayer.players.base.call(this, context, options);
 };
 
 /** Derive from minplayer.players.base. */
@@ -184,7 +183,7 @@ minplayer.players.html5.prototype.load = function(file) {
   if (file && this.isReady()) {
 
     // Get the current source.
-    var src = this.options.elements.player.attr('src');
+    var src = this.options.elements.media.attr('src');
 
     // If the source is different.
     if (src != file.path) {
@@ -193,7 +192,7 @@ minplayer.players.html5.prototype.load = function(file) {
       var code = '<source src="' + file.path + '" ';
       code += 'type="' + file.mimetype + '"';
       code += file.codecs ? ' codecs="' + file.path + '">' : '>';
-      this.options.elements.player.attr('src', '').empty().html(code);
+      this.options.elements.media.attr('src', '').empty().html(code);
     }
   }
 

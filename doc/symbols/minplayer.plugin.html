@@ -266,7 +266,7 @@ ul.inheritsList
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/minplayer.plugin.html#constructor">minplayer.plugin</a></b>(context, options)
+								<b><a href="../symbols/minplayer.plugin.html#constructor">minplayer.plugin</a></b>(name, context, options)
 							</div>
 							<div class="description"></div>
 						</td>
@@ -296,6 +296,16 @@ ul.inheritsList
 								minplayer.plugin.<b><a href="../symbols/minplayer.plugin.html#.instances">instances</a></b>
 								</div>
 								<div class="description">Static array to keep track of plugin instances.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								minplayer.plugin.<b><a href="../symbols/minplayer.plugin.html#.loading">loading</a></b>
+								</div>
+								<div class="description">Static variable to keep track of loading states for each widget.</div>
 							</td>
 						</tr>
 					
@@ -368,6 +378,15 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.plugin.html#getPlugins">getPlugins</a></b>()
+								</div>
+								<div class="description">Returns the plugins for this ID.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/minplayer.plugin.html#initialize">initialize</a></b>()
 								</div>
 								<div class="description">Initializes the plugin.</div>
@@ -377,9 +396,36 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.plugin.html#loading">loading</a></b>()
+								</div>
+								<div class="description">Determine if this widget is still loading.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/minplayer.plugin.html#loadPlugins">loadPlugins</a></b>()
 								</div>
 								<div class="description">Loads all of the available plugins.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.plugin.html#ready">ready</a></b>()
+								</div>
+								<div class="description">Plugins should call this method when they are ready.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.plugin.html#setLoading">setLoading</a></b>(state)
+								</div>
+								<div class="description">Sets the loading flag.</div>
 							</td>
 						</tr>
 					
@@ -400,7 +446,7 @@ ul.inheritsList
 				</div>
 				
 				<div class="fixedFont">
-						<b>minplayer.plugin</b>(context, options)
+						<b>minplayer.plugin</b>(name, context, options)
 				</div>
 				
 				<div class="description">
@@ -414,6 +460,12 @@ ul.inheritsList
 					
 						<dl class="detailList">
 						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								<span class="light fixedFont">{string}</span>  <b>name</b>
+								
+							</dt>
+								<dd>The name of this plugin.</dd>
 						
 							<dt>
 								<span class="light fixedFont">{object}</span>  <b>context</b>
@@ -454,6 +506,28 @@ ul.inheritsList
 					</div>
 					<div class="description">
 						Static array to keep track of plugin instances.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".loading"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">minplayer.plugin.</span><b>loading</b>
+					
+					</div>
+					<div class="description">
+						Static variable to keep track of loading states for each widget.
 						
 						
 					</div>
@@ -650,6 +724,38 @@ as object creation.
 
 					<hr />
 				
+					<a name="getPlugins"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{array}</span>
+					<b>getPlugins</b>()
+					
+					</div>
+					<div class="description">
+						Returns the plugins for this ID.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{array}</span> An array of plugins.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name="initialize"> </a>
 					<div class="fixedFont">
 					
@@ -669,6 +775,38 @@ as object creation.
 						
 						
 						
+						
+						
+						
+
+					<hr />
+				
+					<a name="loading"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{number}</span>
+					<b>loading</b>()
+					
+					</div>
+					<div class="description">
+						Determine if this widget is still loading.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{number}</span> 0 => Widget is done loading, >0 => Widget is still loading.</dd>
+							
+							</dl>
 						
 						
 						
@@ -698,6 +836,67 @@ as object creation.
 						
 						
 
+					<hr />
+				
+					<a name="ready"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>ready</b>()
+					
+					</div>
+					<div class="description">
+						Plugins should call this method when they are ready.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="setLoading"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>setLoading</b>(state)
+					
+					</div>
+					<div class="description">
+						Sets the loading flag.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{boolean}</span> <b>state</b>
+									
+								</dt>
+								<dd>If this plugin is loading or not.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
 					
 				
 			
@@ -712,7 +911,7 @@ as object creation.
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri Feb 10 2012 16:51:13 GMT+0100 (CET)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri Feb 10 2012 18:23:05 GMT+0100 (CET)
 		</div>
 	</body>
 </html>

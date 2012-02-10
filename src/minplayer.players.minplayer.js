@@ -11,12 +11,11 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
- * @param {function} ready Called when the player is ready.
  */
-minplayer.players.minplayer = function(context, options, ready) {
+minplayer.players.minplayer = function(context, options) {
 
   // Derive from players flash.
-  minplayer.players.flash.call(this, context, options, ready);
+  minplayer.players.flash.call(this, context, options);
 };
 
 /** Derive from minplayer.players.flash. */
