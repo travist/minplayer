@@ -28,7 +28,6 @@ minplayer.playLoader["default"].prototype.getElements = function() {
 // Add this to the minplayer.plugins array.
 minplayer.plugins = minplayer.plugins || [];
 minplayer.plugins.push({
-  id:"play_loader_default",
   object:minplayer.playLoader["default"],
   element:".media-player-play-loader"
 });

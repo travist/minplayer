@@ -18,9 +18,6 @@ minplayer.players.base = function(context, options, ready) {
   /** The ready pointer to be called when the player is ready. */
   this.readyCallback = ready;
 
-  // Reset the variables to initial state.
-  this.reset();
-
   // Derive from display
   minplayer.display.call(this, context, options);
 };
@@ -66,8 +63,14 @@ minplayer.players.base.canPlay = function(file) {
  */
 minplayer.players.base.prototype.construct = function() {
 
+  // Set the name of this plugin.
+  this.options.name = 'media';
+
   // Call the media display constructor.
   minplayer.display.prototype.construct.call(this);
+
+  // Reset the variables to initial state.
+  this.reset();
 
   /** The currently loaded media file. */
   this.mediaFile = this.options.file;
@@ -88,10 +91,7 @@ minplayer.players.base.prototype.construct = function() {
   }
 
   // Get the player object...
-  this.player = this.getPlayer();
-
-  // Reset the player params.
-  this.reset();
+  this.media = this.getMedia();
 };
 
 /**
@@ -273,7 +273,7 @@ minplayer.players.base.prototype.onWaiting = function() {
 minplayer.players.base.prototype.isReady = function() {
 
   // Return that the player is set and the ready flag is good.
-  return (this.player && this.ready);
+  return (this.media && this.ready);
 };
 
 /**
@@ -309,8 +309,8 @@ minplayer.players.base.prototype.create = function() {
  *
  * @return {object} The media player object.
  */
-minplayer.players.base.prototype.getPlayer = function() {
-  return this.player;
+minplayer.players.base.prototype.getMedia = function() {
+  return this.media;
 };
 
 /**

@@ -36,7 +36,6 @@ minplayer.controllers["default"].prototype.getElements = function() {
 // Add this to the minplayer.plugins array.
 minplayer.plugins = minplayer.plugins || [];
 minplayer.plugins.push({
-  id:"controller_default",
   object:minplayer.controllers["default"],
   element:".media-player-controls"
 });

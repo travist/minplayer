@@ -36,6 +36,9 @@ minplayer.image.prototype.constructor = minplayer.image;
  */
 minplayer.image.prototype.construct = function() {
 
+  // Set the name of this plugin.
+  this.options.name = 'image';
+
   // Say we need to resize.
   this.allowResize = true;
 

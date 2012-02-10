@@ -120,10 +120,10 @@ minplayer.players.flash.prototype.playerFound = function() {
 };
 
 /**
- * @see minplayer.players.base#getPlayer
+ * @see minplayer.players.base#getMedia
  * @return {object} The media player object.
  */
-minplayer.players.flash.prototype.getPlayer = function() {
+minplayer.players.flash.prototype.getMedia = function() {
   // IE needs the object, everyone else just needs embed.
   var object = jQuery.browser.msie ? 'object' : 'embed';
   return jQuery(object, this.display).eq(0)[0];
