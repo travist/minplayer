@@ -30,8 +30,9 @@ minplayer.players.minplayer.prototype.constructor = minplayer.players.minplayer;
  * @param {string} id The media player ID.
  */
 window.onFlashPlayerReady = function(id) {
-  if (minplayer.player[id]) {
-    minplayer.player[id].media.onReady();
+  var media = minplayer.plugin.get(id, 'media');
+  if (media) {
+    media.onReady();
   }
 };
 
@@ -42,8 +43,9 @@ window.onFlashPlayerReady = function(id) {
  * @param {string} eventType The event type that was triggered.
  */
 window.onFlashPlayerUpdate = function(id, eventType) {
-  if (minplayer.player[id]) {
-    minplayer.player[id].media.onMediaUpdate(eventType);
+  var media = minplayer.plugin.get(id, 'media');
+  if (media) {
+    media.onMediaUpdate(eventType);
   }
 };
 
@@ -155,6 +157,7 @@ minplayer.players.minplayer.prototype.load = function(file) {
  */
 minplayer.players.minplayer.prototype.play = function() {
   minplayer.players.flash.prototype.play.call(this);
+  console.log('play');
   if (this.isReady()) {
     this.player.playMedia();
   }
@@ -214,7 +217,24 @@ minplayer.players.minplayer.prototype.getVolume = function(callback) {
  */
 minplayer.players.minplayer.prototype.getDuration = function(callback) {
   if (this.isReady()) {
-    callback(this.player.getDuration());
+
+    // Check to see if it is immediately available.
+    var duration = this.player.getDuration();
+    if (duration) {
+      callback(duration);
+    }
+    else {
+
+      // If not, then check every half second...
+      var _this = this;
+      var check = setInterval(function() {
+        duration = _this.player.getDuration();
+        if (duration) {
+          clearInterval(check);
+          callback(duration);
+        }
+      }, 500);
+    }
   }
 };
 

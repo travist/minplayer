@@ -149,7 +149,7 @@ minplayer.controllers.base.prototype.setPlayPause = function(state) {
 minplayer.controllers.base.prototype.playPause = function(state, media) {
   var type = state ? 'play' : 'pause';
   this.display.trigger(type);
-  this.setPlayPause(state);
+  this.setPlayPause(!state);
   if (media) {
     media[type]();
   }

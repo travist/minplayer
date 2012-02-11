@@ -143,60 +143,92 @@
 <span class='line'>136</span>  */</span><span class="WHIT">
 <span class='line'>137</span> </span><span class="NAME">minplayer.plugin.prototype.getPlugin</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>138</span> </span><span class="WHIT">  </span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">this.name</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>139</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">plugins</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getPlugins</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>140</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">plugins</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>141</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">plugins</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>142</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>143</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>144</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>145</span> 
-<span class='line'>146</span> </span><span class="COMM">/** Static array to keep track of plugin instances. */</span><span class="WHIT">
-<span class='line'>147</span> </span><span class="NAME">minplayer.plugin.instances</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>148</span> 
-<span class='line'>149</span> </span><span class="COMM">/** Static variable to keep track of loading states for each widget. */</span><span class="WHIT">
-<span class='line'>150</span> </span><span class="NAME">minplayer.plugin.loading</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>151</span> 
-<span class='line'>152</span> </span><span class="COMM">/**
-<span class='line'>153</span>  * Sets the loading flag.
-<span class='line'>154</span>  *
-<span class='line'>155</span>  * @param {boolean} state If this plugin is loading or not.
-<span class='line'>156</span>  */</span><span class="WHIT">
-<span class='line'>157</span> </span><span class="NAME">minplayer.plugin.prototype.setLoading</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">state</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>158</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">minplayer.plugin.loading</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>159</span> </span><span class="WHIT">    </span><span class="NAME">minplayer.plugin.loading</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">minplayer.flags</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>160</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>161</span> 
-<span class='line'>162</span> </span><span class="WHIT">  </span><span class="COMM">// Set this loading flag.</span><span class="WHIT">
-<span class='line'>163</span> </span><span class="WHIT">  </span><span class="NAME">minplayer.plugin.loading</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">setFlag</span><span class="PUNC">(</span><span class="NAME">this.name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">state</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>164</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>165</span> 
-<span class='line'>166</span> </span><span class="COMM">/**
-<span class='line'>167</span>  * Determine if this widget is still loading.
-<span class='line'>168</span>  *
-<span class='line'>169</span>  * @return {number} 0 => Widget is done loading, >0 => Widget is still loading.
-<span class='line'>170</span>  */</span><span class="WHIT">
-<span class='line'>171</span> </span><span class="NAME">minplayer.plugin.prototype.loading</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>172</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">minplayer.plugin.loading</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">flag</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>173</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>174</span> 
-<span class='line'>175</span> </span><span class="COMM">/**
-<span class='line'>176</span>  * Returns the plugins for this ID.
-<span class='line'>177</span>  *
-<span class='line'>178</span>  * @return {array} An array of plugins.
-<span class='line'>179</span>  */</span><span class="WHIT">
-<span class='line'>180</span> </span><span class="NAME">minplayer.plugin.prototype.getPlugins</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>181</span> 
-<span class='line'>182</span> </span><span class="WHIT">  </span><span class="COMM">// If the plugins for this instance do not exist.</span><span class="WHIT">
-<span class='line'>183</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">minplayer.plugin.instances</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>184</span> 
-<span class='line'>185</span> </span><span class="WHIT">    </span><span class="COMM">// Initialize the instances.</span><span class="WHIT">
-<span class='line'>186</span> </span><span class="WHIT">    </span><span class="NAME">minplayer.plugin.instances</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>187</span> 
-<span class='line'>188</span> </span><span class="WHIT">    </span><span class="COMM">// Now load all plugins.</span><span class="WHIT">
-<span class='line'>189</span> </span><span class="WHIT">    </span><span class="NAME">this.loadPlugins</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>190</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>191</span> 
-<span class='line'>192</span> </span><span class="WHIT">  </span><span class="COMM">// Return the plugins for this instance.</span><span class="WHIT">
-<span class='line'>193</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">minplayer.plugin.instances</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>194</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>195</span> </span></pre></body></html>
+<span class='line'>139</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">minplayer.plugin.get</span><span class="PUNC">(</span><span class="NAME">this.options.id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>140</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>141</span> 
+<span class='line'>142</span> </span><span class="COMM">/** Static array to keep track of plugin instances. */</span><span class="WHIT">
+<span class='line'>143</span> </span><span class="NAME">minplayer.plugin.instances</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>144</span> 
+<span class='line'>145</span> </span><span class="COMM">/** Static variable to keep track of loading states for each widget. */</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="NAME">minplayer.plugin.loading</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>147</span> 
+<span class='line'>148</span> </span><span class="COMM">/**
+<span class='line'>149</span>  * Iterate over each plugin instance.
+<span class='line'>150</span>  *
+<span class='line'>151</span>  * @param {string} type The type of plugin you wish to get.
+<span class='line'>152</span>  * @param {function} callback Called for every plugin of this type.
+<span class='line'>153</span>  */</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="NAME">minplayer.plugin.each</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">type</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>155</span> </span><span class="WHIT">  </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">id</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">minplayer.plugin.instances</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>156</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">instances</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">minplayer.plugin.instances</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>157</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">instances</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>158</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">name</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">type</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>159</span> </span><span class="WHIT">        </span><span class="NAME">callback.call</span><span class="PUNC">(</span><span class="NAME">instances</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">instances</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>160</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>161</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>162</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>163</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>164</span> 
+<span class='line'>165</span> </span><span class="COMM">/**
+<span class='line'>166</span>  * Get a specific plugin.
+<span class='line'>167</span>  *
+<span class='line'>168</span>  * @param {string} id The ID of the widget to get the plugins from.
+<span class='line'>169</span>  * @param {string} type The type of widget to get.
+<span class='line'>170</span>  * @return {object} The plugin instance.
+<span class='line'>171</span>  */</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="NAME">minplayer.plugin.get</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">type</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>173</span> 
+<span class='line'>174</span> </span><span class="WHIT">  </span><span class="COMM">// If the plugins for this instance do not exist.</span><span class="WHIT">
+<span class='line'>175</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">instances</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">minplayer.plugin.instances</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>176</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">instances</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">instances</span><span class="PUNC">[</span><span class="NAME">type</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>177</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">instances</span><span class="PUNC">[</span><span class="NAME">type</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>178</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>179</span> 
+<span class='line'>180</span> </span><span class="WHIT">  </span><span class="COMM">// Return this instance.</span><span class="WHIT">
+<span class='line'>181</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>182</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>183</span> 
+<span class='line'>184</span> </span><span class="COMM">/**
+<span class='line'>185</span>  * Sets the loading flag.
+<span class='line'>186</span>  *
+<span class='line'>187</span>  * @param {boolean} state If this plugin is loading or not.
+<span class='line'>188</span>  */</span><span class="WHIT">
+<span class='line'>189</span> </span><span class="NAME">minplayer.plugin.prototype.setLoading</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">state</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>190</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">minplayer.plugin.loading</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>191</span> </span><span class="WHIT">    </span><span class="NAME">minplayer.plugin.loading</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">minplayer.flags</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>192</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>193</span> 
+<span class='line'>194</span> </span><span class="WHIT">  </span><span class="COMM">// Set this loading flag.</span><span class="WHIT">
+<span class='line'>195</span> </span><span class="WHIT">  </span><span class="NAME">minplayer.plugin.loading</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">setFlag</span><span class="PUNC">(</span><span class="NAME">this.name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">state</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>196</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>197</span> 
+<span class='line'>198</span> </span><span class="COMM">/**
+<span class='line'>199</span>  * Determine if this widget is still loading.
+<span class='line'>200</span>  *
+<span class='line'>201</span>  * @return {number} 0 => Widget is done loading, >0 => Widget is still loading.
+<span class='line'>202</span>  */</span><span class="WHIT">
+<span class='line'>203</span> </span><span class="NAME">minplayer.plugin.prototype.loading</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>204</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">minplayer.plugin.loading</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">flag</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>205</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>206</span> 
+<span class='line'>207</span> </span><span class="COMM">/**
+<span class='line'>208</span>  * Returns the plugins for this ID.
+<span class='line'>209</span>  *
+<span class='line'>210</span>  * @return {array} An array of plugins.
+<span class='line'>211</span>  */</span><span class="WHIT">
+<span class='line'>212</span> </span><span class="NAME">minplayer.plugin.prototype.getPlugins</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>213</span> 
+<span class='line'>214</span> </span><span class="WHIT">  </span><span class="COMM">// If the plugins for this instance do not exist.</span><span class="WHIT">
+<span class='line'>215</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">minplayer.plugin.instances</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>216</span> 
+<span class='line'>217</span> </span><span class="WHIT">    </span><span class="COMM">// Initialize the instances.</span><span class="WHIT">
+<span class='line'>218</span> </span><span class="WHIT">    </span><span class="NAME">minplayer.plugin.instances</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>219</span> 
+<span class='line'>220</span> </span><span class="WHIT">    </span><span class="COMM">// Now load all plugins.</span><span class="WHIT">
+<span class='line'>221</span> </span><span class="WHIT">    </span><span class="NAME">this.loadPlugins</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>222</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>223</span> 
+<span class='line'>224</span> </span><span class="WHIT">  </span><span class="COMM">// Return the plugins for this instance.</span><span class="WHIT">
+<span class='line'>225</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">minplayer.plugin.instances</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>226</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>227</span> </span></pre></body></html>
