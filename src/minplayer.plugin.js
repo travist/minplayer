@@ -136,11 +136,7 @@ minplayer.plugin.prototype.addPlugin = function(name, plugin) {
  */
 minplayer.plugin.prototype.getPlugin = function(name) {
   name = name || this.name;
-  var plugins = this.getPlugins();
-  if (plugins[name]) {
-    return plugins[name];
-  }
-  return null;
+  return minplayer.plugin.get(this.options.id, name);
 };
 
 /** Static array to keep track of plugin instances. */
@@ -148,6 +144,42 @@ minplayer.plugin.instances = {};
 
 /** Static variable to keep track of loading states for each widget. */
 minplayer.plugin.loading = {};
+
+/**
+ * Iterate over each plugin instance.
+ *
+ * @param {string} type The type of plugin you wish to get.
+ * @param {function} callback Called for every plugin of this type.
+ */
+minplayer.plugin.each = function(type, callback) {
+  for (var id in minplayer.plugin.instances) {
+    var instances = minplayer.plugin.instances[id];
+    for (var name in instances) {
+      if (name === type) {
+        callback.call(instances[name], instances[name]);
+      }
+    }
+  }
+};
+
+/**
+ * Get a specific plugin.
+ *
+ * @param {string} id The ID of the widget to get the plugins from.
+ * @param {string} type The type of widget to get.
+ * @return {object} The plugin instance.
+ */
+minplayer.plugin.get = function(id, type) {
+
+  // If the plugins for this instance do not exist.
+  var instances = minplayer.plugin.instances[id];
+  if (instances && instances[type]) {
+    return instances[type];
+  }
+
+  // Return this instance.
+  return null;
+};
 
 /**
  * Sets the loading flag.

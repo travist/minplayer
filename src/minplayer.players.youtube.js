@@ -77,37 +77,34 @@ minplayer.players.youtube.prototype.register = function() {
    */
   window.onYouTubePlayerAPIReady = function() {
 
-    // Iterate through all of the player instances.
-    for (var id in minplayer.plugin.instances) {
+    // Iterate over each media player.
+    minplayer.plugin.each('player', function(player) {
 
-      // Make sure this is a property.
-      if (minplayer.plugin.instances.hasOwnProperty(id)) {
+      // Make sure this is the youtube player.
+      if (player.currentPlayer == 'youtube') {
 
-        // Get the instance and check to see if it is a youtube player.
-        var instance = minplayer.plugin.instances[id]['player'];
-        if (instance.currentPlayer == 'youtube') {
+        // Create a new youtube player object for this instance only.
+        var playerId = player.options.id + '-player';
 
-          // Create a new youtube player object for this instance only.
-          var playerId = instance.options.id + '-player';
-          instance.player.media = new YT.Player(playerId, {
-            events: {
-              'onReady': function(event) {
-                instance.player.onReady(event);
-              },
-              'onStateChange': function(event) {
-                instance.player.onPlayerStateChange(event);
-              },
-              'onPlaybackQualityChange': function(newQuality) {
-                instance.player.onQualityChange(newQuality);
-              },
-              'onError': function(errorCode) {
-                instance.player.onError(errorCode);
-              }
+        // Set this players media.
+        player.media.player = new YT.Player(playerId, {
+          events: {
+            'onReady': function(event) {
+              player.media.onReady(event);
+            },
+            'onStateChange': function(event) {
+              player.media.onPlayerStateChange(event);
+            },
+            'onPlaybackQualityChange': function(newQuality) {
+              player.media.onQualityChange(newQuality);
+            },
+            'onError': function(errorCode) {
+              player.media.onError(errorCode);
             }
-          });
-        }
+          }
+        });
       }
-    }
+    });
   }
 };
 
@@ -312,7 +309,7 @@ minplayer.players.youtube.prototype.getVolume = function(callback) {
 };
 
 /**
- * @see minplayer.players.flash#getDuration.
+ * @see minplayer.players.base#getDuration.
  */
 minplayer.players.youtube.prototype.getDuration = function(callback) {
   if (this.isReady()) {

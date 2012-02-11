@@ -150,6 +150,7 @@ minplayer.players.vimeo.prototype.onReady = function(player_id) {
   this.player.addEvent('playProgress', function(progress) {
 
     // Set the duration and current time.
+    console.log(progress);
     _this.duration.set(parseFloat(progress.duration));
     _this.currentTime.set(parseFloat(progress.seconds));
   });
@@ -238,4 +239,20 @@ minplayer.players.vimeo.prototype.getVolume = function(callback) {
   this.player.api('getVolume', function(vol) {
     callback(vol);
   });
+};
+
+/**
+ * @see minplayer.players.base#getDuration.
+ */
+minplayer.players.vimeo.prototype.getDuration = function(callback) {
+  if (this.isReady()) {
+    if (this.duration.value) {
+      callback(this.duration.value);
+    }
+    else {
+      this.player.api('getDuration', function(duration) {
+        callback(duration);
+      });
+    }
+  }
 };

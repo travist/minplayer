@@ -349,11 +349,7 @@ minplayer.plugin.prototype.addPlugin = function(name, plugin) {
  */
 minplayer.plugin.prototype.getPlugin = function(name) {
   name = name || this.name;
-  var plugins = this.getPlugins();
-  if (plugins[name]) {
-    return plugins[name];
-  }
-  return null;
+  return minplayer.plugin.get(this.options.id, name);
 };
 
 /** Static array to keep track of plugin instances. */
@@ -361,6 +357,42 @@ minplayer.plugin.instances = {};
 
 /** Static variable to keep track of loading states for each widget. */
 minplayer.plugin.loading = {};
+
+/**
+ * Iterate over each plugin instance.
+ *
+ * @param {string} type The type of plugin you wish to get.
+ * @param {function} callback Called for every plugin of this type.
+ */
+minplayer.plugin.each = function(type, callback) {
+  for (var id in minplayer.plugin.instances) {
+    var instances = minplayer.plugin.instances[id];
+    for (var name in instances) {
+      if (name === type) {
+        callback.call(instances[name], instances[name]);
+      }
+    }
+  }
+};
+
+/**
+ * Get a specific plugin.
+ *
+ * @param {string} id The ID of the widget to get the plugins from.
+ * @param {string} type The type of widget to get.
+ * @return {object} The plugin instance.
+ */
+minplayer.plugin.get = function(id, type) {
+
+  // If the plugins for this instance do not exist.
+  var instances = minplayer.plugin.instances[id];
+  if (instances && instances[type]) {
+    return instances[type];
+  }
+
+  // Return this instance.
+  return null;
+};
 
 /**
  * Sets the loading flag.
@@ -2259,8 +2291,9 @@ minplayer.players.minplayer.prototype.constructor = minplayer.players.minplayer;
  * @param {string} id The media player ID.
  */
 window.onFlashPlayerReady = function(id) {
-  if (minplayer.player[id]) {
-    minplayer.player[id].media.onReady();
+  var media = minplayer.plugin.get(id, 'media');
+  if (media) {
+    media.onReady();
   }
 };
 
@@ -2271,8 +2304,9 @@ window.onFlashPlayerReady = function(id) {
  * @param {string} eventType The event type that was triggered.
  */
 window.onFlashPlayerUpdate = function(id, eventType) {
-  if (minplayer.player[id]) {
-    minplayer.player[id].media.onMediaUpdate(eventType);
+  var media = minplayer.plugin.get(id, 'media');
+  if (media) {
+    media.onMediaUpdate(eventType);
   }
 };
 
@@ -2384,6 +2418,7 @@ minplayer.players.minplayer.prototype.load = function(file) {
  */
 minplayer.players.minplayer.prototype.play = function() {
   minplayer.players.flash.prototype.play.call(this);
+  console.log('play');
   if (this.isReady()) {
     this.player.playMedia();
   }
@@ -2443,7 +2478,24 @@ minplayer.players.minplayer.prototype.getVolume = function(callback) {
  */
 minplayer.players.minplayer.prototype.getDuration = function(callback) {
   if (this.isReady()) {
-    callback(this.player.getDuration());
+
+    // Check to see if it is immediately available.
+    var duration = this.player.getDuration();
+    if (duration) {
+      callback(duration);
+    }
+    else {
+
+      // If not, then check every half second...
+      var _this = this;
+      var check = setInterval(function() {
+        duration = _this.player.getDuration();
+        if (duration) {
+          clearInterval(check);
+          callback(duration);
+        }
+      }, 500);
+    }
   }
 };
 
@@ -2552,37 +2604,34 @@ minplayer.players.youtube.prototype.register = function() {
    */
   window.onYouTubePlayerAPIReady = function() {
 
-    // Iterate through all of the player instances.
-    for (var id in minplayer.plugin.instances) {
+    // Iterate over each media player.
+    minplayer.plugin.each('player', function(player) {
 
-      // Make sure this is a property.
-      if (minplayer.plugin.instances.hasOwnProperty(id)) {
+      // Make sure this is the youtube player.
+      if (player.currentPlayer == 'youtube') {
 
-        // Get the instance and check to see if it is a youtube player.
-        var instance = minplayer.plugin.instances[id]['player'];
-        if (instance.currentPlayer == 'youtube') {
+        // Create a new youtube player object for this instance only.
+        var playerId = player.options.id + '-player';
 
-          // Create a new youtube player object for this instance only.
-          var playerId = instance.options.id + '-player';
-          instance.player.media = new YT.Player(playerId, {
-            events: {
-              'onReady': function(event) {
-                instance.player.onReady(event);
-              },
-              'onStateChange': function(event) {
-                instance.player.onPlayerStateChange(event);
-              },
-              'onPlaybackQualityChange': function(newQuality) {
-                instance.player.onQualityChange(newQuality);
-              },
-              'onError': function(errorCode) {
-                instance.player.onError(errorCode);
-              }
+        // Set this players media.
+        player.media.player = new YT.Player(playerId, {
+          events: {
+            'onReady': function(event) {
+              player.media.onReady(event);
+            },
+            'onStateChange': function(event) {
+              player.media.onPlayerStateChange(event);
+            },
+            'onPlaybackQualityChange': function(newQuality) {
+              player.media.onQualityChange(newQuality);
+            },
+            'onError': function(errorCode) {
+              player.media.onError(errorCode);
             }
-          });
-        }
+          }
+        });
       }
-    }
+    });
   }
 };
 
@@ -2787,7 +2836,7 @@ minplayer.players.youtube.prototype.getVolume = function(callback) {
 };
 
 /**
- * @see minplayer.players.flash#getDuration.
+ * @see minplayer.players.base#getDuration.
  */
 minplayer.players.youtube.prototype.getDuration = function(callback) {
   if (this.isReady()) {
@@ -2982,6 +3031,7 @@ minplayer.players.vimeo.prototype.onReady = function(player_id) {
   this.player.addEvent('playProgress', function(progress) {
 
     // Set the duration and current time.
+    console.log(progress);
     _this.duration.set(parseFloat(progress.duration));
     _this.currentTime.set(parseFloat(progress.seconds));
   });
@@ -3070,6 +3120,22 @@ minplayer.players.vimeo.prototype.getVolume = function(callback) {
   this.player.api('getVolume', function(vol) {
     callback(vol);
   });
+};
+
+/**
+ * @see minplayer.players.base#getDuration.
+ */
+minplayer.players.vimeo.prototype.getDuration = function(callback) {
+  if (this.isReady()) {
+    if (this.duration.value) {
+      callback(this.duration.value);
+    }
+    else {
+      this.player.api('getDuration', function(duration) {
+        callback(duration);
+      });
+    }
+  }
 };
 /** The minplayer namespace. */
 var minplayer = minplayer || {};
@@ -3222,7 +3288,7 @@ minplayer.controllers.base.prototype.setPlayPause = function(state) {
 minplayer.controllers.base.prototype.playPause = function(state, media) {
   var type = state ? 'play' : 'pause';
   this.display.trigger(type);
-  this.setPlayPause(state);
+  this.setPlayPause(!state);
   if (media) {
     media[type]();
   }
