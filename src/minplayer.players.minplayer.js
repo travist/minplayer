@@ -157,7 +157,6 @@ minplayer.players.minplayer.prototype.load = function(file) {
  */
 minplayer.players.minplayer.prototype.play = function() {
   minplayer.players.flash.prototype.play.call(this);
-  console.log('play');
   if (this.isReady()) {
     this.player.playMedia();
   }

@@ -2543,7 +2543,6 @@ minplayer.players.minplayer.prototype.load = function(file) {
  */
 minplayer.players.minplayer.prototype.play = function() {
   minplayer.players.flash.prototype.play.call(this);
-  console.log('play');
   if (this.isReady()) {
     this.player.playMedia();
   }
@@ -3156,7 +3155,6 @@ minplayer.players.vimeo.prototype.onReady = function(player_id) {
   this.player.addEvent('playProgress', function(progress) {
 
     // Set the duration and current time.
-    console.log(progress);
     _this.duration.set(parseFloat(progress.duration));
     _this.currentTime.set(parseFloat(progress.seconds));
   });
