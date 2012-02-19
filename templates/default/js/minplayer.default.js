@@ -47,7 +47,7 @@ minplayer["default"].prototype.getElements = function() {
     this.display = playerDisplay;
 
     // Also set the main player context to this display.
-    var player = this.getPlugin('player');
+    var player = this.get('player');
     player.display = playerDisplay;
 
     // Mark a flag that says this display needs to be built.
@@ -62,7 +62,3 @@ minplayer["default"].prototype.getElements = function() {
     error:jQuery('.media-player-error', this.display)
   });
 };
-
-// Add this to the minplayer.plugins array.
-minplayer.plugins = minplayer.plugins || [];
-minplayer.plugins.push(minplayer["default"]);

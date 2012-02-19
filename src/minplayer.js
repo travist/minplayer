@@ -51,7 +51,6 @@ minplayer = jQuery.extend(function(context, options) {
   // Make sure we provide default options...
   options = jQuery.extend({
     id: 'player',
-    controller: 'default',
     swfplayer: '',
     wmode: 'transparent',
     preload: true,
@@ -66,6 +65,12 @@ minplayer = jQuery.extend(function(context, options) {
     preview: '',
     attributes: {}
   }, options);
+
+  // Setup the plugins.
+  options.plugins = jQuery.extend({
+    controller: 'default',
+    playLoader: 'default'
+  }, options.plugins);
 
   // Derive from display
   minplayer.display.call(this, 'player', context, options);
@@ -84,6 +89,9 @@ minplayer.prototype.construct = function() {
 
   // Call the minplayer display constructor.
   minplayer.display.prototype.construct.call(this);
+
+  // Load the plugins.
+  this.loadPlugins();
 
   /** Variable to store the current media player. */
   this.currentPlayer = 'html5';

@@ -1,8 +1,8 @@
 /** The minplayer namespace. */
 var minplayer = minplayer || {};
 
-/** Define the controllers object. */
-minplayer.controllers = minplayer.controllers || {};
+/** Define the controller object. */
+minplayer.controller = minplayer.controller || {};
 
 /**
  * @constructor
@@ -14,20 +14,20 @@ minplayer.controllers = minplayer.controllers || {};
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
  */
-minplayer.controllers.base = function(context, options) {
+minplayer.controller.base = function(context, options) {
 
   // Derive from display
   minplayer.display.call(this, 'controller', context, options);
 };
 
 // Define the prototype for all controllers.
-var controllersBase = minplayer.controllers.base;
+var controllersBase = minplayer.controller.base;
 
 /** Derive from minplayer.display. */
-minplayer.controllers.base.prototype = new minplayer.display();
+minplayer.controller.base.prototype = new minplayer.display();
 
 /** Reset the constructor. */
-minplayer.controllers.base.prototype.constructor = minplayer.controllers.base;
+minplayer.controller.base.prototype.constructor = minplayer.controller.base;
 
 /**
  * A static function that will format a time value into a string time format.
@@ -60,7 +60,7 @@ minplayer.formatTime = function(time) {
  * @see minplayer.display#getElements
  * @return {object} The elements defined by this display.
  */
-minplayer.controllers.base.prototype.getElements = function() {
+minplayer.controller.base.prototype.getElements = function() {
   var elements = minplayer.display.prototype.getElements.call(this);
   return jQuery.extend(elements, {
     play: null,
@@ -76,7 +76,7 @@ minplayer.controllers.base.prototype.getElements = function() {
 /**
  * @see minplayer.plugin#construct
  */
-minplayer.controllers.base.prototype.construct = function() {
+minplayer.controller.base.prototype.construct = function() {
 
   // Call the minplayer plugin constructor.
   minplayer.display.prototype.construct.call(this);
@@ -251,7 +251,7 @@ minplayer.controllers.base.prototype.construct = function() {
  *
  * @param {boolean} state TRUE - Show Play, FALSE - Show Pause.
  */
-minplayer.controllers.base.prototype.setPlayPause = function(state) {
+minplayer.controller.base.prototype.setPlayPause = function(state) {
   var css = '';
   if (this.elements.play) {
     css = state ? 'inherit' : 'none';
@@ -269,7 +269,7 @@ minplayer.controllers.base.prototype.setPlayPause = function(state) {
  * @param {bool} state true => play, false => pause.
  * @param {object} media The media player object.
  */
-minplayer.controllers.base.prototype.playPause = function(state, media) {
+minplayer.controller.base.prototype.playPause = function(state, media) {
   var type = state ? 'play' : 'pause';
   this.display.trigger(type);
   this.setPlayPause(!state);
@@ -284,7 +284,7 @@ minplayer.controllers.base.prototype.playPause = function(state, media) {
  * @param {string} element The name of the element to set.
  * @param {number} time The total time amount to set.
  */
-minplayer.controllers.base.prototype.setTimeString = function(element, time) {
+minplayer.controller.base.prototype.setTimeString = function(element, time) {
   if (this.elements[element]) {
     this.elements[element].text(minplayer.formatTime(time).time);
   }
