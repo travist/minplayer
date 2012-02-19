@@ -15,6 +15,13 @@ minplayer.playLoader["default"] = function(context, options) {
 minplayer.playLoader["default"].prototype = new minplayer.playLoader.base();
 minplayer.playLoader["default"].prototype.constructor = minplayer.playLoader["default"];
 
+/**
+ * Return the display for this plugin.
+ */
+minplayer.playLoader["default"].prototype.getDisplay = function(context) {
+  return jQuery('.media-player-play-loader', context);
+}
+
 // Return the elements
 minplayer.playLoader["default"].prototype.getElements = function() {
   var elements = minplayer.playLoader.base.prototype.getElements.call(this);
@@ -27,7 +34,4 @@ minplayer.playLoader["default"].prototype.getElements = function() {
 
 // Add this to the minplayer.plugins array.
 minplayer.plugins = minplayer.plugins || [];
-minplayer.plugins.push({
-  object:minplayer.playLoader["default"],
-  element:".media-player-play-loader"
-});
+minplayer.plugins.push(minplayer.playLoader["default"]);

@@ -30,7 +30,7 @@ minplayer.players.minplayer.prototype.constructor = minplayer.players.minplayer;
  * @param {string} id The media player ID.
  */
 window.onFlashPlayerReady = function(id) {
-  var media = minplayer.plugin.get(id, 'media');
+  var media = minplayer.get(id, 'media');
   if (media) {
     media.onReady();
   }
@@ -43,7 +43,7 @@ window.onFlashPlayerReady = function(id) {
  * @param {string} eventType The event type that was triggered.
  */
 window.onFlashPlayerUpdate = function(id, eventType) {
-  var media = minplayer.plugin.get(id, 'media');
+  var media = minplayer.get(id, 'media');
   if (media) {
     media.onMediaUpdate(eventType);
   }

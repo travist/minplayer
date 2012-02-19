@@ -119,6 +119,129 @@ minplayer.controllers.base.prototype.construct = function() {
     });
   }
 
+  // Get the media plugin.
+  this.get('media', function(media) {
+
+    var _this = this;
+
+    // If they have a pause button
+    if (this.elements.pause) {
+
+      // Bind to the click on this button.
+      this.elements.pause.bind('click', {obj: this}, function(event) {
+        event.preventDefault();
+        event.data.obj.playPause(false, media);
+      });
+
+      // Bind to the pause event of the media.
+      media.bind('pause', {obj: this}, function(event) {
+        event.data.obj.setPlayPause(true);
+      });
+    }
+
+    // If they have a play button
+    if (this.elements.play) {
+
+      // Bind to the click on this button.
+      this.elements.play.bind('click', {obj: this}, function(event) {
+        event.preventDefault();
+        event.data.obj.playPause(true, media);
+      });
+
+      // Bind to the play event of the media.
+      media.bind('playing', {obj: this}, function(event) {
+        event.data.obj.setPlayPause(false);
+      });
+    }
+
+    // If they have a duration, then trigger on duration change.
+    if (this.elements.duration) {
+
+      // Bind to the duration change event.
+      media.bind('durationchange', {obj: this}, function(event, data) {
+        event.data.obj.setTimeString('duration', data.duration);
+      });
+
+      // Set the timestring to the duration.
+      media.getDuration(function(duration) {
+        _this.setTimeString('duration', duration);
+      });
+    }
+
+    // If they have a progress element.
+    if (this.elements.progress) {
+
+      // Bind to the progress event.
+      media.bind('progress', {obj: this}, function(event, data) {
+        var percent = data.total ? (data.loaded / data.total) * 100 : 0;
+        event.data.obj.elements.progress.width(percent + '%');
+      });
+    }
+
+    // If they have a seek bar or timer, bind to the timeupdate.
+    if (this.seekBar || this.elements.timer) {
+
+      // Bind to the time update event.
+      media.bind('timeupdate', {obj: this}, function(event, data) {
+        if (!event.data.obj.dragging) {
+          var value = 0;
+          if (data.duration) {
+            value = (data.currentTime / data.duration) * 100;
+          }
+
+          // Update the seek bar if it exists.
+          if (event.data.obj.seekBar) {
+            event.data.obj.seekBar.slider('option', 'value', value);
+          }
+
+          event.data.obj.setTimeString('timer', data.currentTime);
+        }
+      });
+    }
+
+    // If they have a seekBar element.
+    if (this.seekBar) {
+
+      // Register the events for the control bar to control the media.
+      this.seekBar.slider({
+        start: function(event, ui) {
+          _this.dragging = true;
+        },
+        stop: function(event, ui) {
+          _this.dragging = false;
+          media.getDuration(function(duration) {
+            media.seek((ui.value / 100) * duration);
+          });
+        },
+        slide: function(event, ui) {
+          media.getDuration(function(duration) {
+            var time = (ui.value / 100) * duration;
+            if (!_this.dragging) {
+              media.seek(time);
+            }
+            _this.setTimeString('timer', time);
+          });
+        }
+      });
+    }
+
+    // Setup the volume bar.
+    if (this.volumeBar) {
+
+      // Create the slider.
+      this.volumeBar.slider({
+        slide: function(event, ui) {
+          media.setVolume(ui.value / 100);
+        }
+      });
+
+      // Set the volume to match that of the player.
+      media.getVolume(function(vol) {
+        _this.volumeBar.slider('option', 'value', (vol * 100));
+      });
+    }
+  });
+
   // We are now ready.
   this.ready();
 };
@@ -164,136 +287,5 @@ minplayer.controllers.base.prototype.playPause = function(state, media) {
 minplayer.controllers.base.prototype.setTimeString = function(element, time) {
   if (this.elements[element]) {
     this.elements[element].text(minplayer.formatTime(time).time);
-  }
-};
-
-/**
- * @see minplayer.plugin#initialize
- */
-minplayer.controllers.base.prototype.initialize = function() {
-
-  // Initialize the display.
-  minplayer.display.prototype.initialize.call(this);
-
-  // Get the media player.
-  var media = this.getPlugin('media');
-
-  var _this = this;
-
-  // If they have a pause button
-  if (this.elements.pause) {
-
-    // Bind to the click on this button.
-    this.elements.pause.bind('click', {obj: this}, function(event) {
-      event.preventDefault();
-      event.data.obj.playPause(false, media);
-    });
-
-    // Bind to the pause event of the media.
-    media.bind('pause', {obj: this}, function(event) {
-      event.data.obj.setPlayPause(true);
-    });
-  }
-
-  // If they have a play button
-  if (this.elements.play) {
-
-    // Bind to the click on this button.
-    this.elements.play.bind('click', {obj: this}, function(event) {
-      event.preventDefault();
-      event.data.obj.playPause(true, media);
-    });
-
-    // Bind to the play event of the media.
-    media.bind('playing', {obj: this}, function(event) {
-      event.data.obj.setPlayPause(false);
-    });
-  }
-
-  // If they have a duration, then trigger on duration change.
-  if (this.elements.duration) {
-
-    // Bind to the duration change event.
-    media.bind('durationchange', {obj: this}, function(event, data) {
-      event.data.obj.setTimeString('duration', data.duration);
-    });
-
-    // Set the timestring to the duration.
-    media.getDuration(function(duration) {
-      _this.setTimeString('duration', duration);
-    });
-  }
-
-  // If they have a progress element.
-  if (this.elements.progress) {
-
-    // Bind to the progress event.
-    media.bind('progress', {obj: this}, function(event, data) {
-      var percent = data.total ? (data.loaded / data.total) * 100 : 0;
-      event.data.obj.elements.progress.width(percent + '%');
-    });
-  }
-
-  // If they have a seek bar or timer, bind to the timeupdate.
-  if (this.seekBar || this.elements.timer) {
-
-    // Bind to the time update event.
-    media.bind('timeupdate', {obj: this}, function(event, data) {
-      if (!event.data.obj.dragging) {
-        var value = 0;
-        if (data.duration) {
-          value = (data.currentTime / data.duration) * 100;
-        }
-
-        // Update the seek bar if it exists.
-        if (event.data.obj.seekBar) {
-          event.data.obj.seekBar.slider('option', 'value', value);
-        }
-
-        event.data.obj.setTimeString('timer', data.currentTime);
-      }
-    });
-  }
-
-  // If they have a seekBar element.
-  if (this.seekBar) {
-
-    // Register the events for the control bar to control the media.
-    this.seekBar.slider({
-      start: function(event, ui) {
-        _this.dragging = true;
-      },
-      stop: function(event, ui) {
-        _this.dragging = false;
-        media.getDuration(function(duration) {
-          media.seek((ui.value / 100) * duration);
-        });
-      },
-      slide: function(event, ui) {
-        media.getDuration(function(duration) {
-          var time = (ui.value / 100) * duration;
-          if (!_this.dragging) {
-            media.seek(time);
-          }
-          _this.setTimeString('timer', time);
-        });
-      }
-    });
-  }
-
-  // Setup the volume bar.
-  if (this.volumeBar) {
-
-    // Create the slider.
-    this.volumeBar.slider({
-      slide: function(event, ui) {
-        media.setVolume(ui.value / 100);
-      }
-    });
-
-    // Set the volume to match that of the player.
-    media.getVolume(function(vol) {
-      _this.volumeBar.slider('option', 'value', (vol * 100));
-    });
   }
 };
