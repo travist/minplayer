@@ -78,13 +78,13 @@ minplayer.players.youtube.prototype.register = function() {
   window.onYouTubePlayerAPIReady = function() {
 
     // Iterate over each media player.
-    minplayer.plugin.each('player', function(player) {
+    jQuery.each(minplayer.get(null, 'player'), function(id, player) {
 
       // Make sure this is the youtube player.
       if (player.currentPlayer == 'youtube') {
 
         // Create a new youtube player object for this instance only.
-        var playerId = player.options.id + '-player';
+        var playerId = id + '-player';
 
         // Set this players media.
         player.media.player = new YT.Player(playerId, {

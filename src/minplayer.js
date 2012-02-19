@@ -11,8 +11,16 @@ if (!jQuery.fn.minplayer) {
    */
   jQuery.fn.minplayer = function(options) {
     return jQuery(this).each(function() {
-      if (!minplayer.plugin.instances[options.id]) {
-        new minplayer(jQuery(this), options);
+      options = options || {};
+      options.id = options.id || this.selector;
+      if (!minplayer.instances[options.id]) {
+        var template = options.template || 'default';
+        if (minplayer[template]) {
+          new minplayer[template](jQuery(this), options);
+        }
+        else {
+          new minplayer(jQuery(this), options);
+        }
       }
     });
   };
@@ -44,7 +52,6 @@ minplayer = jQuery.extend(function(context, options) {
   options = jQuery.extend({
     id: 'player',
     controller: 'default',
-    template: 'default',
     swfplayer: '',
     wmode: 'transparent',
     preload: true,
@@ -86,6 +93,20 @@ minplayer.prototype.construct = function() {
 
   // Now load these files.
   this.load(this.getFiles());
+
+  // Want to trigger when each plugin is ready.
+  var _this = this;
+  minplayer.get(this.options.id, null, function(plugin) {
+    // Bind to the error event.
+    plugin.bind('error', function(event, data) {
+      _this.error(data);
+    });
+
+    // Bind to the fullscreen event.
+    plugin.bind('fullscreen', function(event, data) {
+      _this.resize();
+    });
+  });
 
   // We are now ready.
   this.ready();
@@ -198,42 +219,6 @@ minplayer.prototype.getMediaFile = function(files) {
 };
 
 /**
- * Called when the player initializes.
- */
-minplayer.prototype.initialize = function() {
-
-  // Iterate through each plugin.
-  var _this = this;
-  this.eachPlugin(function(name, plugin) {
-
-    // Bind to the error event.
-    plugin.bind('error', function(event, data) {
-      _this.error(data);
-    });
-
-    // Bind to the fullscreen event.
-    plugin.bind('fullscreen', function(event, data) {
-      _this.resize();
-    });
-  });
-
-  // If the media exists.
-  if (this.media) {
-
-    // Copy over all functions.
-    for (var name in this.media) {
-      var prop = this.media[name];
-      if (typeof prop == 'function' && !this[name]) {
-        this[name] = prop;
-      }
-    }
-
-    // Get the media plugin.
-    this.media.load();
-  }
-};
-
-/**
  * Load a set of files or a single file for the media player.
  *
  * @param {array} files An array of files to chose from to load.
@@ -286,8 +271,12 @@ minplayer.prototype.load = function(files) {
 
     // Create the new media player.
     this.media = new pClass(this.elements.display, this.options);
-  }
 
+    // Now get the media, and load it.
+    this.get('media', function(media) {
+      media.load();
+    });
+  }
   // If the media object already exists...
   else if (this.media) {
 

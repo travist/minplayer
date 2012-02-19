@@ -1,6 +1,6 @@
 <div id="<?php print $settings['id']; ?>" class="media-player smalldark" style="width:<?php print $settings['width']; ?>; height:<?php print $settings['height']; ?>;">
   <div class="media-player-error"></div>
-  <div class="media-player-controls" style="display: block; ">
+  <div class="media-player-controls">
     <div class="media-player-controls-left">
       <a class="media-player-play" title="Play"></a>
       <a class="media-player-pause" title="Pause"></a>

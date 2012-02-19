@@ -26,8 +26,7 @@ files =   src/minplayer.compatibility.js\
           src/minplayer.players.minplayer.js\
           src/minplayer.players.youtube.js\
           src/minplayer.players.vimeo.js\
-          src/minplayer.controllers.base.js\
-          src/minplayer.templates.base.js
+          src/minplayer.controllers.base.js
 
 .DEFAULT_GOAL := all
 
