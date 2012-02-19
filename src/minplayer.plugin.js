@@ -20,14 +20,16 @@ minplayer.plugin = function(name, context, options) {
   /** The name of this plugin. */
   this.name = name;
 
-  /** The ready callback queue. */
-  this.queue = [];
-
   /** The ready flag. */
   this.pluginReady = false;
 
+  /** The options for this plugin. */
+  this.options = options;
+
   // Only call the constructor if we have a context.
   if (context) {
+
+    // Construct this plugin.
     this.construct();
   }
 };
@@ -57,12 +59,26 @@ minplayer.plugin.prototype.destroy = function() {
  * Loads all of the available plugins.
  */
 minplayer.plugin.prototype.loadPlugins = function() {
-  // Iterate through all the plugins.
-  var i = minplayer.plugins.length;
-  while (i--) {
 
-    // Create the new plugin.
-    new minplayer.plugins[i](this.display, this.options);
+  // Get all the plugins to load.
+  var instance = '';
+
+  // Iterate through all the plugins.
+  for (var name in this.options.plugins) {
+
+    // Only load if it does not already exist.
+    if (!minplayer.instances[this.options.id][name]) {
+
+      // Get the instance name from the setting.
+      instance = this.options.plugins[name];
+
+      // If this object exists.
+      if (minplayer[name][instance]) {
+
+        // Declare a new object.
+        new minplayer[name][instance](this.display, this.options);
+      }
+    }
   }
 };
 
@@ -74,11 +90,8 @@ minplayer.plugin.prototype.ready = function() {
   // Set the ready flag.
   this.pluginReady = true;
 
-  // Now iterate through our ready queue and call them.
-  var i = this.queue.length;
-  while (i--) {
-    this.queue[i].callback.call(this.queue[i].context, this);
-  }
+  // Check the queue.
+  this.checkQueue();
 };
 
 /**
@@ -99,33 +112,11 @@ minplayer.plugin.prototype.addPlugin = function(name, plugin) {
 
       // Initialize the instances.
       minplayer.instances[this.options.id] = {};
-
-      // Now load all plugins.
-      this.loadPlugins();
     }
 
     // Add this plugin.
     minplayer.instances[this.options.id][name] = plugin;
-
-    // Check the queue.
-    this.checkQueue();
   }
-};
-
-/**
- * Check the queue and execute it.
- */
-minplayer.plugin.prototype.checkQueue = function() {
-  var queue = null;
-  var newqueue = [];
-  var i = minplayer.queue.length;
-  while (i--) {
-    queue = minplayer.queue[i];
-    if (!minplayer.get(queue.id, queue.plugin, queue.callback, true)) {
-      newqueue.push(queue);
-    }
-  }
-  minplayer.queue = newqueue;
 };
 
 /**
@@ -133,6 +124,7 @@ minplayer.plugin.prototype.checkQueue = function() {
  *
  * @param {string} plugin The plugin of the plugin.
  * @param {function} callback Called when the plugin is ready.
+ * @return {object} The plugin if no callback is provided.
  */
 minplayer.plugin.prototype.get = function(plugin, callback) {
 
@@ -142,21 +134,40 @@ minplayer.plugin.prototype.get = function(plugin, callback) {
     return;
   }
 
-  // Do not allow them to get their own plugin.
-  var plugin = minplayer.get(this.options.id, plugin);
-  if (plugin.pluginReady) {
+  // Return the minplayer.get equivalent.
+  return minplayer.get.call(this, this.options.id, plugin, callback);
+};
 
-    // Call me now since you are ready.
-    callback.call(this, plugin);
-  }
-  else {
+/**
+ * Check the queue and execute it.
+ */
+minplayer.plugin.prototype.checkQueue = function() {
+  var q = null;
+  var check = false;
+  var newqueue = [];
+  var i = minplayer.queue.length;
+  while (i--) {
 
-    // Ok, just call me when you are ready.
-    plugin.queue.push({
-      context: this,
-      callback: callback
-    });
+    // Get the queue item.
+    q = minplayer.queue[i];
+
+    // Now check to see if this queue is about us.
+    check = !q.id && !q.plugin;
+    check |= (q.plugin == this.name) && (!q.id || (q.id == this.options.id));
+
+    // If so, then lets try to handle the request.
+    if (check) {
+      check &= minplayer.get.call(q.context, q.id, q.plugin, q.callback, true);
+    }
+
+    // If nothing checks out, keep this in the queue.
+    if (!check) {
+      newqueue.push(q);
+    }
   }
+
+  // Replace the queue.
+  minplayer.queue = newqueue;
 };
 
 /**
@@ -209,6 +220,7 @@ minplayer.plugin.prototype.get = function(plugin, callback) {
  *            // Code goes here.
  *          });
  *
+ * @this The context in which this function was called.
  * @param {string} id The ID of the widget to get the plugins from.
  * @param {string} plugin The name of the plugin.
  * @param {function} callback Called when the plugin is ready.
@@ -217,6 +229,35 @@ minplayer.plugin.prototype.get = function(plugin, callback) {
  */
 minplayer.get = function(id, plugin, callback, noqueue) {
   var handled = false;
+
+  // Private function to add to the queue.
+  function addQueue(id, plugin, callback) {
+    if (!noqueue && callback) {
+      minplayer.queue.push({
+        context: this,
+        id: id,
+        plugin: plugin,
+        callback: callback
+      });
+    }
+  }
+
+  // Private function to call when ready.
+  function onReady(id, plugin, callback) {
+    var inst = minplayer.instances;
+    if (inst.hasOwnProperty(id) &&
+        inst[id].hasOwnProperty(plugin) &&
+        inst[id][plugin].pluginReady) {
+      callback.call(this, inst[id][plugin]);
+      return true;
+    }
+
+    // Add to the queue.
+    addQueue.call(this, id, plugin, callback);
+
+    // Return that this wasn't handled.
+    return false;
+  }
 
   // Normalize the arguments for a better interface.
   if (typeof id === 'function') {
@@ -238,13 +279,13 @@ minplayer.get = function(id, plugin, callback, noqueue) {
 
   // Protect against invalid ids and types.
   if (id && !inst[id]) {
+    addQueue.call(this, id, plugin, callback);
     return null;
   }
   if (id && plugin && !inst[id][plugin]) {
+    addQueue.call(this, id, plugin, callback);
     return null;
   }
-
-  // Go through all the states in order from fastest to slowest...
 
   // 0x000
   if (!id && !plugin && !callback) {
@@ -260,25 +301,18 @@ minplayer.get = function(id, plugin, callback, noqueue) {
   }
   // 0x111
   else if (id && plugin && callback) {
-    inst[id][plugin].get(callback);
-    handled = true;
+    handled = onReady.call(this, id, plugin, callback);
   }
   // 0x011
   else if (!id && plugin && callback) {
     for (var id in inst) {
-      if (inst.hasOwnProperty(id) && inst[id].hasOwnProperty(plugin)) {
-        inst[id][plugin].get(callback);
-        handled = true;
-      }
+      handled = onReady.call(this, id, plugin, callback);
     }
   }
   // 0x101
   else if (id && !plugin && callback) {
     for (var plugin in inst[id]) {
-      if (inst.hasOwnProperty(id) && inst[id].hasOwnProperty(plugin)) {
-        inst[id][plugin].get(callback);
-        handled = true;
-      }
+      handled = onReady.call(this, id, plugin, callback);
     }
   }
   // 0x010
@@ -294,24 +328,15 @@ minplayer.get = function(id, plugin, callback, noqueue) {
   // 0x001
   else {
     for (var id in inst) {
-      if (inst.hasOwnProperty(id)) {
-        for (var plugin in inst[id]) {
-          if (inst[id].hasOwnProperty(plugin)) {
-            inst[id][plugin].get(callback);
-            handled = true;
-          }
-        }
+      for (var plugin in inst[id]) {
+        handled = onReady.call(this, id, plugin, callback);
       }
     }
   }
 
   // If this wasn't handled, then queue for later.'
-  if (!handled && !noqueue) {
-    minplayer.queue.push({
-      id: id,
-      plugin: plugin,
-      callback: callback
-    });
+  if (!handled) {
+    addQueue.call(this, id, plugin, callback);
   }
 
   // Return if we were handled.

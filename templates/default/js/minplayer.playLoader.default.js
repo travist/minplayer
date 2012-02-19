@@ -31,7 +31,3 @@ minplayer.playLoader["default"].prototype.getElements = function() {
     preview:jQuery(".media-player-preview", this.display)
   });
 };
-
-// Add this to the minplayer.plugins array.
-minplayer.plugins = minplayer.plugins || [];
-minplayer.plugins.push(minplayer.playLoader["default"]);

@@ -19,14 +19,8 @@ minplayer.display = function(name, context, options) {
 
   if (context) {
 
-    // Set the display and options.
+    // Set the display.
     this.display = this.getDisplay(context);
-    this.options = options;
-
-    // Extend all display elements.
-    this.options.elements = this.options.elements || {};
-    jQuery.extend(this.options.elements, this.getElements());
-    this.elements = this.options.elements;
   }
 
   // Derive from plugin
@@ -56,6 +50,11 @@ minplayer.display.prototype.construct = function() {
 
   // Call the plugin constructor.
   minplayer.plugin.prototype.construct.call(this);
+
+  // Extend all display elements.
+  this.options.elements = this.options.elements || {};
+  jQuery.extend(this.options.elements, this.getElements());
+  this.elements = this.options.elements;
 
   // Only do this if they allow resize for this display.
   if (this.allowResize) {

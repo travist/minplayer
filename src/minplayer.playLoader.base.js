@@ -22,7 +22,7 @@ minplayer.playLoader.base = function(context, options) {
   // Define the flags that control the big play button.
   this.bigPlay = new minplayer.flags();
 
-  // The preview image.
+  /** The preview image. */
   this.preview = null;
 
   // Derive from display
@@ -43,41 +43,14 @@ minplayer.playLoader.base.prototype.construct = function() {
   // Call the media display constructor.
   minplayer.display.prototype.construct.call(this);
 
-  // Add the preview to the options.
-  if (this.elements.preview) {
-
-    // Get the poster image.
-    if (!this.options.preview) {
-      this.options.preview = this.elements.media.attr('poster');
-    }
-
-    // Reset the media's poster image.
-    this.elements.media.attr('poster', '');
-
-    // If there is a preview to show...
-    if (this.options.preview) {
-
-      // Say that this has a preview.
-      this.elements.preview.addClass('has-preview').show();
-
-      // Create a new preview image.
-      this.preview = new minplayer.image(this.elements.preview, this.options);
-
-      // Create the image.
-      this.preview.load(this.options.preview);
-    }
-    else {
-
-      // Hide the preview.
-      this.elements.preview.hide();
-    }
-  }
-
   // Get the media plugin.
   this.get('media', function(media) {
 
     // Only bind if this player does not have its own play loader.
     if (!media.hasPlayLoader()) {
+
+      // Load the preview image.
+      this.loadPreview();
 
       // Trigger a play event when someone clicks on the controller.
       if (this.elements.bigPlay) {
@@ -139,6 +112,42 @@ minplayer.playLoader.base.prototype.construct = function() {
 
   // We are now ready.
   this.ready();
+};
+
+/**
+ * Loads the preview image.
+ */
+minplayer.playLoader.base.prototype.loadPreview = function() {
+
+  // If the preview element exists.
+  if (this.elements.preview) {
+
+    // Get the poster image.
+    if (!this.options.preview) {
+      this.options.preview = this.elements.media.attr('poster');
+    }
+
+    // Reset the media's poster image.
+    this.elements.media.attr('poster', '');
+
+    // If there is a preview to show...
+    if (this.options.preview) {
+
+      // Say that this has a preview.
+      this.elements.preview.addClass('has-preview').show();
+
+      // Create a new preview image.
+      this.preview = new minplayer.image(this.elements.preview, this.options);
+
+      // Create the image.
+      this.preview.load(this.options.preview);
+    }
+    else {
+
+      // Hide the preview.
+      this.elements.preview.hide();
+    }
+  }
 };
 
 /**
