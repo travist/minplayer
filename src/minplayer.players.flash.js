@@ -49,65 +49,41 @@ minplayer.players.flash.canPlay = function(file) {
 minplayer.players.flash.getFlash = function(params) {
   // Get the protocol.
   var protocol = window.location.protocol;
-  var element = null;
-  var embed = null;
-  var paramKey = '';
-  var flashParams = {};
-  var param = null;
-
-  if (protocol.charAt(protocol.length - 1) === ':') {
+  if (protocol.charAt(protocol.length - 1) == ':') {
     protocol = protocol.substring(0, protocol.length - 1);
   }
 
-  // Create an object element.
-  element = document.createElement('object');
-  element.setAttribute('width', params.width);
-  element.setAttribute('height', params.height);
-  element.setAttribute('id', params.id);
-  element.setAttribute('name', params.id);
-  element.setAttribute('playerType', params.playerType);
+  // Convert the flashvars object to a string...
+  var flashVarsString = jQuery.param(params.flashvars);
 
-  // Setup a params array to make the param additions eaiser.
-  flashParams = {
-    'allowScriptAccess': 'always',
-    'allowfullscreen': 'true',
-    'movie': params.swf,
-    'wmode': params.wmode,
-    'quality': 'high',
-    'FlashVars': jQuery.param(params.flashvars)
-  };
-
-  // Add the parameters.
-  for (paramKey in flashParams) {
-    if (flashParams.hasOwnProperty(paramKey)) {
-      param = document.createElement('param');
-      param.setAttribute('name', paramKey);
-      param.setAttribute('value', flashParams[paramKey]);
-      element.appendChild(param);
-    }
-  }
-
-  // Add the embed element.
-  embed = document.createElement('embed');
-  for (paramKey in flashParams) {
-    if (flashParams.hasOwnProperty(paramKey)) {
-      if (paramKey === 'movie') {
-        embed.setAttribute('src', flashParams[paramKey]);
-      }
-      else {
-        embed.setAttribute(paramKey, flashParams[paramKey]);
-      }
-    }
-  }
-
-  embed.setAttribute('width', params.width);
-  embed.setAttribute('height', params.height);
-  embed.setAttribute('id', params.id);
-  embed.setAttribute('name', params.id);
-  embed.setAttribute('swLiveConnect', 'true');
-  embed.setAttribute('type', 'application/x-shockwave-flash');
-  element.appendChild(embed);
-  return element;
+  // Get the HTML flash object string.
+  var flash = '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" ';
+  flash += 'codebase="' + protocol;
+  flash += '://fpdownload.macromedia.com';
+  flash += '/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" ';
+  flash += 'playerType="' + params.playerType + '" ';
+  flash += 'width="' + params.width + '" ';
+  flash += 'height="' + params.height + '" ';
+  flash += 'id="' + params.id + '" ';
+  flash += 'name="' + params.id + '"> ';
+  flash += '<param name="allowScriptAccess" value="always"></param>';
+  flash += '<param name="allowfullscreen" value="true" />';
+  flash += '<param name="movie" value="' + params.swf + '"></param>';
+  flash += '<param name="wmode" value="' + params.wmode + '"></param>';
+  flash += '<param name="quality" value="high"></param>';
+  flash += '<param name="FlashVars" value="' + flashVarsString + '"></param>';
+  flash += '<embed src="' + params.swf + '" ';
+  flash += 'quality="high" ';
+  flash += 'width="' + params.width + '" height="' + params.height + '" ';
+  flash += 'id="' + params.id + '" name="' + params.id + '" ';
+  flash += 'swLiveConnect="true" allowScriptAccess="always" ';
+  flash += 'wmode="' + params.wmode + '"';
+  flash += 'allowfullscreen="true" type="application/x-shockwave-flash" ';
+  flash += 'FlashVars="' + flashVarsString + '" ';
+  flash += 'pluginspage="' + protocol;
+  flash += '://www.macromedia.com/go/getflashplayer" />';
+  flash += '</object>';
+  return flash;
 };
 
 /**

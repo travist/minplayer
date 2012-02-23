@@ -83,6 +83,11 @@ minplayer.prototype = new minplayer.display();
 minplayer.prototype.constructor = minplayer;
 
 /**
+ * Define a way to debug.
+ */
+minplayer.console = console || {log: function(data) {}};
+
+/**
  * @see minplayer.plugin.construct
  */
 minplayer.prototype.construct = function() {
@@ -104,10 +109,23 @@ minplayer.prototype.construct = function() {
 
   // Want to trigger when each plugin is ready.
   var _this = this;
-  minplayer.get(this.options.id, null, function(plugin) {
+  minplayer.get.call(this, this.options.id, null, function(plugin) {
+
     // Bind to the error event.
     plugin.bind('error', function(event, data) {
-      _this.error(data);
+
+      // Log this to console.
+      minplayer.console.log(data);
+
+      // If an error occurs within the html5 media player, then try
+      // to fall back to the flash player.
+      if (_this.currentPlayer == 'html5') {
+        _this.options.file.player = 'minplayer';
+        _this.loadPlayer();
+      }
+      else {
+        _this.error(data);
+      }
     });
 
     // Bind to the fullscreen event.
@@ -115,9 +133,6 @@ minplayer.prototype.construct = function() {
       _this.resize();
     });
   });
-
-  // We are now ready.
-  this.ready();
 };
 
 /**
@@ -126,6 +141,7 @@ minplayer.prototype.construct = function() {
  * @param {string} error The error to display on the player.
  */
 minplayer.prototype.error = function(error) {
+  error = error || '';
   if (this.elements.error) {
 
     // Set the error text.
@@ -227,18 +243,9 @@ minplayer.prototype.getMediaFile = function(files) {
 };
 
 /**
- * Load a set of files or a single file for the media player.
- *
- * @param {array} files An array of files to chose from to load.
+ * Loads a media player based on the current file.
  */
-minplayer.prototype.load = function(files) {
-
-  // Set the id and class.
-  var id = '', pClass = '';
-
-  // If no file was provided, then get it.
-  this.options.files = files || this.options.files;
-  this.options.file = this.getMediaFile(this.options.files);
+minplayer.prototype.loadPlayer = function() {
 
   // Do nothing if there isn't a file.
   if (!this.options.file) {
@@ -269,11 +276,6 @@ minplayer.prototype.load = function(files) {
       return;
     }
 
-    // If the media exists, then destroy it.
-    if (this.media) {
-      this.media.destory();
-    }
-
     // Get the class name and create the new player.
     pClass = minplayer.players[this.options.file.player];
 
@@ -283,6 +285,7 @@ minplayer.prototype.load = function(files) {
     // Now get the media, and load it.
     this.get('media', function(media) {
       media.load();
+      this.ready();
     });
   }
   // If the media object already exists...
@@ -291,6 +294,24 @@ minplayer.prototype.load = function(files) {
     // Now load the different media file.
     this.media.load(this.options.file);
   }
+};
+
+/**
+ * Load a set of files or a single file for the media player.
+ *
+ * @param {array} files An array of files to chose from to load.
+ */
+minplayer.prototype.load = function(files) {
+
+  // Set the id and class.
+  var id = '', pClass = '';
+
+  // If no file was provided, then get it.
+  this.options.files = files || this.options.files;
+  this.options.file = this.getMediaFile(this.options.files);
+
+  // Now load the player.
+  this.loadPlayer();
 };
 
 /**

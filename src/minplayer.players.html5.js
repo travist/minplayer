@@ -73,6 +73,11 @@ minplayer.players.html5.prototype.construct = function() {
     }, false);
     this.player.addEventListener('loadstart', function() {
       _this.onReady();
+      /** Used to test 'error' fallback.
+      setTimeout(function() {
+        _this.trigger('error', "An error occured - ");
+      }, 200);
+      */
     }, false);
     this.player.addEventListener('loadeddata', function() {
       _this.onLoaded();
@@ -96,19 +101,7 @@ minplayer.players.html5.prototype.construct = function() {
       _this.onPlaying();
     }, false);
     this.player.addEventListener('error', function() {
-      var error = '';
-      switch (this.error.code) {
-         case MEDIA_ERR_NETWORK:
-            error = 'Network error - please try again later.';
-            break;
-         case MEDIA_ERR_DECODE:
-            error = 'Video is broken..';
-            break;
-         case MEDIA_ERR_SRC_NOT_SUPPORTED:
-            error = 'Sorry, your browser can\'t play this video.';
-            break;
-       }
-      _this.trigger('error', error);
+      _this.trigger('error', 'An error occured - ' + this.error.code);
     }, false);
     this.player.addEventListener('waiting', function() {
       _this.onWaiting();

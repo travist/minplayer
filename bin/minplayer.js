@@ -220,6 +220,9 @@ minplayer.instances = minplayer.instances || {};
 /** Static array to keep track of queues. */
 minplayer.queue = minplayer.queue || [];
 
+/** Mutex lock to keep multiple triggers from occuring. */
+minplayer.lock = false;
+
 /**
  * @constructor
  * @class The base class for all plugins.
@@ -261,14 +264,6 @@ minplayer.plugin.prototype.construct = function() {
 };
 
 /**
- * Destructor.
- */
-minplayer.plugin.prototype.destroy = function() {
-  var plugin = this.get(this.options.id, this.name);
-  plugin = null;
-};
-
-/**
  * Loads all of the available plugins.
  */
 minplayer.plugin.prototype.loadPlugins = function() {
@@ -300,11 +295,18 @@ minplayer.plugin.prototype.loadPlugins = function() {
  */
 minplayer.plugin.prototype.ready = function() {
 
-  // Set the ready flag.
-  this.pluginReady = true;
+  // Keep this plugin from triggering multiple ready events.
+  if (!this.pluginReady) {
 
-  // Check the queue.
-  this.checkQueue();
+    // Set the ready flag.
+    this.pluginReady = true;
+
+    // Check the queue.
+    this.checkQueue();
+
+    // Now trigger that I am ready.
+    this.trigger('pluginReady');
+  }
 };
 
 /**
@@ -355,32 +357,116 @@ minplayer.plugin.prototype.get = function(plugin, callback) {
  * Check the queue and execute it.
  */
 minplayer.plugin.prototype.checkQueue = function() {
-  var q = null;
-  var check = false;
-  var newqueue = [];
-  var i = minplayer.queue.length;
-  while (i--) {
 
-    // Get the queue item.
+  // Initialize our variables.
+  var q = null, i = 0, check = false, newqueue = [];
+
+  // Set the lock.
+  minplayer.lock = true;
+
+  // Iterate through all the queues.
+  var length = minplayer.queue.length;
+  for (i = 0; i < length; i++) {
+
+    // Get the queue.
     q = minplayer.queue[i];
 
     // Now check to see if this queue is about us.
     check = !q.id && !q.plugin;
     check |= (q.plugin == this.name) && (!q.id || (q.id == this.options.id));
 
-    // If so, then lets try to handle the request.
+    // If the check passes...
     if (check) {
-      check &= minplayer.get.call(q.context, q.id, q.plugin, q.callback, true);
+      check = minplayer.bind.call(
+        q.context,
+        q.event,
+        this.options.id,
+        this.name,
+        q.callback
+      );
     }
 
-    // If nothing checks out, keep this in the queue.
+    // Add the queue back if it doesn't check out.
     if (!check) {
+
+      // Add this back to the queue.
       newqueue.push(q);
     }
   }
 
-  // Replace the queue.
+  // Set the old queue to the new queue.
   minplayer.queue = newqueue;
+
+  // Release the lock.
+  minplayer.lock = false;
+};
+
+/**
+ * Adds an item to the queue.
+ *
+ * @param {object} context The context which this is called within.
+ * @param {string} event The event to trigger on.
+ * @param {string} id The player ID.
+ * @param {string} plugin The name of the plugin.
+ * @param {function} callback Called when the event occurs.
+ */
+minplayer.addQueue = function(context, event, id, plugin, callback) {
+
+  // See if it is locked...
+  if (!minplayer.lock) {
+    minplayer.queue.push({
+      context: context,
+      id: id,
+      event: event,
+      plugin: plugin,
+      callback: callback
+    });
+  }
+  else {
+
+    // If so, then try again after 10 milliseconds.
+    setTimeout(function() {
+      minplayer.addQueue(context, id, event, plugin, callback);
+    }, 10);
+  }
+};
+
+/**
+ * Binds an event to a plugin instance, and if it doesn't exist, then caches
+ * it for a later time.
+ *
+ * @param {string} event The event to trigger on.
+ * @param {string} id The player ID.
+ * @param {string} plugin The name of the plugin.
+ * @param {function} callback Called when the event occurs.
+ * @return {boolean} If the bind was successful.
+ * @this The object in context who called this method.
+ */
+minplayer.bind = function(event, id, plugin, callback) {
+
+  // If no callback exists, then just return false.
+  if (!callback) {
+    return false;
+  }
+
+  // Get the instances.
+  var inst = minplayer.instances;
+
+  // See if this plugin exists.
+  if (inst[id][plugin]) {
+
+    // If so, then bind the event to this plugin.
+    inst[id][plugin].bind(event, {context: this}, function(event, data) {
+      callback.call(event.data.context, data.plugin);
+    });
+    return true;
+  }
+
+  // If not, then add it to the queue to bind later.
+  minplayer.addQueue(this, event, id, plugin, callback);
+
+  // Return that this wasn't handled.
+  return false;
 };
 
 /**
@@ -437,40 +523,9 @@ minplayer.plugin.prototype.checkQueue = function() {
  * @param {string} id The ID of the widget to get the plugins from.
  * @param {string} plugin The name of the plugin.
  * @param {function} callback Called when the plugin is ready.
- * @param {boolean} noqueue To see if we wish to queue this request for later.
- * @return {object} The plugin instance.
+ * @return {object} The plugin object if it is immediately available.
  */
-minplayer.get = function(id, plugin, callback, noqueue) {
-  var handled = false;
-
-  // Private function to add to the queue.
-  function addQueue(id, plugin, callback) {
-    if (!noqueue && callback) {
-      minplayer.queue.push({
-        context: this,
-        id: id,
-        plugin: plugin,
-        callback: callback
-      });
-    }
-  }
-
-  // Private function to call when ready.
-  function onReady(id, plugin, callback) {
-    var inst = minplayer.instances;
-    if (inst.hasOwnProperty(id) &&
-        inst[id].hasOwnProperty(plugin) &&
-        inst[id][plugin].pluginReady) {
-      callback.call(this, inst[id][plugin]);
-      return true;
-    }
-
-    // Add to the queue.
-    addQueue.call(this, id, plugin, callback);
-
-    // Return that this wasn't handled.
-    return false;
-  }
+minplayer.get = function(id, plugin, callback) {
 
   // Normalize the arguments for a better interface.
   if (typeof id === 'function') {
@@ -490,16 +545,6 @@ minplayer.get = function(id, plugin, callback, noqueue) {
   // Get the instances.
   var inst = minplayer.instances;
 
-  // Protect against invalid ids and types.
-  if (id && !inst[id]) {
-    addQueue.call(this, id, plugin, callback);
-    return null;
-  }
-  if (id && plugin && !inst[id][plugin]) {
-    addQueue.call(this, id, plugin, callback);
-    return null;
-  }
-
   // 0x000
   if (!id && !plugin && !callback) {
     return inst;
@@ -514,18 +559,18 @@ minplayer.get = function(id, plugin, callback, noqueue) {
   }
   // 0x111
   else if (id && plugin && callback) {
-    handled = onReady.call(this, id, plugin, callback);
+    minplayer.bind.call(this, 'pluginReady', id, plugin, callback);
   }
   // 0x011
   else if (!id && plugin && callback) {
     for (var id in inst) {
-      handled = onReady.call(this, id, plugin, callback);
+      minplayer.bind.call(this, 'pluginReady', id, plugin, callback);
     }
   }
   // 0x101
   else if (id && !plugin && callback) {
     for (var plugin in inst[id]) {
-      handled = onReady.call(this, id, plugin, callback);
+      minplayer.bind.call(this, 'pluginReady', id, plugin, callback);
     }
   }
   // 0x010
@@ -542,18 +587,10 @@ minplayer.get = function(id, plugin, callback, noqueue) {
   else {
     for (var id in inst) {
       for (var plugin in inst[id]) {
-        handled = onReady.call(this, id, plugin, callback);
+        minplayer.bind.call(this, 'pluginReady', id, plugin, callback);
       }
     }
   }
-
-  // If this wasn't handled, then queue for later.'
-  if (!handled) {
-    addQueue.call(this, id, plugin, callback);
-  }
-
-  // Return if we were handled.
-  return handled;
 };
 /** The minplayer namespace. */
 minplayer = minplayer || {};
@@ -645,6 +682,8 @@ minplayer.display.prototype.onResize = function() {
  * @return {object} The jQuery prototype.
  */
 minplayer.display.prototype.trigger = function(type, data) {
+  data = data || {};
+  data.plugin = this;
   return this.display.trigger(type, data);
 };
 
@@ -793,6 +832,11 @@ minplayer.prototype = new minplayer.display();
 minplayer.prototype.constructor = minplayer;
 
 /**
+ * Define a way to debug.
+ */
+minplayer.console = console || {log: function(data) {}};
+
+/**
  * @see minplayer.plugin.construct
  */
 minplayer.prototype.construct = function() {
@@ -814,10 +858,23 @@ minplayer.prototype.construct = function() {
 
   // Want to trigger when each plugin is ready.
   var _this = this;
-  minplayer.get(this.options.id, null, function(plugin) {
+  minplayer.get.call(this, this.options.id, null, function(plugin) {
+
     // Bind to the error event.
     plugin.bind('error', function(event, data) {
-      _this.error(data);
+
+      // Log this to console.
+      minplayer.console.log(data);
+
+      // If an error occurs within the html5 media player, then try
+      // to fall back to the flash player.
+      if (_this.currentPlayer == 'html5') {
+        _this.options.file.player = 'minplayer';
+        _this.loadPlayer();
+      }
+      else {
+        _this.error(data);
+      }
     });
 
     // Bind to the fullscreen event.
@@ -825,9 +882,6 @@ minplayer.prototype.construct = function() {
       _this.resize();
     });
   });
-
-  // We are now ready.
-  this.ready();
 };
 
 /**
@@ -836,6 +890,7 @@ minplayer.prototype.construct = function() {
  * @param {string} error The error to display on the player.
  */
 minplayer.prototype.error = function(error) {
+  error = error || '';
   if (this.elements.error) {
 
     // Set the error text.
@@ -937,18 +992,9 @@ minplayer.prototype.getMediaFile = function(files) {
 };
 
 /**
- * Load a set of files or a single file for the media player.
- *
- * @param {array} files An array of files to chose from to load.
+ * Loads a media player based on the current file.
  */
-minplayer.prototype.load = function(files) {
-
-  // Set the id and class.
-  var id = '', pClass = '';
-
-  // If no file was provided, then get it.
-  this.options.files = files || this.options.files;
-  this.options.file = this.getMediaFile(this.options.files);
+minplayer.prototype.loadPlayer = function() {
 
   // Do nothing if there isn't a file.
   if (!this.options.file) {
@@ -979,11 +1025,6 @@ minplayer.prototype.load = function(files) {
       return;
     }
 
-    // If the media exists, then destroy it.
-    if (this.media) {
-      this.media.destory();
-    }
-
     // Get the class name and create the new player.
     pClass = minplayer.players[this.options.file.player];
 
@@ -993,6 +1034,7 @@ minplayer.prototype.load = function(files) {
     // Now get the media, and load it.
     this.get('media', function(media) {
       media.load();
+      this.ready();
     });
   }
   // If the media object already exists...
@@ -1001,6 +1043,24 @@ minplayer.prototype.load = function(files) {
     // Now load the different media file.
     this.media.load(this.options.file);
   }
+};
+
+/**
+ * Load a set of files or a single file for the media player.
+ *
+ * @param {array} files An array of files to chose from to load.
+ */
+minplayer.prototype.load = function(files) {
+
+  // Set the id and class.
+  var id = '', pClass = '';
+
+  // If no file was provided, then get it.
+  this.options.files = files || this.options.files;
+  this.options.file = this.getMediaFile(this.options.files);
+
+  // Now load the player.
+  this.loadPlayer();
 };
 
 /**
@@ -1994,6 +2054,11 @@ minplayer.players.html5.prototype.construct = function() {
     }, false);
     this.player.addEventListener('loadstart', function() {
       _this.onReady();
+      /** Used to test 'error' fallback.
+      setTimeout(function() {
+        _this.trigger('error', "An error occured - ");
+      }, 200);
+      */
     }, false);
     this.player.addEventListener('loadeddata', function() {
       _this.onLoaded();
@@ -2017,19 +2082,7 @@ minplayer.players.html5.prototype.construct = function() {
       _this.onPlaying();
     }, false);
     this.player.addEventListener('error', function() {
-      var error = '';
-      switch (this.error.code) {
-         case MEDIA_ERR_NETWORK:
-            error = 'Network error - please try again later.';
-            break;
-         case MEDIA_ERR_DECODE:
-            error = 'Video is broken..';
-            break;
-         case MEDIA_ERR_SRC_NOT_SUPPORTED:
-            error = 'Sorry, your browser can\'t play this video.';
-            break;
-       }
-      _this.trigger('error', error);
+      _this.trigger('error', 'An error occured - ' + this.error.code);
     }, false);
     this.player.addEventListener('waiting', function() {
       _this.onWaiting();
@@ -2306,65 +2359,41 @@ minplayer.players.flash.canPlay = function(file) {
 minplayer.players.flash.getFlash = function(params) {
   // Get the protocol.
   var protocol = window.location.protocol;
-  var element = null;
-  var embed = null;
-  var paramKey = '';
-  var flashParams = {};
-  var param = null;
-
-  if (protocol.charAt(protocol.length - 1) === ':') {
+  if (protocol.charAt(protocol.length - 1) == ':') {
     protocol = protocol.substring(0, protocol.length - 1);
   }
 
-  // Create an object element.
-  element = document.createElement('object');
-  element.setAttribute('width', params.width);
-  element.setAttribute('height', params.height);
-  element.setAttribute('id', params.id);
-  element.setAttribute('name', params.id);
-  element.setAttribute('playerType', params.playerType);
+  // Convert the flashvars object to a string...
+  var flashVarsString = jQuery.param(params.flashvars);
 
-  // Setup a params array to make the param additions eaiser.
-  flashParams = {
-    'allowScriptAccess': 'always',
-    'allowfullscreen': 'true',
-    'movie': params.swf,
-    'wmode': params.wmode,
-    'quality': 'high',
-    'FlashVars': jQuery.param(params.flashvars)
-  };
-
-  // Add the parameters.
-  for (paramKey in flashParams) {
-    if (flashParams.hasOwnProperty(paramKey)) {
-      param = document.createElement('param');
-      param.setAttribute('name', paramKey);
-      param.setAttribute('value', flashParams[paramKey]);
-      element.appendChild(param);
-    }
-  }
-
-  // Add the embed element.
-  embed = document.createElement('embed');
-  for (paramKey in flashParams) {
-    if (flashParams.hasOwnProperty(paramKey)) {
-      if (paramKey === 'movie') {
-        embed.setAttribute('src', flashParams[paramKey]);
-      }
-      else {
-        embed.setAttribute(paramKey, flashParams[paramKey]);
-      }
-    }
-  }
-
-  embed.setAttribute('width', params.width);
-  embed.setAttribute('height', params.height);
-  embed.setAttribute('id', params.id);
-  embed.setAttribute('name', params.id);
-  embed.setAttribute('swLiveConnect', 'true');
-  embed.setAttribute('type', 'application/x-shockwave-flash');
-  element.appendChild(embed);
-  return element;
+  // Get the HTML flash object string.
+  var flash = '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" ';
+  flash += 'codebase="' + protocol;
+  flash += '://fpdownload.macromedia.com';
+  flash += '/pub/shockwave/cabs/flash/swflash.cab#version=9,0,0,0" ';
+  flash += 'playerType="' + params.playerType + '" ';
+  flash += 'width="' + params.width + '" ';
+  flash += 'height="' + params.height + '" ';
+  flash += 'id="' + params.id + '" ';
+  flash += 'name="' + params.id + '"> ';
+  flash += '<param name="allowScriptAccess" value="always"></param>';
+  flash += '<param name="allowfullscreen" value="true" />';
+  flash += '<param name="movie" value="' + params.swf + '"></param>';
+  flash += '<param name="wmode" value="' + params.wmode + '"></param>';
+  flash += '<param name="quality" value="high"></param>';
+  flash += '<param name="FlashVars" value="' + flashVarsString + '"></param>';
+  flash += '<embed src="' + params.swf + '" ';
+  flash += 'quality="high" ';
+  flash += 'width="' + params.width + '" height="' + params.height + '" ';
+  flash += 'id="' + params.id + '" name="' + params.id + '" ';
+  flash += 'swLiveConnect="true" allowScriptAccess="always" ';
+  flash += 'wmode="' + params.wmode + '"';
+  flash += 'allowfullscreen="true" type="application/x-shockwave-flash" ';
+  flash += 'FlashVars="' + flashVarsString + '" ';
+  flash += 'pluginspage="' + protocol;
+  flash += '://www.macromedia.com/go/getflashplayer" />';
+  flash += '</object>';
+  return flash;
 };
 
 /**
@@ -2435,15 +2464,13 @@ window.onFlashPlayerUpdate = function(id, eventType) {
   }
 };
 
-var debugConsole = console || {log: function(data) {}};
-
 /**
  * Used to debug from the Flash player to the browser console.
  *
  * @param {string} debug The debug string.
  */
 window.onFlashPlayerDebug = function(debug) {
-  debugConsole.log(debug);
+  minplayer.console.log(debug);
 };
 
 /**
@@ -3381,7 +3408,7 @@ minplayer.controller.base.prototype.construct = function() {
     });
   }
 
-  // Get the media plugin.
+  // Get the player plugin.
   this.get('media', function(media) {
 
     var _this = this;
