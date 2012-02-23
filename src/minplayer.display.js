@@ -88,6 +88,8 @@ minplayer.display.prototype.onResize = function() {
  * @return {object} The jQuery prototype.
  */
 minplayer.display.prototype.trigger = function(type, data) {
+  data = data || {};
+  data.plugin = this;
   return this.display.trigger(type, data);
 };
 

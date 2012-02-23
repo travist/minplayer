@@ -49,15 +49,13 @@ window.onFlashPlayerUpdate = function(id, eventType) {
   }
 };
 
-var debugConsole = console || {log: function(data) {}};
-
 /**
  * Used to debug from the Flash player to the browser console.
  *
  * @param {string} debug The debug string.
  */
 window.onFlashPlayerDebug = function(debug) {
-  debugConsole.log(debug);
+  minplayer.console.log(debug);
 };
 
 /**

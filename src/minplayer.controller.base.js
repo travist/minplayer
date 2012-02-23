@@ -119,7 +119,7 @@ minplayer.controller.base.prototype.construct = function() {
     });
   }
 
-  // Get the media plugin.
+  // Get the player plugin.
   this.get('media', function(media) {
 
     var _this = this;
