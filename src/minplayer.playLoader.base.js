@@ -54,8 +54,7 @@ minplayer.playLoader.base.prototype.construct = function() {
 
       // Trigger a play event when someone clicks on the controller.
       if (this.elements.bigPlay) {
-        this.elements.bigPlay.unbind();
-        this.elements.bigPlay.bind('click', function(event) {
+        this.elements.bigPlay.unbind().bind('click', function(event) {
           event.preventDefault();
           jQuery(this).hide();
           media.play();
@@ -63,7 +62,7 @@ minplayer.playLoader.base.prototype.construct = function() {
       }
 
       // Bind to the player events to control the play loader.
-      media.bind('loadstart', {obj: this}, function(event) {
+      media.unbind('loadstart').bind('loadstart', {obj: this}, function(event) {
         event.data.obj.busy.setFlag('media', true);
         event.data.obj.bigPlay.setFlag('media', true);
         if (event.data.obj.preview) {
@@ -96,17 +95,16 @@ minplayer.playLoader.base.prototype.construct = function() {
 
       // Hide the busy cursor.
       if (this.elements.busy) {
-        this.elements.busy.hide();
+        this.elements.busy.unbind().hide();
       }
 
       // Hide the big play button.
       if (this.elements.bigPlay) {
-        this.elements.bigPlay.unbind();
-        this.elements.bigPlay.hide();
+        this.elements.bigPlay.unbind().hide();
       }
 
       // Hide the display.
-      this.display.hide();
+      this.display.unbind().hide();
     }
   });
 

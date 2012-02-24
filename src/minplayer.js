@@ -107,7 +107,17 @@ minplayer.prototype.construct = function() {
   // Now load these files.
   this.load(this.getFiles());
 
-  // Want to trigger when each plugin is ready.
+  // Add the player events.
+  this.addEvents();
+
+  // The player is ready.
+  this.ready();
+};
+
+/**
+ * We need to bind to events we are interested in.
+ */
+minplayer.prototype.addEvents = function() {
   var _this = this;
   minplayer.get.call(this, this.options.id, null, function(plugin) {
 
@@ -276,16 +286,28 @@ minplayer.prototype.loadPlayer = function() {
       return;
     }
 
+    // Store the queue.
+    var queue = this.media ? this.media.queue : {};
+
+    // Destroy the current media.
+    if (this.media) {
+      this.media.destroy();
+    }
+
     // Get the class name and create the new player.
     pClass = minplayer.players[this.options.file.player];
 
     // Create the new media player.
     this.media = new pClass(this.elements.display, this.options);
 
-    // Now get the media, and load it.
+    // Restore the queue.
+    this.media.queue = queue;
+
+    // Now get the media when it is ready.
     this.get('media', function(media) {
+
+      // Load the media.
       media.load();
-      this.ready();
     });
   }
   // If the media object already exists...

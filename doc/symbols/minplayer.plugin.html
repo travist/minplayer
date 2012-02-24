@@ -289,6 +289,16 @@ ul.inheritsList
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
 								<div class="fixedFont">
+								<b><a href="../symbols/minplayer.plugin.html#lock">lock</a></b>
+								</div>
+								<div class="description">Create a queue lock.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
 								<b><a href="../symbols/minplayer.plugin.html#name">name</a></b>
 								</div>
 								<div class="description">The name of this plugin.</div>
@@ -312,6 +322,26 @@ ul.inheritsList
 								<b><a href="../symbols/minplayer.plugin.html#pluginReady">pluginReady</a></b>
 								</div>
 								<div class="description">The ready flag.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/minplayer.plugin.html#queue">queue</a></b>
+								</div>
+								<div class="description">The event queue.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/minplayer.plugin.html#triggered">triggered</a></b>
+								</div>
+								<div class="description">Keep track of already triggered events.</div>
 							</td>
 						</tr>
 					
@@ -348,6 +378,15 @@ ul.inheritsList
 						<tr>
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.plugin.html#bind">bind</a></b>(type, data, fn)
+								</div>
+								<div class="description">Bind to a media event.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont"><b><a href="../symbols/minplayer.plugin.html#checkQueue">checkQueue</a></b>()
 								</div>
 								<div class="description">Check the queue and execute it.</div>
@@ -360,6 +399,15 @@ ul.inheritsList
 								<div class="fixedFont"><b><a href="../symbols/minplayer.plugin.html#construct">construct</a></b>()
 								</div>
 								<div class="description">The constructor which is called once the context is set.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.plugin.html#destroy">destroy</a></b>()
+								</div>
+								<div class="description">Destructor.</div>
 							</td>
 						</tr>
 					
@@ -387,6 +435,24 @@ ul.inheritsList
 								<div class="fixedFont"><b><a href="../symbols/minplayer.plugin.html#ready">ready</a></b>()
 								</div>
 								<div class="description">Plugins should call this method when they are ready.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.plugin.html#trigger">trigger</a></b>(type, data)
+								</div>
+								<div class="description">Trigger a media event.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont"><b><a href="../symbols/minplayer.plugin.html#unbind">unbind</a></b>(type, fn)
+								</div>
+								<div class="description">Unbind a media event.</div>
 							</td>
 						</tr>
 					
@@ -458,6 +524,28 @@ ul.inheritsList
 					Field Detail
 				</div>
 				
+					<a name="lock"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>lock</b>
+					
+					</div>
+					<div class="description">
+						Create a queue lock.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
 					<a name="name"> </a>
 					<div class="fixedFont">
 					
@@ -522,6 +610,50 @@ ul.inheritsList
 						
 						
 
+					<hr />
+				
+					<a name="queue"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>queue</b>
+					
+					</div>
+					<div class="description">
+						The event queue.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="triggered"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>triggered</b>
+					
+					</div>
+					<div class="description">
+						Keep track of already triggered events.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
 					
 				
 			
@@ -574,6 +706,61 @@ ul.inheritsList
 
 					<hr />
 				
+					<a name="bind"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{object}</span>
+					<b>bind</b>(type, data, fn)
+					
+					</div>
+					<div class="description">
+						Bind to a media event.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>type</b>
+									
+								</dt>
+								<dd>The event type.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>data</b>
+									
+								</dt>
+								<dd>The data to bind with the event.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{function}</span> <b>fn</b>
+									
+								</dt>
+								<dd>The callback function.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{object}</span> The plugin object.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name="checkQueue"> </a>
 					<div class="fixedFont">
 					
@@ -612,6 +799,31 @@ Any class deriving from the plugin class should place all context
 dependant functionality within this function instead of the standard
 constructor function since it is called on object derivation as well
 as object creation.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="destroy"> </a>
+					<div class="fixedFont">
+					
+					
+					<b>destroy</b>()
+					
+					</div>
+					<div class="description">
+						Destructor.
 						
 						
 					</div>
@@ -725,6 +937,104 @@ as object creation.
 						
 						
 
+					<hr />
+				
+					<a name="trigger"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{object}</span>
+					<b>trigger</b>(type, data)
+					
+					</div>
+					<div class="description">
+						Trigger a media event.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>type</b>
+									
+								</dt>
+								<dd>The event type.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{object}</span> <b>data</b>
+									
+								</dt>
+								<dd>The event data object.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{object}</span> The plugin object.</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name="unbind"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{object}</span>
+					<b>unbind</b>(type, fn)
+					
+					</div>
+					<div class="description">
+						Unbind a media event.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{string}</span> <b>type</b>
+									
+								</dt>
+								<dd>The event type.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{function}</span> <b>fn</b>
+									
+								</dt>
+								<dd>The callback function.</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{object}</span> The plugin object.</dd>
+							
+							</dl>
+						
+						
+						
+
 					
 				
 			
@@ -739,7 +1049,7 @@ as object creation.
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Wed Feb 22 2012 22:31:17 GMT-0600 (CST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Thu Feb 23 2012 12:00:39 GMT-0600 (CST)
 		</div>
 	</body>
 </html>
