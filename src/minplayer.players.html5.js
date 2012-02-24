@@ -109,26 +109,6 @@ minplayer.players.html5.prototype.construct = function() {
       _this.bytesTotal.set(event.total);
       _this.bytesLoaded.set(event.loaded);
     }, false);
-    if (this.autoBuffer()) {
-      this.player.autobuffer = true;
-    } else {
-      this.player.autobuffer = false;
-      this.player.preload = 'none';
-    }
-  }
-};
-
-/**
- * Determine if this player is able to autobuffer.
- * @return {boolean} TRUE - the player is able to autobuffer.
- */
-minplayer.players.html5.prototype.autoBuffer = function() {
-  var preload = this.player.preload !== 'none';
-  if (typeof this.player.hasAttribute === 'function') {
-    return this.player.hasAttribute('preload') && preload;
-  }
-  else {
-    return false;
   }
 };
 

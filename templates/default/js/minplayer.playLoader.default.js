@@ -18,7 +18,20 @@ minplayer.playLoader["default"].prototype.constructor = minplayer.playLoader["de
 /**
  * Return the display for this plugin.
  */
-minplayer.playLoader["default"].prototype.getDisplay = function(context) {
+minplayer.playLoader["default"].prototype.getDisplay = function(context, options) {
+
+  // See if we need to build out the controller.
+  if (context.build) {
+
+    // Prepend the playloader template.
+    context.prepend('\
+    <div class="media-player-play-loader">\
+      <div class="media-player-big-play"><span></span></div>\
+      <div class="media-player-loader">&nbsp;</div>\
+      <div class="media-player-preview"></div>\
+    </div>');
+  }
+
   return jQuery('.media-player-play-loader', context);
 }
 

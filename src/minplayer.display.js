@@ -20,7 +20,7 @@ minplayer.display = function(name, context, options) {
   if (context) {
 
     // Set the display.
-    this.display = this.getDisplay(context);
+    this.display = this.getDisplay(context, options);
   }
 
   // Derive from plugin
@@ -37,9 +37,10 @@ minplayer.display.prototype.constructor = minplayer.display;
  * Returns the display for this component.
  *
  * @param {object} context The original context.
+ * @param {object} options The options for this component.
  * @return {object} The jQuery context for this display.
  */
-minplayer.display.prototype.getDisplay = function(context) {
+minplayer.display.prototype.getDisplay = function(context, options) {
   return jQuery(context);
 };
 
