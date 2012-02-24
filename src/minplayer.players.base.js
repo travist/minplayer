@@ -88,17 +88,22 @@ minplayer.players.base.prototype.construct = function() {
 };
 
 /**
+ * @see minplayer.plugin.destroy.
+ */
+minplayer.players.base.prototype.destroy = function() {
+  minplayer.plugin.prototype.destroy.call(this);
+
+  // Reset the player.
+  this.reset();
+};
+
+/**
  * Clears all the intervals.
  */
 minplayer.players.base.prototype.clearIntervals = function() {
   // Stop the intervals.
-  if (this.playInterval) {
-    clearInterval(this.playInterval);
-  }
-
-  if (this.progressInterval) {
-    clearInterval(this.progressInterval);
-  }
+  this.playInterval = false;
+  this.progressInterval = false;
 };
 
 /**
@@ -130,9 +135,23 @@ minplayer.players.base.prototype.reset = function() {
   // Stop the intervals.
   this.clearIntervals();
 
-  // Set the intervals to zero.
-  this.playInterval = 0;
-  this.progressInterval = 0;
+  // If the player exists, then unbind all events.
+  if (this.player) {
+    jQuery(this.player).unbind();
+  }
+};
+
+/**
+ * Create a polling timer.
+ * @param {function} callback The function to call when you poll.
+ */
+minplayer.players.base.prototype.poll = function(callback) {
+  var _this = this;
+  setTimeout(function later() {
+    if (callback.call(_this)) {
+      setTimeout(later, 1000);
+    }
+  }, 1000);
 };
 
 /**
@@ -148,35 +167,43 @@ minplayer.players.base.prototype.onReady = function() {
   // Set the volume to the default.
   this.setVolume(this.options.volume / 100);
 
-  // Create a progress interval to keep track of the bytes loaded.
-  this.progressInterval = setInterval(function() {
+  // Setup the progress interval.
+  this.progressInterval = true;
 
-    // Get the bytes loaded asynchronously.
-    _this.getBytesLoaded(function(bytesLoaded) {
+  // Create a poll to get the progress.
+  this.poll(function() {
 
-      // Get the bytes total asynchronously.
-      _this.getBytesTotal(function(bytesTotal) {
+    // Only do this if the play interval is set.
+    if (_this.progressInterval) {
 
-        // Trigger an event about the progress.
-        if (bytesLoaded || bytesTotal) {
+      // Get the bytes loaded asynchronously.
+      _this.getBytesLoaded(function(bytesLoaded) {
 
-          // Get the bytes start, but don't require it.
-          var bytesStart = 0;
-          _this.getBytesStart(function(val) {
-            bytesStart = val;
-          });
+        // Get the bytes total asynchronously.
+        _this.getBytesTotal(function(bytesTotal) {
 
-          // Trigger a progress event.
-          _this.trigger('progress', {
-            loaded: bytesLoaded,
-            total: bytesTotal,
-            start: bytesStart
-          });
-        }
+          // Trigger an event about the progress.
+          if (bytesLoaded || bytesTotal) {
+
+            // Get the bytes start, but don't require it.
+            var bytesStart = 0;
+            _this.getBytesStart(function(val) {
+              bytesStart = val;
+            });
+
+            // Trigger a progress event.
+            _this.trigger('progress', {
+              loaded: bytesLoaded,
+              total: bytesTotal,
+              start: bytesStart
+            });
+          }
+        });
       });
+    }
 
-    });
-  }, 1000);
+    return _this.progressInterval;
+  });
 
   // We are now ready.
   this.ready();
@@ -195,31 +222,40 @@ minplayer.players.base.prototype.onPlaying = function() {
   // Trigger an event that we are playing.
   this.trigger('playing');
 
-  // Create a progress interval to keep track of the bytes loaded.
-  this.playInterval = setInterval(function() {
+  // Set the playInterval to true.
+  this.playInterval = true;
 
-    // Get the current time asyncrhonously.
-    _this.getCurrentTime(function(currentTime) {
+  // Create a poll to get the timeupate.
+  this.poll(function() {
 
-      // Get the duration asynchronously.
-      _this.getDuration(function(duration) {
+    // Only do this if the play interval is set.
+    if (_this.playInterval) {
 
-        // Convert these to floats.
-        currentTime = parseFloat(currentTime);
-        duration = parseFloat(duration);
+      // Get the current time asyncrhonously.
+      _this.getCurrentTime(function(currentTime) {
 
-        // Trigger an event about the progress.
-        if (currentTime || duration) {
+        // Get the duration asynchronously.
+        _this.getDuration(function(duration) {
 
-          // Trigger an update event.
-          _this.trigger('timeupdate', {
-            currentTime: currentTime,
-            duration: duration
-          });
-        }
+          // Convert these to floats.
+          currentTime = parseFloat(currentTime);
+          duration = parseFloat(duration);
+
+          // Trigger an event about the progress.
+          if (currentTime || duration) {
+
+            // Trigger an update event.
+            _this.trigger('timeupdate', {
+              currentTime: currentTime,
+              duration: duration
+            });
+          }
+        });
       });
-    });
-  }, 1000);
+    }
+
+    return _this.playInterval;
+  });
 };
 
 /**
@@ -231,7 +267,7 @@ minplayer.players.base.prototype.onPaused = function() {
   this.trigger('pause');
 
   // Stop the play interval.
-  clearInterval(this.playInterval);
+  this.playInterval = false;
 };
 
 /**

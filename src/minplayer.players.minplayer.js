@@ -224,11 +224,13 @@ minplayer.players.minplayer.prototype.getDuration = function(callback) {
 
       // If not, then check every half second...
       var _this = this;
-      var check = setInterval(function() {
+      setTimeout(function check() {
         duration = _this.player.getDuration();
         if (duration) {
-          clearInterval(check);
           callback(duration);
+        }
+        else {
+          setTimeout(check, 500);
         }
       }, 500);
     }

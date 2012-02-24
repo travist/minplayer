@@ -305,7 +305,7 @@ the elements that they define by implementing the getElements method.
 				
 				
 				<dl class="inheritsList">
-				<dt>Fields borrowed from class <a href="../symbols/minplayer.plugin.html">minplayer.plugin</a>: </dt><dd><a href="../symbols/minplayer.plugin.html#name">name</a>, <a href="../symbols/minplayer.plugin.html#options">options</a>, <a href="../symbols/minplayer.plugin.html#pluginReady">pluginReady</a></dd>
+				<dt>Fields borrowed from class <a href="../symbols/minplayer.plugin.html">minplayer.plugin</a>: </dt><dd><a href="../symbols/minplayer.plugin.html#lock">lock</a>, <a href="../symbols/minplayer.plugin.html#name">name</a>, <a href="../symbols/minplayer.plugin.html#options">options</a>, <a href="../symbols/minplayer.plugin.html#pluginReady">pluginReady</a>, <a href="../symbols/minplayer.plugin.html#queue">queue</a>, <a href="../symbols/minplayer.plugin.html#triggered">triggered</a></dd>
 				</dl>
 				
 			
@@ -323,15 +323,6 @@ the elements that they define by implementing the getElements method.
 						</tr>
 					</thead>
 					<tbody>
-					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.display.html#bind">bind</a></b>(types, data, fn)
-								</div>
-								<div class="description">Bind to a media event.</div>
-							</td>
-						</tr>
 					
 						<tr>
 							<td class="attributes">&nbsp;</td>
@@ -387,22 +378,13 @@ the elements that they define by implementing the getElements method.
 							</td>
 						</tr>
 					
-						<tr>
-							<td class="attributes">&nbsp;</td>
-							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/minplayer.display.html#trigger">trigger</a></b>(type, data)
-								</div>
-								<div class="description">Trigger a media event.</div>
-							</td>
-						</tr>
-					
 					</tbody>
 				</table>
 				
 				
 				
 				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/minplayer.plugin.html">minplayer.plugin</a>: </dt><dd><a href="../symbols/minplayer.plugin.html#addPlugin">addPlugin</a>, <a href="../symbols/minplayer.plugin.html#checkQueue">checkQueue</a>, <a href="../symbols/minplayer.plugin.html#get">get</a>, <a href="../symbols/minplayer.plugin.html#loadPlugins">loadPlugins</a>, <a href="../symbols/minplayer.plugin.html#ready">ready</a></dd>
+				<dt>Methods borrowed from class <a href="../symbols/minplayer.plugin.html">minplayer.plugin</a>: </dt><dd><a href="../symbols/minplayer.plugin.html#addPlugin">addPlugin</a>, <a href="../symbols/minplayer.plugin.html#bind">bind</a>, <a href="../symbols/minplayer.plugin.html#checkQueue">checkQueue</a>, <a href="../symbols/minplayer.plugin.html#destroy">destroy</a>, <a href="../symbols/minplayer.plugin.html#get">get</a>, <a href="../symbols/minplayer.plugin.html#loadPlugins">loadPlugins</a>, <a href="../symbols/minplayer.plugin.html#ready">ready</a>, <a href="../symbols/minplayer.plugin.html#trigger">trigger</a>, <a href="../symbols/minplayer.plugin.html#unbind">unbind</a></dd>
 				</dl>
 				
 			
@@ -497,61 +479,6 @@ the elements that they define by implementing the getElements method.
 				<div class="sectionTitle">
 					Method Detail
 				</div>
-				
-					<a name="bind"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{object}</span>
-					<b>bind</b>(types, data, fn)
-					
-					</div>
-					<div class="description">
-						Bind to a media event.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{string}</span> <b>types</b>
-									
-								</dt>
-								<dd>The event type.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{object}</span> <b>data</b>
-									
-								</dt>
-								<dd>The data to bind with the event.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{function}</span> <b>fn</b>
-									
-								</dt>
-								<dd>The callback function.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{object}</span> The jQuery prototype.</dd>
-							
-							</dl>
-						
-						
-						
-
-					<hr />
 				
 					<a name="construct"> </a>
 					<div class="fixedFont">
@@ -765,55 +692,6 @@ this component uses.</dd>
 						
 						
 
-					<hr />
-				
-					<a name="trigger"> </a>
-					<div class="fixedFont">
-					
-					<span class="light">{object}</span>
-					<b>trigger</b>(type, data)
-					
-					</div>
-					<div class="description">
-						Trigger a media event.
-						
-						
-					</div>
-					
-					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{string}</span> <b>type</b>
-									
-								</dt>
-								<dd>The event type.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{object}</span> <b>data</b>
-									
-								</dt>
-								<dd>The event data object.</dd>
-							
-							</dl>
-						
-						
-						
-						
-						
-							<dl class="detailList">
-							<dt class="heading">Returns:</dt>
-							
-								<dd><span class="light fixedFont">{object}</span> The jQuery prototype.</dd>
-							
-							</dl>
-						
-						
-						
-
 					
 				
 			
@@ -828,7 +706,7 @@ this component uses.</dd>
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Wed Feb 22 2012 22:31:16 GMT-0600 (CST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Thu Feb 23 2012 12:00:38 GMT-0600 (CST)
 		</div>
 	</body>
 </html>

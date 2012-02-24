@@ -73,11 +73,6 @@ minplayer.players.html5.prototype.construct = function() {
     }, false);
     this.player.addEventListener('loadstart', function() {
       _this.onReady();
-      /** Used to test 'error' fallback.
-      setTimeout(function() {
-        _this.trigger('error', "An error occured - ");
-      }, 200);
-      */
     }, false);
     this.player.addEventListener('loadeddata', function() {
       _this.onLoaded();

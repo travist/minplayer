@@ -119,7 +119,7 @@ minplayer.controller.base.prototype.construct = function() {
     });
   }
 
-  // Get the player plugin.
+  // Get the media plugin.
   this.get('media', function(media) {
 
     var _this = this;
@@ -128,7 +128,7 @@ minplayer.controller.base.prototype.construct = function() {
     if (this.elements.pause) {
 
       // Bind to the click on this button.
-      this.elements.pause.bind('click', {obj: this}, function(event) {
+      this.elements.pause.unbind().bind('click', {obj: this}, function(event) {
         event.preventDefault();
         event.data.obj.playPause(false, media);
       });
@@ -143,7 +143,7 @@ minplayer.controller.base.prototype.construct = function() {
     if (this.elements.play) {
 
       // Bind to the click on this button.
-      this.elements.play.bind('click', {obj: this}, function(event) {
+      this.elements.play.unbind().bind('click', {obj: this}, function(event) {
         event.preventDefault();
         event.data.obj.playPause(true, media);
       });
