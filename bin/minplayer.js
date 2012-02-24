@@ -751,7 +751,7 @@ minplayer.display = function(name, context, options) {
   if (context) {
 
     // Set the display.
-    this.display = this.getDisplay(context);
+    this.display = this.getDisplay(context, options);
   }
 
   // Derive from plugin
@@ -768,9 +768,10 @@ minplayer.display.prototype.constructor = minplayer.display;
  * Returns the display for this component.
  *
  * @param {object} context The original context.
+ * @param {object} options The options for this component.
  * @return {object} The jQuery context for this display.
  */
-minplayer.display.prototype.getDisplay = function(context) {
+minplayer.display.prototype.getDisplay = function(context, options) {
   return jQuery(context);
 };
 
@@ -870,7 +871,7 @@ if (!jQuery.fn.minplayer) {
   jQuery.fn.minplayer = function(options) {
     return jQuery(this).each(function() {
       options = options || {};
-      options.id = options.id || this.selector;
+      options.id = options.id || $(this).attr('id') || Math.random();
       if (!minplayer.instances[options.id]) {
         var template = options.template || 'default';
         if (minplayer[template]) {
@@ -1763,9 +1764,6 @@ minplayer.players.base.prototype.construct = function() {
   // Get the player display object.
   if (!this.playerFound()) {
 
-    // Cleanup some events and code.
-    this.display.unbind();
-
     // Remove the media element if found
     if (this.elements.media) {
       this.elements.media.remove();
@@ -2255,26 +2253,6 @@ minplayer.players.html5.prototype.construct = function() {
       _this.bytesTotal.set(event.total);
       _this.bytesLoaded.set(event.loaded);
     }, false);
-    if (this.autoBuffer()) {
-      this.player.autobuffer = true;
-    } else {
-      this.player.autobuffer = false;
-      this.player.preload = 'none';
-    }
-  }
-};
-
-/**
- * Determine if this player is able to autobuffer.
- * @return {boolean} TRUE - the player is able to autobuffer.
- */
-minplayer.players.html5.prototype.autoBuffer = function() {
-  var preload = this.player.preload !== 'none';
-  if (typeof this.player.hasAttribute === 'function') {
-    return this.player.hasAttribute('preload') && preload;
-  }
-  else {
-    return false;
   }
 };
 

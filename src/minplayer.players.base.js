@@ -71,9 +71,6 @@ minplayer.players.base.prototype.construct = function() {
   // Get the player display object.
   if (!this.playerFound()) {
 
-    // Cleanup some events and code.
-    this.display.unbind();
-
     // Remove the media element if found
     if (this.elements.media) {
       this.elements.media.remove();

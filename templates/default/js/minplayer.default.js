@@ -14,45 +14,41 @@ minplayer["default"] = function(context, options) {
 minplayer["default"].prototype = new minplayer();
 minplayer["default"].prototype.constructor = minplayer["default"];
 
+/**
+ * Return the display for this plugin.
+ */
+minplayer["default"].prototype.getDisplay = function(context, options) {
+
+  // Convert the context to jQuery object.
+  context = jQuery(context);
+
+  // If the tag is video or audio, then build out the player.
+  var tag = context.get(0).tagName.toLowerCase();
+  if (tag == 'video' || tag == 'audio') {
+
+    // Build out the player provided the base tag.
+    context = context.attr({
+      'id': options.id + '-player',
+      'class': 'media-player-media'
+    })
+    .wrap(jQuery(document.createElement('div')).attr({
+      'class': 'media-player-display'
+    })).parent('.media-player-display')
+    .wrap(jQuery(document.createElement('div')).attr({
+      'id': options.id,
+      'class': 'media-player'
+    })).parent('.media-player');
+
+    // Mark a flag that says this display needs to be built.
+    context.build = true;
+  }
+
+  return context;
+}
+
 // Get the elements for this player.
 minplayer["default"].prototype.getElements = function() {
   var elements = minplayer.prototype.getElements.call(this);
-
-  // If the tag is video or audio, then build out the player.
-  var tag = this.display.get(0).tagName.toLowerCase();
-  if (tag == 'video' || tag == 'audio') {
-
-    // Get the media object from the display.
-    var media = this.display.attr({
-      'id': this.options.id + '-player',
-      'class': 'media-player-media',
-      'width': '100%',
-      'height': '100%'
-    });
-
-    // Wrap the media display around the media element.
-    var mediaDisplay = jQuery(document.createElement('div'));
-    mediaDisplay.attr('class', 'media-player-display');
-    mediaDisplay = media.wrap(mediaDisplay).parent('.media-player-display');
-
-    // Wrap the main player around the media display.
-    var playerDisplay = jQuery(document.createElement('div'));
-    playerDisplay.attr({
-      'id': this.options.id,
-      'class': 'media-player'
-    });
-    playerDisplay = mediaDisplay.wrap(playerDisplay).parent('.media-player');
-
-    // Now set the main display to the playerDisplay.
-    this.display = playerDisplay;
-
-    // Also set the main player context to this display.
-    var player = this.get('player');
-    player.display = playerDisplay;
-
-    // Mark a flag that says this display needs to be built.
-    this.display.build = true;
-  }
 
   // Return the jQuery elements.
   return jQuery.extend(elements, {
