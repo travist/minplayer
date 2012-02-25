@@ -110,7 +110,6 @@ minplayer.players.minplayer.prototype.create = function() {
   return minplayer.players.flash.getFlash({
     swf: this.options.swfplayer,
     id: this.options.id + '_player',
-    playerType: 'flash',
     width: this.options.width,
     height: '100%',
     flashvars: flashVars,

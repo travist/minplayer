@@ -172,15 +172,6 @@ minplayer.players.youtube.prototype.onQualityChange = function(newQuality) {
 };
 
 /**
- * Called when an error occurs.
- *
- * @param {string} errorCode The error that was triggered.
- */
-minplayer.players.youtube.prototype.onError = function(errorCode) {
-  this.trigger('error', errorCode);
-};
-
-/**
  * Determines if the player should show the playloader.
  *
  * @return {bool} If this player implements its own playLoader.
