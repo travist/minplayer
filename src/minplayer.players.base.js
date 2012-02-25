@@ -291,6 +291,15 @@ minplayer.players.base.prototype.onWaiting = function() {
 };
 
 /**
+ * Called when an error occurs.
+ *
+ * @param {string} errorCode The error that was triggered.
+ */
+minplayer.players.base.prototype.onError = function(errorCode) {
+  this.trigger('error', errorCode);
+};
+
+/**
  * @see minplayer.players.base#isReady
  * @return {boolean} Checks to see if the Flash is ready.
  */
