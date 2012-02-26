@@ -1,7 +1,7 @@
 minPlayer - Because less IS more.
 ===================================
 
-The goal of this project is to provide a well documented, object oriented,
+The goal of this project is to provide a slim, well documented, object oriented,
 plugin-based "core" media player in which other players and libraries can build
 on top of.  It is written using object oriented JavaScript and is continuously
 integrated using JSLint, JSDoc, and Google Closure.
