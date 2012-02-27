@@ -214,8 +214,8 @@ minplayer.flags.prototype.setFlag = function(id, value) {
 /** The minplayer namespace. */
 minplayer = minplayer || {};
 
-/** Static array to keep track of plugin instances. */
-minplayer.instances = minplayer.instances || {};
+/** Static array to keep track of all plugins. */
+minplayer.plugins = minplayer.plugins || {};
 
 /** Static array to keep track of queues. */
 minplayer.queue = minplayer.queue || [];
@@ -293,7 +293,7 @@ minplayer.plugin.prototype.loadPlugins = function() {
   for (var name in this.options.plugins) {
 
     // Only load if it does not already exist.
-    if (!minplayer.instances[this.options.id][name]) {
+    if (!minplayer.plugins[this.options.id][name]) {
 
       // Get the instance name from the setting.
       instance = this.options.plugins[name];
@@ -341,14 +341,14 @@ minplayer.plugin.prototype.addPlugin = function(name, plugin) {
   if (plugin.isValid()) {
 
     // If the plugins for this instance do not exist.
-    if (!minplayer.instances[this.options.id]) {
+    if (!minplayer.plugins[this.options.id]) {
 
-      // Initialize the instances.
-      minplayer.instances[this.options.id] = {};
+      // Initialize the plugins.
+      minplayer.plugins[this.options.id] = {};
     }
 
     // Add this plugin.
-    minplayer.instances[this.options.id][name] = plugin;
+    minplayer.plugins[this.options.id][name] = plugin;
   }
 };
 
@@ -506,8 +506,9 @@ minplayer.plugin.prototype.unbind = function(type, fn) {
 
   // If this is locked then try again after 10ms.
   if (this.lock) {
+    var _this = this;
     setTimeout(function() {
-      this.unbind(type, fn);
+      _this.unbind(type, fn);
     }, 10);
   }
 
@@ -586,8 +587,8 @@ minplayer.bind = function(event, id, plugin, callback) {
     return false;
   }
 
-  // Get the instances.
-  var inst = minplayer.instances;
+  // Get the plugins.
+  var inst = minplayer.plugins;
 
   // See if this plugin exists.
   if (inst[id][plugin]) {
@@ -618,7 +619,7 @@ minplayer.bind = function(event, id, plugin, callback) {
  *
  *   000 - You want all plugins from all players, ready or not.
  *
- *          var instances = minplayer.get();
+ *          var plugins = minplayer.get();
  *
  *   001 - You want all plugins from all players, but only when ready.
  *
@@ -679,20 +680,20 @@ minplayer.get = function(id, plugin, callback) {
   // Make sure the callback is a callback.
   callback = (typeof callback === 'function') ? callback : null;
 
-  // Get the instances.
-  var inst = minplayer.instances;
+  // Get the plugins.
+  var plugins = minplayer.plugins;
 
   // 0x000
   if (!id && !plugin && !callback) {
-    return inst;
+    return plugins;
   }
   // 0x100
   else if (id && !plugin && !callback) {
-    return inst[id];
+    return plugins[id];
   }
   // 0x110
   else if (id && plugin && !callback) {
-    return inst[id][plugin];
+    return plugins[id][plugin];
   }
   // 0x111
   else if (id && plugin && callback) {
@@ -700,30 +701,30 @@ minplayer.get = function(id, plugin, callback) {
   }
   // 0x011
   else if (!id && plugin && callback) {
-    for (var id in inst) {
+    for (var id in plugins) {
       minplayer.bind.call(this, 'ready', id, plugin, callback);
     }
   }
   // 0x101
   else if (id && !plugin && callback) {
-    for (var plugin in inst[id]) {
+    for (var plugin in plugins[id]) {
       minplayer.bind.call(this, 'ready', id, plugin, callback);
     }
   }
   // 0x010
   else if (!id && plugin && !callback) {
-    var plugins = {};
-    for (var id in inst) {
-      if (inst.hasOwnProperty(id) && inst[id].hasOwnProperty(plugin)) {
-        plugins[id] = inst[id][plugin];
+    var plugin_types = {};
+    for (var id in plugins) {
+      if (plugins.hasOwnProperty(id) && plugins[id].hasOwnProperty(plugin)) {
+        plugin_types[id] = plugins[id][plugin];
       }
     }
-    return plugins;
+    return plugin_types;
   }
   // 0x001
   else {
-    for (var id in inst) {
-      for (var plugin in inst[id]) {
+    for (var id in plugins) {
+      for (var plugin in plugins[id]) {
         minplayer.bind.call(this, 'ready', id, plugin, callback);
       }
     }
@@ -872,7 +873,7 @@ if (!jQuery.fn.minplayer) {
     return jQuery(this).each(function() {
       options = options || {};
       options.id = options.id || $(this).attr('id') || Math.random();
-      if (!minplayer.instances[options.id]) {
+      if (!minplayer.plugins[options.id]) {
         var template = options.template || 'default';
         if (minplayer[template]) {
           new minplayer[template](jQuery(this), options);
