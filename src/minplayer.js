@@ -13,7 +13,7 @@ if (!jQuery.fn.minplayer) {
     return jQuery(this).each(function() {
       options = options || {};
       options.id = options.id || $(this).attr('id') || Math.random();
-      if (!minplayer.instances[options.id]) {
+      if (!minplayer.plugins[options.id]) {
         var template = options.template || 'default';
         if (minplayer[template]) {
           new minplayer[template](jQuery(this), options);

@@ -8,8 +8,8 @@
 	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/** The minplayer namespace. */</span><span class="WHIT">
 <span class='line'>  2</span> </span><span class="NAME">minplayer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">minplayer</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>  3</span> 
-<span class='line'>  4</span> </span><span class="COMM">/** Static array to keep track of plugin instances. */</span><span class="WHIT">
-<span class='line'>  5</span> </span><span class="NAME">minplayer.instances</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">minplayer.instances</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  4</span> </span><span class="COMM">/** Static array to keep track of all plugins. */</span><span class="WHIT">
+<span class='line'>  5</span> </span><span class="NAME">minplayer.plugins</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">minplayer.plugins</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>  6</span> 
 <span class='line'>  7</span> </span><span class="COMM">/** Static array to keep track of queues. */</span><span class="WHIT">
 <span class='line'>  8</span> </span><span class="NAME">minplayer.queue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">minplayer.queue</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
@@ -87,7 +87,7 @@
 <span class='line'> 80</span> </span><span class="WHIT">  </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">name</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">this.options.plugins</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 81</span> 
 <span class='line'> 82</span> </span><span class="WHIT">    </span><span class="COMM">// Only load if it does not already exist.</span><span class="WHIT">
-<span class='line'> 83</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">minplayer.instances</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 83</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">minplayer.plugins</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 84</span> 
 <span class='line'> 85</span> </span><span class="WHIT">      </span><span class="COMM">// Get the instance name from the setting.</span><span class="WHIT">
 <span class='line'> 86</span> </span><span class="WHIT">      </span><span class="NAME">instance</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.options.plugins</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
@@ -135,14 +135,14 @@
 <span class='line'>128</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">plugin.isValid</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>129</span> 
 <span class='line'>130</span> </span><span class="WHIT">    </span><span class="COMM">// If the plugins for this instance do not exist.</span><span class="WHIT">
-<span class='line'>131</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">minplayer.instances</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>131</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">minplayer.plugins</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>132</span> 
-<span class='line'>133</span> </span><span class="WHIT">      </span><span class="COMM">// Initialize the instances.</span><span class="WHIT">
-<span class='line'>134</span> </span><span class="WHIT">      </span><span class="NAME">minplayer.instances</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>133</span> </span><span class="WHIT">      </span><span class="COMM">// Initialize the plugins.</span><span class="WHIT">
+<span class='line'>134</span> </span><span class="WHIT">      </span><span class="NAME">minplayer.plugins</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>135</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>136</span> 
 <span class='line'>137</span> </span><span class="WHIT">    </span><span class="COMM">// Add this plugin.</span><span class="WHIT">
-<span class='line'>138</span> </span><span class="WHIT">    </span><span class="NAME">minplayer.instances</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>138</span> </span><span class="WHIT">    </span><span class="NAME">minplayer.plugins</span><span class="PUNC">[</span><span class="NAME">this.options.id</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="NAME">name</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>139</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>140</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>141</span> 
@@ -300,227 +300,228 @@
 <span class='line'>293</span> 
 <span class='line'>294</span> </span><span class="WHIT">  </span><span class="COMM">// If this is locked then try again after 10ms.</span><span class="WHIT">
 <span class='line'>295</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.lock</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>296</span> </span><span class="WHIT">    </span><span class="NAME">setTimeout</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>297</span> </span><span class="WHIT">      </span><span class="NAME">this.unbind</span><span class="PUNC">(</span><span class="NAME">type</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>298</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">10</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>299</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>300</span> 
-<span class='line'>301</span> </span><span class="WHIT">  </span><span class="COMM">// Set the lock.</span><span class="WHIT">
-<span class='line'>302</span> </span><span class="WHIT">  </span><span class="NAME">this.lock</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>303</span> 
-<span class='line'>304</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">type</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>305</span> </span><span class="WHIT">    </span><span class="NAME">this.queue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>306</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>307</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>308</span> </span><span class="WHIT">    </span><span class="NAME">this.queue</span><span class="PUNC">[</span><span class="NAME">type</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>309</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>310</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>311</span> </span><span class="WHIT">    </span><span class="COMM">// Iterate through all the callbacks and search for equal callbacks.</span><span class="WHIT">
-<span class='line'>312</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">queue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>313</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">i</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">this.queue</span><span class="PUNC">[</span><span class="NAME">type</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>314</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.queue</span><span class="PUNC">[</span><span class="NAME">type</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">callback</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>315</span> </span><span class="WHIT">        </span><span class="NAME">queue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.queue</span><span class="PUNC">[</span><span class="NAME">type</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">splice</span><span class="PUNC">(</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>316</span> </span><span class="WHIT">        </span><span class="KEYW">delete</span><span class="WHIT"> </span><span class="NAME">queue</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>317</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>318</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>319</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>320</span> 
-<span class='line'>321</span> </span><span class="WHIT">  </span><span class="COMM">// Reset the lock.</span><span class="WHIT">
-<span class='line'>322</span> </span><span class="WHIT">  </span><span class="NAME">this.lock</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>323</span> 
-<span class='line'>324</span> </span><span class="WHIT">  </span><span class="COMM">// Return the plugin.</span><span class="WHIT">
-<span class='line'>325</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>326</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>327</span> 
-<span class='line'>328</span> </span><span class="COMM">/**
-<span class='line'>329</span>  * Adds an item to the queue.
-<span class='line'>330</span>  *
-<span class='line'>331</span>  * @param {object} context The context which this is called within.
-<span class='line'>332</span>  * @param {string} event The event to trigger on.
-<span class='line'>333</span>  * @param {string} id The player ID.
-<span class='line'>334</span>  * @param {string} plugin The name of the plugin.
-<span class='line'>335</span>  * @param {function} callback Called when the event occurs.
-<span class='line'>336</span>  */</span><span class="WHIT">
-<span class='line'>337</span> </span><span class="NAME">minplayer.addQueue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">context</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>338</span> 
-<span class='line'>339</span> </span><span class="WHIT">  </span><span class="COMM">// See if it is locked...</span><span class="WHIT">
-<span class='line'>340</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">minplayer.lock</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>341</span> </span><span class="WHIT">    </span><span class="NAME">minplayer.queue.push</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>342</span> </span><span class="WHIT">      </span><span class="NAME">context</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">context</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>343</span> </span><span class="WHIT">      </span><span class="NAME">id</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>344</span> </span><span class="WHIT">      </span><span class="NAME">event</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>345</span> </span><span class="WHIT">      </span><span class="NAME">plugin</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>346</span> </span><span class="WHIT">      </span><span class="NAME">callback</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="WHIT">
-<span class='line'>347</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>348</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>349</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>350</span> 
-<span class='line'>351</span> </span><span class="WHIT">    </span><span class="COMM">// If so, then try again after 10 milliseconds.</span><span class="WHIT">
-<span class='line'>352</span> </span><span class="WHIT">    </span><span class="NAME">setTimeout</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>353</span> </span><span class="WHIT">      </span><span class="NAME">minplayer.addQueue</span><span class="PUNC">(</span><span class="NAME">context</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>354</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">10</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>355</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>356</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>357</span> 
-<span class='line'>358</span> </span><span class="COMM">/**
-<span class='line'>359</span>  * Binds an event to a plugin instance, and if it doesn't exist, then caches
-<span class='line'>360</span>  * it for a later time.
-<span class='line'>361</span>  *
-<span class='line'>362</span>  * @param {string} event The event to trigger on.
-<span class='line'>363</span>  * @param {string} id The player ID.
-<span class='line'>364</span>  * @param {string} plugin The name of the plugin.
-<span class='line'>365</span>  * @param {function} callback Called when the event occurs.
-<span class='line'>366</span>  * @return {boolean} If the bind was successful.
-<span class='line'>367</span>  * @this The object in context who called this method.
-<span class='line'>368</span>  */</span><span class="WHIT">
-<span class='line'>369</span> </span><span class="NAME">minplayer.bind</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>370</span> 
-<span class='line'>371</span> </span><span class="WHIT">  </span><span class="COMM">// If no callback exists, then just return false.</span><span class="WHIT">
-<span class='line'>372</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>373</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>374</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>375</span> 
-<span class='line'>376</span> </span><span class="WHIT">  </span><span class="COMM">// Get the instances.</span><span class="WHIT">
-<span class='line'>377</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">inst</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">minplayer.instances</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>378</span> 
-<span class='line'>379</span> </span><span class="WHIT">  </span><span class="COMM">// See if this plugin exists.</span><span class="WHIT">
-<span class='line'>380</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">inst</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="NAME">plugin</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>381</span> 
-<span class='line'>382</span> </span><span class="WHIT">    </span><span class="COMM">// If so, then bind the event to this plugin.</span><span class="WHIT">
-<span class='line'>383</span> </span><span class="WHIT">    </span><span class="NAME">inst</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="NAME">plugin</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">context</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>384</span> </span><span class="WHIT">      </span><span class="NAME">callback.call</span><span class="PUNC">(</span><span class="NAME">event.data.context</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">data.plugin</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>385</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>386</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>387</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>388</span> 
-<span class='line'>389</span> </span><span class="WHIT">  </span><span class="COMM">// If not, then add it to the queue to bind later.</span><span class="WHIT">
-<span class='line'>390</span> </span><span class="WHIT">  </span><span class="NAME">minplayer.addQueue</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>391</span> 
-<span class='line'>392</span> </span><span class="WHIT">  </span><span class="COMM">// Return that this wasn't handled.</span><span class="WHIT">
-<span class='line'>393</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>394</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>395</span> 
-<span class='line'>396</span> </span><span class="COMM">/**
-<span class='line'>397</span>  * The main API for minPlayer.
-<span class='line'>398</span>  *
-<span class='line'>399</span>  * Provided that this function takes three parameters, there are 8 different
-<span class='line'>400</span>  * ways to use this api.
-<span class='line'>401</span>  *
-<span class='line'>402</span>  *   id (0x100) - You want a specific player.
-<span class='line'>403</span>  *   plugin (0x010) - You want a specific plugin.
-<span class='line'>404</span>  *   callback (0x001) - You only want it when it is ready.
-<span class='line'>405</span>  *
-<span class='line'>406</span>  *   000 - You want all plugins from all players, ready or not.
-<span class='line'>407</span>  *
-<span class='line'>408</span>  *          var instances = minplayer.get();
-<span class='line'>409</span>  *
-<span class='line'>410</span>  *   001 - You want all plugins from all players, but only when ready.
-<span class='line'>411</span>  *
-<span class='line'>412</span>  *          minplayer.get(function(plugin) {
-<span class='line'>413</span>  *            // Code goes here.
-<span class='line'>414</span>  *          });
-<span class='line'>415</span>  *
-<span class='line'>416</span>  *   010 - You want a specific plugin from all players, ready or not...
-<span class='line'>417</span>  *
-<span class='line'>418</span>  *          var medias = minplayer.get(null, 'media');
-<span class='line'>419</span>  *
-<span class='line'>420</span>  *   011 - You want a specific plugin from all players, but only when ready.
-<span class='line'>421</span>  *
-<span class='line'>422</span>  *          minplayer.get('player', function(player) {
-<span class='line'>423</span>  *            // Code goes here.
-<span class='line'>424</span>  *          });
-<span class='line'>425</span>  *
-<span class='line'>426</span>  *   100 - You want all plugins from a specific player, ready or not.
-<span class='line'>427</span>  *
-<span class='line'>428</span>  *          var plugins = minplayer.get('player_id');
-<span class='line'>429</span>  *
-<span class='line'>430</span>  *   101 - You want all plugins from a specific player, but only when ready.
-<span class='line'>431</span>  *
-<span class='line'>432</span>  *          minplayer.get('player_id', null, function(plugin) {
-<span class='line'>433</span>  *            // Code goes here.
-<span class='line'>434</span>  *          });
-<span class='line'>435</span>  *
-<span class='line'>436</span>  *   110 - You want a specific plugin from a specific player, ready or not.
-<span class='line'>437</span>  *
-<span class='line'>438</span>  *          var plugin = minplayer.get('player_id', 'media');
-<span class='line'>439</span>  *
-<span class='line'>440</span>  *   111 - You want a specific plugin from a specific player, only when ready.
-<span class='line'>441</span>  *
-<span class='line'>442</span>  *          minplayer.get('player_id', 'media', function(media) {
-<span class='line'>443</span>  *            // Code goes here.
-<span class='line'>444</span>  *          });
-<span class='line'>445</span>  *
-<span class='line'>446</span>  * @this The context in which this function was called.
-<span class='line'>447</span>  * @param {string} id The ID of the widget to get the plugins from.
-<span class='line'>448</span>  * @param {string} plugin The name of the plugin.
-<span class='line'>449</span>  * @param {function} callback Called when the plugin is ready.
-<span class='line'>450</span>  * @return {object} The plugin object if it is immediately available.
-<span class='line'>451</span>  */</span><span class="WHIT">
-<span class='line'>452</span> </span><span class="NAME">minplayer.get</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>453</span> 
-<span class='line'>454</span> </span><span class="WHIT">  </span><span class="COMM">// Normalize the arguments for a better interface.</span><span class="WHIT">
-<span class='line'>455</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">'function'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>456</span> </span><span class="WHIT">    </span><span class="NAME">callback</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>457</span> </span><span class="WHIT">    </span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>458</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>459</span> 
-<span class='line'>460</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">'function'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>461</span> </span><span class="WHIT">    </span><span class="NAME">callback</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>462</span> </span><span class="WHIT">    </span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>463</span> </span><span class="WHIT">    </span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>464</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>465</span> 
-<span class='line'>466</span> </span><span class="WHIT">  </span><span class="COMM">// Make sure the callback is a callback.</span><span class="WHIT">
-<span class='line'>467</span> </span><span class="WHIT">  </span><span class="NAME">callback</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">'function'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>468</span> 
-<span class='line'>469</span> </span><span class="WHIT">  </span><span class="COMM">// Get the instances.</span><span class="WHIT">
-<span class='line'>470</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">inst</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">minplayer.instances</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>471</span> 
-<span class='line'>472</span> </span><span class="WHIT">  </span><span class="COMM">// 0x000</span><span class="WHIT">
-<span class='line'>473</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>474</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">inst</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>475</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>476</span> </span><span class="WHIT">  </span><span class="COMM">// 0x100</span><span class="WHIT">
-<span class='line'>477</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>478</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">inst</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>479</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>480</span> </span><span class="WHIT">  </span><span class="COMM">// 0x110</span><span class="WHIT">
-<span class='line'>481</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>482</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">inst</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="NAME">plugin</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>483</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>484</span> </span><span class="WHIT">  </span><span class="COMM">// 0x111</span><span class="WHIT">
-<span class='line'>485</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>486</span> </span><span class="WHIT">    </span><span class="NAME">minplayer.bind.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'ready'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>487</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>488</span> </span><span class="WHIT">  </span><span class="COMM">// 0x011</span><span class="WHIT">
-<span class='line'>489</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>490</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">id</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">inst</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>491</span> </span><span class="WHIT">      </span><span class="NAME">minplayer.bind.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'ready'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>492</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>493</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>494</span> </span><span class="WHIT">  </span><span class="COMM">// 0x101</span><span class="WHIT">
-<span class='line'>495</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>496</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">inst</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>497</span> </span><span class="WHIT">      </span><span class="NAME">minplayer.bind.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'ready'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>498</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>499</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>500</span> </span><span class="WHIT">  </span><span class="COMM">// 0x010</span><span class="WHIT">
-<span class='line'>501</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>502</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">plugins</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>503</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">id</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">inst</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>504</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">inst.hasOwnProperty</span><span class="PUNC">(</span><span class="NAME">id</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">inst</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">hasOwnProperty</span><span class="PUNC">(</span><span class="NAME">plugin</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>505</span> </span><span class="WHIT">        </span><span class="NAME">plugins</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">inst</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="NAME">plugin</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>506</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>507</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>508</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">plugins</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>509</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>510</span> </span><span class="WHIT">  </span><span class="COMM">// 0x001</span><span class="WHIT">
-<span class='line'>511</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>512</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">id</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">inst</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>513</span> </span><span class="WHIT">      </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">inst</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>514</span> </span><span class="WHIT">        </span><span class="NAME">minplayer.bind.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'ready'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>515</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>516</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>517</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>518</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>519</span> </span></pre></body></html>
+<span class='line'>296</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_this</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>297</span> </span><span class="WHIT">    </span><span class="NAME">setTimeout</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>298</span> </span><span class="WHIT">      </span><span class="NAME">_this.unbind</span><span class="PUNC">(</span><span class="NAME">type</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>299</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">10</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>300</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>301</span> 
+<span class='line'>302</span> </span><span class="WHIT">  </span><span class="COMM">// Set the lock.</span><span class="WHIT">
+<span class='line'>303</span> </span><span class="WHIT">  </span><span class="NAME">this.lock</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>304</span> 
+<span class='line'>305</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">type</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>306</span> </span><span class="WHIT">    </span><span class="NAME">this.queue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>307</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>308</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">fn</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>309</span> </span><span class="WHIT">    </span><span class="NAME">this.queue</span><span class="PUNC">[</span><span class="NAME">type</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>310</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>311</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>312</span> </span><span class="WHIT">    </span><span class="COMM">// Iterate through all the callbacks and search for equal callbacks.</span><span class="WHIT">
+<span class='line'>313</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">queue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>314</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">i</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">this.queue</span><span class="PUNC">[</span><span class="NAME">type</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>315</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.queue</span><span class="PUNC">[</span><span class="NAME">type</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">callback</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="NAME">fn</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>316</span> </span><span class="WHIT">        </span><span class="NAME">queue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.queue</span><span class="PUNC">[</span><span class="NAME">type</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">splice</span><span class="PUNC">(</span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>317</span> </span><span class="WHIT">        </span><span class="KEYW">delete</span><span class="WHIT"> </span><span class="NAME">queue</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>318</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>319</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>320</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>321</span> 
+<span class='line'>322</span> </span><span class="WHIT">  </span><span class="COMM">// Reset the lock.</span><span class="WHIT">
+<span class='line'>323</span> </span><span class="WHIT">  </span><span class="NAME">this.lock</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>324</span> 
+<span class='line'>325</span> </span><span class="WHIT">  </span><span class="COMM">// Return the plugin.</span><span class="WHIT">
+<span class='line'>326</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>327</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>328</span> 
+<span class='line'>329</span> </span><span class="COMM">/**
+<span class='line'>330</span>  * Adds an item to the queue.
+<span class='line'>331</span>  *
+<span class='line'>332</span>  * @param {object} context The context which this is called within.
+<span class='line'>333</span>  * @param {string} event The event to trigger on.
+<span class='line'>334</span>  * @param {string} id The player ID.
+<span class='line'>335</span>  * @param {string} plugin The name of the plugin.
+<span class='line'>336</span>  * @param {function} callback Called when the event occurs.
+<span class='line'>337</span>  */</span><span class="WHIT">
+<span class='line'>338</span> </span><span class="NAME">minplayer.addQueue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">context</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>339</span> 
+<span class='line'>340</span> </span><span class="WHIT">  </span><span class="COMM">// See if it is locked...</span><span class="WHIT">
+<span class='line'>341</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">minplayer.lock</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>342</span> </span><span class="WHIT">    </span><span class="NAME">minplayer.queue.push</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>343</span> </span><span class="WHIT">      </span><span class="NAME">context</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">context</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>344</span> </span><span class="WHIT">      </span><span class="NAME">id</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>345</span> </span><span class="WHIT">      </span><span class="NAME">event</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>346</span> </span><span class="WHIT">      </span><span class="NAME">plugin</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>347</span> </span><span class="WHIT">      </span><span class="NAME">callback</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="WHIT">
+<span class='line'>348</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>349</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>350</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>351</span> 
+<span class='line'>352</span> </span><span class="WHIT">    </span><span class="COMM">// If so, then try again after 10 milliseconds.</span><span class="WHIT">
+<span class='line'>353</span> </span><span class="WHIT">    </span><span class="NAME">setTimeout</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>354</span> </span><span class="WHIT">      </span><span class="NAME">minplayer.addQueue</span><span class="PUNC">(</span><span class="NAME">context</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>355</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">10</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>356</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>357</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>358</span> 
+<span class='line'>359</span> </span><span class="COMM">/**
+<span class='line'>360</span>  * Binds an event to a plugin instance, and if it doesn't exist, then caches
+<span class='line'>361</span>  * it for a later time.
+<span class='line'>362</span>  *
+<span class='line'>363</span>  * @param {string} event The event to trigger on.
+<span class='line'>364</span>  * @param {string} id The player ID.
+<span class='line'>365</span>  * @param {string} plugin The name of the plugin.
+<span class='line'>366</span>  * @param {function} callback Called when the event occurs.
+<span class='line'>367</span>  * @return {boolean} If the bind was successful.
+<span class='line'>368</span>  * @this The object in context who called this method.
+<span class='line'>369</span>  */</span><span class="WHIT">
+<span class='line'>370</span> </span><span class="NAME">minplayer.bind</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>371</span> 
+<span class='line'>372</span> </span><span class="WHIT">  </span><span class="COMM">// If no callback exists, then just return false.</span><span class="WHIT">
+<span class='line'>373</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>374</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>375</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>376</span> 
+<span class='line'>377</span> </span><span class="WHIT">  </span><span class="COMM">// Get the plugins.</span><span class="WHIT">
+<span class='line'>378</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">inst</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">minplayer.plugins</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>379</span> 
+<span class='line'>380</span> </span><span class="WHIT">  </span><span class="COMM">// See if this plugin exists.</span><span class="WHIT">
+<span class='line'>381</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">inst</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="NAME">plugin</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>382</span> 
+<span class='line'>383</span> </span><span class="WHIT">    </span><span class="COMM">// If so, then bind the event to this plugin.</span><span class="WHIT">
+<span class='line'>384</span> </span><span class="WHIT">    </span><span class="NAME">inst</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="NAME">plugin</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="NAME">context</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">data</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>385</span> </span><span class="WHIT">      </span><span class="NAME">callback.call</span><span class="PUNC">(</span><span class="NAME">event.data.context</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">data.plugin</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>386</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>387</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>388</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>389</span> 
+<span class='line'>390</span> </span><span class="WHIT">  </span><span class="COMM">// If not, then add it to the queue to bind later.</span><span class="WHIT">
+<span class='line'>391</span> </span><span class="WHIT">  </span><span class="NAME">minplayer.addQueue</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">event</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>392</span> 
+<span class='line'>393</span> </span><span class="WHIT">  </span><span class="COMM">// Return that this wasn't handled.</span><span class="WHIT">
+<span class='line'>394</span> </span><span class="WHIT">  </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>395</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>396</span> 
+<span class='line'>397</span> </span><span class="COMM">/**
+<span class='line'>398</span>  * The main API for minPlayer.
+<span class='line'>399</span>  *
+<span class='line'>400</span>  * Provided that this function takes three parameters, there are 8 different
+<span class='line'>401</span>  * ways to use this api.
+<span class='line'>402</span>  *
+<span class='line'>403</span>  *   id (0x100) - You want a specific player.
+<span class='line'>404</span>  *   plugin (0x010) - You want a specific plugin.
+<span class='line'>405</span>  *   callback (0x001) - You only want it when it is ready.
+<span class='line'>406</span>  *
+<span class='line'>407</span>  *   000 - You want all plugins from all players, ready or not.
+<span class='line'>408</span>  *
+<span class='line'>409</span>  *          var plugins = minplayer.get();
+<span class='line'>410</span>  *
+<span class='line'>411</span>  *   001 - You want all plugins from all players, but only when ready.
+<span class='line'>412</span>  *
+<span class='line'>413</span>  *          minplayer.get(function(plugin) {
+<span class='line'>414</span>  *            // Code goes here.
+<span class='line'>415</span>  *          });
+<span class='line'>416</span>  *
+<span class='line'>417</span>  *   010 - You want a specific plugin from all players, ready or not...
+<span class='line'>418</span>  *
+<span class='line'>419</span>  *          var medias = minplayer.get(null, 'media');
+<span class='line'>420</span>  *
+<span class='line'>421</span>  *   011 - You want a specific plugin from all players, but only when ready.
+<span class='line'>422</span>  *
+<span class='line'>423</span>  *          minplayer.get('player', function(player) {
+<span class='line'>424</span>  *            // Code goes here.
+<span class='line'>425</span>  *          });
+<span class='line'>426</span>  *
+<span class='line'>427</span>  *   100 - You want all plugins from a specific player, ready or not.
+<span class='line'>428</span>  *
+<span class='line'>429</span>  *          var plugins = minplayer.get('player_id');
+<span class='line'>430</span>  *
+<span class='line'>431</span>  *   101 - You want all plugins from a specific player, but only when ready.
+<span class='line'>432</span>  *
+<span class='line'>433</span>  *          minplayer.get('player_id', null, function(plugin) {
+<span class='line'>434</span>  *            // Code goes here.
+<span class='line'>435</span>  *          });
+<span class='line'>436</span>  *
+<span class='line'>437</span>  *   110 - You want a specific plugin from a specific player, ready or not.
+<span class='line'>438</span>  *
+<span class='line'>439</span>  *          var plugin = minplayer.get('player_id', 'media');
+<span class='line'>440</span>  *
+<span class='line'>441</span>  *   111 - You want a specific plugin from a specific player, only when ready.
+<span class='line'>442</span>  *
+<span class='line'>443</span>  *          minplayer.get('player_id', 'media', function(media) {
+<span class='line'>444</span>  *            // Code goes here.
+<span class='line'>445</span>  *          });
+<span class='line'>446</span>  *
+<span class='line'>447</span>  * @this The context in which this function was called.
+<span class='line'>448</span>  * @param {string} id The ID of the widget to get the plugins from.
+<span class='line'>449</span>  * @param {string} plugin The name of the plugin.
+<span class='line'>450</span>  * @param {function} callback Called when the plugin is ready.
+<span class='line'>451</span>  * @return {object} The plugin object if it is immediately available.
+<span class='line'>452</span>  */</span><span class="WHIT">
+<span class='line'>453</span> </span><span class="NAME">minplayer.get</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>454</span> 
+<span class='line'>455</span> </span><span class="WHIT">  </span><span class="COMM">// Normalize the arguments for a better interface.</span><span class="WHIT">
+<span class='line'>456</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">'function'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>457</span> </span><span class="WHIT">    </span><span class="NAME">callback</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>458</span> </span><span class="WHIT">    </span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>459</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>460</span> 
+<span class='line'>461</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">'function'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>462</span> </span><span class="WHIT">    </span><span class="NAME">callback</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>463</span> </span><span class="WHIT">    </span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>464</span> </span><span class="WHIT">    </span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>465</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>466</span> 
+<span class='line'>467</span> </span><span class="WHIT">  </span><span class="COMM">// Make sure the callback is a callback.</span><span class="WHIT">
+<span class='line'>468</span> </span><span class="WHIT">  </span><span class="NAME">callback</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">'function'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>469</span> 
+<span class='line'>470</span> </span><span class="WHIT">  </span><span class="COMM">// Get the plugins.</span><span class="WHIT">
+<span class='line'>471</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">plugins</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">minplayer.plugins</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>472</span> 
+<span class='line'>473</span> </span><span class="WHIT">  </span><span class="COMM">// 0x000</span><span class="WHIT">
+<span class='line'>474</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>475</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">plugins</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>476</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>477</span> </span><span class="WHIT">  </span><span class="COMM">// 0x100</span><span class="WHIT">
+<span class='line'>478</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>479</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">plugins</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>480</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>481</span> </span><span class="WHIT">  </span><span class="COMM">// 0x110</span><span class="WHIT">
+<span class='line'>482</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>483</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">plugins</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="NAME">plugin</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>484</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>485</span> </span><span class="WHIT">  </span><span class="COMM">// 0x111</span><span class="WHIT">
+<span class='line'>486</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>487</span> </span><span class="WHIT">    </span><span class="NAME">minplayer.bind.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'ready'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>488</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>489</span> </span><span class="WHIT">  </span><span class="COMM">// 0x011</span><span class="WHIT">
+<span class='line'>490</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>491</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">id</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">plugins</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>492</span> </span><span class="WHIT">      </span><span class="NAME">minplayer.bind.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'ready'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>493</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>494</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>495</span> </span><span class="WHIT">  </span><span class="COMM">// 0x101</span><span class="WHIT">
+<span class='line'>496</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>497</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">plugins</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>498</span> </span><span class="WHIT">      </span><span class="NAME">minplayer.bind.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'ready'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>499</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>500</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>501</span> </span><span class="WHIT">  </span><span class="COMM">// 0x010</span><span class="WHIT">
+<span class='line'>502</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">callback</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>503</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">plugin_types</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>504</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">id</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">plugins</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>505</span> </span><span class="WHIT">      </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">plugins.hasOwnProperty</span><span class="PUNC">(</span><span class="NAME">id</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">plugins</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">hasOwnProperty</span><span class="PUNC">(</span><span class="NAME">plugin</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>506</span> </span><span class="WHIT">        </span><span class="NAME">plugin_types</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">plugins</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">[</span><span class="NAME">plugin</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>507</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>508</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>509</span> </span><span class="WHIT">    </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">plugin_types</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>510</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>511</span> </span><span class="WHIT">  </span><span class="COMM">// 0x001</span><span class="WHIT">
+<span class='line'>512</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>513</span> </span><span class="WHIT">    </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">id</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">plugins</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>514</span> </span><span class="WHIT">      </span><span class="KEYW">for</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="WHIT"> </span><span class="KEYW">in</span><span class="WHIT"> </span><span class="NAME">plugins</span><span class="PUNC">[</span><span class="NAME">id</span><span class="PUNC">]</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>515</span> </span><span class="WHIT">        </span><span class="NAME">minplayer.bind.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'ready'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">id</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">plugin</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">callback</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>516</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>517</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>518</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>519</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>520</span> </span></pre></body></html>
