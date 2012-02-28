@@ -124,9 +124,6 @@ minplayer.prototype.addEvents = function() {
     // Bind to the error event.
     plugin.bind('error', function(event, data) {
 
-      // Log this to console.
-      minplayer.console.log(data);
-
       // If an error occurs within the html5 media player, then try
       // to fall back to the flash player.
       if (_this.currentPlayer == 'html5') {
@@ -170,12 +167,13 @@ minplayer.prototype.error = function(error) {
  */
 minplayer.prototype.addKeyEvents = function() {
 
-  // Bind keyup to the current window.
-  jQuery(window).bind('keyup', {obj: this}, function(event) {
-    // Escape out of fullscreen if they press ESC or Q.
-    var isFull = event.data.obj.display.hasClass('fullscreen');
-    if (isFull && (event.keyCode === 113 || event.keyCode === 27)) {
-      event.data.obj.display.removeClass('fullscreen');
+  // Bind to key events...
+  jQuery(document).bind('keydown', {obj: this}, function(e) {
+    switch (e.keyCode) {
+      case 113: // ESC
+      case 27:  // Q
+        e.data.obj.display.removeClass('fullscreen');
+        break;
     }
   });
 };
@@ -342,7 +340,7 @@ minplayer.prototype.load = function(files) {
 minplayer.prototype.resize = function() {
 
   // Call onRezie for each plugin.
-  this.eachPlugin(function(name, plugin) {
+  this.get(function(plugin) {
     plugin.onResize();
   });
 };

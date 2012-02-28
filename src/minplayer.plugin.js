@@ -148,10 +148,10 @@ minplayer.plugin.prototype.addPlugin = function(name, plugin) {
  */
 minplayer.plugin.prototype.get = function(plugin, callback) {
 
-  // Allow this to be called on itself with a single callback.
+  // If they pass just a callback, then return all plugins when ready.
   if (typeof plugin === 'function') {
-    this.get(this.name, plugin);
-    return;
+    callback = plugin;
+    plugin = null;
   }
 
   // Return the minplayer.get equivalent.
