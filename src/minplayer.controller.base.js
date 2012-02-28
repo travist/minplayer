@@ -235,6 +235,10 @@ minplayer.controller.base.prototype.construct = function() {
         }
       });
 
+      media.bind('volumeupdate', {obj: this}, function(event, vol) {
+        event.data.obj.volumeBar.slider('option', 'value', (vol * 100));
+      });
+
       // Set the volume to match that of the player.
       media.getVolume(function(vol) {
         _this.volumeBar.slider('option', 'value', (vol * 100));

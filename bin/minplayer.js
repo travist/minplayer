@@ -361,10 +361,10 @@ minplayer.plugin.prototype.addPlugin = function(name, plugin) {
  */
 minplayer.plugin.prototype.get = function(plugin, callback) {
 
-  // Allow this to be called on itself with a single callback.
+  // If they pass just a callback, then return all plugins when ready.
   if (typeof plugin === 'function') {
-    this.get(this.name, plugin);
-    return;
+    callback = plugin;
+    plugin = null;
   }
 
   // Return the minplayer.get equivalent.
@@ -984,9 +984,6 @@ minplayer.prototype.addEvents = function() {
     // Bind to the error event.
     plugin.bind('error', function(event, data) {
 
-      // Log this to console.
-      minplayer.console.log(data);
-
       // If an error occurs within the html5 media player, then try
       // to fall back to the flash player.
       if (_this.currentPlayer == 'html5') {
@@ -1030,12 +1027,13 @@ minplayer.prototype.error = function(error) {
  */
 minplayer.prototype.addKeyEvents = function() {
 
-  // Bind keyup to the current window.
-  jQuery(window).bind('keyup', {obj: this}, function(event) {
-    // Escape out of fullscreen if they press ESC or Q.
-    var isFull = event.data.obj.display.hasClass('fullscreen');
-    if (isFull && (event.keyCode === 113 || event.keyCode === 27)) {
-      event.data.obj.display.removeClass('fullscreen');
+  // Bind to key events...
+  jQuery(document).bind('keydown', {obj: this}, function(e) {
+    switch (e.keyCode) {
+      case 113: // ESC
+      case 27:  // Q
+        e.data.obj.display.removeClass('fullscreen');
+        break;
     }
   });
 };
@@ -1202,7 +1200,7 @@ minplayer.prototype.load = function(files) {
 minplayer.prototype.resize = function() {
 
   // Call onRezie for each plugin.
-  this.eachPlugin(function(name, plugin) {
+  this.get(function(plugin) {
     plugin.onResize();
   });
 };
@@ -1776,6 +1774,49 @@ minplayer.players.base.prototype.construct = function() {
 
   // Get the player object...
   this.player = this.getPlayer();
+
+  // Set the focus of the element based on if they click in or outside of it.
+  var _this = this;
+  jQuery(document).bind('click', function(e) {
+    if (jQuery(e.target).closest('#' + _this.options.id).length == 0) {
+      _this.hasFocus = false;
+    }
+    else {
+      _this.hasFocus = true;
+    }
+  });
+
+  // Bind to key events...
+  jQuery(document).bind('keydown', {obj: this}, function(e) {
+    if (e.data.obj.hasFocus) {
+      e.preventDefault();
+      switch (e.keyCode) {
+        case 32:  // SPACE
+        case 179: // GOOGLE play/pause button.
+          if (e.data.obj.playing) {
+            e.data.obj.pause();
+          }
+          else {
+            e.data.obj.play();
+          }
+          break;
+        case 38:  // UP
+          e.data.obj.setVolumeRelative(0.1);
+          break;
+        case 40:  // DOWN
+          e.data.obj.setVolumeRelative(-0.1);
+          break;
+        case 37:  // LEFT
+        case 227: // GOOGLE TV REW
+          e.data.obj.seekRelative(-0.05);
+          break;
+        case 39:  // RIGHT
+        case 228: // GOOGLE TV FW
+          e.data.obj.seekRelative(0.05);
+          break;
+      }
+    }
+  });
 };
 
 /**
@@ -1786,15 +1827,6 @@ minplayer.players.base.prototype.destroy = function() {
 
   // Reset the player.
   this.reset();
-};
-
-/**
- * Clears all the intervals.
- */
-minplayer.players.base.prototype.clearIntervals = function() {
-  // Stop the intervals.
-  this.playInterval = false;
-  this.progressInterval = false;
 };
 
 /**
@@ -1823,8 +1855,14 @@ minplayer.players.base.prototype.reset = function() {
   // The current volume of the player.
   this.volume = new minplayer.async();
 
-  // Stop the intervals.
-  this.clearIntervals();
+  // Reset focus.
+  this.hasFocus = false;
+
+  // We are not playing.
+  this.playing = false;
+
+  // We are not loading.
+  this.loading = false;
 
   // If the player exists, then unbind all events.
   if (this.player) {
@@ -1859,13 +1897,13 @@ minplayer.players.base.prototype.onReady = function() {
   this.setVolume(this.options.volume / 100);
 
   // Setup the progress interval.
-  this.progressInterval = true;
+  this.loading = true;
 
   // Create a poll to get the progress.
   this.poll(function() {
 
     // Only do this if the play interval is set.
-    if (_this.progressInterval) {
+    if (_this.loading) {
 
       // Get the bytes loaded asynchronously.
       _this.getBytesLoaded(function(bytesLoaded) {
@@ -1888,12 +1926,17 @@ minplayer.players.base.prototype.onReady = function() {
               total: bytesTotal,
               start: bytesStart
             });
+
+            // Say we are not longer loading if they are equal.
+            if (bytesLoaded >= bytesTotal) {
+              _this.loading = false;
+            }
           }
         });
       });
     }
 
-    return _this.progressInterval;
+    return _this.loading;
   });
 
   // We are now ready.
@@ -1913,14 +1956,17 @@ minplayer.players.base.prototype.onPlaying = function() {
   // Trigger an event that we are playing.
   this.trigger('playing');
 
+  // Say that this player has focus.
+  this.hasFocus = true;
+
   // Set the playInterval to true.
-  this.playInterval = true;
+  this.playing = true;
 
   // Create a poll to get the timeupate.
   this.poll(function() {
 
     // Only do this if the play interval is set.
-    if (_this.playInterval) {
+    if (_this.playing) {
 
       // Get the current time asyncrhonously.
       _this.getCurrentTime(function(currentTime) {
@@ -1945,7 +1991,7 @@ minplayer.players.base.prototype.onPlaying = function() {
       });
     }
 
-    return _this.playInterval;
+    return _this.playing;
   });
 };
 
@@ -1957,8 +2003,11 @@ minplayer.players.base.prototype.onPaused = function() {
   // Trigger an event that we are paused.
   this.trigger('pause');
 
-  // Stop the play interval.
-  this.playInterval = false;
+  // Remove focus.
+  this.hasFocus = false;
+
+  // Say we are not playing.
+  this.playing = false;
 };
 
 /**
@@ -1966,7 +2015,9 @@ minplayer.players.base.prototype.onPaused = function() {
  */
 minplayer.players.base.prototype.onComplete = function() {
   // Stop the intervals.
-  this.clearIntervals();
+  this.playing = false;
+  this.loading = false;
+  this.hasFocus = false;
   this.trigger('ended');
 };
 
@@ -1990,6 +2041,7 @@ minplayer.players.base.prototype.onWaiting = function() {
  * @param {string} errorCode The error that was triggered.
  */
 minplayer.players.base.prototype.onError = function(errorCode) {
+  this.hasFocus = false;
   this.trigger('error', errorCode);
 };
 
@@ -2070,8 +2122,42 @@ minplayer.players.base.prototype.pause = function() {
  * Stop the loaded media file.
  */
 minplayer.players.base.prototype.stop = function() {
-  // Stop the intervals.
-  this.clearIntervals();
+  this.playing = false;
+  this.loading = false;
+  this.hasFocus = false;
+};
+
+/**
+ * Seeks to relative position.
+ *
+ * @param {number} pos Relative position.  -1 to 1 (percent), > 1 (seconds).
+ */
+minplayer.players.base.prototype.seekRelative = function(pos) {
+
+  // Get the current time asyncrhonously.
+  var _this = this;
+  this.getCurrentTime(function(currentTime) {
+
+    // Get the duration asynchronously.
+    _this.getDuration(function(duration) {
+
+      // Only do this if we have a duration.
+      if (duration) {
+
+        // Get the position.
+        var seekPos = 0;
+        if ((pos > -1) && (pos < 1)) {
+          seekPos = (currentTime / duration) + parseFloat(pos);
+        }
+        else {
+          seekPos = (currentTime + parseFloat(pos)) / duration;
+        }
+
+        // Set the seek value.
+        _this.seek(seekPos);
+      }
+    });
+  });
 };
 
 /**
@@ -2080,7 +2166,23 @@ minplayer.players.base.prototype.stop = function() {
  * @param {number} pos The position to seek the minplayer. 0 to 1.
  */
 minplayer.players.base.prototype.seek = function(pos) {
+};
 
+/**
+ * Set the volume of the loaded minplayer.
+ *
+ * @param {number} vol -1 to 1 - The relative amount to increase or decrease.
+ */
+minplayer.players.base.prototype.setVolumeRelative = function(vol) {
+
+  // Get the volume
+  var _this = this;
+  this.getVolume(function(newVol) {
+    newVol += parseFloat(vol);
+    newVol = (newVol < 0) ? 0 : newVol;
+    newVol = (newVol > 1) ? 1 : newVol;
+    _this.setVolume(newVol);
+  });
 };
 
 /**
@@ -3666,6 +3768,10 @@ minplayer.controller.base.prototype.construct = function() {
         slide: function(event, ui) {
           media.setVolume(ui.value / 100);
         }
+      });
+
+      media.bind('volumeupdate', {obj: this}, function(event, vol) {
+        event.data.obj.volumeBar.slider('option', 'value', (vol * 100));
       });
 
       // Set the volume to match that of the player.
