@@ -39,17 +39,19 @@ minplayer.players.html5.getPriority = function() {
 minplayer.players.html5.canPlay = function(file) {
   switch (file.mimetype) {
     case 'video/ogg':
-      return minplayer.playTypes.videoOGG;
+      return !!minplayer.playTypes.videoOGG;
     case 'video/mp4':
-      return minplayer.playTypes.videoH264;
+      return !!minplayer.playTypes.videoH264;
     case 'video/x-webm':
-      return minplayer.playTypes.videoWEBM;
+    case 'video/webm':
+    case 'application/octet-stream':
+      return !!minplayer.playTypes.videoWEBM;
     case 'audio/ogg':
-      return minplayer.playTypes.audioOGG;
+      return !!minplayer.playTypes.audioOGG;
     case 'audio/mpeg':
-      return minplayer.playTypes.audioMP3;
+      return !!minplayer.playTypes.audioMP3;
     case 'audio/mp4':
-      return minplayer.playTypes.audioMP4;
+      return !!minplayer.playTypes.audioMP4;
     default:
       return false;
   }
@@ -68,6 +70,7 @@ minplayer.players.html5.prototype.construct = function() {
 
   // For the HTML5 player, we will just pass events along...
   if (this.player) {
+
     this.player.addEventListener('abort', function() {
       _this.trigger('abort');
     }, false);

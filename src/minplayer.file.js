@@ -63,6 +63,8 @@ minplayer.file.prototype.getPriority = function() {
   }
   switch (this.mimetype) {
     case 'video/x-webm':
+    case 'video/webm':
+    case 'application/octet-stream':
       return priority * 10;
     case 'video/mp4':
     case 'audio/mp4':
@@ -96,7 +98,7 @@ minplayer.file.prototype.getMimeType = function() {
     case 'mp4': case 'm4v': case 'flv': case 'f4v':
       return 'video/mp4';
     case'webm':
-      return 'video/x-webm';
+      return 'video/webm';
     case 'ogg': case 'ogv':
       return 'video/ogg';
     case '3g2':
@@ -134,6 +136,8 @@ minplayer.file.prototype.getMimeType = function() {
 minplayer.file.prototype.getType = function() {
   switch (this.mimetype) {
     case 'video/mp4':
+    case 'video/webm':
+    case 'application/octet-stream':
     case 'video/x-webm':
     case 'video/ogg':
     case 'video/3gpp2':

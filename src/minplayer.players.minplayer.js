@@ -74,6 +74,8 @@ minplayer.players.minplayer.canPlay = function(file) {
   switch (file.mimetype) {
     case 'video/mp4':
     case 'video/x-webm':
+    case 'video/webm':
+    case 'application/octet-stream':
     case 'video/quicktime':
     case 'video/3gpp2':
     case 'video/3gpp':

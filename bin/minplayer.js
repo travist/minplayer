@@ -4,12 +4,25 @@ var minplayer = minplayer || {};
 // Private function to check a single element's play type.
 function checkPlayType(elem, playType) {
   if ((typeof elem.canPlayType) === 'function') {
-    var canPlay = elem.canPlayType(playType);
-    return ('no' !== canPlay) && ('' !== canPlay);
+    if (typeof playType === 'object') {
+      var i = playType.length;
+      var mimetype = '';
+      while (i--) {
+        mimetype = checkPlayType(elem, playType[i]);
+        if (!!mimetype) {
+          break;
+        }
+      }
+      return mimetype;
+    }
+    else {
+      var canPlay = elem.canPlayType(playType);
+      if (('no' !== canPlay) && ('' !== canPlay)) {
+        return playType;
+      }
+    }
   }
-  else {
-    return false;
-  }
+  return '';
 }
 
 /**
@@ -56,10 +69,17 @@ minplayer.compatibility = function() {
   this.videoOGG = checkPlayType(elem, 'video/ogg');
 
   /** Can play H264 video */
-  this.videoH264 = checkPlayType(elem, 'video/mp4');
+  this.videoH264 = checkPlayType(elem, [
+    'video/mp4',
+    'video/h264'
+  ]);
 
   /** Can play WEBM video */
-  this.videoWEBM = checkPlayType(elem, 'video/x-webm');
+  this.videoWEBM = checkPlayType(elem, [
+    'video/x-webm',
+    'video/webm',
+    'application/octet-stream'
+  ]);
 
   // Create an audio element.
   elem = document.createElement('audio');
@@ -1412,6 +1432,8 @@ minplayer.file.prototype.getPriority = function() {
   }
   switch (this.mimetype) {
     case 'video/x-webm':
+    case 'video/webm':
+    case 'application/octet-stream':
       return priority * 10;
     case 'video/mp4':
     case 'audio/mp4':
@@ -1445,7 +1467,7 @@ minplayer.file.prototype.getMimeType = function() {
     case 'mp4': case 'm4v': case 'flv': case 'f4v':
       return 'video/mp4';
     case'webm':
-      return 'video/x-webm';
+      return 'video/webm';
     case 'ogg': case 'ogv':
       return 'video/ogg';
     case '3g2':
@@ -1483,6 +1505,8 @@ minplayer.file.prototype.getMimeType = function() {
 minplayer.file.prototype.getType = function() {
   switch (this.mimetype) {
     case 'video/mp4':
+    case 'video/webm':
+    case 'application/octet-stream':
     case 'video/x-webm':
     case 'video/ogg':
     case 'video/3gpp2':
@@ -2295,17 +2319,19 @@ minplayer.players.html5.getPriority = function() {
 minplayer.players.html5.canPlay = function(file) {
   switch (file.mimetype) {
     case 'video/ogg':
-      return minplayer.playTypes.videoOGG;
+      return !!minplayer.playTypes.videoOGG;
     case 'video/mp4':
-      return minplayer.playTypes.videoH264;
+      return !!minplayer.playTypes.videoH264;
     case 'video/x-webm':
-      return minplayer.playTypes.videoWEBM;
+    case 'video/webm':
+    case 'application/octet-stream':
+      return !!minplayer.playTypes.videoWEBM;
     case 'audio/ogg':
-      return minplayer.playTypes.audioOGG;
+      return !!minplayer.playTypes.audioOGG;
     case 'audio/mpeg':
-      return minplayer.playTypes.audioMP3;
+      return !!minplayer.playTypes.audioMP3;
     case 'audio/mp4':
-      return minplayer.playTypes.audioMP4;
+      return !!minplayer.playTypes.audioMP4;
     default:
       return false;
   }
@@ -2324,6 +2350,7 @@ minplayer.players.html5.prototype.construct = function() {
 
   // For the HTML5 player, we will just pass events along...
   if (this.player) {
+
     this.player.addEventListener('abort', function() {
       _this.trigger('abort');
     }, false);
@@ -2741,6 +2768,8 @@ minplayer.players.minplayer.canPlay = function(file) {
   switch (file.mimetype) {
     case 'video/mp4':
     case 'video/x-webm':
+    case 'video/webm':
+    case 'application/octet-stream':
     case 'video/quicktime':
     case 'video/3gpp2':
     case 'video/3gpp':

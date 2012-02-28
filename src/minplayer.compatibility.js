@@ -4,12 +4,25 @@ var minplayer = minplayer || {};
 // Private function to check a single element's play type.
 function checkPlayType(elem, playType) {
   if ((typeof elem.canPlayType) === 'function') {
-    var canPlay = elem.canPlayType(playType);
-    return ('no' !== canPlay) && ('' !== canPlay);
+    if (typeof playType === 'object') {
+      var i = playType.length;
+      var mimetype = '';
+      while (i--) {
+        mimetype = checkPlayType(elem, playType[i]);
+        if (!!mimetype) {
+          break;
+        }
+      }
+      return mimetype;
+    }
+    else {
+      var canPlay = elem.canPlayType(playType);
+      if (('no' !== canPlay) && ('' !== canPlay)) {
+        return playType;
+      }
+    }
   }
-  else {
-    return false;
-  }
+  return '';
 }
 
 /**
@@ -56,10 +69,17 @@ minplayer.compatibility = function() {
   this.videoOGG = checkPlayType(elem, 'video/ogg');
 
   /** Can play H264 video */
-  this.videoH264 = checkPlayType(elem, 'video/mp4');
+  this.videoH264 = checkPlayType(elem, [
+    'video/mp4',
+    'video/h264'
+  ]);
 
   /** Can play WEBM video */
-  this.videoWEBM = checkPlayType(elem, 'video/x-webm');
+  this.videoWEBM = checkPlayType(elem, [
+    'video/x-webm',
+    'video/webm',
+    'application/octet-stream'
+  ]);
 
   // Create an audio element.
   elem = document.createElement('audio');
