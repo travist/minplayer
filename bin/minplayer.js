@@ -2409,12 +2409,17 @@ minplayer.players.html5.prototype.playerFound = function() {
  */
 minplayer.players.html5.prototype.create = function() {
   minplayer.players.base.prototype.create.call(this);
-  var element = document.createElement(this.mediaFile.type), attribute = '';
-  for (attribute in this.options.attributes) {
-    if (this.options.attributes.hasOwnProperty(attribute)) {
-      element.setAttribute(attribute, this.options.attributes[attribute]);
-    }
-  }
+  var element = jQuery(document.createElement(this.mediaFile.type))
+  .attr(this.options.attributes)
+  .append(
+    jQuery(document.createElement('source')).attr({
+      'src': this.mediaFile.path
+    })
+  );
+
+  // Fix the fluid width and height.
+  element.eq(0)[0].setAttribute('width', '100%');
+  element.eq(0)[0].setAttribute('height', '100%');
   return element;
 };
 
