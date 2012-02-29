@@ -561,4 +561,3 @@ minplayer.players.base.prototype.getBytesLoaded = function(callback) {
 minplayer.players.base.prototype.getBytesTotal = function(callback) {
   return this.bytesTotal.get(callback);
 };
-

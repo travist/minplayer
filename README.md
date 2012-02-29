@@ -120,5 +120,3 @@ minplayer.get = function(id, plugin, callback) {
 ```
 
 Thanks and enjoy minPlayer.
-
-
