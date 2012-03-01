@@ -3023,7 +3023,7 @@ minplayer.players.youtube.canPlay = function(file) {
 minplayer.players.youtube.getMediaId = function(file) {
   var regex = /^http[s]?\:\/\/(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9]+)/i;
   if (file.path.search(regex) === 0) {
-    return file.path.replace(regex, '$2');
+    return file.path.match(regex)[2];
   }
   else {
     return file.path;
@@ -3365,7 +3365,7 @@ minplayer.players.vimeo.canPlay = function(file) {
 minplayer.players.vimeo.getMediaId = function(file) {
   var regex = /^http[s]?\:\/\/(www\.)?vimeo\.com\/(\?v\=)?([0-9]+)/i;
   if (file.path.search(regex) === 0) {
-    return file.path.replace(regex, '$3');
+    return file.path.match(regex)[3];
   }
   else {
     return file.path;
