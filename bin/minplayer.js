@@ -948,8 +948,8 @@ minplayer = jQuery.extend(function(context, options) {
 
   // Setup the plugins.
   options.plugins = jQuery.extend({
-    controller: 'default',
-    playLoader: 'default'
+    controller: options.controller || options.template,
+    playLoader: options.playLoader || options.template
   }, options.plugins);
 
   // Derive from display

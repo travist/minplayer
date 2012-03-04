@@ -75,8 +75,8 @@
 <span class='line'> 68</span> 
 <span class='line'> 69</span> </span><span class="WHIT">  </span><span class="COMM">// Setup the plugins.</span><span class="WHIT">
 <span class='line'> 70</span> </span><span class="WHIT">  </span><span class="NAME">options.plugins</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">jQuery.extend</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 71</span> </span><span class="WHIT">    </span><span class="NAME">controller</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'default'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 72</span> </span><span class="WHIT">    </span><span class="NAME">playLoader</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'default'</span><span class="WHIT">
+<span class='line'> 71</span> </span><span class="WHIT">    </span><span class="NAME">controller</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">options.controller</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">options.template</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 72</span> </span><span class="WHIT">    </span><span class="NAME">playLoader</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">options.playLoader</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">options.template</span><span class="WHIT">
 <span class='line'> 73</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">options.plugins</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 74</span> 
 <span class='line'> 75</span> </span><span class="WHIT">  </span><span class="COMM">// Derive from display</span><span class="WHIT">
