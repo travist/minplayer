@@ -172,7 +172,9 @@ minplayer.prototype.addKeyEvents = function() {
     switch (e.keyCode) {
       case 113: // ESC
       case 27:  // Q
-        e.data.obj.display.removeClass('fullscreen');
+        if (e.data.obj.isFullScreen()) {
+          e.data.obj.fullscreen(false);
+        }
         break;
     }
   });

@@ -81,6 +81,51 @@ minplayer.display.prototype.onResize = function() {
 };
 
 /**
+ * Make this display element go fullscreen.
+ *
+ * @param {boolean} full Tell the player to go into fullscreen or not.
+ */
+minplayer.display.prototype.fullscreen = function(full) {
+  var isFull = this.isFullScreen();
+  if (isFull && !full) {
+    this.display.removeClass('fullscreen');
+    if (screenfull) {
+      screenfull.exit();
+    }
+    this.trigger('fullscreen', false);
+  }
+  else if (!isFull && full) {
+    this.display.addClass('fullscreen');
+    if (screenfull) {
+      var _this = this;
+      screenfull.request(this.display[0]);
+      screenfull.onchange = function(e) {
+        if (!screenfull.isFullscreen) {
+          _this.fullscreen(false);
+        }
+      };
+    }
+    this.trigger('fullscreen', true);
+  }
+};
+
+/**
+ * Toggle fullscreen.
+ */
+minplayer.display.prototype.toggleFullScreen = function() {
+  this.fullscreen(!this.isFullScreen());
+};
+
+/**
+ * Checks to see if we are in fullscreen mode.
+ *
+ * @return {boolean} TRUE - fullscreen, FALSE - otherwise.
+ */
+minplayer.display.prototype.isFullScreen = function() {
+  return this.display.hasClass('fullscreen');
+};
+
+/**
  * Returns a scaled rectangle provided a ratio and the container rect.
  *
  * @param {number} ratio The width/height ratio of what is being scaled.
@@ -126,3 +171,83 @@ minplayer.display.prototype.getElements = function() {
 minplayer.display.prototype.isValid = function() {
   return (this.display.length > 0);
 };
+
+/**
+ * From https://github.com/sindresorhus/screenfull.js
+ */
+/*global Element:true*/
+(function(window, document) {
+  'use strict';
+  var methods = (function() {
+    var methodMap = [
+      [
+        'requestFullscreen',
+        'exitFullscreen',
+        'fullscreenchange',
+        'fullscreen',
+        'fullscreenElement'
+      ],
+      [
+        'webkitRequestFullScreen',
+        'webkitCancelFullScreen',
+        'webkitfullscreenchange',
+        'webkitIsFullScreen',
+        'webkitCurrentFullScreenElement'
+      ],
+      [
+        'mozRequestFullScreen',
+        'mozCancelFullScreen',
+        'mozfullscreenchange',
+        'mozFullScreen',
+        'mozFullScreenElement'
+      ]
+    ];
+    for (var i = 0, l = methodMap.length; i < l; i++) {
+      var val = methodMap[i];
+      if (val[1] in document) {
+        return val;
+      }
+    }
+  })();
+
+  if (!methods) {
+    return window.screenfull = false;
+  }
+
+  var keyboardAllowed = 'ALLOW_KEYBOARD_INPUT' in Element;
+
+  var screenfull = {
+    init: function() {
+      document.addEventListener(methods[2], function(e) {
+        screenfull.isFullscreen = document[methods[3]];
+        screenfull.element = document[methods[4]];
+        screenfull.onchange(e);
+      });
+      return this;
+    },
+    isFullscreen: document[methods[3]],
+    element: document[methods[4]],
+    request: function(elem) {
+      elem = elem || document.documentElement;
+      elem[methods[0]](keyboardAllowed && Element.ALLOW_KEYBOARD_INPUT);
+      // Work around Safari 5.1 bug: reports support for keyboard in fullscreen
+      // even though it doesn't.
+      if (!document.isFullscreen) {
+        elem[methods[0]]();
+      }
+    },
+    exit: function() {
+      document[methods[1]]();
+    },
+    toggle: function(elem) {
+      if (this.isFullscreen) {
+        this.exit();
+      } else {
+        this.request(elem);
+      }
+    },
+    onchange: function() {}
+  };
+
+  window.screenfull = screenfull.init();
+})(window, document);

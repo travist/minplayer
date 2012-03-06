@@ -833,6 +833,51 @@ minplayer.display.prototype.onResize = function() {
 };
 
 /**
+ * Make this display element go fullscreen.
+ *
+ * @param {boolean} full Tell the player to go into fullscreen or not.
+ */
+minplayer.display.prototype.fullscreen = function(full) {
+  var isFull = this.isFullScreen();
+  if (isFull && !full) {
+    this.display.removeClass('fullscreen');
+    if (screenfull) {
+      screenfull.exit();
+    }
+    this.trigger('fullscreen', false);
+  }
+  else if (!isFull && full) {
+    this.display.addClass('fullscreen');
+    if (screenfull) {
+      var _this = this;
+      screenfull.request(this.display[0]);
+      screenfull.onchange = function(e) {
+        if (!screenfull.isFullscreen) {
+          _this.fullscreen(false);
+        }
+      };
+    }
+    this.trigger('fullscreen', true);
+  }
+};
+
+/**
+ * Toggle fullscreen.
+ */
+minplayer.display.prototype.toggleFullScreen = function() {
+  this.fullscreen(!this.isFullScreen());
+};
+
+/**
+ * Checks to see if we are in fullscreen mode.
+ *
+ * @return {boolean} TRUE - fullscreen, FALSE - otherwise.
+ */
+minplayer.display.prototype.isFullScreen = function() {
+  return this.display.hasClass('fullscreen');
+};
+
+/**
  * Returns a scaled rectangle provided a ratio and the container rect.
  *
  * @param {number} ratio The width/height ratio of what is being scaled.
@@ -878,6 +923,86 @@ minplayer.display.prototype.getElements = function() {
 minplayer.display.prototype.isValid = function() {
   return (this.display.length > 0);
 };
+
+/**
+ * From https://github.com/sindresorhus/screenfull.js
+ */
+/*global Element:true*/
+(function(window, document) {
+  'use strict';
+  var methods = (function() {
+    var methodMap = [
+      [
+        'requestFullscreen',
+        'exitFullscreen',
+        'fullscreenchange',
+        'fullscreen',
+        'fullscreenElement'
+      ],
+      [
+        'webkitRequestFullScreen',
+        'webkitCancelFullScreen',
+        'webkitfullscreenchange',
+        'webkitIsFullScreen',
+        'webkitCurrentFullScreenElement'
+      ],
+      [
+        'mozRequestFullScreen',
+        'mozCancelFullScreen',
+        'mozfullscreenchange',
+        'mozFullScreen',
+        'mozFullScreenElement'
+      ]
+    ];
+    for (var i = 0, l = methodMap.length; i < l; i++) {
+      var val = methodMap[i];
+      if (val[1] in document) {
+        return val;
+      }
+    }
+  })();
+
+  if (!methods) {
+    return window.screenfull = false;
+  }
+
+  var keyboardAllowed = 'ALLOW_KEYBOARD_INPUT' in Element;
+
+  var screenfull = {
+    init: function() {
+      document.addEventListener(methods[2], function(e) {
+        screenfull.isFullscreen = document[methods[3]];
+        screenfull.element = document[methods[4]];
+        screenfull.onchange(e);
+      });
+      return this;
+    },
+    isFullscreen: document[methods[3]],
+    element: document[methods[4]],
+    request: function(elem) {
+      elem = elem || document.documentElement;
+      elem[methods[0]](keyboardAllowed && Element.ALLOW_KEYBOARD_INPUT);
+      // Work around Safari 5.1 bug: reports support for keyboard in fullscreen
+      // even though it doesn't.
+      if (!document.isFullscreen) {
+        elem[methods[0]]();
+      }
+    },
+    exit: function() {
+      document[methods[1]]();
+    },
+    toggle: function(elem) {
+      if (this.isFullscreen) {
+        this.exit();
+      } else {
+        this.request(elem);
+      }
+    },
+    onchange: function() {}
+  };
+
+  window.screenfull = screenfull.init();
+})(window, document);
 // Add a way to instanciate using jQuery prototype.
 if (!jQuery.fn.minplayer) {
 
@@ -1052,7 +1177,9 @@ minplayer.prototype.addKeyEvents = function() {
     switch (e.keyCode) {
       case 113: // ESC
       case 27:  // Q
-        e.data.obj.display.removeClass('fullscreen');
+        if (e.data.obj.isFullScreen()) {
+          e.data.obj.fullscreen(false);
+        }
         break;
     }
   });
@@ -3649,22 +3776,6 @@ minplayer.controller.base.prototype.construct = function() {
   // Call the minplayer plugin constructor.
   minplayer.display.prototype.construct.call(this);
 
-  // If they have a fullscreen button.
-  if (this.elements.fullscreen) {
-
-    // Bind to the click event.
-    this.elements.fullscreen.bind('click', {obj: this}, function(event) {
-      var isFull = event.data.obj.elements.player.hasClass('fullscreen');
-      if (isFull) {
-        event.data.obj.elements.player.removeClass('fullscreen');
-      }
-      else {
-        event.data.obj.elements.player.addClass('fullscreen');
-      }
-      event.data.obj.trigger('fullscreen', !isFull);
-    }).css({'pointer' : 'hand'});
-  }
-
   // Keep track of if we are dragging...
   this.dragging = false;
 
@@ -3687,6 +3798,21 @@ minplayer.controller.base.prototype.construct = function() {
     });
   }
 
+  // Get the player plugin.
+  this.get('player', function(player) {
+
+    // If they have a fullscreen button.
+    if (this.elements.fullscreen) {
+
+      // Bind to the click event.
+      this.elements.fullscreen.unbind().bind('click', function(e) {
+
+        // Toggle fullscreen mode.
+        player.toggleFullScreen();
+      }).css({'pointer' : 'hand'});
+    }
+  });
+
   // Get the media plugin.
   this.get('media', function(media) {
 
@@ -3696,14 +3822,14 @@ minplayer.controller.base.prototype.construct = function() {
     if (this.elements.pause) {
 
       // Bind to the click on this button.
-      this.elements.pause.unbind().bind('click', {obj: this}, function(event) {
-        event.preventDefault();
-        event.data.obj.playPause(false, media);
+      this.elements.pause.unbind().bind('click', {obj: this}, function(e) {
+        e.preventDefault();
+        e.data.obj.playPause(false, media);
       });
 
       // Bind to the pause event of the media.
-      media.bind('pause', {obj: this}, function(event) {
-        event.data.obj.setPlayPause(true);
+      media.bind('pause', {obj: this}, function(e) {
+        e.data.obj.setPlayPause(true);
       });
     }
 
@@ -3711,14 +3837,14 @@ minplayer.controller.base.prototype.construct = function() {
     if (this.elements.play) {
 
       // Bind to the click on this button.
-      this.elements.play.unbind().bind('click', {obj: this}, function(event) {
-        event.preventDefault();
-        event.data.obj.playPause(true, media);
+      this.elements.play.unbind().bind('click', {obj: this}, function(e) {
+        e.preventDefault();
+        e.data.obj.playPause(true, media);
       });
 
       // Bind to the play event of the media.
-      media.bind('playing', {obj: this}, function(event) {
-        event.data.obj.setPlayPause(false);
+      media.bind('playing', {obj: this}, function(e) {
+        e.data.obj.setPlayPause(false);
       });
     }
 
@@ -3726,8 +3852,8 @@ minplayer.controller.base.prototype.construct = function() {
     if (this.elements.duration) {
 
       // Bind to the duration change event.
-      media.bind('durationchange', {obj: this}, function(event, data) {
-        event.data.obj.setTimeString('duration', data.duration);
+      media.bind('durationchange', {obj: this}, function(e, data) {
+        e.data.obj.setTimeString('duration', data.duration);
       });
 
       // Set the timestring to the duration.
@@ -3740,9 +3866,9 @@ minplayer.controller.base.prototype.construct = function() {
     if (this.elements.progress) {
 
       // Bind to the progress event.
-      media.bind('progress', {obj: this}, function(event, data) {
+      media.bind('progress', {obj: this}, function(e, data) {
         var percent = data.total ? (data.loaded / data.total) * 100 : 0;
-        event.data.obj.elements.progress.width(percent + '%');
+        e.data.obj.elements.progress.width(percent + '%');
       });
     }
 
@@ -3750,19 +3876,19 @@ minplayer.controller.base.prototype.construct = function() {
     if (this.seekBar || this.elements.timer) {
 
       // Bind to the time update event.
-      media.bind('timeupdate', {obj: this}, function(event, data) {
-        if (!event.data.obj.dragging) {
+      media.bind('timeupdate', {obj: this}, function(e, data) {
+        if (!e.data.obj.dragging) {
           var value = 0;
           if (data.duration) {
             value = (data.currentTime / data.duration) * 100;
           }
 
           // Update the seek bar if it exists.
-          if (event.data.obj.seekBar) {
-            event.data.obj.seekBar.slider('option', 'value', value);
+          if (e.data.obj.seekBar) {
+            e.data.obj.seekBar.slider('option', 'value', value);
           }
 
-          event.data.obj.setTimeString('timer', data.currentTime);
+          e.data.obj.setTimeString('timer', data.currentTime);
         }
       });
     }

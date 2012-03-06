@@ -81,22 +81,6 @@ minplayer.controller.base.prototype.construct = function() {
   // Call the minplayer plugin constructor.
   minplayer.display.prototype.construct.call(this);
 
-  // If they have a fullscreen button.
-  if (this.elements.fullscreen) {
-
-    // Bind to the click event.
-    this.elements.fullscreen.bind('click', {obj: this}, function(event) {
-      var isFull = event.data.obj.elements.player.hasClass('fullscreen');
-      if (isFull) {
-        event.data.obj.elements.player.removeClass('fullscreen');
-      }
-      else {
-        event.data.obj.elements.player.addClass('fullscreen');
-      }
-      event.data.obj.trigger('fullscreen', !isFull);
-    }).css({'pointer' : 'hand'});
-  }
-
   // Keep track of if we are dragging...
   this.dragging = false;
 
@@ -119,6 +103,21 @@ minplayer.controller.base.prototype.construct = function() {
     });
   }
 
+  // Get the player plugin.
+  this.get('player', function(player) {
+
+    // If they have a fullscreen button.
+    if (this.elements.fullscreen) {
+
+      // Bind to the click event.
+      this.elements.fullscreen.unbind().bind('click', function(e) {
+
+        // Toggle fullscreen mode.
+        player.toggleFullScreen();
+      }).css({'pointer' : 'hand'});
+    }
+  });
+
   // Get the media plugin.
   this.get('media', function(media) {
 
@@ -128,14 +127,14 @@ minplayer.controller.base.prototype.construct = function() {
     if (this.elements.pause) {
 
       // Bind to the click on this button.
-      this.elements.pause.unbind().bind('click', {obj: this}, function(event) {
-        event.preventDefault();
-        event.data.obj.playPause(false, media);
+      this.elements.pause.unbind().bind('click', {obj: this}, function(e) {
+        e.preventDefault();
+        e.data.obj.playPause(false, media);
       });
 
       // Bind to the pause event of the media.
-      media.bind('pause', {obj: this}, function(event) {
-        event.data.obj.setPlayPause(true);
+      media.bind('pause', {obj: this}, function(e) {
+        e.data.obj.setPlayPause(true);
       });
     }
 
@@ -143,14 +142,14 @@ minplayer.controller.base.prototype.construct = function() {
     if (this.elements.play) {
 
       // Bind to the click on this button.
-      this.elements.play.unbind().bind('click', {obj: this}, function(event) {
-        event.preventDefault();
-        event.data.obj.playPause(true, media);
+      this.elements.play.unbind().bind('click', {obj: this}, function(e) {
+        e.preventDefault();
+        e.data.obj.playPause(true, media);
       });
 
       // Bind to the play event of the media.
-      media.bind('playing', {obj: this}, function(event) {
-        event.data.obj.setPlayPause(false);
+      media.bind('playing', {obj: this}, function(e) {
+        e.data.obj.setPlayPause(false);
       });
     }
 
@@ -158,8 +157,8 @@ minplayer.controller.base.prototype.construct = function() {
     if (this.elements.duration) {
 
       // Bind to the duration change event.
-      media.bind('durationchange', {obj: this}, function(event, data) {
-        event.data.obj.setTimeString('duration', data.duration);
+      media.bind('durationchange', {obj: this}, function(e, data) {
+        e.data.obj.setTimeString('duration', data.duration);
       });
 
       // Set the timestring to the duration.
@@ -172,9 +171,9 @@ minplayer.controller.base.prototype.construct = function() {
     if (this.elements.progress) {
 
       // Bind to the progress event.
-      media.bind('progress', {obj: this}, function(event, data) {
+      media.bind('progress', {obj: this}, function(e, data) {
         var percent = data.total ? (data.loaded / data.total) * 100 : 0;
-        event.data.obj.elements.progress.width(percent + '%');
+        e.data.obj.elements.progress.width(percent + '%');
       });
     }
 
@@ -182,19 +181,19 @@ minplayer.controller.base.prototype.construct = function() {
     if (this.seekBar || this.elements.timer) {
 
       // Bind to the time update event.
-      media.bind('timeupdate', {obj: this}, function(event, data) {
-        if (!event.data.obj.dragging) {
+      media.bind('timeupdate', {obj: this}, function(e, data) {
+        if (!e.data.obj.dragging) {
           var value = 0;
           if (data.duration) {
             value = (data.currentTime / data.duration) * 100;
           }
 
           // Update the seek bar if it exists.
-          if (event.data.obj.seekBar) {
-            event.data.obj.seekBar.slider('option', 'value', value);
+          if (e.data.obj.seekBar) {
+            e.data.obj.seekBar.slider('option', 'value', value);
           }
 
-          event.data.obj.setTimeString('timer', data.currentTime);
+          e.data.obj.setTimeString('timer', data.currentTime);
         }
       });
     }
