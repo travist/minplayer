@@ -1019,9 +1019,9 @@ if (!jQuery.fn.minplayer) {
       options = options || {};
       options.id = options.id || $(this).attr('id') || Math.random();
       if (!minplayer.plugins[options.id]) {
-        var template = options.template || 'default';
-        if (minplayer[template]) {
-          new minplayer[template](jQuery(this), options);
+        options.template = options.template || 'default';
+        if (minplayer[options.template]) {
+          new minplayer[options.template](jQuery(this), options);
         }
         else {
           new minplayer(jQuery(this), options);
