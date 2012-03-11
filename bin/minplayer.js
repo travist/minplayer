@@ -305,19 +305,23 @@ minplayer.plugin.prototype.destroy = function() {
  * Creates a new plugin within this context.
  *
  * @param {string} name The name of the plugin you wish to create.
+ * @param {object} base The base object for this plugin.
  * @return {object} The new plugin object.
  */
-minplayer.plugin.prototype.create = function(name) {
+minplayer.plugin.prototype.create = function(name, base) {
   var plugin = null;
 
+  // Make sure we have a base object.
+  base = base || 'minplayer';
+
   // See if this plugin exists within this object.
-  if (this.hasOwnProperty(name)) {
+  if (window[base][name]) {
 
     // Set the plugin.
-    plugin = this[name];
+    plugin = window[base][name];
 
     // See if a template version of the plugin exists.
-    if (plugin.hasOwnProperty(this.options.template)) {
+    if (plugin[this.options.template]) {
 
       plugin = plugin[this.options.template];
     }
