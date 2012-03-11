@@ -27,7 +27,7 @@ minplayer.plugin = function(name, context, options) {
   this.pluginReady = false;
 
   /** The options for this plugin. */
-  this.options = options;
+  this.options = options || {};
 
   /** The event queue. */
   this.queue = {};
@@ -69,30 +69,31 @@ minplayer.plugin.prototype.destroy = function() {
 };
 
 /**
- * Loads all of the available plugins.
+ * Creates a new plugin within this context.
+ *
+ * @param {string} name The name of the plugin you wish to create.
+ * @return {object} The new plugin object.
  */
-minplayer.plugin.prototype.loadPlugins = function() {
+minplayer.plugin.prototype.create = function(name) {
+  var plugin = null;
 
-  // Get all the plugins to load.
-  var instance = '';
+  // See if this plugin exists within this object.
+  if (this.hasOwnProperty(name)) {
 
-  // Iterate through all the plugins.
-  for (var name in this.options.plugins) {
+    // Set the plugin.
+    plugin = this[name];
 
-    // Only load if it does not already exist.
-    if (!minplayer.plugins[this.options.id][name]) {
+    // See if a template version of the plugin exists.
+    if (plugin.hasOwnProperty(this.options.template)) {
 
-      // Get the instance name from the setting.
-      instance = this.options.plugins[name];
-
-      // If this object exists.
-      if (minplayer[name][instance]) {
-
-        // Declare a new object.
-        new minplayer[name][instance](this.display, this.options);
-      }
+      plugin = plugin[this.options.template];
     }
+
+    // Create the new plugin.
+    return new plugin(this.display, this.options);
   }
+
+  return null;
 };
 
 /**

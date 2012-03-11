@@ -66,12 +66,6 @@ minplayer = jQuery.extend(function(context, options) {
     attributes: {}
   }, options);
 
-  // Setup the plugins.
-  options.plugins = jQuery.extend({
-    controller: options.controller || options.template,
-    playLoader: options.playLoader || options.template
-  }, options.plugins);
-
   // Derive from display
   minplayer.display.call(this, 'player', context, options);
 }, minplayer);
@@ -95,8 +89,11 @@ minplayer.prototype.construct = function() {
   // Call the minplayer display constructor.
   minplayer.display.prototype.construct.call(this);
 
-  // Load the plugins.
-  this.loadPlugins();
+  /** The controller for this player. */
+  this.controller = this.create('controller');
+
+  /** The play loader for this player. */
+  this.playLoader = this.create('playLoader');
 
   /** Variable to store the current media player. */
   this.currentPlayer = 'html5';

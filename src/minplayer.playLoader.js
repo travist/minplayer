@@ -1,9 +1,6 @@
 /** The minplayer namespace. */
 var minplayer = minplayer || {};
 
-/** Define the playLoader object. */
-minplayer.playLoader = minplayer.playLoader || {};
-
 /**
  * @constructor
  * @extends minplayer.display
@@ -14,7 +11,7 @@ minplayer.playLoader = minplayer.playLoader || {};
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
  */
-minplayer.playLoader.base = function(context, options) {
+minplayer.playLoader = function(context, options) {
 
   // Define the flags that control the busy cursor.
   this.busy = new minplayer.flags();
@@ -30,15 +27,15 @@ minplayer.playLoader.base = function(context, options) {
 };
 
 /** Derive from minplayer.display. */
-minplayer.playLoader.base.prototype = new minplayer.display();
+minplayer.playLoader.prototype = new minplayer.display();
 
 /** Reset the constructor. */
-minplayer.playLoader.base.prototype.constructor = minplayer.playLoader.base;
+minplayer.playLoader.prototype.constructor = minplayer.playLoader;
 
 /**
  * The constructor.
  */
-minplayer.playLoader.base.prototype.construct = function() {
+minplayer.playLoader.prototype.construct = function() {
 
   // Call the media display constructor.
   minplayer.display.prototype.construct.call(this);
@@ -115,7 +112,7 @@ minplayer.playLoader.base.prototype.construct = function() {
 /**
  * Loads the preview image.
  */
-minplayer.playLoader.base.prototype.loadPreview = function() {
+minplayer.playLoader.prototype.loadPreview = function() {
 
   // If the preview element exists.
   if (this.elements.preview) {
@@ -152,7 +149,7 @@ minplayer.playLoader.base.prototype.loadPreview = function() {
  * Hide or show certain elements based on the state of the busy and big play
  * button.
  */
-minplayer.playLoader.base.prototype.checkVisibility = function() {
+minplayer.playLoader.prototype.checkVisibility = function() {
 
   // Hide or show the busy cursor based on the flags.
   if (this.busy.flag) {

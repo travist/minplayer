@@ -7,12 +7,12 @@ minplayer.playLoader = minplayer.playLoader || {};
 // constructor.
 minplayer.playLoader["default"] = function(context, options) {
 
-  // Derive from busy.base
-  minplayer.playLoader.base.call(this, context, options);
+  // Derive from busy
+  minplayer.playLoader.call(this, context, options);
 };
 
 // Define the prototype for all controllers.
-minplayer.playLoader["default"].prototype = new minplayer.playLoader.base();
+minplayer.playLoader["default"].prototype = new minplayer.playLoader();
 minplayer.playLoader["default"].prototype.constructor = minplayer.playLoader["default"];
 
 /**
@@ -37,7 +37,7 @@ minplayer.playLoader["default"].prototype.getDisplay = function(context, options
 
 // Return the elements
 minplayer.playLoader["default"].prototype.getElements = function() {
-  var elements = minplayer.playLoader.base.prototype.getElements.call(this);
+  var elements = minplayer.playLoader.prototype.getElements.call(this);
   return jQuery.extend(elements, {
     busy:jQuery(".media-player-loader", this.display),
     bigPlay:jQuery(".media-player-big-play", this.display),

@@ -260,7 +260,7 @@ minplayer.plugin = function(name, context, options) {
   this.pluginReady = false;
 
   /** The options for this plugin. */
-  this.options = options;
+  this.options = options || {};
 
   /** The event queue. */
   this.queue = {};
@@ -302,30 +302,31 @@ minplayer.plugin.prototype.destroy = function() {
 };
 
 /**
- * Loads all of the available plugins.
+ * Creates a new plugin within this context.
+ *
+ * @param {string} name The name of the plugin you wish to create.
+ * @return {object} The new plugin object.
  */
-minplayer.plugin.prototype.loadPlugins = function() {
+minplayer.plugin.prototype.create = function(name) {
+  var plugin = null;
 
-  // Get all the plugins to load.
-  var instance = '';
+  // See if this plugin exists within this object.
+  if (this.hasOwnProperty(name)) {
 
-  // Iterate through all the plugins.
-  for (var name in this.options.plugins) {
+    // Set the plugin.
+    plugin = this[name];
 
-    // Only load if it does not already exist.
-    if (!minplayer.plugins[this.options.id][name]) {
+    // See if a template version of the plugin exists.
+    if (plugin.hasOwnProperty(this.options.template)) {
 
-      // Get the instance name from the setting.
-      instance = this.options.plugins[name];
-
-      // If this object exists.
-      if (minplayer[name][instance]) {
-
-        // Declare a new object.
-        new minplayer[name][instance](this.display, this.options);
-      }
+      plugin = plugin[this.options.template];
     }
+
+    // Create the new plugin.
+    return new plugin(this.display, this.options);
   }
+
+  return null;
 };
 
 /**
@@ -1071,12 +1072,6 @@ minplayer = jQuery.extend(function(context, options) {
     attributes: {}
   }, options);
 
-  // Setup the plugins.
-  options.plugins = jQuery.extend({
-    controller: options.controller || options.template,
-    playLoader: options.playLoader || options.template
-  }, options.plugins);
-
   // Derive from display
   minplayer.display.call(this, 'player', context, options);
 }, minplayer);
@@ -1100,8 +1095,11 @@ minplayer.prototype.construct = function() {
   // Call the minplayer display constructor.
   minplayer.display.prototype.construct.call(this);
 
-  // Load the plugins.
-  this.loadPlugins();
+  /** The controller for this player. */
+  this.controller = this.create('controller');
+
+  /** The play loader for this player. */
+  this.playLoader = this.create('playLoader');
 
   /** Variable to store the current media player. */
   this.currentPlayer = 'html5';
@@ -1662,9 +1660,6 @@ minplayer.file.prototype.getId = function() {
 /** The minplayer namespace. */
 var minplayer = minplayer || {};
 
-/** Define the playLoader object. */
-minplayer.playLoader = minplayer.playLoader || {};
-
 /**
  * @constructor
  * @extends minplayer.display
@@ -1675,7 +1670,7 @@ minplayer.playLoader = minplayer.playLoader || {};
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
  */
-minplayer.playLoader.base = function(context, options) {
+minplayer.playLoader = function(context, options) {
 
   // Define the flags that control the busy cursor.
   this.busy = new minplayer.flags();
@@ -1691,15 +1686,15 @@ minplayer.playLoader.base = function(context, options) {
 };
 
 /** Derive from minplayer.display. */
-minplayer.playLoader.base.prototype = new minplayer.display();
+minplayer.playLoader.prototype = new minplayer.display();
 
 /** Reset the constructor. */
-minplayer.playLoader.base.prototype.constructor = minplayer.playLoader.base;
+minplayer.playLoader.prototype.constructor = minplayer.playLoader;
 
 /**
  * The constructor.
  */
-minplayer.playLoader.base.prototype.construct = function() {
+minplayer.playLoader.prototype.construct = function() {
 
   // Call the media display constructor.
   minplayer.display.prototype.construct.call(this);
@@ -1776,7 +1771,7 @@ minplayer.playLoader.base.prototype.construct = function() {
 /**
  * Loads the preview image.
  */
-minplayer.playLoader.base.prototype.loadPreview = function() {
+minplayer.playLoader.prototype.loadPreview = function() {
 
   // If the preview element exists.
   if (this.elements.preview) {
@@ -1813,7 +1808,7 @@ minplayer.playLoader.base.prototype.loadPreview = function() {
  * Hide or show certain elements based on the state of the busy and big play
  * button.
  */
-minplayer.playLoader.base.prototype.checkVisibility = function() {
+minplayer.playLoader.prototype.checkVisibility = function() {
 
   // Hide or show the busy cursor based on the flags.
   if (this.busy.flag) {
@@ -3696,9 +3691,6 @@ minplayer.players.vimeo.prototype.getDuration = function(callback) {
 /** The minplayer namespace. */
 var minplayer = minplayer || {};
 
-/** Define the controller object. */
-minplayer.controller = minplayer.controller || {};
-
 /**
  * @constructor
  * @extends minplayer.display
@@ -3709,20 +3701,17 @@ minplayer.controller = minplayer.controller || {};
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
  */
-minplayer.controller.base = function(context, options) {
+minplayer.controller = function(context, options) {
 
   // Derive from display
   minplayer.display.call(this, 'controller', context, options);
 };
 
-// Define the prototype for all controllers.
-var controllersBase = minplayer.controller.base;
-
 /** Derive from minplayer.display. */
-minplayer.controller.base.prototype = new minplayer.display();
+minplayer.controller.prototype = new minplayer.display();
 
 /** Reset the constructor. */
-minplayer.controller.base.prototype.constructor = minplayer.controller.base;
+minplayer.controller.prototype.constructor = minplayer.controller;
 
 /**
  * A static function that will format a time value into a string time format.
@@ -3755,7 +3744,7 @@ minplayer.formatTime = function(time) {
  * @see minplayer.display#getElements
  * @return {object} The elements defined by this display.
  */
-minplayer.controller.base.prototype.getElements = function() {
+minplayer.controller.prototype.getElements = function() {
   var elements = minplayer.display.prototype.getElements.call(this);
   return jQuery.extend(elements, {
     play: null,
@@ -3771,7 +3760,7 @@ minplayer.controller.base.prototype.getElements = function() {
 /**
  * @see minplayer.plugin#construct
  */
-minplayer.controller.base.prototype.construct = function() {
+minplayer.controller.prototype.construct = function() {
 
   // Call the minplayer plugin constructor.
   minplayer.display.prototype.construct.call(this);
@@ -3949,7 +3938,7 @@ minplayer.controller.base.prototype.construct = function() {
  *
  * @param {boolean} state TRUE - Show Play, FALSE - Show Pause.
  */
-minplayer.controller.base.prototype.setPlayPause = function(state) {
+minplayer.controller.prototype.setPlayPause = function(state) {
   var css = '';
   if (this.elements.play) {
     css = state ? 'inherit' : 'none';
@@ -3967,7 +3956,7 @@ minplayer.controller.base.prototype.setPlayPause = function(state) {
  * @param {bool} state true => play, false => pause.
  * @param {object} media The media player object.
  */
-minplayer.controller.base.prototype.playPause = function(state, media) {
+minplayer.controller.prototype.playPause = function(state, media) {
   var type = state ? 'play' : 'pause';
   this.display.trigger(type);
   this.setPlayPause(!state);
@@ -3982,7 +3971,7 @@ minplayer.controller.base.prototype.playPause = function(state, media) {
  * @param {string} element The name of the element to set.
  * @param {number} time The total time amount to set.
  */
-minplayer.controller.base.prototype.setTimeString = function(element, time) {
+minplayer.controller.prototype.setTimeString = function(element, time) {
   if (this.elements[element]) {
     this.elements[element].text(minplayer.formatTime(time).time);
   }

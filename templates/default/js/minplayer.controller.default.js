@@ -13,18 +13,18 @@ minplayer.controller["default"] = function(context, options) {
   this.timer = 0;
 
   // Derive from base controller
-  minplayer.controller.base.call(this, context, options);
+  minplayer.controller.call(this, context, options);
 };
 
-/** Derive from controller.base. */
-minplayer.controller["default"].prototype = new minplayer.controller.base();
+/** Derive from controller. */
+minplayer.controller["default"].prototype = new minplayer.controller();
 minplayer.controller["default"].prototype.constructor = minplayer.controller["default"];
 
 /**
  * @see minplayer.plugin#construct
  */
 minplayer.controller["default"].prototype.construct = function() {
-  minplayer.controller.base.prototype.construct.call(this);
+  minplayer.controller.prototype.construct.call(this);
   minplayer.get.call(this, this.options.id, null, function(plugin) {
     plugin.bind('fullscreen', {obj:this}, function(event, full) {
       event.data.obj.onFullScreen(full);
@@ -99,7 +99,7 @@ minplayer.controller["default"].prototype.getDisplay = function(context, options
 
 // Return the elements
 minplayer.controller["default"].prototype.getElements = function() {
-  var elements = minplayer.controller.base.prototype.getElements.call(this);
+  var elements = minplayer.controller.prototype.getElements.call(this);
   var timer = jQuery(".media-player-timer", this.display);
   return jQuery.extend(elements, {
     play: jQuery(".media-player-play", this.display),

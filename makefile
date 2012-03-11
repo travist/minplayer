@@ -19,14 +19,14 @@ files =   src/minplayer.compatibility.js\
           src/minplayer.js\
           src/minplayer.image.js\
           src/minplayer.file.js\
-          src/minplayer.playLoader.base.js\
+          src/minplayer.playLoader.js\
           src/minplayer.players.base.js\
           src/minplayer.players.html5.js\
           src/minplayer.players.flash.js\
           src/minplayer.players.minplayer.js\
           src/minplayer.players.youtube.js\
           src/minplayer.players.vimeo.js\
-          src/minplayer.controller.base.js
+          src/minplayer.controller.js
 
 .DEFAULT_GOAL := all
 
