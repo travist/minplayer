@@ -30,7 +30,7 @@ minplayer.plugin = function(name, context, options) {
   this.options = options || {};
 
   /** The event queue. */
-  this.queue = {};
+  this.queue = this.options.queue || {};
 
   /** Keep track of already triggered events. */
   this.triggered = {};
@@ -66,6 +66,9 @@ minplayer.plugin.prototype.destroy = function() {
 
   // Unbind all events.
   this.unbind();
+
+  // Restore the queue.
+  this.queue = this.options.queue;
 };
 
 /**

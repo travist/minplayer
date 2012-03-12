@@ -62,8 +62,8 @@ minplayer.players.base.prototype.construct = function() {
   // Call the media display constructor.
   minplayer.display.prototype.construct.call(this);
 
-  // Reset the variables to initial state.
-  this.reset();
+  // Reset all variables and unbind.
+  this.destroy();
 
   /** The currently loaded media file. */
   this.mediaFile = this.options.file;
@@ -133,17 +133,22 @@ minplayer.players.base.prototype.construct = function() {
 minplayer.players.base.prototype.destroy = function() {
   minplayer.plugin.prototype.destroy.call(this);
 
+  // Reset the ready flag.
+  this.playerReady = false;
+
   // Reset the player.
   this.reset();
+
+  // If the player exists, then unbind all events.
+  if (this.player) {
+    jQuery(this.player).unbind();
+  }
 };
 
 /**
  * Resets all variables.
  */
 minplayer.players.base.prototype.reset = function() {
-
-  // Reset the ready flag.
-  this.playerReady = false;
 
   // The duration of the player.
   this.duration = new minplayer.async();
@@ -171,11 +176,6 @@ minplayer.players.base.prototype.reset = function() {
 
   // We are not loading.
   this.loading = false;
-
-  // If the player exists, then unbind all events.
-  if (this.player) {
-    jQuery(this.player).unbind();
-  }
 };
 
 /**

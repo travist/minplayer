@@ -263,7 +263,7 @@ minplayer.plugin = function(name, context, options) {
   this.options = options || {};
 
   /** The event queue. */
-  this.queue = {};
+  this.queue = this.options.queue || {};
 
   /** Keep track of already triggered events. */
   this.triggered = {};
@@ -299,6 +299,9 @@ minplayer.plugin.prototype.destroy = function() {
 
   // Unbind all events.
   this.unbind();
+
+  // Restore the queue.
+  this.queue = this.options.queue;
 };
 
 /**
@@ -1299,6 +1302,7 @@ minplayer.prototype.loadPlayer = function() {
 
     // Destroy the current media.
     if (this.media) {
+      this.options.queue = this.media.queue;
       this.media.destroy();
     }
 
@@ -1904,8 +1908,8 @@ minplayer.players.base.prototype.construct = function() {
   // Call the media display constructor.
   minplayer.display.prototype.construct.call(this);
 
-  // Reset the variables to initial state.
-  this.reset();
+  // Reset all variables and unbind.
+  this.destroy();
 
   /** The currently loaded media file. */
   this.mediaFile = this.options.file;
@@ -1975,17 +1979,22 @@ minplayer.players.base.prototype.construct = function() {
 minplayer.players.base.prototype.destroy = function() {
   minplayer.plugin.prototype.destroy.call(this);
 
+  // Reset the ready flag.
+  this.playerReady = false;
+
   // Reset the player.
   this.reset();
+
+  // If the player exists, then unbind all events.
+  if (this.player) {
+    jQuery(this.player).unbind();
+  }
 };
 
 /**
  * Resets all variables.
  */
 minplayer.players.base.prototype.reset = function() {
-
-  // Reset the ready flag.
-  this.playerReady = false;
 
   // The duration of the player.
   this.duration = new minplayer.async();
@@ -2013,11 +2022,6 @@ minplayer.players.base.prototype.reset = function() {
 
   // We are not loading.
   this.loading = false;
-
-  // If the player exists, then unbind all events.
-  if (this.player) {
-    jQuery(this.player).unbind();
-  }
 };
 
 /**

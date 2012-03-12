@@ -285,6 +285,7 @@ minplayer.prototype.loadPlayer = function() {
 
     // Destroy the current media.
     if (this.media) {
+      this.options.queue = this.media.queue;
       this.media.destroy();
     }
 

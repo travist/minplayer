@@ -69,8 +69,8 @@
 <span class='line'> 62</span> </span><span class="WHIT">  </span><span class="COMM">// Call the media display constructor.</span><span class="WHIT">
 <span class='line'> 63</span> </span><span class="WHIT">  </span><span class="NAME">minplayer.display.prototype.construct.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 64</span> 
-<span class='line'> 65</span> </span><span class="WHIT">  </span><span class="COMM">// Reset the variables to initial state.</span><span class="WHIT">
-<span class='line'> 66</span> </span><span class="WHIT">  </span><span class="NAME">this.reset</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 65</span> </span><span class="WHIT">  </span><span class="COMM">// Reset all variables and unbind.</span><span class="WHIT">
+<span class='line'> 66</span> </span><span class="WHIT">  </span><span class="NAME">this.destroy</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 67</span> 
 <span class='line'> 68</span> </span><span class="WHIT">  </span><span class="COMM">/** The currently loaded media file. */</span><span class="WHIT">
 <span class='line'> 69</span> </span><span class="WHIT">  </span><span class="NAME">this.mediaFile</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.options.file</span><span class="PUNC">;</span><span class="WHIT">
@@ -140,49 +140,49 @@
 <span class='line'>133</span> </span><span class="NAME">minplayer.players.base.prototype.destroy</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>134</span> </span><span class="WHIT">  </span><span class="NAME">minplayer.plugin.prototype.destroy.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>135</span> 
-<span class='line'>136</span> </span><span class="WHIT">  </span><span class="COMM">// Reset the player.</span><span class="WHIT">
-<span class='line'>137</span> </span><span class="WHIT">  </span><span class="NAME">this.reset</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>138</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>139</span> 
-<span class='line'>140</span> </span><span class="COMM">/**
-<span class='line'>141</span>  * Resets all variables.
-<span class='line'>142</span>  */</span><span class="WHIT">
-<span class='line'>143</span> </span><span class="NAME">minplayer.players.base.prototype.reset</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>144</span> 
-<span class='line'>145</span> </span><span class="WHIT">  </span><span class="COMM">// Reset the ready flag.</span><span class="WHIT">
-<span class='line'>146</span> </span><span class="WHIT">  </span><span class="NAME">this.playerReady</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>136</span> </span><span class="WHIT">  </span><span class="COMM">// Reset the ready flag.</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="WHIT">  </span><span class="NAME">this.playerReady</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>138</span> 
+<span class='line'>139</span> </span><span class="WHIT">  </span><span class="COMM">// Reset the player.</span><span class="WHIT">
+<span class='line'>140</span> </span><span class="WHIT">  </span><span class="NAME">this.reset</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>141</span> 
+<span class='line'>142</span> </span><span class="WHIT">  </span><span class="COMM">// If the player exists, then unbind all events.</span><span class="WHIT">
+<span class='line'>143</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.player</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>144</span> </span><span class="WHIT">    </span><span class="NAME">jQuery</span><span class="PUNC">(</span><span class="NAME">this.player</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">unbind</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>145</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>147</span> 
-<span class='line'>148</span> </span><span class="WHIT">  </span><span class="COMM">// The duration of the player.</span><span class="WHIT">
-<span class='line'>149</span> </span><span class="WHIT">  </span><span class="NAME">this.duration</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">minplayer.async</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>150</span> 
-<span class='line'>151</span> </span><span class="WHIT">  </span><span class="COMM">// The current play time of the player.</span><span class="WHIT">
-<span class='line'>152</span> </span><span class="WHIT">  </span><span class="NAME">this.currentTime</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">minplayer.async</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>153</span> 
-<span class='line'>154</span> </span><span class="WHIT">  </span><span class="COMM">// The amount of bytes loaded in the player.</span><span class="WHIT">
-<span class='line'>155</span> </span><span class="WHIT">  </span><span class="NAME">this.bytesLoaded</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">minplayer.async</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>156</span> 
-<span class='line'>157</span> </span><span class="WHIT">  </span><span class="COMM">// The total amount of bytes for the media.</span><span class="WHIT">
-<span class='line'>158</span> </span><span class="WHIT">  </span><span class="NAME">this.bytesTotal</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">minplayer.async</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>159</span> 
-<span class='line'>160</span> </span><span class="WHIT">  </span><span class="COMM">// The bytes that the download started with.</span><span class="WHIT">
-<span class='line'>161</span> </span><span class="WHIT">  </span><span class="NAME">this.bytesStart</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">minplayer.async</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>162</span> 
-<span class='line'>163</span> </span><span class="WHIT">  </span><span class="COMM">// The current volume of the player.</span><span class="WHIT">
-<span class='line'>164</span> </span><span class="WHIT">  </span><span class="NAME">this.volume</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">minplayer.async</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>165</span> 
-<span class='line'>166</span> </span><span class="WHIT">  </span><span class="COMM">// Reset focus.</span><span class="WHIT">
-<span class='line'>167</span> </span><span class="WHIT">  </span><span class="NAME">this.hasFocus</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>168</span> 
-<span class='line'>169</span> </span><span class="WHIT">  </span><span class="COMM">// We are not playing.</span><span class="WHIT">
-<span class='line'>170</span> </span><span class="WHIT">  </span><span class="NAME">this.playing</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>171</span> 
-<span class='line'>172</span> </span><span class="WHIT">  </span><span class="COMM">// We are not loading.</span><span class="WHIT">
-<span class='line'>173</span> </span><span class="WHIT">  </span><span class="NAME">this.loading</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>174</span> 
-<span class='line'>175</span> </span><span class="WHIT">  </span><span class="COMM">// If the player exists, then unbind all events.</span><span class="WHIT">
-<span class='line'>176</span> </span><span class="WHIT">  </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.player</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>177</span> </span><span class="WHIT">    </span><span class="NAME">jQuery</span><span class="PUNC">(</span><span class="NAME">this.player</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">unbind</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>178</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>148</span> </span><span class="COMM">/**
+<span class='line'>149</span>  * Resets all variables.
+<span class='line'>150</span>  */</span><span class="WHIT">
+<span class='line'>151</span> </span><span class="NAME">minplayer.players.base.prototype.reset</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>152</span> 
+<span class='line'>153</span> </span><span class="WHIT">  </span><span class="COMM">// The duration of the player.</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="WHIT">  </span><span class="NAME">this.duration</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">minplayer.async</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>155</span> 
+<span class='line'>156</span> </span><span class="WHIT">  </span><span class="COMM">// The current play time of the player.</span><span class="WHIT">
+<span class='line'>157</span> </span><span class="WHIT">  </span><span class="NAME">this.currentTime</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">minplayer.async</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>158</span> 
+<span class='line'>159</span> </span><span class="WHIT">  </span><span class="COMM">// The amount of bytes loaded in the player.</span><span class="WHIT">
+<span class='line'>160</span> </span><span class="WHIT">  </span><span class="NAME">this.bytesLoaded</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">minplayer.async</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>161</span> 
+<span class='line'>162</span> </span><span class="WHIT">  </span><span class="COMM">// The total amount of bytes for the media.</span><span class="WHIT">
+<span class='line'>163</span> </span><span class="WHIT">  </span><span class="NAME">this.bytesTotal</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">minplayer.async</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>164</span> 
+<span class='line'>165</span> </span><span class="WHIT">  </span><span class="COMM">// The bytes that the download started with.</span><span class="WHIT">
+<span class='line'>166</span> </span><span class="WHIT">  </span><span class="NAME">this.bytesStart</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">minplayer.async</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>167</span> 
+<span class='line'>168</span> </span><span class="WHIT">  </span><span class="COMM">// The current volume of the player.</span><span class="WHIT">
+<span class='line'>169</span> </span><span class="WHIT">  </span><span class="NAME">this.volume</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">minplayer.async</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>170</span> 
+<span class='line'>171</span> </span><span class="WHIT">  </span><span class="COMM">// Reset focus.</span><span class="WHIT">
+<span class='line'>172</span> </span><span class="WHIT">  </span><span class="NAME">this.hasFocus</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>173</span> 
+<span class='line'>174</span> </span><span class="WHIT">  </span><span class="COMM">// We are not playing.</span><span class="WHIT">
+<span class='line'>175</span> </span><span class="WHIT">  </span><span class="NAME">this.playing</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>176</span> 
+<span class='line'>177</span> </span><span class="WHIT">  </span><span class="COMM">// We are not loading.</span><span class="WHIT">
+<span class='line'>178</span> </span><span class="WHIT">  </span><span class="NAME">this.loading</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>179</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>180</span> 
 <span class='line'>181</span> </span><span class="COMM">/**
