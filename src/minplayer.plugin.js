@@ -73,13 +73,17 @@ minplayer.plugin.prototype.destroy = function() {
  *
  * @param {string} name The name of the plugin you wish to create.
  * @param {object} base The base object for this plugin.
+ * @param {object} context The context which you would like to create.
  * @return {object} The new plugin object.
  */
-minplayer.plugin.prototype.create = function(name, base) {
+minplayer.plugin.prototype.create = function(name, base, context) {
   var plugin = null;
 
   // Make sure we have a base object.
   base = base || 'minplayer';
+
+  // Make sure there is a context.
+  context = context || this.display;
 
   // See if this plugin exists within this object.
   if (window[base][name]) {
@@ -94,7 +98,7 @@ minplayer.plugin.prototype.create = function(name, base) {
     }
 
     // Create the new plugin.
-    return new plugin(this.display, this.options);
+    return new plugin(context, this.options);
   }
 
   return null;

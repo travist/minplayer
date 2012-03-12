@@ -283,9 +283,6 @@ minplayer.prototype.loadPlayer = function() {
       return;
     }
 
-    // Store the queue.
-    var queue = this.media ? this.media.queue : {};
-
     // Destroy the current media.
     if (this.media) {
       this.media.destroy();
@@ -297,15 +294,14 @@ minplayer.prototype.loadPlayer = function() {
     // Create the new media player.
     this.media = new pClass(this.elements.display, this.options);
 
-    // Restore the queue.
-    this.media.queue = queue;
-
     // Now get the media when it is ready.
-    this.get('media', function(media) {
+    this.get('media', (function(player) {
+      return function(media) {
 
-      // Load the media.
-      media.load();
-    });
+        // Load the media.
+        media.load(player.options.file);
+      };
+    })(this));
   }
   // If the media object already exists...
   else if (this.media) {

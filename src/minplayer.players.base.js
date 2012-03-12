@@ -198,6 +198,11 @@ minplayer.players.base.prototype.onReady = function() {
   // Store the this pointer.
   var _this = this;
 
+  // Only continue if we are not already ready.
+  if (this.playerReady) {
+    return;
+  }
+
   // Set the ready flag.
   this.playerReady = true;
 

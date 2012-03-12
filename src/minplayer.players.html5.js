@@ -112,6 +112,9 @@ minplayer.players.html5.prototype.construct = function() {
       _this.bytesTotal.set(event.total);
       _this.bytesLoaded.set(event.loaded);
     }, false);
+
+    // Say we are ready.
+    this.onReady();
   }
 };
 
@@ -156,19 +159,20 @@ minplayer.players.html5.prototype.getPlayer = function() {
  */
 minplayer.players.html5.prototype.load = function(file) {
 
-  if (file && this.isReady()) {
+  if (file) {
 
     // Get the current source.
-    var src = this.options.elements.media.attr('src');
+    var src = this.elements.media.attr('src');
+    if (!src) {
+      src = jQuery('source', this.elements.media).eq(0).attr('src');
+    }
 
     // If the source is different.
     if (src != file.path) {
 
       // Change the source...
-      var code = '<source src="' + file.path + '" ';
-      code += 'type="' + file.mimetype + '"';
-      code += file.codecs ? ' codecs="' + file.path + '">' : '>';
-      this.options.elements.media.attr('src', '').empty().html(code);
+      var code = '<source src="' + file.path + '">';
+      this.elements.media.removeAttr('src').empty().html(code);
     }
   }
 

@@ -306,13 +306,17 @@ minplayer.plugin.prototype.destroy = function() {
  *
  * @param {string} name The name of the plugin you wish to create.
  * @param {object} base The base object for this plugin.
+ * @param {object} context The context which you would like to create.
  * @return {object} The new plugin object.
  */
-minplayer.plugin.prototype.create = function(name, base) {
+minplayer.plugin.prototype.create = function(name, base, context) {
   var plugin = null;
 
   // Make sure we have a base object.
   base = base || 'minplayer';
+
+  // Make sure there is a context.
+  context = context || this.display;
 
   // See if this plugin exists within this object.
   if (window[base][name]) {
@@ -327,7 +331,7 @@ minplayer.plugin.prototype.create = function(name, base) {
     }
 
     // Create the new plugin.
-    return new plugin(this.display, this.options);
+    return new plugin(context, this.options);
   }
 
   return null;
@@ -1293,9 +1297,6 @@ minplayer.prototype.loadPlayer = function() {
       return;
     }
 
-    // Store the queue.
-    var queue = this.media ? this.media.queue : {};
-
     // Destroy the current media.
     if (this.media) {
       this.media.destroy();
@@ -1307,15 +1308,14 @@ minplayer.prototype.loadPlayer = function() {
     // Create the new media player.
     this.media = new pClass(this.elements.display, this.options);
 
-    // Restore the queue.
-    this.media.queue = queue;
-
     // Now get the media when it is ready.
-    this.get('media', function(media) {
+    this.get('media', (function(player) {
+      return function(media) {
 
-      // Load the media.
-      media.load();
-    });
+        // Load the media.
+        media.load(player.options.file);
+      };
+    })(this));
   }
   // If the media object already exists...
   else if (this.media) {
@@ -2040,6 +2040,11 @@ minplayer.players.base.prototype.onReady = function() {
   // Store the this pointer.
   var _this = this;
 
+  // Only continue if we are not already ready.
+  if (this.playerReady) {
+    return;
+  }
+
   // Set the ready flag.
   this.playerReady = true;
 
@@ -2517,6 +2522,9 @@ minplayer.players.html5.prototype.construct = function() {
       _this.bytesTotal.set(event.total);
       _this.bytesLoaded.set(event.loaded);
     }, false);
+
+    // Say we are ready.
+    this.onReady();
   }
 };
 
@@ -2561,19 +2569,20 @@ minplayer.players.html5.prototype.getPlayer = function() {
  */
 minplayer.players.html5.prototype.load = function(file) {
 
-  if (file && this.isReady()) {
+  if (file) {
 
     // Get the current source.
-    var src = this.options.elements.media.attr('src');
+    var src = this.elements.media.attr('src');
+    if (!src) {
+      src = jQuery('source', this.elements.media).eq(0).attr('src');
+    }
 
     // If the source is different.
     if (src != file.path) {
 
       // Change the source...
-      var code = '<source src="' + file.path + '" ';
-      code += 'type="' + file.mimetype + '"';
-      code += file.codecs ? ' codecs="' + file.path + '">' : '>';
-      this.options.elements.media.attr('src', '').empty().html(code);
+      var code = '<source src="' + file.path + '">';
+      this.elements.media.removeAttr('src').empty().html(code);
     }
   }
 
