@@ -40,7 +40,7 @@ minplayer["default"].prototype.getDisplay = function(context, options) {
     })).parent('.media-player');
 
     // Mark a flag that says this display needs to be built.
-    context.build = true;
+    options.build = true;
   }
 
   return context;

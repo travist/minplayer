@@ -11,11 +11,12 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
+ * @param {object} queue The event queue to pass events around.
  */
-minplayer.players.base = function(context, options) {
+minplayer.players.base = function(context, options, queue) {
 
   // Derive from display
-  minplayer.display.call(this, 'media', context, options);
+  minplayer.display.call(this, 'media', context, options, queue);
 };
 
 /** Derive from minplayer.display. */
@@ -62,8 +63,8 @@ minplayer.players.base.prototype.construct = function() {
   // Call the media display constructor.
   minplayer.display.prototype.construct.call(this);
 
-  // Reset all variables and unbind.
-  this.destroy();
+  // Clear the media player.
+  this.clear();
 
   /** The currently loaded media file. */
   this.mediaFile = this.options.file;
@@ -77,7 +78,8 @@ minplayer.players.base.prototype.construct = function() {
     }
 
     // Create a new media player element.
-    this.display.html(this.create());
+    this.elements.media = jQuery(this.create());
+    this.display.html(this.elements.media);
   }
 
   // Get the player object...
@@ -132,6 +134,13 @@ minplayer.players.base.prototype.construct = function() {
  */
 minplayer.players.base.prototype.destroy = function() {
   minplayer.plugin.prototype.destroy.call(this);
+  this.clear();
+};
+
+/**
+ * Clears the media player.
+ */
+minplayer.players.base.prototype.clear = function() {
 
   // Reset the ready flag.
   this.playerReady = false;
@@ -176,6 +185,12 @@ minplayer.players.base.prototype.reset = function() {
 
   // We are not loading.
   this.loading = false;
+
+  // Tell everyone else we reset.
+  this.trigger('pause');
+  this.trigger('waiting');
+  this.trigger('progress', {loaded: 0, total: 0, start: 0});
+  this.trigger('timeupdate', {currentTime: 0, duration: 0});
 };
 
 /**

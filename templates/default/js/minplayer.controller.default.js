@@ -66,7 +66,7 @@ minplayer.controller["default"].prototype.onFullScreen = function(full) {
 minplayer.controller["default"].prototype.getDisplay = function(context, options) {
 
   // See if we need to build out the controller.
-  if (context.build) {
+  if (options.build) {
 
     // Prepend the control template.
     context.prepend('\

@@ -11,11 +11,12 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
+ * @param {object} queue The event queue to pass events around.
  */
-minplayer.players.flash = function(context, options) {
+minplayer.players.flash = function(context, options, queue) {
 
   // Derive from players base.
-  minplayer.players.base.call(this, context, options);
+  minplayer.players.base.call(this, context, options, queue);
 };
 
 /** Derive from minplayer.players.base. */

@@ -74,6 +74,7 @@ minplayer.image.prototype.load = function(src) {
   this.clear(function() {
 
     // Create the new image, and append to the display.
+    this.display.empty();
     this.img = jQuery(document.createElement('img')).attr({src: ''}).hide();
     this.display.append(this.img);
     this.loader.src = src;

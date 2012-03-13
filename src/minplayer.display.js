@@ -11,8 +11,9 @@ minplayer = minplayer || {};
  * @param {string} name The name of this plugin.
  * @param {object} context The jQuery context this component resides.
  * @param {object} options The options for this component.
+ * @param {object} queue The event queue to pass events around.
  */
-minplayer.display = function(name, context, options) {
+minplayer.display = function(name, context, options, queue) {
 
   // See if we allow resize on this display.
   this.allowResize = false;
@@ -24,7 +25,7 @@ minplayer.display = function(name, context, options) {
   }
 
   // Derive from plugin
-  minplayer.plugin.call(this, name, context, options);
+  minplayer.plugin.call(this, name, context, options, queue);
 };
 
 /** Derive from minplayer.plugin. */
@@ -81,24 +82,34 @@ minplayer.display.prototype.onResize = function() {
 };
 
 /**
+ * Gets the full screen element.
+ *
+ * @return {object} The display to be used for full screen support.
+ */
+minplayer.display.prototype.fullScreenElement = function() {
+  return this.display;
+};
+
+/**
  * Make this display element go fullscreen.
  *
  * @param {boolean} full Tell the player to go into fullscreen or not.
  */
 minplayer.display.prototype.fullscreen = function(full) {
   var isFull = this.isFullScreen();
+  var element = this.fullScreenElement();
   if (isFull && !full) {
-    this.display.removeClass('fullscreen');
+    element.removeClass('fullscreen');
     if (screenfull) {
       screenfull.exit();
     }
     this.trigger('fullscreen', false);
   }
   else if (!isFull && full) {
-    this.display.addClass('fullscreen');
+    element.addClass('fullscreen');
     if (screenfull) {
       var _this = this;
-      screenfull.request(this.display[0]);
+      screenfull.request(element[0]);
       screenfull.onchange = function(e) {
         if (!screenfull.isFullscreen) {
           _this.fullscreen(false);
@@ -122,7 +133,7 @@ minplayer.display.prototype.toggleFullScreen = function() {
  * @return {boolean} TRUE - fullscreen, FALSE - otherwise.
  */
 minplayer.display.prototype.isFullScreen = function() {
-  return this.display.hasClass('fullscreen');
+  return this.fullScreenElement().hasClass('fullscreen');
 };
 
 /**

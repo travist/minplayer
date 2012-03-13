@@ -17,8 +17,9 @@ minplayer.lock = false;
  * @param {string} name The name of this plugin.
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
+ * @param {object} queue The event queue to pass events around.
  */
-minplayer.plugin = function(name, context, options) {
+minplayer.plugin = function(name, context, options, queue) {
 
   /** The name of this plugin. */
   this.name = name;
@@ -30,7 +31,7 @@ minplayer.plugin = function(name, context, options) {
   this.options = options || {};
 
   /** The event queue. */
-  this.queue = this.options.queue || {};
+  this.queue = queue || {};
 
   /** Keep track of already triggered events. */
   this.triggered = {};
@@ -66,9 +67,6 @@ minplayer.plugin.prototype.destroy = function() {
 
   // Unbind all events.
   this.unbind();
-
-  // Restore the queue.
-  this.queue = this.options.queue;
 };
 
 /**
@@ -233,7 +231,7 @@ minplayer.plugin.prototype.trigger = function(type, data) {
   this.triggered[type] = data;
 
   // Check to make sure the queue for this type exists.
-  if (this.queue[type]) {
+  if (this.queue.hasOwnProperty(type)) {
 
     var i = 0, queue = {};
 

@@ -51,7 +51,7 @@ minplayer = jQuery.extend(function(context, options) {
   // Make sure we provide default options...
   options = jQuery.extend({
     id: 'player',
-    swfplayer: '',
+    build: false,
     wmode: 'transparent',
     preload: true,
     autoplay: false,
@@ -284,8 +284,9 @@ minplayer.prototype.loadPlayer = function() {
     }
 
     // Destroy the current media.
+    var queue = {};
     if (this.media) {
-      this.options.queue = this.media.queue;
+      queue = this.media.queue;
       this.media.destroy();
     }
 
@@ -293,7 +294,7 @@ minplayer.prototype.loadPlayer = function() {
     pClass = minplayer.players[this.options.file.player];
 
     // Create the new media player.
-    this.media = new pClass(this.elements.display, this.options);
+    this.media = new pClass(this.elements.display, this.options, queue);
 
     // Now get the media when it is ready.
     this.get('media', (function(player) {

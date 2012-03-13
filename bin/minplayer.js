@@ -250,8 +250,9 @@ minplayer.lock = false;
  * @param {string} name The name of this plugin.
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
+ * @param {object} queue The event queue to pass events around.
  */
-minplayer.plugin = function(name, context, options) {
+minplayer.plugin = function(name, context, options, queue) {
 
   /** The name of this plugin. */
   this.name = name;
@@ -263,7 +264,7 @@ minplayer.plugin = function(name, context, options) {
   this.options = options || {};
 
   /** The event queue. */
-  this.queue = this.options.queue || {};
+  this.queue = queue || {};
 
   /** Keep track of already triggered events. */
   this.triggered = {};
@@ -299,9 +300,6 @@ minplayer.plugin.prototype.destroy = function() {
 
   // Unbind all events.
   this.unbind();
-
-  // Restore the queue.
-  this.queue = this.options.queue;
 };
 
 /**
@@ -466,7 +464,7 @@ minplayer.plugin.prototype.trigger = function(type, data) {
   this.triggered[type] = data;
 
   // Check to make sure the queue for this type exists.
-  if (this.queue[type]) {
+  if (this.queue.hasOwnProperty(type)) {
 
     var i = 0, queue = {};
 
@@ -775,8 +773,9 @@ minplayer = minplayer || {};
  * @param {string} name The name of this plugin.
  * @param {object} context The jQuery context this component resides.
  * @param {object} options The options for this component.
+ * @param {object} queue The event queue to pass events around.
  */
-minplayer.display = function(name, context, options) {
+minplayer.display = function(name, context, options, queue) {
 
   // See if we allow resize on this display.
   this.allowResize = false;
@@ -788,7 +787,7 @@ minplayer.display = function(name, context, options) {
   }
 
   // Derive from plugin
-  minplayer.plugin.call(this, name, context, options);
+  minplayer.plugin.call(this, name, context, options, queue);
 };
 
 /** Derive from minplayer.plugin. */
@@ -845,24 +844,34 @@ minplayer.display.prototype.onResize = function() {
 };
 
 /**
+ * Gets the full screen element.
+ *
+ * @return {object} The display to be used for full screen support.
+ */
+minplayer.display.prototype.fullScreenElement = function() {
+  return this.display;
+};
+
+/**
  * Make this display element go fullscreen.
  *
  * @param {boolean} full Tell the player to go into fullscreen or not.
  */
 minplayer.display.prototype.fullscreen = function(full) {
   var isFull = this.isFullScreen();
+  var element = this.fullScreenElement();
   if (isFull && !full) {
-    this.display.removeClass('fullscreen');
+    element.removeClass('fullscreen');
     if (screenfull) {
       screenfull.exit();
     }
     this.trigger('fullscreen', false);
   }
   else if (!isFull && full) {
-    this.display.addClass('fullscreen');
+    element.addClass('fullscreen');
     if (screenfull) {
       var _this = this;
-      screenfull.request(this.display[0]);
+      screenfull.request(element[0]);
       screenfull.onchange = function(e) {
         if (!screenfull.isFullscreen) {
           _this.fullscreen(false);
@@ -886,7 +895,7 @@ minplayer.display.prototype.toggleFullScreen = function() {
  * @return {boolean} TRUE - fullscreen, FALSE - otherwise.
  */
 minplayer.display.prototype.isFullScreen = function() {
-  return this.display.hasClass('fullscreen');
+  return this.fullScreenElement().hasClass('fullscreen');
 };
 
 /**
@@ -1068,7 +1077,7 @@ minplayer = jQuery.extend(function(context, options) {
   // Make sure we provide default options...
   options = jQuery.extend({
     id: 'player',
-    swfplayer: '',
+    build: false,
     wmode: 'transparent',
     preload: true,
     autoplay: false,
@@ -1301,8 +1310,9 @@ minplayer.prototype.loadPlayer = function() {
     }
 
     // Destroy the current media.
+    var queue = {};
     if (this.media) {
-      this.options.queue = this.media.queue;
+      queue = this.media.queue;
       this.media.destroy();
     }
 
@@ -1310,7 +1320,7 @@ minplayer.prototype.loadPlayer = function() {
     pClass = minplayer.players[this.options.file.player];
 
     // Create the new media player.
-    this.media = new pClass(this.elements.display, this.options);
+    this.media = new pClass(this.elements.display, this.options, queue);
 
     // Now get the media when it is ready.
     this.get('media', (function(player) {
@@ -1433,6 +1443,7 @@ minplayer.image.prototype.load = function(src) {
   this.clear(function() {
 
     // Create the new image, and append to the display.
+    this.display.empty();
     this.img = jQuery(document.createElement('img')).attr({src: ''}).hide();
     this.display.append(this.img);
     this.loader.src = src;
@@ -1857,11 +1868,12 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
+ * @param {object} queue The event queue to pass events around.
  */
-minplayer.players.base = function(context, options) {
+minplayer.players.base = function(context, options, queue) {
 
   // Derive from display
-  minplayer.display.call(this, 'media', context, options);
+  minplayer.display.call(this, 'media', context, options, queue);
 };
 
 /** Derive from minplayer.display. */
@@ -1908,8 +1920,8 @@ minplayer.players.base.prototype.construct = function() {
   // Call the media display constructor.
   minplayer.display.prototype.construct.call(this);
 
-  // Reset all variables and unbind.
-  this.destroy();
+  // Clear the media player.
+  this.clear();
 
   /** The currently loaded media file. */
   this.mediaFile = this.options.file;
@@ -1923,7 +1935,8 @@ minplayer.players.base.prototype.construct = function() {
     }
 
     // Create a new media player element.
-    this.display.html(this.create());
+    this.elements.media = jQuery(this.create());
+    this.display.html(this.elements.media);
   }
 
   // Get the player object...
@@ -1978,6 +1991,13 @@ minplayer.players.base.prototype.construct = function() {
  */
 minplayer.players.base.prototype.destroy = function() {
   minplayer.plugin.prototype.destroy.call(this);
+  this.clear();
+};
+
+/**
+ * Clears the media player.
+ */
+minplayer.players.base.prototype.clear = function() {
 
   // Reset the ready flag.
   this.playerReady = false;
@@ -2022,6 +2042,12 @@ minplayer.players.base.prototype.reset = function() {
 
   // We are not loading.
   this.loading = false;
+
+  // Tell everyone else we reset.
+  this.trigger('pause');
+  this.trigger('waiting');
+  this.trigger('progress', {loaded: 0, total: 0, start: 0});
+  this.trigger('timeupdate', {currentTime: 0, duration: 0});
 };
 
 /**
@@ -2425,11 +2451,12 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
+ * @param {object} queue The event queue to pass events around.
  */
-minplayer.players.html5 = function(context, options) {
+minplayer.players.html5 = function(context, options, queue) {
 
   // Derive players base.
-  minplayer.players.base.call(this, context, options);
+  minplayer.players.base.call(this, context, options, queue);
 };
 
 /** Derive from minplayer.players.base. */
@@ -2741,11 +2768,12 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
+ * @param {object} queue The event queue to pass events around.
  */
-minplayer.players.flash = function(context, options) {
+minplayer.players.flash = function(context, options, queue) {
 
   // Derive from players base.
-  minplayer.players.base.call(this, context, options);
+  minplayer.players.base.call(this, context, options, queue);
 };
 
 /** Derive from minplayer.players.base. */
@@ -2848,11 +2876,17 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
+ * @param {object} queue The event queue to pass events around.
  */
-minplayer.players.minplayer = function(context, options) {
+minplayer.players.minplayer = function(context, options, queue) {
+
+  // Make sure we provide default options...
+  options = jQuery.extend({
+    swfplayer: 'flash/minplayer.swf'
+  }, options);
 
   // Derive from players flash.
-  minplayer.players.flash.call(this, context, options);
+  minplayer.players.flash.call(this, context, options, queue);
 };
 
 /** Derive from minplayer.players.flash. */
@@ -3114,14 +3148,15 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
+ * @param {object} queue The event queue to pass events around.
  */
-minplayer.players.youtube = function(context, options) {
+minplayer.players.youtube = function(context, options, queue) {
 
   /** The quality of the YouTube stream. */
   this.quality = 'default';
 
   // Derive from players base.
-  minplayer.players.base.call(this, context, options);
+  minplayer.players.base.call(this, context, options, queue);
 };
 
 /** Derive from minplayer.players.base. */
@@ -3459,11 +3494,12 @@ minplayer.players = minplayer.players || {};
  *
  * @param {object} context The jQuery context.
  * @param {object} options This components options.
+ * @param {object} queue The event queue to pass events around.
  */
-minplayer.players.vimeo = function(context, options) {
+minplayer.players.vimeo = function(context, options, queue) {
 
   // Derive from players base.
-  minplayer.players.base.call(this, context, options);
+  minplayer.players.base.call(this, context, options, queue);
 };
 
 /** Derive from minplayer.players.base. */

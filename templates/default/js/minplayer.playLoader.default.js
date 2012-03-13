@@ -21,7 +21,7 @@ minplayer.playLoader["default"].prototype.constructor = minplayer.playLoader["de
 minplayer.playLoader["default"].prototype.getDisplay = function(context, options) {
 
   // See if we need to build out the controller.
-  if (context.build) {
+  if (options.build) {
 
     // Prepend the playloader template.
     context.prepend('\

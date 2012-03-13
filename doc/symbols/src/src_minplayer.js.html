@@ -58,7 +58,7 @@
 <span class='line'> 51</span> </span><span class="WHIT">  </span><span class="COMM">// Make sure we provide default options...</span><span class="WHIT">
 <span class='line'> 52</span> </span><span class="WHIT">  </span><span class="NAME">options</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">jQuery.extend</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 53</span> </span><span class="WHIT">    </span><span class="NAME">id</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'player'</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 54</span> </span><span class="WHIT">    </span><span class="NAME">swfplayer</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 54</span> </span><span class="WHIT">    </span><span class="NAME">build</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 55</span> </span><span class="WHIT">    </span><span class="NAME">wmode</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">'transparent'</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 56</span> </span><span class="WHIT">    </span><span class="NAME">preload</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'> 57</span> </span><span class="WHIT">    </span><span class="NAME">autoplay</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT">
@@ -291,60 +291,61 @@
 <span class='line'>284</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>285</span> 
 <span class='line'>286</span> </span><span class="WHIT">    </span><span class="COMM">// Destroy the current media.</span><span class="WHIT">
-<span class='line'>287</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.media</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>288</span> </span><span class="WHIT">      </span><span class="NAME">this.options.queue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.media.queue</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>289</span> </span><span class="WHIT">      </span><span class="NAME">this.media.destroy</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>290</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>291</span> 
-<span class='line'>292</span> </span><span class="WHIT">    </span><span class="COMM">// Get the class name and create the new player.</span><span class="WHIT">
-<span class='line'>293</span> </span><span class="WHIT">    </span><span class="NAME">pClass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">minplayer.players</span><span class="PUNC">[</span><span class="NAME">this.options.file.player</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>294</span> 
-<span class='line'>295</span> </span><span class="WHIT">    </span><span class="COMM">// Create the new media player.</span><span class="WHIT">
-<span class='line'>296</span> </span><span class="WHIT">    </span><span class="NAME">this.media</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">pClass</span><span class="PUNC">(</span><span class="NAME">this.elements.display</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.options</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>297</span> 
-<span class='line'>298</span> </span><span class="WHIT">    </span><span class="COMM">// Now get the media when it is ready.</span><span class="WHIT">
-<span class='line'>299</span> </span><span class="WHIT">    </span><span class="NAME">this.get</span><span class="PUNC">(</span><span class="STRN">'media'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">player</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>300</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">media</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>301</span> 
-<span class='line'>302</span> </span><span class="WHIT">        </span><span class="COMM">// Load the media.</span><span class="WHIT">
-<span class='line'>303</span> </span><span class="WHIT">        </span><span class="NAME">media.load</span><span class="PUNC">(</span><span class="NAME">player.options.file</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>304</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>305</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>306</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>307</span> </span><span class="WHIT">  </span><span class="COMM">// If the media object already exists...</span><span class="WHIT">
-<span class='line'>308</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.media</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>309</span> 
-<span class='line'>310</span> </span><span class="WHIT">    </span><span class="COMM">// Now load the different media file.</span><span class="WHIT">
-<span class='line'>311</span> </span><span class="WHIT">    </span><span class="NAME">this.media.load</span><span class="PUNC">(</span><span class="NAME">this.options.file</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>312</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>313</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>314</span> 
-<span class='line'>315</span> </span><span class="COMM">/**
-<span class='line'>316</span>  * Load a set of files or a single file for the media player.
-<span class='line'>317</span>  *
-<span class='line'>318</span>  * @param {array} files An array of files to chose from to load.
-<span class='line'>319</span>  */</span><span class="WHIT">
-<span class='line'>320</span> </span><span class="NAME">minplayer.prototype.load</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">files</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>321</span> 
-<span class='line'>322</span> </span><span class="WHIT">  </span><span class="COMM">// Set the id and class.</span><span class="WHIT">
-<span class='line'>323</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pClass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>324</span> 
-<span class='line'>325</span> </span><span class="WHIT">  </span><span class="COMM">// If no file was provided, then get it.</span><span class="WHIT">
-<span class='line'>326</span> </span><span class="WHIT">  </span><span class="NAME">this.options.files</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">files</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">this.options.files</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>327</span> </span><span class="WHIT">  </span><span class="NAME">this.options.file</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getMediaFile</span><span class="PUNC">(</span><span class="NAME">this.options.files</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>328</span> 
-<span class='line'>329</span> </span><span class="WHIT">  </span><span class="COMM">// Now load the player.</span><span class="WHIT">
-<span class='line'>330</span> </span><span class="WHIT">  </span><span class="NAME">this.loadPlayer</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>331</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>332</span> 
-<span class='line'>333</span> </span><span class="COMM">/**
-<span class='line'>334</span>  * Called when the player is resized.
-<span class='line'>335</span>  */</span><span class="WHIT">
-<span class='line'>336</span> </span><span class="NAME">minplayer.prototype.resize</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>337</span> 
-<span class='line'>338</span> </span><span class="WHIT">  </span><span class="COMM">// Call onRezie for each plugin.</span><span class="WHIT">
-<span class='line'>339</span> </span><span class="WHIT">  </span><span class="NAME">this.get</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">plugin</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>340</span> </span><span class="WHIT">    </span><span class="NAME">plugin.onResize</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>341</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>342</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>343</span> </span></pre></body></html>
+<span class='line'>287</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">queue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>288</span> </span><span class="WHIT">    </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.media</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>289</span> </span><span class="WHIT">      </span><span class="NAME">queue</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.media.queue</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>290</span> </span><span class="WHIT">      </span><span class="NAME">this.media.destroy</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>291</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>292</span> 
+<span class='line'>293</span> </span><span class="WHIT">    </span><span class="COMM">// Get the class name and create the new player.</span><span class="WHIT">
+<span class='line'>294</span> </span><span class="WHIT">    </span><span class="NAME">pClass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">minplayer.players</span><span class="PUNC">[</span><span class="NAME">this.options.file.player</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>295</span> 
+<span class='line'>296</span> </span><span class="WHIT">    </span><span class="COMM">// Create the new media player.</span><span class="WHIT">
+<span class='line'>297</span> </span><span class="WHIT">    </span><span class="NAME">this.media</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">pClass</span><span class="PUNC">(</span><span class="NAME">this.elements.display</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.options</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">queue</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>298</span> 
+<span class='line'>299</span> </span><span class="WHIT">    </span><span class="COMM">// Now get the media when it is ready.</span><span class="WHIT">
+<span class='line'>300</span> </span><span class="WHIT">    </span><span class="NAME">this.get</span><span class="PUNC">(</span><span class="STRN">'media'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">player</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>301</span> </span><span class="WHIT">      </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">media</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>302</span> 
+<span class='line'>303</span> </span><span class="WHIT">        </span><span class="COMM">// Load the media.</span><span class="WHIT">
+<span class='line'>304</span> </span><span class="WHIT">        </span><span class="NAME">media.load</span><span class="PUNC">(</span><span class="NAME">player.options.file</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>305</span> </span><span class="WHIT">      </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>306</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>307</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>308</span> </span><span class="WHIT">  </span><span class="COMM">// If the media object already exists...</span><span class="WHIT">
+<span class='line'>309</span> </span><span class="WHIT">  </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">this.media</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>310</span> 
+<span class='line'>311</span> </span><span class="WHIT">    </span><span class="COMM">// Now load the different media file.</span><span class="WHIT">
+<span class='line'>312</span> </span><span class="WHIT">    </span><span class="NAME">this.media.load</span><span class="PUNC">(</span><span class="NAME">this.options.file</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>313</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>314</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>315</span> 
+<span class='line'>316</span> </span><span class="COMM">/**
+<span class='line'>317</span>  * Load a set of files or a single file for the media player.
+<span class='line'>318</span>  *
+<span class='line'>319</span>  * @param {array} files An array of files to chose from to load.
+<span class='line'>320</span>  */</span><span class="WHIT">
+<span class='line'>321</span> </span><span class="NAME">minplayer.prototype.load</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">files</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>322</span> 
+<span class='line'>323</span> </span><span class="WHIT">  </span><span class="COMM">// Set the id and class.</span><span class="WHIT">
+<span class='line'>324</span> </span><span class="WHIT">  </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">id</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">pClass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">''</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>325</span> 
+<span class='line'>326</span> </span><span class="WHIT">  </span><span class="COMM">// If no file was provided, then get it.</span><span class="WHIT">
+<span class='line'>327</span> </span><span class="WHIT">  </span><span class="NAME">this.options.files</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">files</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">this.options.files</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>328</span> </span><span class="WHIT">  </span><span class="NAME">this.options.file</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.getMediaFile</span><span class="PUNC">(</span><span class="NAME">this.options.files</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>329</span> 
+<span class='line'>330</span> </span><span class="WHIT">  </span><span class="COMM">// Now load the player.</span><span class="WHIT">
+<span class='line'>331</span> </span><span class="WHIT">  </span><span class="NAME">this.loadPlayer</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>332</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>333</span> 
+<span class='line'>334</span> </span><span class="COMM">/**
+<span class='line'>335</span>  * Called when the player is resized.
+<span class='line'>336</span>  */</span><span class="WHIT">
+<span class='line'>337</span> </span><span class="NAME">minplayer.prototype.resize</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>338</span> 
+<span class='line'>339</span> </span><span class="WHIT">  </span><span class="COMM">// Call onRezie for each plugin.</span><span class="WHIT">
+<span class='line'>340</span> </span><span class="WHIT">  </span><span class="NAME">this.get</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">plugin</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>341</span> </span><span class="WHIT">    </span><span class="NAME">plugin.onResize</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>342</span> </span><span class="WHIT">  </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>343</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>344</span> </span></pre></body></html>
