@@ -3858,81 +3858,95 @@ minplayer.controller.prototype.construct = function() {
   // Get the media plugin.
   this.get('media', function(media) {
 
-    var _this = this;
-
     // If they have a pause button
     if (this.elements.pause) {
 
       // Bind to the click on this button.
-      this.elements.pause.unbind().bind('click', {obj: this}, function(e) {
-        e.preventDefault();
-        e.data.obj.playPause(false, media);
-      });
+      this.elements.pause.unbind().bind('click', (function(controller) {
+        return function(event) {
+          event.preventDefault();
+          controller.playPause(false, media);
+        };
+      })(this));
 
       // Bind to the pause event of the media.
-      media.bind('pause', {obj: this}, function(e) {
-        e.data.obj.setPlayPause(true);
-      });
+      media.bind('pause', (function(controller) {
+        return function(event) {
+          controller.setPlayPause(true);
+        };
+      })(this));
     }
 
     // If they have a play button
     if (this.elements.play) {
 
       // Bind to the click on this button.
-      this.elements.play.unbind().bind('click', {obj: this}, function(e) {
-        e.preventDefault();
-        e.data.obj.playPause(true, media);
-      });
+      this.elements.play.unbind().bind('click', (function(controller) {
+        return function(event) {
+          event.preventDefault();
+          controller.playPause(true, media);
+        };
+      })(this));
 
       // Bind to the play event of the media.
-      media.bind('playing', {obj: this}, function(e) {
-        e.data.obj.setPlayPause(false);
-      });
+      media.bind('playing', (function(controller) {
+        return function(event) {
+          controller.setPlayPause(false);
+        };
+      })(this));
     }
 
     // If they have a duration, then trigger on duration change.
     if (this.elements.duration) {
 
       // Bind to the duration change event.
-      media.bind('durationchange', {obj: this}, function(e, data) {
-        e.data.obj.setTimeString('duration', data.duration);
-      });
+      media.bind('durationchange', (function(controller) {
+        return function(event, data) {
+          controller.setTimeString('duration', data.duration);
+        };
+      })(this));
 
       // Set the timestring to the duration.
-      media.getDuration(function(duration) {
-        _this.setTimeString('duration', duration);
-      });
+      media.getDuration((function(controller) {
+        return function(duration) {
+          controller.setTimeString('duration', duration);
+        };
+      })(this));
     }
 
     // If they have a progress element.
     if (this.elements.progress) {
 
       // Bind to the progress event.
-      media.bind('progress', {obj: this}, function(e, data) {
-        var percent = data.total ? (data.loaded / data.total) * 100 : 0;
-        e.data.obj.elements.progress.width(percent + '%');
-      });
+      media.bind('progress', (function(controller) {
+        return function(event, data) {
+          var percent = data.total ? (data.loaded / data.total) * 100 : 0;
+          controller.elements.progress.width(percent + '%');
+        };
+      })(this));
     }
 
     // If they have a seek bar or timer, bind to the timeupdate.
     if (this.seekBar || this.elements.timer) {
 
       // Bind to the time update event.
-      media.bind('timeupdate', {obj: this}, function(e, data) {
-        if (!e.data.obj.dragging) {
-          var value = 0;
-          if (data.duration) {
-            value = (data.currentTime / data.duration) * 100;
-          }
+      media.bind('timeupdate', (function(controller) {
+        return function(event, data) {
+          if (!controller.dragging) {
+            var value = 0;
+            if (data.duration) {
+              value = (data.currentTime / data.duration) * 100;
+            }
 
-          // Update the seek bar if it exists.
-          if (e.data.obj.seekBar) {
-            e.data.obj.seekBar.slider('option', 'value', value);
-          }
+            // Update the seek bar if it exists.
+            if (controller.seekBar) {
+              controller.seekBar.slider('option', 'value', value);
+            }
 
-          e.data.obj.setTimeString('timer', data.currentTime);
-        }
-      });
+            controller.setTimeString('timer', data.currentTime);
+          }
+        };
+      })(this));
     }
 
     // If they have a seekBar element.
@@ -3940,24 +3954,30 @@ minplayer.controller.prototype.construct = function() {
 
       // Register the events for the control bar to control the media.
       this.seekBar.slider({
-        start: function(event, ui) {
-          _this.dragging = true;
-        },
-        stop: function(event, ui) {
-          _this.dragging = false;
-          media.getDuration(function(duration) {
-            media.seek((ui.value / 100) * duration);
-          });
-        },
-        slide: function(event, ui) {
-          media.getDuration(function(duration) {
-            var time = (ui.value / 100) * duration;
-            if (!_this.dragging) {
-              media.seek(time);
-            }
-            _this.setTimeString('timer', time);
-          });
-        }
+        start: (function(controller) {
+          return function(event, ui) {
+            controller.dragging = true;
+          };
+        })(this),
+        stop: (function(controller) {
+          return function(event, ui) {
+            controller.dragging = false;
+            media.getDuration(function(duration) {
+              media.seek((ui.value / 100) * duration);
+            });
+          };
+        })(this),
+        slide: (function(controller) {
+          return function(event, ui) {
+            media.getDuration(function(duration) {
+              var time = (ui.value / 100) * duration;
+              if (!controller.dragging) {
+                media.seek(time);
+              }
+              controller.setTimeString('timer', time);
+            });
+          };
+        })(this)
       });
     }
 
@@ -3971,14 +3991,18 @@ minplayer.controller.prototype.construct = function() {
         }
       });
 
-      media.bind('volumeupdate', {obj: this}, function(event, vol) {
-        event.data.obj.volumeBar.slider('option', 'value', (vol * 100));
-      });
+      media.bind('volumeupdate', (function(controller) {
+        return function(event, vol) {
+          controller.volumeBar.slider('option', 'value', (vol * 100));
+        };
+      })(this));
 
       // Set the volume to match that of the player.
-      media.getVolume(function(vol) {
-        _this.volumeBar.slider('option', 'value', (vol * 100));
-      });
+      media.getVolume((function(controller) {
+        return function(vol) {
+          controller.volumeBar.slider('option', 'value', (vol * 100));
+        };
+      })(this));
     }
   });
 
