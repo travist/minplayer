@@ -169,7 +169,7 @@ minplayer.players.youtube.prototype.onPlayerStateChange = function(event) {
  * @param {string} newQuality The new quality for the change.
  */
 minplayer.players.youtube.prototype.onQualityChange = function(newQuality) {
-  this.quality = newQuality;
+  this.quality = newQuality.data;
 };
 
 /**

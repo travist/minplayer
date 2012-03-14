@@ -222,7 +222,7 @@ minplayer.prototype.getMediaFile = function(files) {
   }
 
   // If the file is already a file object then just return.
-  if (files.path) {
+  if (files.path || files.id) {
     return new minplayer.file(files);
   }
 

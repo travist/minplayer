@@ -1248,7 +1248,7 @@ minplayer.prototype.getMediaFile = function(files) {
   }
 
   // If the file is already a file object then just return.
-  if (files.path) {
+  if (files.path || files.id) {
     return new minplayer.file(files);
   }
 
@@ -3306,7 +3306,7 @@ minplayer.players.youtube.prototype.onPlayerStateChange = function(event) {
  * @param {string} newQuality The new quality for the change.
  */
 minplayer.players.youtube.prototype.onQualityChange = function(newQuality) {
-  this.quality = newQuality;
+  this.quality = newQuality.data;
 };
 
 /**
