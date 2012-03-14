@@ -39,14 +39,16 @@ minplayer.file = function(file) {
  * @return {string} The best player to play the media file.
  */
 minplayer.file.prototype.getBestPlayer = function() {
-  var bestplayer = null, bestpriority = 0, _this = this;
-  jQuery.each(minplayer.players, function(name, player) {
-    var priority = player.getPriority();
-    if (player.canPlay(_this) && (priority > bestpriority)) {
-      bestplayer = name;
-      bestpriority = priority;
-    }
-  });
+  var bestplayer = null, bestpriority = 0;
+  jQuery.each(minplayer.players, (function(file) {
+    return function(name, player) {
+      var priority = player.getPriority();
+      if (player.canPlay(file) && (priority > bestpriority)) {
+        bestplayer = name;
+        bestpriority = priority;
+      }
+    };
+  })(this));
   return bestplayer;
 };
 

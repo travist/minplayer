@@ -66,53 +66,76 @@ minplayer.players.html5.prototype.construct = function() {
   // Call base constructor.
   minplayer.players.base.prototype.construct.call(this);
 
-  // Store the this pointer...
-  var _this = this;
-
   // For the HTML5 player, we will just pass events along...
   if (this.player) {
 
-    this.player.addEventListener('abort', function() {
-      _this.trigger('abort');
-    }, false);
-    this.player.addEventListener('loadstart', function() {
-      _this.onReady();
-    }, false);
-    this.player.addEventListener('loadeddata', function() {
-      _this.onLoaded();
-    }, false);
-    this.player.addEventListener('loadedmetadata', function() {
-      _this.onLoaded();
-    }, false);
-    this.player.addEventListener('canplaythrough', function() {
-      _this.onLoaded();
-    }, false);
-    this.player.addEventListener('ended', function() {
-      _this.onComplete();
-    }, false);
-    this.player.addEventListener('pause', function() {
-      _this.onPaused();
-    }, false);
-    this.player.addEventListener('play', function() {
-      _this.onPlaying();
-    }, false);
-    this.player.addEventListener('playing', function() {
-      _this.onPlaying();
-    }, false);
-    this.player.addEventListener('error', function() {
-      _this.trigger('error', 'An error occured - ' + this.error.code);
-    }, false);
-    this.player.addEventListener('waiting', function() {
-      _this.onWaiting();
-    }, false);
-    this.player.addEventListener('durationchange', function() {
-      _this.duration.set(this.duration);
-      _this.trigger('durationchange', {duration: this.duration});
-    }, false);
-    this.player.addEventListener('progress', function(event) {
-      _this.bytesTotal.set(event.total);
-      _this.bytesLoaded.set(event.loaded);
-    }, false);
+    this.player.addEventListener('abort', (function(player) {
+      return function() {
+        player.trigger('abort');
+      };
+    })(this), false);
+    this.player.addEventListener('loadstart', (function(player) {
+      return function() {
+        player.onReady();
+      };
+    })(this), false);
+    this.player.addEventListener('loadeddata', (function(player) {
+      return function() {
+        player.onLoaded();
+      };
+    })(this), false);
+    this.player.addEventListener('loadedmetadata', (function(player) {
+      return function() {
+        player.onLoaded();
+      };
+    })(this), false);
+    this.player.addEventListener('canplaythrough', (function(player) {
+      return function() {
+        player.onLoaded();
+      };
+    })(this), false);
+    this.player.addEventListener('ended', (function(player) {
+      return function() {
+        player.onComplete();
+      };
+    })(this), false);
+    this.player.addEventListener('pause', (function(player) {
+      return function() {
+        player.onPaused();
+      };
+    })(this), false);
+    this.player.addEventListener('play', (function(player) {
+      return function() {
+        player.onPlaying();
+      };
+    })(this), false);
+    this.player.addEventListener('playing', (function(player) {
+      return function() {
+        player.onPlaying();
+      };
+    })(this), false);
+    this.player.addEventListener('error', (function(player) {
+      return function() {
+        player.trigger('error', 'An error occured - ' + this.error.code);
+      };
+    })(this), false);
+    this.player.addEventListener('waiting', (function(player) {
+      return function() {
+        player.onWaiting();
+      };
+    })(this), false);
+    this.player.addEventListener('durationchange', (function(player) {
+      return function() {
+        player.duration.set(this.duration);
+        player.trigger('durationchange', {duration: this.duration});
+      };
+    })(this), false);
+    this.player.addEventListener('progress', (function(player) {
+      return function(event) {
+        player.bytesTotal.set(event.total);
+        player.bytesLoaded.set(event.loaded);
+      };
+    })(this), false);
 
     // Say we are ready.
     this.onReady();

@@ -59,34 +59,44 @@ minplayer.playLoader.prototype.construct = function() {
       }
 
       // Bind to the player events to control the play loader.
-      media.unbind('loadstart').bind('loadstart', {obj: this}, function(event) {
-        event.data.obj.busy.setFlag('media', true);
-        event.data.obj.bigPlay.setFlag('media', true);
-        if (event.data.obj.preview) {
-          event.data.obj.elements.preview.show();
-        }
-        event.data.obj.checkVisibility();
-      });
-      media.bind('waiting', {obj: this}, function(event) {
-        event.data.obj.busy.setFlag('media', true);
-        event.data.obj.checkVisibility();
-      });
-      media.bind('loadeddata', {obj: this}, function(event) {
-        event.data.obj.busy.setFlag('media', false);
-        event.data.obj.checkVisibility();
-      });
-      media.bind('playing', {obj: this}, function(event) {
-        event.data.obj.busy.setFlag('media', false);
-        event.data.obj.bigPlay.setFlag('media', false);
-        if (event.data.obj.preview) {
-          event.data.obj.elements.preview.hide();
-        }
-        event.data.obj.checkVisibility();
-      });
-      media.bind('pause', {obj: this}, function(event) {
-        event.data.obj.bigPlay.setFlag('media', true);
-        event.data.obj.checkVisibility();
-      });
+      media.unbind('loadstart').bind('loadstart', (function(playLoader) {
+        return function(event) {
+          playLoader.busy.setFlag('media', true);
+          playLoader.bigPlay.setFlag('media', true);
+          if (playLoader.preview) {
+            playLoader.elements.preview.show();
+          }
+          playLoader.checkVisibility();
+        };
+      })(this));
+      media.bind('waiting', (function(playLoader) {
+        return function(event) {
+          playLoader.busy.setFlag('media', true);
+          playLoader.checkVisibility();
+        };
+      })(this));
+      media.bind('loadeddata', (function(playLoader) {
+        return function(event) {
+          playLoader.busy.setFlag('media', false);
+          playLoader.checkVisibility();
+        };
+      })(this));
+      media.bind('playing', (function(playLoader) {
+        return function(event) {
+          playLoader.busy.setFlag('media', false);
+          playLoader.bigPlay.setFlag('media', false);
+          if (playLoader.preview) {
+            playLoader.elements.preview.hide();
+          }
+          playLoader.checkVisibility();
+        };
+      })(this));
+      media.bind('pause', (function(playLoader) {
+        return function(event) {
+          playLoader.bigPlay.setFlag('media', true);
+          playLoader.checkVisibility();
+        };
+      })(this));
     }
     else {
 

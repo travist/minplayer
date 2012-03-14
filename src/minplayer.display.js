@@ -63,15 +63,16 @@ minplayer.display.prototype.construct = function() {
 
     // Set the resize timeout and this pointer.
     var resizeTimeout = 0;
-    var _this = this;
 
     // Add a handler to trigger a resize event.
-    jQuery(window).resize(function() {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(function() {
-        _this.onResize();
-      }, 200);
-    });
+    jQuery(window).resize((function(display) {
+      return function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+          display.onResize();
+        }, 200);
+      };
+    })(this));
   }
 };
 
@@ -108,13 +109,14 @@ minplayer.display.prototype.fullscreen = function(full) {
   else if (!isFull && full) {
     element.addClass('fullscreen');
     if (screenfull) {
-      var _this = this;
       screenfull.request(element[0]);
-      screenfull.onchange = function(e) {
-        if (!screenfull.isFullscreen) {
-          _this.fullscreen(false);
-        }
-      };
+      screenfull.onchange = (function(display) {
+        return function(e) {
+          if (!screenfull.isFullscreen) {
+            display.fullscreen(false);
+          }
+        };
+      })(this);
     }
     this.trigger('fullscreen', true);
   }

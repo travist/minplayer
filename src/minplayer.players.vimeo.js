@@ -114,18 +114,17 @@ minplayer.players.vimeo.prototype.create = function() {
   iframe.setAttribute('src', src);
 
   // Now register this player when the froogaloop code is loaded.
-  var _this = this;
-  setTimeout(function check() {
-    if (window.Froogaloop) {
-      _this.player = window.Froogaloop(iframe);
-      _this.player.addEvent('ready', function() {
-        _this.onReady();
-      });
-    }
-    else {
-      setTimeout(check, 200);
-    }
-  }, 200);
+  this.poll((function(player) {
+    return function() {
+      if (window.Froogaloop) {
+        player.player = window.Froogaloop(iframe);
+        player.player.addEvent('ready', function() {
+          player.onReady();
+        });
+      }
+      return !window.Froogaloop;
+    };
+  })(this), 200);
 
   // Trigger that the load has started.
   this.trigger('loadstart');
@@ -138,36 +137,40 @@ minplayer.players.vimeo.prototype.create = function() {
  * @see minplayer.players.base#onReady
  */
 minplayer.players.vimeo.prototype.onReady = function(player_id) {
-  // Store the this pointer within this context.
-  var _this = this;
 
   // Add the other listeners.
-  this.player.addEvent('loadProgress', function(progress) {
+  this.player.addEvent('loadProgress', (function(player) {
+    return function(progress) {
+      player.duration.set(parseFloat(progress.duration));
+      player.bytesLoaded.set(progress.bytesLoaded);
+      player.bytesTotal.set(progress.bytesTotal);
+    };
+  })(this));
 
-    // Set the duration, bytesLoaded, and bytesTotal.
-    _this.duration.set(parseFloat(progress.duration));
-    _this.bytesLoaded.set(progress.bytesLoaded);
-    _this.bytesTotal.set(progress.bytesTotal);
-  });
+  this.player.addEvent('playProgress', (function(player) {
+    return function(progress) {
+      player.duration.set(parseFloat(progress.duration));
+      player.currentTime.set(parseFloat(progress.seconds));
+    };
+  })(this));
 
-  this.player.addEvent('playProgress', function(progress) {
+  this.player.addEvent('play', (function(player) {
+    return function() {
+      player.onPlaying();
+    };
+  })(this));
 
-    // Set the duration and current time.
-    _this.duration.set(parseFloat(progress.duration));
-    _this.currentTime.set(parseFloat(progress.seconds));
-  });
+  this.player.addEvent('pause', (function(player) {
+    return function() {
+      player.onPaused();
+    };
+  })(this));
 
-  this.player.addEvent('play', function() {
-    _this.onPlaying();
-  });
-
-  this.player.addEvent('pause', function() {
-    _this.onPaused();
-  });
-
-  this.player.addEvent('finish', function() {
-    _this.onComplete();
-  });
+  this.player.addEvent('finish', (function(player) {
+    return function() {
+      player.onComplete();
+    };
+  })(this));
 
   minplayer.players.base.prototype.onReady.call(this);
   this.onLoaded();
@@ -237,7 +240,6 @@ minplayer.players.vimeo.prototype.setVolume = function(vol) {
  * @see minplayer.players.base#getVolume
  */
 minplayer.players.vimeo.prototype.getVolume = function(callback) {
-  var _this = this;
   this.player.api('getVolume', function(vol) {
     callback(vol);
   });

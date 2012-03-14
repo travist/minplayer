@@ -229,17 +229,16 @@ minplayer.players.minplayer.prototype.getDuration = function(callback) {
     }
     else {
 
-      // If not, then check every half second...
-      var _this = this;
-      setTimeout(function check() {
-        duration = _this.player.getDuration();
-        if (duration) {
-          callback(duration);
-        }
-        else {
-          setTimeout(check, 500);
-        }
-      }, 500);
+      // If not, then poll every second for the duration.
+      this.poll((function(player) {
+        return function() {
+          duration = player.player.getDuration();
+          if (duration) {
+            callback(duration);
+          }
+          return !duration;
+        };
+      })(this), 1000);
     }
   }
 };

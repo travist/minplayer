@@ -115,28 +115,29 @@ minplayer.prototype.construct = function() {
  * We need to bind to events we are interested in.
  */
 minplayer.prototype.addEvents = function() {
-  var _this = this;
-  minplayer.get.call(this, this.options.id, null, function(plugin) {
+  minplayer.get.call(this, this.options.id, null, (function(player) {
+    return function(plugin) {
 
-    // Bind to the error event.
-    plugin.bind('error', function(event, data) {
+      // Bind to the error event.
+      plugin.bind('error', function(event, data) {
 
-      // If an error occurs within the html5 media player, then try
-      // to fall back to the flash player.
-      if (_this.currentPlayer == 'html5') {
-        _this.options.file.player = 'minplayer';
-        _this.loadPlayer();
-      }
-      else {
-        _this.error(data);
-      }
-    });
+        // If an error occurs within the html5 media player, then try
+        // to fall back to the flash player.
+        if (player.currentPlayer == 'html5') {
+          player.options.file.player = 'minplayer';
+          player.loadPlayer();
+        }
+        else {
+          player.error(data);
+        }
+      });
 
-    // Bind to the fullscreen event.
-    plugin.bind('fullscreen', function(event, data) {
-      _this.resize();
-    });
-  });
+      // Bind to the fullscreen event.
+      plugin.bind('fullscreen', function(event, data) {
+        player.resize();
+      });
+    };
+  })(this));
 };
 
 /**
@@ -163,18 +164,18 @@ minplayer.prototype.error = function(error) {
  * Adds key events to the player.
  */
 minplayer.prototype.addKeyEvents = function() {
-
-  // Bind to key events...
-  jQuery(document).bind('keydown', {obj: this}, function(e) {
-    switch (e.keyCode) {
-      case 113: // ESC
-      case 27:  // Q
-        if (e.data.obj.isFullScreen()) {
-          e.data.obj.fullscreen(false);
-        }
-        break;
-    }
-  });
+  jQuery(document).bind('keydown', (function(player) {
+    return function(event) {
+      switch (event.keyCode) {
+        case 113: // ESC
+        case 27:  // Q
+          if (player.isFullScreen()) {
+            player.fullscreen(false);
+          }
+          break;
+      }
+    };
+  })(this));
 };
 
 /**

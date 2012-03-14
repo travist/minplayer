@@ -150,6 +150,22 @@ minplayer.plugin.prototype.addPlugin = function(name, plugin) {
 };
 
 /**
+ * Create a polling timer.
+ *
+ * @param {function} callback The function to call when you poll.
+ * @param {integer} interval The interval you would like to poll.
+ */
+minplayer.plugin.prototype.poll = function(callback, interval) {
+  setTimeout((function(context) {
+    return function callLater() {
+      if (callback.call(context)) {
+        setTimeout(callLater, interval);
+      }
+    };
+  })(this), interval);
+};
+
+/**
  * Gets a plugin by name and calls callback when it is ready.
  *
  * @param {string} plugin The plugin of the plugin.
@@ -303,10 +319,11 @@ minplayer.plugin.prototype.unbind = function(type, fn) {
 
   // If this is locked then try again after 10ms.
   if (this.lock) {
-    var _this = this;
-    setTimeout(function() {
-      _this.unbind(type, fn);
-    }, 10);
+    setTimeout((function(plugin) {
+      return function() {
+        plugin.unbind(type, fn);
+      };
+    })(this), 10);
   }
 
   // Set the lock.

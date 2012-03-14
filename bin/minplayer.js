@@ -383,6 +383,22 @@ minplayer.plugin.prototype.addPlugin = function(name, plugin) {
 };
 
 /**
+ * Create a polling timer.
+ *
+ * @param {function} callback The function to call when you poll.
+ * @param {integer} interval The interval you would like to poll.
+ */
+minplayer.plugin.prototype.poll = function(callback, interval) {
+  setTimeout((function(context) {
+    return function callLater() {
+      if (callback.call(context)) {
+        setTimeout(callLater, interval);
+      }
+    };
+  })(this), interval);
+};
+
+/**
  * Gets a plugin by name and calls callback when it is ready.
  *
  * @param {string} plugin The plugin of the plugin.
@@ -536,10 +552,11 @@ minplayer.plugin.prototype.unbind = function(type, fn) {
 
   // If this is locked then try again after 10ms.
   if (this.lock) {
-    var _this = this;
-    setTimeout(function() {
-      _this.unbind(type, fn);
-    }, 10);
+    setTimeout((function(plugin) {
+      return function() {
+        plugin.unbind(type, fn);
+      };
+    })(this), 10);
   }
 
   // Set the lock.
@@ -825,15 +842,16 @@ minplayer.display.prototype.construct = function() {
 
     // Set the resize timeout and this pointer.
     var resizeTimeout = 0;
-    var _this = this;
 
     // Add a handler to trigger a resize event.
-    jQuery(window).resize(function() {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(function() {
-        _this.onResize();
-      }, 200);
-    });
+    jQuery(window).resize((function(display) {
+      return function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+          display.onResize();
+        }, 200);
+      };
+    })(this));
   }
 };
 
@@ -870,13 +888,14 @@ minplayer.display.prototype.fullscreen = function(full) {
   else if (!isFull && full) {
     element.addClass('fullscreen');
     if (screenfull) {
-      var _this = this;
       screenfull.request(element[0]);
-      screenfull.onchange = function(e) {
-        if (!screenfull.isFullscreen) {
-          _this.fullscreen(false);
-        }
-      };
+      screenfull.onchange = (function(display) {
+        return function(e) {
+          if (!screenfull.isFullscreen) {
+            display.fullscreen(false);
+          }
+        };
+      })(this);
     }
     this.trigger('fullscreen', true);
   }
@@ -1141,28 +1160,29 @@ minplayer.prototype.construct = function() {
  * We need to bind to events we are interested in.
  */
 minplayer.prototype.addEvents = function() {
-  var _this = this;
-  minplayer.get.call(this, this.options.id, null, function(plugin) {
+  minplayer.get.call(this, this.options.id, null, (function(player) {
+    return function(plugin) {
 
-    // Bind to the error event.
-    plugin.bind('error', function(event, data) {
+      // Bind to the error event.
+      plugin.bind('error', function(event, data) {
 
-      // If an error occurs within the html5 media player, then try
-      // to fall back to the flash player.
-      if (_this.currentPlayer == 'html5') {
-        _this.options.file.player = 'minplayer';
-        _this.loadPlayer();
-      }
-      else {
-        _this.error(data);
-      }
-    });
+        // If an error occurs within the html5 media player, then try
+        // to fall back to the flash player.
+        if (player.currentPlayer == 'html5') {
+          player.options.file.player = 'minplayer';
+          player.loadPlayer();
+        }
+        else {
+          player.error(data);
+        }
+      });
 
-    // Bind to the fullscreen event.
-    plugin.bind('fullscreen', function(event, data) {
-      _this.resize();
-    });
-  });
+      // Bind to the fullscreen event.
+      plugin.bind('fullscreen', function(event, data) {
+        player.resize();
+      });
+    };
+  })(this));
 };
 
 /**
@@ -1189,18 +1209,18 @@ minplayer.prototype.error = function(error) {
  * Adds key events to the player.
  */
 minplayer.prototype.addKeyEvents = function() {
-
-  // Bind to key events...
-  jQuery(document).bind('keydown', {obj: this}, function(e) {
-    switch (e.keyCode) {
-      case 113: // ESC
-      case 27:  // Q
-        if (e.data.obj.isFullScreen()) {
-          e.data.obj.fullscreen(false);
-        }
-        break;
-    }
-  });
+  jQuery(document).bind('keydown', (function(player) {
+    return function(event) {
+      switch (event.keyCode) {
+        case 113: // ESC
+        case 27:  // Q
+          if (player.isFullScreen()) {
+            player.fullscreen(false);
+          }
+          break;
+      }
+    };
+  })(this));
 };
 
 /**
@@ -1414,19 +1434,18 @@ minplayer.image.prototype.construct = function() {
   // Set the container to not show any overflow...
   this.display.css('overflow', 'hidden');
 
-  // Create the image loader.
-  var _this = this;
-
   /** The loader for the image. */
   this.loader = new Image();
 
   /** Register for when the image is loaded within the loader. */
-  this.loader.onload = function() {
-    _this.loaded = true;
-    _this.ratio = (_this.loader.width / _this.loader.height);
-    _this.resize();
-    _this.trigger('loaded');
-  };
+  this.loader.onload = (function(image) {
+    return function() {
+      image.loaded = true;
+      image.ratio = (image.loader.width / image.loader.height);
+      image.resize();
+      image.trigger('loaded');
+    };
+  })(this);
 
   // We are now ready.
   this.ready();
@@ -1458,13 +1477,14 @@ minplayer.image.prototype.load = function(src) {
 minplayer.image.prototype.clear = function(callback) {
   this.loaded = false;
   if (this.img) {
-    var _this = this;
-    this.img.fadeOut(function() {
-      _this.img.attr('src', '');
-      _this.loader.src = '';
-      $(this).remove();
-      callback.call(_this);
-    });
+    this.img.fadeOut((function(image) {
+      return function() {
+        image.img.attr('src', '');
+        image.loader.src = '';
+        $(this).remove();
+        callback.call(image);
+      };
+    })(this));
   }
   else {
     callback.call(this);
@@ -1552,14 +1572,16 @@ minplayer.file = function(file) {
  * @return {string} The best player to play the media file.
  */
 minplayer.file.prototype.getBestPlayer = function() {
-  var bestplayer = null, bestpriority = 0, _this = this;
-  jQuery.each(minplayer.players, function(name, player) {
-    var priority = player.getPriority();
-    if (player.canPlay(_this) && (priority > bestpriority)) {
-      bestplayer = name;
-      bestpriority = priority;
-    }
-  });
+  var bestplayer = null, bestpriority = 0;
+  jQuery.each(minplayer.players, (function(file) {
+    return function(name, player) {
+      var priority = player.getPriority();
+      if (player.canPlay(file) && (priority > bestpriority)) {
+        bestplayer = name;
+        bestpriority = priority;
+      }
+    };
+  })(this));
   return bestplayer;
 };
 
@@ -1737,34 +1759,44 @@ minplayer.playLoader.prototype.construct = function() {
       }
 
       // Bind to the player events to control the play loader.
-      media.unbind('loadstart').bind('loadstart', {obj: this}, function(event) {
-        event.data.obj.busy.setFlag('media', true);
-        event.data.obj.bigPlay.setFlag('media', true);
-        if (event.data.obj.preview) {
-          event.data.obj.elements.preview.show();
-        }
-        event.data.obj.checkVisibility();
-      });
-      media.bind('waiting', {obj: this}, function(event) {
-        event.data.obj.busy.setFlag('media', true);
-        event.data.obj.checkVisibility();
-      });
-      media.bind('loadeddata', {obj: this}, function(event) {
-        event.data.obj.busy.setFlag('media', false);
-        event.data.obj.checkVisibility();
-      });
-      media.bind('playing', {obj: this}, function(event) {
-        event.data.obj.busy.setFlag('media', false);
-        event.data.obj.bigPlay.setFlag('media', false);
-        if (event.data.obj.preview) {
-          event.data.obj.elements.preview.hide();
-        }
-        event.data.obj.checkVisibility();
-      });
-      media.bind('pause', {obj: this}, function(event) {
-        event.data.obj.bigPlay.setFlag('media', true);
-        event.data.obj.checkVisibility();
-      });
+      media.unbind('loadstart').bind('loadstart', (function(playLoader) {
+        return function(event) {
+          playLoader.busy.setFlag('media', true);
+          playLoader.bigPlay.setFlag('media', true);
+          if (playLoader.preview) {
+            playLoader.elements.preview.show();
+          }
+          playLoader.checkVisibility();
+        };
+      })(this));
+      media.bind('waiting', (function(playLoader) {
+        return function(event) {
+          playLoader.busy.setFlag('media', true);
+          playLoader.checkVisibility();
+        };
+      })(this));
+      media.bind('loadeddata', (function(playLoader) {
+        return function(event) {
+          playLoader.busy.setFlag('media', false);
+          playLoader.checkVisibility();
+        };
+      })(this));
+      media.bind('playing', (function(playLoader) {
+        return function(event) {
+          playLoader.busy.setFlag('media', false);
+          playLoader.bigPlay.setFlag('media', false);
+          if (playLoader.preview) {
+            playLoader.elements.preview.hide();
+          }
+          playLoader.checkVisibility();
+        };
+      })(this));
+      media.bind('pause', (function(playLoader) {
+        return function(event) {
+          playLoader.bigPlay.setFlag('media', true);
+          playLoader.checkVisibility();
+        };
+      })(this));
     }
     else {
 
@@ -1943,47 +1975,50 @@ minplayer.players.base.prototype.construct = function() {
   this.player = this.getPlayer();
 
   // Set the focus of the element based on if they click in or outside of it.
-  var _this = this;
-  jQuery(document).bind('click', function(e) {
-    if (jQuery(e.target).closest('#' + _this.options.id).length == 0) {
-      _this.hasFocus = false;
-    }
-    else {
-      _this.hasFocus = true;
-    }
-  });
+  jQuery(document).bind('click', (function(player) {
+    return function(event) {
+      if (jQuery(event.target).closest('#' + player.options.id).length == 0) {
+        player.hasFocus = false;
+      }
+      else {
+        player.hasFocus = true;
+      }
+    };
+  })(this));
 
   // Bind to key events...
-  jQuery(document).bind('keydown', {obj: this}, function(e) {
-    if (e.data.obj.hasFocus) {
-      e.preventDefault();
-      switch (e.keyCode) {
-        case 32:  // SPACE
-        case 179: // GOOGLE play/pause button.
-          if (e.data.obj.playing) {
-            e.data.obj.pause();
-          }
-          else {
-            e.data.obj.play();
-          }
-          break;
-        case 38:  // UP
-          e.data.obj.setVolumeRelative(0.1);
-          break;
-        case 40:  // DOWN
-          e.data.obj.setVolumeRelative(-0.1);
-          break;
-        case 37:  // LEFT
-        case 227: // GOOGLE TV REW
-          e.data.obj.seekRelative(-0.05);
-          break;
-        case 39:  // RIGHT
-        case 228: // GOOGLE TV FW
-          e.data.obj.seekRelative(0.05);
-          break;
+  jQuery(document).bind('keydown', (function(player) {
+    return function(event) {
+      if (event.data.obj.hasFocus) {
+        event.preventDefault();
+        switch (event.keyCode) {
+          case 32:  // SPACE
+          case 179: // GOOGLE play/pause button.
+            if (player.playing) {
+              player.pause();
+            }
+            else {
+              player.play();
+            }
+            break;
+          case 38:  // UP
+            player.setVolumeRelative(0.1);
+            break;
+          case 40:  // DOWN
+            player.setVolumeRelative(-0.1);
+            break;
+          case 37:  // LEFT
+          case 227: // GOOGLE TV REW
+            player.seekRelative(-0.05);
+            break;
+          case 39:  // RIGHT
+          case 228: // GOOGLE TV FW
+            player.seekRelative(0.05);
+            break;
+        }
       }
-    }
-  });
+    };
+  })(this));
 };
 
 /**
@@ -2051,24 +2086,9 @@ minplayer.players.base.prototype.reset = function() {
 };
 
 /**
- * Create a polling timer.
- * @param {function} callback The function to call when you poll.
- */
-minplayer.players.base.prototype.poll = function(callback) {
-  var _this = this;
-  setTimeout(function later() {
-    if (callback.call(_this)) {
-      setTimeout(later, 1000);
-    }
-  }, 1000);
-};
-
-/**
  * Called when the player is ready to recieve events and commands.
  */
 minplayer.players.base.prototype.onReady = function() {
-  // Store the this pointer.
-  var _this = this;
 
   // Only continue if we are not already ready.
   if (this.playerReady) {
@@ -2085,44 +2105,47 @@ minplayer.players.base.prototype.onReady = function() {
   this.loading = true;
 
   // Create a poll to get the progress.
-  this.poll(function() {
+  this.poll((function(player) {
+    return function() {
 
-    // Only do this if the play interval is set.
-    if (_this.loading) {
+      // Only do this if the play interval is set.
+      if (player.loading) {
 
-      // Get the bytes loaded asynchronously.
-      _this.getBytesLoaded(function(bytesLoaded) {
+        // Get the bytes loaded asynchronously.
+        player.getBytesLoaded(function(bytesLoaded) {
 
-        // Get the bytes total asynchronously.
-        _this.getBytesTotal(function(bytesTotal) {
+          // Get the bytes total asynchronously.
+          player.getBytesTotal(function(bytesTotal) {
 
-          // Trigger an event about the progress.
-          if (bytesLoaded || bytesTotal) {
+            // Trigger an event about the progress.
+            if (bytesLoaded || bytesTotal) {
 
-            // Get the bytes start, but don't require it.
-            var bytesStart = 0;
-            _this.getBytesStart(function(val) {
-              bytesStart = val;
-            });
+              // Get the bytes start, but don't require it.
+              var bytesStart = 0;
+              player.getBytesStart(function(val) {
+                bytesStart = val;
+              });
 
-            // Trigger a progress event.
-            _this.trigger('progress', {
-              loaded: bytesLoaded,
-              total: bytesTotal,
-              start: bytesStart
-            });
+              // Trigger a progress event.
+              player.trigger('progress', {
+                loaded: bytesLoaded,
+                total: bytesTotal,
+                start: bytesStart
+              });
 
-            // Say we are not longer loading if they are equal.
-            if (bytesLoaded >= bytesTotal) {
-              _this.loading = false;
+              // Say we are not longer loading if they are equal.
+              if (bytesLoaded >= bytesTotal) {
+                player.loading = false;
+              }
             }
-          }
+          });
         });
-      });
-    }
+      }
 
-    return _this.loading;
-  });
+      // Keep polling as long as its loading...
+      return player.loading;
+    };
+  })(this), 1000);
 
   // We are now ready.
   this.ready();
@@ -2135,8 +2158,6 @@ minplayer.players.base.prototype.onReady = function() {
  * Should be called when the media is playing.
  */
 minplayer.players.base.prototype.onPlaying = function() {
-  // Store the this pointer.
-  var _this = this;
 
   // Trigger an event that we are playing.
   this.trigger('playing');
@@ -2148,36 +2169,39 @@ minplayer.players.base.prototype.onPlaying = function() {
   this.playing = true;
 
   // Create a poll to get the timeupate.
-  this.poll(function() {
+  this.poll((function(player) {
+    return function() {
 
-    // Only do this if the play interval is set.
-    if (_this.playing) {
+      // Only do this if the play interval is set.
+      if (player.playing) {
 
-      // Get the current time asyncrhonously.
-      _this.getCurrentTime(function(currentTime) {
+        // Get the current time asyncrhonously.
+        player.getCurrentTime(function(currentTime) {
 
-        // Get the duration asynchronously.
-        _this.getDuration(function(duration) {
+          // Get the duration asynchronously.
+          player.getDuration(function(duration) {
 
-          // Convert these to floats.
-          currentTime = parseFloat(currentTime);
-          duration = parseFloat(duration);
+            // Convert these to floats.
+            currentTime = parseFloat(currentTime);
+            duration = parseFloat(duration);
 
-          // Trigger an event about the progress.
-          if (currentTime || duration) {
+            // Trigger an event about the progress.
+            if (currentTime || duration) {
 
-            // Trigger an update event.
-            _this.trigger('timeupdate', {
-              currentTime: currentTime,
-              duration: duration
-            });
-          }
+              // Trigger an update event.
+              player.trigger('timeupdate', {
+                currentTime: currentTime,
+                duration: duration
+              });
+            }
+          });
         });
-      });
-    }
+      }
 
-    return _this.playing;
-  });
+      // Keep polling as long as it is playing.
+      return player.playing;
+    };
+  })(this), 1000);
 };
 
 /**
@@ -2320,29 +2344,30 @@ minplayer.players.base.prototype.stop = function() {
 minplayer.players.base.prototype.seekRelative = function(pos) {
 
   // Get the current time asyncrhonously.
-  var _this = this;
-  this.getCurrentTime(function(currentTime) {
+  this.getCurrentTime((function(player) {
+    return function(currentTime) {
 
-    // Get the duration asynchronously.
-    _this.getDuration(function(duration) {
+      // Get the duration asynchronously.
+      player.getDuration(function(duration) {
 
-      // Only do this if we have a duration.
-      if (duration) {
+        // Only do this if we have a duration.
+        if (duration) {
 
-        // Get the position.
-        var seekPos = 0;
-        if ((pos > -1) && (pos < 1)) {
-          seekPos = (currentTime / duration) + parseFloat(pos);
+          // Get the position.
+          var seekPos = 0;
+          if ((pos > -1) && (pos < 1)) {
+            seekPos = (currentTime / duration) + parseFloat(pos);
+          }
+          else {
+            seekPos = (currentTime + parseFloat(pos)) / duration;
+          }
+
+          // Set the seek value.
+          player.seek(seekPos);
         }
-        else {
-          seekPos = (currentTime + parseFloat(pos)) / duration;
-        }
-
-        // Set the seek value.
-        _this.seek(seekPos);
-      }
-    });
-  });
+      });
+    };
+  })(this));
 };
 
 /**
@@ -2361,13 +2386,14 @@ minplayer.players.base.prototype.seek = function(pos) {
 minplayer.players.base.prototype.setVolumeRelative = function(vol) {
 
   // Get the volume
-  var _this = this;
-  this.getVolume(function(newVol) {
-    newVol += parseFloat(vol);
-    newVol = (newVol < 0) ? 0 : newVol;
-    newVol = (newVol > 1) ? 1 : newVol;
-    _this.setVolume(newVol);
-  });
+  this.getVolume((function(player) {
+    return function(newVol) {
+      newVol += parseFloat(vol);
+      newVol = (newVol < 0) ? 0 : newVol;
+      newVol = (newVol > 1) ? 1 : newVol;
+      player.setVolume(newVol);
+    };
+  })(this));
 };
 
 /**
@@ -2506,53 +2532,76 @@ minplayer.players.html5.prototype.construct = function() {
   // Call base constructor.
   minplayer.players.base.prototype.construct.call(this);
 
-  // Store the this pointer...
-  var _this = this;
-
   // For the HTML5 player, we will just pass events along...
   if (this.player) {
 
-    this.player.addEventListener('abort', function() {
-      _this.trigger('abort');
-    }, false);
-    this.player.addEventListener('loadstart', function() {
-      _this.onReady();
-    }, false);
-    this.player.addEventListener('loadeddata', function() {
-      _this.onLoaded();
-    }, false);
-    this.player.addEventListener('loadedmetadata', function() {
-      _this.onLoaded();
-    }, false);
-    this.player.addEventListener('canplaythrough', function() {
-      _this.onLoaded();
-    }, false);
-    this.player.addEventListener('ended', function() {
-      _this.onComplete();
-    }, false);
-    this.player.addEventListener('pause', function() {
-      _this.onPaused();
-    }, false);
-    this.player.addEventListener('play', function() {
-      _this.onPlaying();
-    }, false);
-    this.player.addEventListener('playing', function() {
-      _this.onPlaying();
-    }, false);
-    this.player.addEventListener('error', function() {
-      _this.trigger('error', 'An error occured - ' + this.error.code);
-    }, false);
-    this.player.addEventListener('waiting', function() {
-      _this.onWaiting();
-    }, false);
-    this.player.addEventListener('durationchange', function() {
-      _this.duration.set(this.duration);
-      _this.trigger('durationchange', {duration: this.duration});
-    }, false);
-    this.player.addEventListener('progress', function(event) {
-      _this.bytesTotal.set(event.total);
-      _this.bytesLoaded.set(event.loaded);
-    }, false);
+    this.player.addEventListener('abort', (function(player) {
+      return function() {
+        player.trigger('abort');
+      };
+    })(this), false);
+    this.player.addEventListener('loadstart', (function(player) {
+      return function() {
+        player.onReady();
+      };
+    })(this), false);
+    this.player.addEventListener('loadeddata', (function(player) {
+      return function() {
+        player.onLoaded();
+      };
+    })(this), false);
+    this.player.addEventListener('loadedmetadata', (function(player) {
+      return function() {
+        player.onLoaded();
+      };
+    })(this), false);
+    this.player.addEventListener('canplaythrough', (function(player) {
+      return function() {
+        player.onLoaded();
+      };
+    })(this), false);
+    this.player.addEventListener('ended', (function(player) {
+      return function() {
+        player.onComplete();
+      };
+    })(this), false);
+    this.player.addEventListener('pause', (function(player) {
+      return function() {
+        player.onPaused();
+      };
+    })(this), false);
+    this.player.addEventListener('play', (function(player) {
+      return function() {
+        player.onPlaying();
+      };
+    })(this), false);
+    this.player.addEventListener('playing', (function(player) {
+      return function() {
+        player.onPlaying();
+      };
+    })(this), false);
+    this.player.addEventListener('error', (function(player) {
+      return function() {
+        player.trigger('error', 'An error occured - ' + this.error.code);
+      };
+    })(this), false);
+    this.player.addEventListener('waiting', (function(player) {
+      return function() {
+        player.onWaiting();
+      };
+    })(this), false);
+    this.player.addEventListener('durationchange', (function(player) {
+      return function() {
+        player.duration.set(this.duration);
+        player.trigger('durationchange', {duration: this.duration});
+      };
+    })(this), false);
+    this.player.addEventListener('progress', (function(player) {
+      return function(event) {
+        player.bytesTotal.set(event.total);
+        player.bytesLoaded.set(event.loaded);
+      };
+    })(this), false);
 
     // Say we are ready.
     this.onReady();
@@ -3094,17 +3143,16 @@ minplayer.players.minplayer.prototype.getDuration = function(callback) {
     }
     else {
 
-      // If not, then check every half second...
-      var _this = this;
-      setTimeout(function check() {
-        duration = _this.player.getDuration();
-        if (duration) {
-          callback(duration);
-        }
-        else {
-          setTimeout(check, 500);
-        }
-      }, 500);
+      // If not, then poll every second for the duration.
+      this.poll((function(player) {
+        return function() {
+          duration = player.player.getDuration();
+          if (duration) {
+            callback(duration);
+          }
+          return !duration;
+        };
+      })(this), 1000);
     }
   }
 };
@@ -3597,18 +3645,17 @@ minplayer.players.vimeo.prototype.create = function() {
   iframe.setAttribute('src', src);
 
   // Now register this player when the froogaloop code is loaded.
-  var _this = this;
-  setTimeout(function check() {
-    if (window.Froogaloop) {
-      _this.player = window.Froogaloop(iframe);
-      _this.player.addEvent('ready', function() {
-        _this.onReady();
-      });
-    }
-    else {
-      setTimeout(check, 200);
-    }
-  }, 200);
+  this.poll((function(player) {
+    return function() {
+      if (window.Froogaloop) {
+        player.player = window.Froogaloop(iframe);
+        player.player.addEvent('ready', function() {
+          player.onReady();
+        });
+      }
+      return !window.Froogaloop;
+    };
+  })(this), 200);
 
   // Trigger that the load has started.
   this.trigger('loadstart');
@@ -3621,36 +3668,40 @@ minplayer.players.vimeo.prototype.create = function() {
  * @see minplayer.players.base#onReady
  */
 minplayer.players.vimeo.prototype.onReady = function(player_id) {
-  // Store the this pointer within this context.
-  var _this = this;
 
   // Add the other listeners.
-  this.player.addEvent('loadProgress', function(progress) {
+  this.player.addEvent('loadProgress', (function(player) {
+    return function(progress) {
+      player.duration.set(parseFloat(progress.duration));
+      player.bytesLoaded.set(progress.bytesLoaded);
+      player.bytesTotal.set(progress.bytesTotal);
+    };
+  })(this));
 
-    // Set the duration, bytesLoaded, and bytesTotal.
-    _this.duration.set(parseFloat(progress.duration));
-    _this.bytesLoaded.set(progress.bytesLoaded);
-    _this.bytesTotal.set(progress.bytesTotal);
-  });
+  this.player.addEvent('playProgress', (function(player) {
+    return function(progress) {
+      player.duration.set(parseFloat(progress.duration));
+      player.currentTime.set(parseFloat(progress.seconds));
+    };
+  })(this));
 
-  this.player.addEvent('playProgress', function(progress) {
+  this.player.addEvent('play', (function(player) {
+    return function() {
+      player.onPlaying();
+    };
+  })(this));
 
-    // Set the duration and current time.
-    _this.duration.set(parseFloat(progress.duration));
-    _this.currentTime.set(parseFloat(progress.seconds));
-  });
+  this.player.addEvent('pause', (function(player) {
+    return function() {
+      player.onPaused();
+    };
+  })(this));
 
-  this.player.addEvent('play', function() {
-    _this.onPlaying();
-  });
-
-  this.player.addEvent('pause', function() {
-    _this.onPaused();
-  });
-
-  this.player.addEvent('finish', function() {
-    _this.onComplete();
-  });
+  this.player.addEvent('finish', (function(player) {
+    return function() {
+      player.onComplete();
+    };
+  })(this));
 
   minplayer.players.base.prototype.onReady.call(this);
   this.onLoaded();
@@ -3720,7 +3771,6 @@ minplayer.players.vimeo.prototype.setVolume = function(vol) {
  * @see minplayer.players.base#getVolume
  */
 minplayer.players.vimeo.prototype.getVolume = function(callback) {
-  var _this = this;
   this.player.api('getVolume', function(vol) {
     callback(vol);
   });
