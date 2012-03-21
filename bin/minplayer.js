@@ -2319,7 +2319,9 @@ minplayer.players.base.prototype.getPlayer = function() {
 minplayer.players.base.prototype.load = function(file) {
 
   // Store the media file for future lookup.
-  if (file) {
+  var isString = (typeof this.mediaFile == 'string');
+  var path = isString ? this.mediaFile : this.mediaFile.path;
+  if (file && (file.path != path)) {
     this.reset();
     this.mediaFile = file;
   }
