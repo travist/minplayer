@@ -42,6 +42,9 @@ minplayer.players.html5.canPlay = function(file) {
     case 'video/ogg':
       return !!minplayer.playTypes.videoOGG;
     case 'video/mp4':
+    case 'video/x-mp4':
+    case 'video/m4v':
+    case 'video/x-m4v':
       return !!minplayer.playTypes.videoH264;
     case 'video/x-webm':
     case 'video/webm':

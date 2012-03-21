@@ -275,6 +275,9 @@ minplayer.plugin = function(name, context, options, queue) {
   // Only call the constructor if we have a context.
   if (context) {
 
+    /** Keep track of the context. */
+    this.context = context;
+
     // Construct this plugin.
     this.construct();
   }
@@ -1093,24 +1096,6 @@ if (!jQuery.fn.minplayer) {
  */
 minplayer = jQuery.extend(function(context, options) {
 
-  // Make sure we provide default options...
-  options = jQuery.extend({
-    id: 'player',
-    build: false,
-    wmode: 'transparent',
-    preload: true,
-    autoplay: false,
-    loop: false,
-    width: '100%',
-    height: '350px',
-    debug: false,
-    volume: 80,
-    files: [],
-    file: '',
-    preview: '',
-    attributes: {}
-  }, options);
-
   // Derive from display
   minplayer.display.call(this, 'player', context, options);
 }, minplayer);
@@ -1130,6 +1115,31 @@ minplayer.console = console || {log: function(data) {}};
  * @see minplayer.plugin.construct
  */
 minplayer.prototype.construct = function() {
+
+  // Allow them to provide arguments based off of the DOM attributes.
+  jQuery.each(this.context[0].attributes, (function(player) {
+    return function(index, attr) {
+      player.options[attr.name] = player.options[attr.name] || attr.value;
+    };
+  })(this));
+
+  // Make sure we provide default options...
+  this.options = jQuery.extend({
+    id: 'player',
+    build: false,
+    wmode: 'transparent',
+    preload: true,
+    autoplay: false,
+    loop: false,
+    width: '100%',
+    height: '350px',
+    debug: false,
+    volume: 80,
+    files: [],
+    file: '',
+    preview: '',
+    attributes: {}
+  }, this.options);
 
   // Call the minplayer display constructor.
   minplayer.display.prototype.construct.call(this);
@@ -2508,6 +2518,9 @@ minplayer.players.html5.canPlay = function(file) {
     case 'video/ogg':
       return !!minplayer.playTypes.videoOGG;
     case 'video/mp4':
+    case 'video/x-mp4':
+    case 'video/m4v':
+    case 'video/x-m4v':
       return !!minplayer.playTypes.videoH264;
     case 'video/x-webm':
     case 'video/webm':
@@ -2929,11 +2942,6 @@ minplayer.players = minplayer.players || {};
  */
 minplayer.players.minplayer = function(context, options, queue) {
 
-  // Make sure we provide default options...
-  options = jQuery.extend({
-    swfplayer: 'flash/minplayer.swf'
-  }, options);
-
   // Derive from players flash.
   minplayer.players.flash.call(this, context, options, queue);
 };
@@ -2993,6 +3001,9 @@ minplayer.players.minplayer.getPriority = function() {
 minplayer.players.minplayer.canPlay = function(file) {
   switch (file.mimetype) {
     case 'video/mp4':
+    case 'video/x-mp4':
+    case 'video/m4v':
+    case 'video/x-m4v':
     case 'video/x-webm':
     case 'video/webm':
     case 'application/octet-stream':
@@ -3017,6 +3028,12 @@ minplayer.players.minplayer.canPlay = function(file) {
  * @return {object} The media player entity.
  */
 minplayer.players.minplayer.prototype.create = function() {
+
+  // Make sure we provide default options...
+  this.options = jQuery.extend({
+    swfplayer: 'flash/minplayer.swf'
+  }, this.options);
+
   minplayer.players.flash.prototype.create.call(this);
 
   // The flash variables for this flash player.

@@ -42,6 +42,9 @@ minplayer.plugin = function(name, context, options, queue) {
   // Only call the constructor if we have a context.
   if (context) {
 
+    /** Keep track of the context. */
+    this.context = context;
+
     // Construct this plugin.
     this.construct();
   }

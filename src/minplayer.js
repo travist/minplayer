@@ -48,24 +48,6 @@ if (!jQuery.fn.minplayer) {
  */
 minplayer = jQuery.extend(function(context, options) {
 
-  // Make sure we provide default options...
-  options = jQuery.extend({
-    id: 'player',
-    build: false,
-    wmode: 'transparent',
-    preload: true,
-    autoplay: false,
-    loop: false,
-    width: '100%',
-    height: '350px',
-    debug: false,
-    volume: 80,
-    files: [],
-    file: '',
-    preview: '',
-    attributes: {}
-  }, options);
-
   // Derive from display
   minplayer.display.call(this, 'player', context, options);
 }, minplayer);
@@ -85,6 +67,31 @@ minplayer.console = console || {log: function(data) {}};
  * @see minplayer.plugin.construct
  */
 minplayer.prototype.construct = function() {
+
+  // Allow them to provide arguments based off of the DOM attributes.
+  jQuery.each(this.context[0].attributes, (function(player) {
+    return function(index, attr) {
+      player.options[attr.name] = player.options[attr.name] || attr.value;
+    };
+  })(this));
+
+  // Make sure we provide default options...
+  this.options = jQuery.extend({
+    id: 'player',
+    build: false,
+    wmode: 'transparent',
+    preload: true,
+    autoplay: false,
+    loop: false,
+    width: '100%',
+    height: '350px',
+    debug: false,
+    volume: 80,
+    files: [],
+    file: '',
+    preview: '',
+    attributes: {}
+  }, this.options);
 
   // Call the minplayer display constructor.
   minplayer.display.prototype.construct.call(this);

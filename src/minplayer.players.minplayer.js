@@ -15,11 +15,6 @@ minplayer.players = minplayer.players || {};
  */
 minplayer.players.minplayer = function(context, options, queue) {
 
-  // Make sure we provide default options...
-  options = jQuery.extend({
-    swfplayer: 'flash/minplayer.swf'
-  }, options);
-
   // Derive from players flash.
   minplayer.players.flash.call(this, context, options, queue);
 };
@@ -79,6 +74,9 @@ minplayer.players.minplayer.getPriority = function() {
 minplayer.players.minplayer.canPlay = function(file) {
   switch (file.mimetype) {
     case 'video/mp4':
+    case 'video/x-mp4':
+    case 'video/m4v':
+    case 'video/x-m4v':
     case 'video/x-webm':
     case 'video/webm':
     case 'application/octet-stream':
@@ -103,6 +101,12 @@ minplayer.players.minplayer.canPlay = function(file) {
  * @return {object} The media player entity.
  */
 minplayer.players.minplayer.prototype.create = function() {
+
+  // Make sure we provide default options...
+  this.options = jQuery.extend({
+    swfplayer: 'flash/minplayer.swf'
+  }, this.options);
+
   minplayer.players.flash.prototype.create.call(this);
 
   // The flash variables for this flash player.
