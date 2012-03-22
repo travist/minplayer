@@ -53,10 +53,8 @@ minplayer.display.prototype.construct = function() {
   // Call the plugin constructor.
   minplayer.plugin.prototype.construct.call(this);
 
-  // Extend all display elements.
-  this.options.elements = this.options.elements || {};
-  jQuery.extend(this.options.elements, this.getElements());
-  this.elements = this.options.elements;
+  // Get the display elements.
+  this.elements = this.getElements();
 
   // Only do this if they allow resize for this display.
   if (this.allowResize) {
@@ -89,6 +87,38 @@ minplayer.display.prototype.onResize = function() {
  */
 minplayer.display.prototype.fullScreenElement = function() {
   return this.display;
+};
+
+/**
+ * Called if you would like for your display item to show then hide.
+ *
+ * @param {object} element The element you would like to hide or show.
+ * @param {number} timeout The timeout to hide and show.
+ */
+minplayer.showThenHide = function(element, timeout) {
+
+  // Ensure we have a timeout.
+  timeout = timeout || 5000;
+
+  // If this has not yet been configured.
+  if (!element.showTimer) {
+
+    // Bind when they move the mouse.
+    jQuery(document).bind('mousemove', function() {
+      minplayer.showThenHide(element, timeout);
+    });
+  }
+
+  // Clear the timeout, and then setup the show then hide functionality.
+  clearTimeout(element.showTimer);
+
+  // Show the display.
+  element.show();
+
+  // Set a timer to hide it after the timeout.
+  element.showTimer = setTimeout(function() {
+    element.hide('slow');
+  }, timeout);
 };
 
 /**

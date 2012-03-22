@@ -26,6 +26,18 @@ minplayer.players.base.prototype = new minplayer.display();
 minplayer.players.base.prototype.constructor = minplayer.players.base;
 
 /**
+ * @see minplayer.display.getElements
+ * @this minplayer.players.base
+ * @return {object} The elements for this display.
+ */
+minplayer.players.base.prototype.getElements = function() {
+  var elements = minplayer.display.prototype.getElements.call(this);
+  return jQuery.extend(elements, {
+    media: this.options.mediaelement
+  });
+};
+
+/**
  * Get the priority of this media player.
  *
  * @return {number} The priority of this media player.
@@ -100,7 +112,7 @@ minplayer.players.base.prototype.construct = function() {
   // Bind to key events...
   jQuery(document).bind('keydown', (function(player) {
     return function(event) {
-      if (event.data.obj.hasFocus) {
+      if (player.hasFocus) {
         event.preventDefault();
         switch (event.keyCode) {
           case 32:  // SPACE

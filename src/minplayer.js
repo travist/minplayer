@@ -302,6 +302,7 @@ minplayer.prototype.loadPlayer = function() {
     pClass = minplayer.players[this.options.file.player];
 
     // Create the new media player.
+    this.options.mediaelement = this.elements.media;
     this.media = new pClass(this.elements.display, this.options, queue);
 
     // Now get the media when it is ready.

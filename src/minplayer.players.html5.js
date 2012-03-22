@@ -178,7 +178,7 @@ minplayer.players.html5.prototype.create = function() {
  * @return {object} The media player object.
  */
 minplayer.players.html5.prototype.getPlayer = function() {
-  return this.options.elements.media.eq(0)[0];
+  return this.elements.media.eq(0)[0];
 };
 
 /**

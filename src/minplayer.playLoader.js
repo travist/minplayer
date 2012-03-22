@@ -46,6 +46,14 @@ minplayer.playLoader.prototype.construct = function() {
     // Only bind if this player does not have its own play loader.
     if (!media.hasPlayLoader()) {
 
+      // Get the poster image.
+      if (!this.options.preview) {
+        this.options.preview = media.elements.media.attr('poster');
+      }
+
+      // Reset the media's poster image.
+      media.elements.media.attr('poster', '');
+
       // Load the preview image.
       this.loadPreview();
 
@@ -126,14 +134,6 @@ minplayer.playLoader.prototype.loadPreview = function() {
 
   // If the preview element exists.
   if (this.elements.preview) {
-
-    // Get the poster image.
-    if (!this.options.preview) {
-      this.options.preview = this.elements.media.attr('poster');
-    }
-
-    // Reset the media's poster image.
-    this.elements.media.attr('poster', '');
 
     // If there is a preview to show...
     if (this.options.preview) {

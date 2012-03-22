@@ -835,10 +835,8 @@ minplayer.display.prototype.construct = function() {
   // Call the plugin constructor.
   minplayer.plugin.prototype.construct.call(this);
 
-  // Extend all display elements.
-  this.options.elements = this.options.elements || {};
-  jQuery.extend(this.options.elements, this.getElements());
-  this.elements = this.options.elements;
+  // Get the display elements.
+  this.elements = this.getElements();
 
   // Only do this if they allow resize for this display.
   if (this.allowResize) {
@@ -871,6 +869,38 @@ minplayer.display.prototype.onResize = function() {
  */
 minplayer.display.prototype.fullScreenElement = function() {
   return this.display;
+};
+
+/**
+ * Called if you would like for your display item to show then hide.
+ *
+ * @param {object} element The element you would like to hide or show.
+ * @param {number} timeout The timeout to hide and show.
+ */
+minplayer.showThenHide = function(element, timeout) {
+
+  // Ensure we have a timeout.
+  timeout = timeout || 5000;
+
+  // If this has not yet been configured.
+  if (!element.showTimer) {
+
+    // Bind when they move the mouse.
+    jQuery(document).bind('mousemove', function() {
+      minplayer.showThenHide(element, timeout);
+    });
+  }
+
+  // Clear the timeout, and then setup the show then hide functionality.
+  clearTimeout(element.showTimer);
+
+  // Show the display.
+  element.show();
+
+  // Set a timer to hide it after the timeout.
+  element.showTimer = setTimeout(function() {
+    element.hide('slow');
+  }, timeout);
 };
 
 /**
@@ -1350,6 +1380,7 @@ minplayer.prototype.loadPlayer = function() {
     pClass = minplayer.players[this.options.file.player];
 
     // Create the new media player.
+    this.options.mediaelement = this.elements.media;
     this.media = new pClass(this.elements.display, this.options, queue);
 
     // Now get the media when it is ready.
@@ -1756,6 +1787,14 @@ minplayer.playLoader.prototype.construct = function() {
     // Only bind if this player does not have its own play loader.
     if (!media.hasPlayLoader()) {
 
+      // Get the poster image.
+      if (!this.options.preview) {
+        this.options.preview = media.elements.media.attr('poster');
+      }
+
+      // Reset the media's poster image.
+      media.elements.media.attr('poster', '');
+
       // Load the preview image.
       this.loadPreview();
 
@@ -1837,14 +1876,6 @@ minplayer.playLoader.prototype.loadPreview = function() {
   // If the preview element exists.
   if (this.elements.preview) {
 
-    // Get the poster image.
-    if (!this.options.preview) {
-      this.options.preview = this.elements.media.attr('poster');
-    }
-
-    // Reset the media's poster image.
-    this.elements.media.attr('poster', '');
-
     // If there is a preview to show...
     if (this.options.preview) {
 
@@ -1925,6 +1956,18 @@ minplayer.players.base.prototype = new minplayer.display();
 minplayer.players.base.prototype.constructor = minplayer.players.base;
 
 /**
+ * @see minplayer.display.getElements
+ * @this minplayer.players.base
+ * @return {object} The elements for this display.
+ */
+minplayer.players.base.prototype.getElements = function() {
+  var elements = minplayer.display.prototype.getElements.call(this);
+  return jQuery.extend(elements, {
+    media: this.options.mediaelement
+  });
+};
+
+/**
  * Get the priority of this media player.
  *
  * @return {number} The priority of this media player.
@@ -1999,7 +2042,7 @@ minplayer.players.base.prototype.construct = function() {
   // Bind to key events...
   jQuery(document).bind('keydown', (function(player) {
     return function(event) {
-      if (event.data.obj.hasFocus) {
+      if (player.hasFocus) {
         event.preventDefault();
         switch (event.keyCode) {
           case 32:  // SPACE
@@ -2656,7 +2699,7 @@ minplayer.players.html5.prototype.create = function() {
  * @return {object} The media player object.
  */
 minplayer.players.html5.prototype.getPlayer = function() {
-  return this.options.elements.media.eq(0)[0];
+  return this.elements.media.eq(0)[0];
 };
 
 /**
