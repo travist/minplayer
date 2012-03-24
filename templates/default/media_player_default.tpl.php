@@ -1,7 +1,10 @@
-<div id="<?php print $settings['id']; ?>" class="media-player" style="width:<?php print $settings['width']; ?>; height:<?php print $settings['height']; ?>;">
-  <div class="media-player-logo"></div>
-  <div class="media-player-error"></div>
-  <div class="media-player-controls">
+<div class="media-player">
+  <div class="media-player-play-loader">
+    <div class="media-player-big-play"><span></span></div>
+    <div class="media-player-loader">&nbsp;</div>
+    <div class="media-player-preview"></div>
+  </div>
+  <div class="media-player-controls ui-state-default">
     <div class="media-player-controls-left">
       <a class="media-player-play" title="Play"></a>
       <a class="media-player-pause" title="Pause"></a>
@@ -22,12 +25,7 @@
       </div>
     </div>
   </div>
-  <div class="media-player-play-loader">
-    <div class="media-player-big-play"><span></span></div>
-    <div class="media-player-loader">&nbsp;</div>
-    <div class="media-player-preview"></div>
-  </div>
-  <div class="media-player-display">
-    <?php print $player; ?>
-  </div>
+  <div class="media-player-logo with-controller"></div>
+  <div class="media-player-error"></div>
+  <div class="media-player-display"></div>
 </div>

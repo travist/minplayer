@@ -52,11 +52,15 @@ minplayer["default"].prototype.getDisplay = function() {
 minplayer["default"].prototype.getElements = function() {
   var elements = minplayer.prototype.getElements.call(this);
 
+  // Set the width and height of this element.
+  this.display.width(this.options.width);
+  this.display.height(this.options.height);
+
   // Return the jQuery elements.
   return jQuery.extend(elements, {
     player:this.display,
     display:jQuery(".media-player-display", this.display),
-    media:jQuery("#" + this.options.id + "-player", this.display),
+    media:jQuery(".media-player-media", this.display),
     error:jQuery('.media-player-error', this.display),
     logo:jQuery('.media-player-logo', this.display)
   });
