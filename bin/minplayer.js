@@ -1440,7 +1440,8 @@ minplayer.prototype.load = function(files) {
 
   // If no file was provided, then get it.
   this.options.files = files || this.options.files;
-  this.options.file = this.getMediaFile(this.options.files);
+  this.options.file = this.options.file || this.options.files;
+  this.options.file = this.getMediaFile(this.options.file);
 
   // Now load the player.
   this.loadPlayer();
@@ -3423,6 +3424,9 @@ minplayer.players.youtube.prototype.setPlayerState = function(playerState) {
  */
 minplayer.players.youtube.prototype.onReady = function(event) {
   minplayer.players.base.prototype.onReady.call(this);
+  if (!this.options.autoplay) {
+    this.pause();
+  }
   this.onLoaded();
 };
 
@@ -3500,9 +3504,7 @@ minplayer.players.youtube.prototype.create = function() {
     'wmode': 'opaque',
     'controls': 0,
     'enablejsapi': 1,
-    'origin': origin,
-    'autoplay': this.options.autoplay,
-    'loop': this.options.loop
+    'origin': origin
   });
 
   // Set the source of the iframe.

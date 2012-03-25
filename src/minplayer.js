@@ -351,7 +351,8 @@ minplayer.prototype.load = function(files) {
 
   // If no file was provided, then get it.
   this.options.files = files || this.options.files;
-  this.options.file = this.getMediaFile(this.options.files);
+  this.options.file = this.options.file || this.options.files;
+  this.options.file = this.getMediaFile(this.options.file);
 
   // Now load the player.
   this.loadPlayer();

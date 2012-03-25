@@ -142,6 +142,9 @@ minplayer.players.youtube.prototype.setPlayerState = function(playerState) {
  */
 minplayer.players.youtube.prototype.onReady = function(event) {
   minplayer.players.base.prototype.onReady.call(this);
+  if (!this.options.autoplay) {
+    this.pause();
+  }
   this.onLoaded();
 };
 
@@ -219,9 +222,7 @@ minplayer.players.youtube.prototype.create = function() {
     'wmode': 'opaque',
     'controls': 0,
     'enablejsapi': 1,
-    'origin': origin,
-    'autoplay': this.options.autoplay,
-    'loop': this.options.loop
+    'origin': origin
   });
 
   // Set the source of the iframe.
