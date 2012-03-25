@@ -87,7 +87,7 @@ minplayer.prototype.construct = function() {
     height: '350px',
     debug: false,
     volume: 80,
-    files: [],
+    files: null,
     file: '',
     preview: '',
     attributes: {},
@@ -209,6 +209,16 @@ minplayer.prototype.addKeyEvents = function() {
  * @return {array} All the media files for this player.
  */
 minplayer.prototype.getFiles = function() {
+
+  // If they provide the files in the options, use those first.
+  if (this.options.files) {
+    return this.options.files;
+  }
+
+  if (this.options.file) {
+    return this.options.file;
+  }
+
   var files = [];
   var mediaSrc = null;
 
@@ -351,8 +361,7 @@ minplayer.prototype.load = function(files) {
 
   // If no file was provided, then get it.
   this.options.files = files || this.options.files;
-  this.options.file = this.options.file || this.options.files;
-  this.options.file = this.getMediaFile(this.options.file);
+  this.options.file = this.getMediaFile(this.options.files);
 
   // Now load the player.
   this.loadPlayer();

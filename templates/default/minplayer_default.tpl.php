@@ -25,7 +25,7 @@
       </div>
     </div>
   </div>
-  <div class="minplayer-default-logo with-controller"></div>
+  <div class="minplayer-default-logo"></div>
   <div class="minplayer-default-error"></div>
   <div class="minplayer-default-display"></div>
 </div>

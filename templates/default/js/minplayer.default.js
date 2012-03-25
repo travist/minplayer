@@ -36,7 +36,7 @@ minplayer["default"].prototype.getDisplay = function() {
       'class': 'minplayer-default'
     })).parent('.minplayer-default')
     .append('\
-      <div class="minplayer-default-logo with-controller"></div>\
+      <div class="minplayer-default-logo"></div>\
       <div class="minplayer-default-error"></div>'
     );
 

@@ -25,14 +25,8 @@ minplayer.controller["default"].prototype.construct = function() {
   /*
   this.get('player', function(player) {
     minplayer.showThenHide(this.display, 5000, function(shown) {
-      if (player.logo) {
-        if (shown) {
-          player.logo.addClass('with-controller');
-        }
-        else {
-          player.logo.removeClass('with-controller');
-        }
-      }
+      var op = shown ? 'addClass' : 'removeClass';
+      player.display[op]('with-controller');
     });
   });
   */
@@ -48,7 +42,6 @@ minplayer.controller["default"].prototype.getDisplay = function() {
 
     // Prepend the control template.
     this.context.prepend('\
-    <div class="minplayer-default-error"></div>\
     <div class="minplayer-default-controls">\
       <div class="minplayer-default-controls-left">\
         <a class="minplayer-default-play minplayer-default-button" title="Play"></a>\
@@ -72,6 +65,9 @@ minplayer.controller["default"].prototype.getDisplay = function() {
     </div>');
   }
 
+  // Let our template know we have a controller.
+  this.context.addClass('with-controller');
+
   return jQuery('.minplayer-default-controls', this.context);
 }
 
@@ -86,6 +82,7 @@ minplayer.controller["default"].prototype.getElements = function() {
     seek: jQuery(".minplayer-default-seek", this.display),
     progress: jQuery(".minplayer-default-progress", this.display),
     volume: jQuery(".minplayer-default-volume-slider", this.display),
+    mute: jQuery('.minplayer-default-volume-button', this.display),
     timer:timer,
     duration:timer
   });
