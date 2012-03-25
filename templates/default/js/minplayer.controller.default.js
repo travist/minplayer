@@ -22,14 +22,12 @@ minplayer.controller["default"].prototype.constructor = minplayer.controller["de
  */
 minplayer.controller["default"].prototype.construct = function() {
   minplayer.controller.prototype.construct.call(this);
-  /*
   this.get('player', function(player) {
     minplayer.showThenHide(this.display, 5000, function(shown) {
       var op = shown ? 'addClass' : 'removeClass';
       player.display[op]('with-controller');
     });
   });
-  */
 }
 
 /**
