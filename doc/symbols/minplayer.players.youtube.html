@@ -542,7 +542,7 @@ on the same page without event collision.</div>
 				
 				
 				<dl class="inheritsList">
-				<dt>Methods borrowed from class <a href="../symbols/minplayer.players.base.html">minplayer.players.base</a>: </dt><dd><a href="../symbols/minplayer.players.base.html#clear">clear</a>, <a href="../symbols/minplayer.players.base.html#construct">construct</a>, <a href="../symbols/minplayer.players.base.html#destroy">destroy</a>, <a href="../symbols/minplayer.players.base.html#getElements">getElements</a>, <a href="../symbols/minplayer.players.base.html#getPlayer">getPlayer</a>, <a href="../symbols/minplayer.players.base.html#getValue">getValue</a>, <a href="../symbols/minplayer.players.base.html#isReady">isReady</a>, <a href="../symbols/minplayer.players.base.html#onComplete">onComplete</a>, <a href="../symbols/minplayer.players.base.html#onError">onError</a>, <a href="../symbols/minplayer.players.base.html#onLoaded">onLoaded</a>, <a href="../symbols/minplayer.players.base.html#onPaused">onPaused</a>, <a href="../symbols/minplayer.players.base.html#onPlaying">onPlaying</a>, <a href="../symbols/minplayer.players.base.html#onWaiting">onWaiting</a>, <a href="../symbols/minplayer.players.base.html#reset">reset</a>, <a href="../symbols/minplayer.players.base.html#seekRelative">seekRelative</a>, <a href="../symbols/minplayer.players.base.html#setVolumeRelative">setVolumeRelative</a></dd><dt>Methods borrowed from class <a href="../symbols/minplayer.display.html">minplayer.display</a>: </dt><dd><a href="../symbols/minplayer.display.html#fullscreen">fullscreen</a>, <a href="../symbols/minplayer.display.html#fullScreenElement">fullScreenElement</a>, <a href="../symbols/minplayer.display.html#getDisplay">getDisplay</a>, <a href="../symbols/minplayer.display.html#getScaledRect">getScaledRect</a>, <a href="../symbols/minplayer.display.html#isFullScreen">isFullScreen</a>, <a href="../symbols/minplayer.display.html#isValid">isValid</a>, <a href="../symbols/minplayer.display.html#toggleFullScreen">toggleFullScreen</a></dd><dt>Methods borrowed from class <a href="../symbols/minplayer.plugin.html">minplayer.plugin</a>: </dt><dd><a href="../symbols/minplayer.plugin.html#addPlugin">addPlugin</a>, <a href="../symbols/minplayer.plugin.html#bind">bind</a>, <a href="../symbols/minplayer.plugin.html#checkQueue">checkQueue</a>, <a href="../symbols/minplayer.plugin.html#get">get</a>, <a href="../symbols/minplayer.plugin.html#poll">poll</a>, <a href="../symbols/minplayer.plugin.html#ready">ready</a>, <a href="../symbols/minplayer.plugin.html#trigger">trigger</a>, <a href="../symbols/minplayer.plugin.html#unbind">unbind</a></dd>
+				<dt>Methods borrowed from class <a href="../symbols/minplayer.players.base.html">minplayer.players.base</a>: </dt><dd><a href="../symbols/minplayer.players.base.html#addPlayer">addPlayer</a>, <a href="../symbols/minplayer.players.base.html#clear">clear</a>, <a href="../symbols/minplayer.players.base.html#construct">construct</a>, <a href="../symbols/minplayer.players.base.html#destroy">destroy</a>, <a href="../symbols/minplayer.players.base.html#getElements">getElements</a>, <a href="../symbols/minplayer.players.base.html#getPlayer">getPlayer</a>, <a href="../symbols/minplayer.players.base.html#getValue">getValue</a>, <a href="../symbols/minplayer.players.base.html#isReady">isReady</a>, <a href="../symbols/minplayer.players.base.html#onComplete">onComplete</a>, <a href="../symbols/minplayer.players.base.html#onError">onError</a>, <a href="../symbols/minplayer.players.base.html#onLoaded">onLoaded</a>, <a href="../symbols/minplayer.players.base.html#onPaused">onPaused</a>, <a href="../symbols/minplayer.players.base.html#onPlaying">onPlaying</a>, <a href="../symbols/minplayer.players.base.html#onWaiting">onWaiting</a>, <a href="../symbols/minplayer.players.base.html#reset">reset</a>, <a href="../symbols/minplayer.players.base.html#seekRelative">seekRelative</a>, <a href="../symbols/minplayer.players.base.html#setVolumeRelative">setVolumeRelative</a></dd><dt>Methods borrowed from class <a href="../symbols/minplayer.display.html">minplayer.display</a>: </dt><dd><a href="../symbols/minplayer.display.html#fullscreen">fullscreen</a>, <a href="../symbols/minplayer.display.html#fullScreenElement">fullScreenElement</a>, <a href="../symbols/minplayer.display.html#getDisplay">getDisplay</a>, <a href="../symbols/minplayer.display.html#getScaledRect">getScaledRect</a>, <a href="../symbols/minplayer.display.html#isFullScreen">isFullScreen</a>, <a href="../symbols/minplayer.display.html#isValid">isValid</a>, <a href="../symbols/minplayer.display.html#toggleFullScreen">toggleFullScreen</a></dd><dt>Methods borrowed from class <a href="../symbols/minplayer.plugin.html">minplayer.plugin</a>: </dt><dd><a href="../symbols/minplayer.plugin.html#addPlugin">addPlugin</a>, <a href="../symbols/minplayer.plugin.html#bind">bind</a>, <a href="../symbols/minplayer.plugin.html#checkQueue">checkQueue</a>, <a href="../symbols/minplayer.plugin.html#get">get</a>, <a href="../symbols/minplayer.plugin.html#poll">poll</a>, <a href="../symbols/minplayer.plugin.html#ready">ready</a>, <a href="../symbols/minplayer.plugin.html#trigger">trigger</a>, <a href="../symbols/minplayer.plugin.html#unbind">unbind</a></dd>
 				</dl>
 				
 			
@@ -1124,7 +1124,7 @@ on the same page without event collision.</div>
 					<a name="load"> </a>
 					<div class="fixedFont">
 					
-					
+					<span class="light">{boolean}</span>
 					<b>load</b>(file)
 					
 					</div>
@@ -1151,6 +1151,13 @@ on the same page without event collision.</div>
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{boolean}</span> If this action was performed.</dd>
+							
+							</dl>
 						
 						
 						
@@ -1275,7 +1282,7 @@ on the same page without event collision.</div>
 					<a name="pause"> </a>
 					<div class="fixedFont">
 					
-					
+					<span class="light">{boolean}</span>
 					<b>pause</b>()
 					
 					</div>
@@ -1292,6 +1299,13 @@ on the same page without event collision.</div>
 						
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{boolean}</span> If this action was performed.</dd>
+							
+							</dl>
+						
 						
 						
 							<dl class="detailList">
@@ -1307,7 +1321,7 @@ on the same page without event collision.</div>
 					<a name="play"> </a>
 					<div class="fixedFont">
 					
-					
+					<span class="light">{boolean}</span>
 					<b>play</b>()
 					
 					</div>
@@ -1323,6 +1337,13 @@ on the same page without event collision.</div>
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{boolean}</span> If this action was performed.</dd>
+							
+							</dl>
 						
 						
 						
@@ -1397,7 +1418,7 @@ on the same page without event collision.
 					<a name="seek"> </a>
 					<div class="fixedFont">
 					
-					
+					<span class="light">{boolean}</span>
 					<b>seek</b>(pos)
 					
 					</div>
@@ -1424,6 +1445,13 @@ on the same page without event collision.
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{boolean}</span> If this action was performed.</dd>
+							
+							</dl>
 						
 						
 						
@@ -1476,7 +1504,7 @@ on the same page without event collision.
 					<a name="setVolume"> </a>
 					<div class="fixedFont">
 					
-					
+					<span class="light">{boolean}</span>
 					<b>setVolume</b>(vol)
 					
 					</div>
@@ -1504,6 +1532,13 @@ on the same page without event collision.
 						
 						
 						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{boolean}</span> If this action was performed.</dd>
+							
+							</dl>
+						
 						
 						
 							<dl class="detailList">
@@ -1519,7 +1554,7 @@ on the same page without event collision.
 					<a name="stop"> </a>
 					<div class="fixedFont">
 					
-					
+					<span class="light">{boolean}</span>
 					<b>stop</b>()
 					
 					</div>
@@ -1535,6 +1570,13 @@ on the same page without event collision.
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{boolean}</span> If this action was performed.</dd>
+							
+							</dl>
 						
 						
 						
@@ -1560,7 +1602,7 @@ on the same page without event collision.
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Sun Apr 01 2012 18:46:13 GMT-0700 (PDT)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Mon Apr 02 2012 19:24:49 GMT-0700 (PDT)
 		</div>
 	</body>
 </html>
