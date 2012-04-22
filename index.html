@@ -1,11 +1,60 @@
 <!DOCTYPE html>
 <html>
-
   <head>
     <meta charset='utf-8' />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
     <meta name="description" content="minPlayer : A minimalistic, plugin-based &quot;core&quot; media player for the web." />
 
+    <!-- Include jQuery and jQuery UI -->
+    <script type='text/javascript' src="https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+
+    <!-- Many more themes to chose from... go to http://jqueryui.com/themeroller! -->
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/dark-hive/jquery-ui.css">
+
+    <!-- The following can be replaced by a single javascript include bin/minplayer.compressed.js -->
+    <script type="text/javascript" src="src/minplayer.compatibility.js"></script>
+    <script type="text/javascript" src="src/minplayer.flags.js"></script>
+    <script type="text/javascript" src="src/minplayer.async.js"></script>
+    <script type="text/javascript" src="src/minplayer.plugin.js"></script>
+    <script type="text/javascript" src="src/minplayer.display.js"></script>
+    <script type="text/javascript" src="src/minplayer.js"></script>
+    <script type="text/javascript" src="src/minplayer.image.js"></script>
+    <script type="text/javascript" src="src/minplayer.file.js"></script>
+    <script type="text/javascript" src="src/minplayer.playLoader.js"></script>
+    <script type="text/javascript" src="src/minplayer.players.base.js"></script>
+    <script type="text/javascript" src="src/minplayer.players.html5.js"></script>
+    <script type="text/javascript" src="src/minplayer.players.flash.js"></script>
+    <script type="text/javascript" src="src/minplayer.players.minplayer.js"></script>
+    <script type="text/javascript" src="src/minplayer.players.youtube.js"></script>
+    <script type="text/javascript" src="src/minplayer.players.vimeo.js"></script>
+    <script type="text/javascript" src="src/minplayer.controller.js"></script>
+
+    <!-- Include the template CSS and JS files. -->
+    <link rel="stylesheet" href="templates/default/css/minplayer_default.css">
+    <script type="text/javascript" src="templates/default/js/minplayer.playLoader.default.js"></script>
+    <script type="text/javascript" src="templates/default/js/minplayer.controller.default.js"></script>
+    <script type="text/javascript" src="templates/default/js/minplayer.default.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        $("#h264").minplayer({
+          width: '500px',
+          height: '300px'
+        });
+        $("#youtube").minplayer({
+          width: '500px',
+          height: '300px'
+        });
+        $("#youtube2").minplayer({
+          width: '500px',
+          height: '300px'
+        });
+        $("#vimeo").minplayer({
+          width: '500px',
+          height: '300px'
+        });
+      });
+    </script>
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
     <title>minPlayer</title>
@@ -37,6 +86,15 @@
 plugin-based "core" media player in which other players and libraries can build
 on top of.  It is written using object oriented JavaScript and is continuously
 integrated using JSLint, JSDoc, and Google Closure.</p>
+
+<h2>h264 Example</h2>
+<video id="h264" src="http://mediafront.org/sites/default/files/video/The_Living_Sky___Time-Lapse__HD.mp4"></video>
+<h2>YouTube Example</h2>
+<video id="youtube" src="http://www.youtube.com/watch?v=hLQl3WQQoQ0"></video>
+<h2>Two YouTube Players on same page</h2>
+<video id="youtube2" src="http://www.youtube.com/watch?v=dTAAsCNK7RA"></video>
+<h2>Vimeo Example</h2>
+<video id="vimeo" src="http://vimeo.com/5606758"></video>
 
 <h2>Multiple players - One single API.</h2>
 
@@ -160,8 +218,5 @@ minplayer.get = function(id, plugin, callback) {
         <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
-
-    
-
   </body>
 </html>
