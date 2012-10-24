@@ -395,9 +395,6 @@ minplayer.plugin.prototype.bind = function(type, data, fn) {
   // Initialize the queue for this type.
   this.queue[type] = this.queue[type] || [];
 
-  // Unbind any existing equivalent events.
-  this.unbind(type, fn);
-
   // Now add this event to the queue.
   this.queue[type].push({
     callback: fn,
