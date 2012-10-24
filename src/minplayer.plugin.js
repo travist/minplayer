@@ -391,7 +391,9 @@ minplayer.plugin.prototype.unbind = function(type, fn) {
     this.queue = {};
   }
   else if (!fn) {
-    this.queue[type] = [];
+    if (this.queue[type] && (this.queue[type].length > 0)) {
+      this.queue[type].length = 0;
+    }
   }
   else if (queuetype) {
     // Iterate through all the callbacks and search for equal callbacks.

@@ -99,19 +99,19 @@ minplayer.playLoader.prototype.initialize = function() {
           playLoader.checkVisibility();
         };
       })(this));
-      media.bind('waiting', (function(playLoader) {
+      media.unbind('waiting').bind('waiting', (function(playLoader) {
         return function(event) {
           playLoader.busy.setFlag('media', true);
           playLoader.checkVisibility();
         };
       })(this));
-      media.bind('loadeddata', (function(playLoader) {
+      media.unbind('loadeddata').bind('loadeddata', (function(playLoader) {
         return function(event) {
           playLoader.busy.setFlag('media', false);
           playLoader.checkVisibility();
         };
       })(this));
-      media.bind('playing', (function(playLoader) {
+      media.unbind('playing').bind('playing', (function(playLoader) {
         return function(event) {
           playLoader.busy.setFlag('media', false);
           playLoader.bigPlay.setFlag('media', false);
@@ -121,7 +121,7 @@ minplayer.playLoader.prototype.initialize = function() {
           playLoader.checkVisibility();
         };
       })(this));
-      media.bind('pause', (function(playLoader) {
+      media.unbind('pause').bind('pause', (function(playLoader) {
         return function(event) {
           playLoader.bigPlay.setFlag('media', true);
           playLoader.checkVisibility();

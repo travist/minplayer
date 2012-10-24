@@ -652,7 +652,9 @@ minplayer.plugin.prototype.unbind = function(type, fn) {
     this.queue = {};
   }
   else if (!fn) {
-    this.queue[type] = [];
+    if (this.queue[type] && (this.queue[type].length > 0)) {
+      this.queue[type].length = 0;
+    }
   }
   else if (queuetype) {
     // Iterate through all the callbacks and search for equal callbacks.
@@ -2195,19 +2197,19 @@ minplayer.playLoader.prototype.initialize = function() {
           playLoader.checkVisibility();
         };
       })(this));
-      media.bind('waiting', (function(playLoader) {
+      media.unbind('waiting').bind('waiting', (function(playLoader) {
         return function(event) {
           playLoader.busy.setFlag('media', true);
           playLoader.checkVisibility();
         };
       })(this));
-      media.bind('loadeddata', (function(playLoader) {
+      media.unbind('loadeddata').bind('loadeddata', (function(playLoader) {
         return function(event) {
           playLoader.busy.setFlag('media', false);
           playLoader.checkVisibility();
         };
       })(this));
-      media.bind('playing', (function(playLoader) {
+      media.unbind('playing').bind('playing', (function(playLoader) {
         return function(event) {
           playLoader.busy.setFlag('media', false);
           playLoader.bigPlay.setFlag('media', false);
@@ -2217,7 +2219,7 @@ minplayer.playLoader.prototype.initialize = function() {
           playLoader.checkVisibility();
         };
       })(this));
-      media.bind('pause', (function(playLoader) {
+      media.unbind('pause').bind('pause', (function(playLoader) {
         return function(event) {
           playLoader.bigPlay.setFlag('media', true);
           playLoader.checkVisibility();
@@ -2403,7 +2405,7 @@ minplayer.players.base.prototype.construct = function() {
   this.mediaFile = this.options.file;
 
   // Make sure we always autoplay on streams.
-  this.options.autoplay = this.options.autoplay || this.mediaFile.stream;
+  this.options.autoplay = this.options.autoplay || !!this.mediaFile.stream;
 
   // Clear the media player.
   this.clear();
@@ -2463,6 +2465,11 @@ minplayer.players.base.prototype.construct = function() {
       }
     };
   })(this));
+
+  // Make sure that we trigger onReady if autoload is false.
+  if (!this.options.autoload) {
+    this.onReady();
+  }
 };
 
 /**
@@ -2856,6 +2863,8 @@ minplayer.players.base.prototype.load = function(file) {
  * @return {boolean} If this action was performed.
  */
 minplayer.players.base.prototype.play = function() {
+  this.options.autoload = true;
+  this.options.autoplay = true;
   return this.isReady();
 };
 
@@ -3150,6 +3159,9 @@ minplayer.players.html5.prototype.addPlayerEvents = function() {
     });
     this.addPlayerEvent('loadstart', function() {
       this.onReady();
+      if (!this.options.autoload) {
+        this.onLoaded();
+      }
     });
     this.addPlayerEvent('loadeddata', function() {
       this.onLoaded();
@@ -3246,10 +3258,15 @@ minplayer.players.html5.prototype.create = function() {
   // Fix the fluid width and height.
   element.eq(0)[0].setAttribute('width', '100%');
   element.eq(0)[0].setAttribute('height', '100%');
-  element.eq(0)[0].setAttribute('autobuffer', true);
-  var option = this.options.autoload ? 'auto' : 'metadata';
+  var option = this.options.autoload ? 'metadata' : 'none';
   option = minplayer.isIDevice ? 'metadata' : option;
   element.eq(0)[0].setAttribute('preload', option);
+
+  // Make sure that we trigger onReady if autoload is false.
+  if (!this.options.autoload) {
+    element.eq(0)[0].setAttribute('autobuffer', false);
+  }
+
   return element;
 };
 
@@ -3701,10 +3718,14 @@ minplayer.players.minplayer.prototype.create = function() {
     'debug': this.options.debug,
     'config': 'nocontrols',
     'file': this.mediaFile.path,
-    'stream': this.mediaFile.stream,
     'autostart': this.options.autoplay,
     'autoload': this.options.autoload
   };
+
+  // Add a stream if one is provided.
+  if (this.mediaFile.stream) {
+    flashVars.stream = this.mediaFile.stream;
+  }
 
   // Return a flash media player object.
   return this.getFlash({
@@ -3727,6 +3748,9 @@ minplayer.players.minplayer.prototype.onMediaUpdate = function(eventType) {
     case 'mediaMeta':
       this.onLoaded();
       break;
+    case 'mediaConnected':
+      this.onLoaded();
+      break;
     case 'mediaPlaying':
       if (this.minplayerloaded) {
         this.onPlaying();
@@ -3747,7 +3771,7 @@ minplayer.players.minplayer.prototype.onMediaUpdate = function(eventType) {
  */
 minplayer.players.minplayer.prototype.clear = function() {
   minplayer.players.flash.prototype.clear.call(this);
-  this.minplayerloaded = this.options.autoplay;
+  this.minplayerloaded = this.options.autoplay || !this.options.autoload;
 };
 
 /**
