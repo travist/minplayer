@@ -236,98 +236,97 @@ minplayer.players.vimeo.prototype.onReady = function(player_id) {
 
 /**
  * Clears the media player.
+ *
+ * @param {function} callback Called when it is done performing this operation.
  */
-minplayer.players.vimeo.prototype.clear = function() {
-  if (this.player) {
+minplayer.players.vimeo.prototype.clear = function(callback) {
+  this.whenReady(function() {
     this.player.api('unload');
-  }
-  minplayer.players.base.prototype.clear.call(this);
+    minplayer.players.base.prototype.clear.call(this, callback);
+  });
 };
 
 /**
  * @see minplayer.players.base#load
- * @return {boolean} If this action was performed.
  */
-minplayer.players.vimeo.prototype.load = function(file) {
-  if (minplayer.players.base.prototype.load.call(this, file)) {
+minplayer.players.vimeo.prototype.load = function(file, callback) {
+  minplayer.players.base.prototype.load.call(this, file, function() {
     this.construct();
-    return true;
-  }
-  return false;
+    if (callback) {
+      callback.call(this);
+    }
+  });
 };
 
 /**
  * @see minplayer.players.base#play
- * @return {boolean} If this action was performed.
  */
-minplayer.players.vimeo.prototype.play = function() {
-  if (minplayer.players.base.prototype.play.call(this)) {
+minplayer.players.vimeo.prototype.play = function(callback) {
+  minplayer.players.base.prototype.play.call(this, function() {
     this.player.api('play');
-    return true;
-  }
-
-  return false;
+    if (callback) {
+      callback.call(this);
+    }
+  });
 };
 
 /**
  * @see minplayer.players.base#pause
- * @return {boolean} If this action was performed.
  */
-minplayer.players.vimeo.prototype.pause = function() {
-  if (minplayer.players.base.prototype.pause.call(this)) {
+minplayer.players.vimeo.prototype.pause = function(callback) {
+  minplayer.players.base.prototype.pause.call(this, function() {
     this.player.api('pause');
-    return true;
-  }
-
-  return false;
+    if (callback) {
+      callback.call(this);
+    }
+  });
 };
 
 /**
  * @see minplayer.players.base#stop
- * @return {boolean} If this action was performed.
  */
-minplayer.players.vimeo.prototype.stop = function() {
-  if (minplayer.players.base.prototype.stop.call(this)) {
+minplayer.players.vimeo.prototype.stop = function(callback) {
+  minplayer.players.base.prototype.stop.call(this, function() {
     this.player.api('unload');
-    return true;
-  }
-
-  return false;
+    if (callback) {
+      callback.call(this);
+    }
+  });
 };
 
 /**
  * @see minplayer.players.base#seek
- * @return {boolean} If this action was performed.
  */
-minplayer.players.vimeo.prototype.seek = function(pos) {
-  if (minplayer.players.base.prototype.seek.call(this, pos)) {
+minplayer.players.vimeo.prototype.seek = function(pos, callback) {
+  minplayer.players.base.prototype.seek.call(this, pos, function() {
     this.player.api('seekTo', pos);
-    return true;
-  }
-
-  return false;
+    if (callback) {
+      callback.call(this);
+    }
+  });
 };
 
 /**
  * @see minplayer.players.base#setVolume
- * @return {boolean} If this action was performed.
  */
-minplayer.players.vimeo.prototype.setVolume = function(vol) {
-  if (minplayer.players.base.prototype.setVolume.call(this, vol)) {
+minplayer.players.vimeo.prototype.setVolume = function(vol, callback) {
+  minplayer.players.base.prototype.setVolume.call(this, vol, function() {
     this.volume.set(vol);
     this.player.api('setVolume', vol);
-    return true;
-  }
-
-  return false;
+    if (callback) {
+      callback.call(this);
+    }
+  });
 };
 
 /**
  * @see minplayer.players.base#getVolume
  */
 minplayer.players.vimeo.prototype.getVolume = function(callback) {
-  this.player.api('getVolume', function(vol) {
-    callback(vol);
+  this.whenReady(function() {
+    this.player.api('getVolume', function(vol) {
+      callback(vol);
+    });
   });
 };
 
@@ -335,7 +334,7 @@ minplayer.players.vimeo.prototype.getVolume = function(callback) {
  * @see minplayer.players.base#getDuration.
  */
 minplayer.players.vimeo.prototype.getDuration = function(callback) {
-  if (this.isReady()) {
+  this.whenReady(function() {
     if (this.options.duration) {
       callback(this.options.duration);
     }
@@ -347,5 +346,5 @@ minplayer.players.vimeo.prototype.getDuration = function(callback) {
         callback(duration);
       });
     }
-  }
+  });
 };
