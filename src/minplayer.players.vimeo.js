@@ -69,7 +69,7 @@ minplayer.players.vimeo.canPlay = function(file) {
  * @return {bool} If this player implements its own playLoader.
  */
 minplayer.players.vimeo.prototype.hasPlayLoader = function(preview) {
-  return minplayer.hasTouch || !preview;
+  return minplayer.hasTouch;
 };
 
 /**
@@ -157,7 +157,6 @@ minplayer.players.vimeo.prototype.create = function() {
     'title': 0,
     'byline': 0,
     'portrait': 0,
-    'autoplay': this.options.autoplay,
     'loop': this.options.loop
   });
 
@@ -177,8 +176,7 @@ minplayer.players.vimeo.prototype.create = function() {
         });
         playerTimeout = setTimeout(function() {
           player.onReady();
-          player.onError('Unable to play video.');
-        }, 2000);
+        }, 3000);
       }
       return !window.Froogaloop;
     };
@@ -232,18 +230,22 @@ minplayer.players.vimeo.prototype.onReady = function(player_id) {
 
   minplayer.players.base.prototype.onReady.call(this);
   this.onLoaded();
+
+  // Make sure we autoplay if it is set.
+  if (this.options.autoplay) {
+    this.play();
+  }
 };
 
 /**
  * Clears the media player.
- *
- * @param {function} callback Called when it is done performing this operation.
  */
-minplayer.players.vimeo.prototype.clear = function(callback) {
-  this.whenReady(function() {
+minplayer.players.vimeo.prototype.clear = function() {
+  if (this.player) {
     this.player.api('unload');
-    minplayer.players.base.prototype.clear.call(this, callback);
-  });
+  }
+
+  minplayer.players.base.prototype.clear.call(this);
 };
 
 /**

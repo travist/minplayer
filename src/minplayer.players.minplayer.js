@@ -157,6 +157,7 @@ minplayer.players.minplayer.prototype.onMediaUpdate = function(eventType) {
       break;
     case 'mediaConnected':
       this.onLoaded();
+      this.onPaused();
       break;
     case 'mediaPlaying':
       this.onPlaying();
