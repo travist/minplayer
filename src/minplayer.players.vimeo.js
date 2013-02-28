@@ -141,7 +141,7 @@ minplayer.players.vimeo.getNode = function(file, callback) {
   }
   else {
     jQuery.ajax({
-      url: 'http://vimeo.com/api/v2/video/' + file.id + '.json',
+      url: 'https://vimeo.com/api/v2/video/' + file.id + '.json',
       dataType: 'jsonp',
       success: function(data) {
         var node = minplayer.players.vimeo.parseNode(data[0]);
@@ -183,7 +183,7 @@ minplayer.players.vimeo.prototype.createPlayer = function() {
 
   // Insert the Vimeo Froogaloop player.
   var tag = document.createElement('script');
-  tag.src = 'http://a.vimeocdn.com/js/froogaloop2.min.js';
+  tag.src = 'https://a.vimeocdn.com/js/froogaloop2.min.js';
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
@@ -197,7 +197,7 @@ minplayer.players.vimeo.prototype.createPlayer = function() {
   jQuery(iframe).addClass('vimeo-player');
 
   // Get the source.
-  var src = 'http://player.vimeo.com/video/';
+  var src = 'https://player.vimeo.com/video/';
   src += this.mediaFile.id + '?';
 
   // Add the parameters to the src.
