@@ -4739,7 +4739,7 @@ minplayer.players.vimeo.prototype.createPlayer = function() {
 
   // Insert the Vimeo Froogaloop player.
   var tag = document.createElement('script');
-  tag.src = 'https://a.vimeocdn.com/js/froogaloop2.min.js';
+  tag.src = 'http://a.vimeocdn.com/js/froogaloop2.min.js';
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
