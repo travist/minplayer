@@ -100,7 +100,7 @@ minplayer.players.vimeo.getMediaId = function(file) {
 /**
  * Parse a single playlist node.
  *
- * @param {object} item The youtube item.
+ * @param {object} item The vimeo item.
  * @return {object} The mediafront node.
  */
 minplayer.players.vimeo.parseNode = function(item) {
@@ -130,7 +130,7 @@ minplayer.players.vimeo.parseNode = function(item) {
 minplayer.players.vimeo.nodes = {};
 
 /**
- * Returns information about this youtube video.
+ * Returns information about this vimeo video.
  *
  * @param {object} file The file to get the node from.
  * @param {function} callback Callback when the node is loaded.
