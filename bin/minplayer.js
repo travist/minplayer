@@ -81,6 +81,9 @@ minplayer.compatibility = function() {
     'application/octet-stream'
   ]);
 
+  /** Can play MPEG URL streams. */
+  this.videoMPEGURL = checkPlayType(elem, 'application/vnd.apple.mpegurl');
+
   // Create an audio element.
   elem = document.createElement('audio');
 
@@ -2115,6 +2118,7 @@ minplayer.file.prototype.getPriority = function() {
     case 'video/x-webm':
     case 'video/webm':
     case 'application/octet-stream':
+    case 'application/vnd.apple.mpegurl':
       return priority * 10;
     case 'video/mp4':
     case 'audio/mp4':
@@ -2147,6 +2151,9 @@ minplayer.file.prototype.getMimeType = function() {
   switch (this.extension) {
     case 'mp4': case 'm4v': case 'flv': case 'f4v':
       return 'video/mp4';
+    case 'm3u8':
+      return 'application/vnd.apple.mpegurl';
+      break;
     case'webm':
       return 'video/webm';
     case 'ogg': case 'ogv':
@@ -2186,11 +2193,18 @@ minplayer.file.prototype.getMimeType = function() {
 minplayer.file.prototype.getType = function() {
   var type = this.mimetype.match(/([^\/]+)(\/)/);
   type = (type && (type.length > 1)) ? type[1] : '';
-  if (type == 'video' || this.mimetype == 'application/octet-stream') {
+  if (type == 'video') {
     return 'video';
   }
   if (type == 'audio') {
     return 'audio';
+  }
+  switch (this.mimetype) {
+    case 'application/octet-stream':
+    case 'application/x-shockwave-flash':
+    case 'application/vnd.apple.mpegurl':
+      return 'video';
+      break;
   }
   return '';
 };
@@ -2266,7 +2280,7 @@ minplayer.playLoader.prototype.initializePlayLoader = function() {
 
       // Get the poster image.
       if (!this.options.preview) {
-        this.options.preview = media.elements.media.attr('poster');
+        this.options.preview = media.poster;
       }
 
       // Determine if we should load the image.
@@ -2563,6 +2577,11 @@ minplayer.players.base.prototype.construct = function() {
   // Call the media display constructor.
   minplayer.display.prototype.construct.call(this);
 
+  // Set the poster if it exists.
+  if (this.elements.media) {
+    this.poster = this.elements.media.attr('poster');
+  }
+
   // Set the plugin name within the options.
   this.options.pluginName = 'basePlayer';
 
@@ -2571,9 +2590,6 @@ minplayer.players.base.prototype.construct = function() {
 
   /** The currently loaded media file. */
   this.mediaFile = this.options.file;
-
-  // Make sure we always autoplay on streams.
-  this.options.autoplay = this.options.autoplay || !!this.mediaFile.stream;
 
   // Clear the media player.
   this.clear();
@@ -2941,8 +2957,11 @@ minplayer.players.base.prototype.onComplete = function() {
  */
 minplayer.players.base.prototype.onLoaded = function() {
 
+  // See if we are loaded.
+  var isLoaded = this.loaded;
+
   // If we should autoplay, then just play now.
-  if (this.options.autoplay) {
+  if (!this.loaded && this.options.autoplay) {
     this.play();
   }
 
@@ -2953,16 +2972,18 @@ minplayer.players.base.prototype.onLoaded = function() {
   this.trigger('loadeddata');
 
   // See if they would like to seek.
-  var seek = this.getSeek();
-  if (seek) {
-    this.getDuration((function(player) {
-      return function(duration) {
-        if (seek < duration) {
-          player.seek(seek);
-          player.play();
-        }
-      };
-    })(this));
+  if (!isLoaded) {
+    var seek = this.getSeek();
+    if (seek) {
+      this.getDuration((function(player) {
+        return function(duration) {
+          if (seek < duration) {
+            player.seek(seek);
+            player.play();
+          }
+        };
+      })(this));
+    }
   }
 };
 
@@ -3318,6 +3339,8 @@ minplayer.players.html5.canPlay = function(file) {
     case 'video/m4v':
     case 'video/x-m4v':
       return !!minplayer.playTypes.videoH264;
+    case 'application/vnd.apple.mpegurl':
+      return !!minplayer.playTypes.videoMPEGURL;
     case 'video/x-webm':
     case 'video/webm':
     case 'application/octet-stream':
