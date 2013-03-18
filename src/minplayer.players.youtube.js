@@ -249,7 +249,7 @@ minplayer.players.youtube.prototype.createPlayer = function() {
   this.playerId = this.options.id + '-player';
 
   // Poll until the YouTube API is ready.
-  this.poll(this.playerId, (function(player) {
+  this.poll(this.options.id + '_youtube', (function(player) {
     return function() {
       var ready = jQuery('#' + player.playerId).length > 0;
       ready = ready && ('YT' in window);
