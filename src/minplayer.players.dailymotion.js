@@ -145,7 +145,7 @@ minplayer.players.dailymotion.getNode = function(file, callback) {
     jQuery.get(url, function(data) {
         callback(minplayer.players.dailymotion.parseNode(data.data));
     },
-            "jsonp");
+    "jsonp");
 };
 
 /**
@@ -206,24 +206,27 @@ minplayer.players.dailymotion.prototype.hasController = function() {
 minplayer.players.dailymotion.prototype.createPlayer = function() {
     minplayer.players.base.prototype.createPlayer.call(this);
 
-    // Insert the Dailymotion iframe API player.
-    var tag = document.createElement('script');
-    tag.src = document.location.protocol + '//api.dmcdn.net/all.js';
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    // Insert the DailyMotion iframe API player.
+    var dailymotion_script = document.location.protocol + '//api.dmcdn.net/all.js';
+    if (jQuery('script[src="' + dailymotion_script + '"]').length == 0) {
+        var tag = document.createElement('script');
+        tag.src = dailymotion_script;
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    }
 
     // Get the player ID.
-    this.playerId = this.options.id;
+    this.playerId = this.options.id + '-player';
 
-    // Poll until the Dailymotion API is ready.
-    this.poll('dailymotion', (function(player) {
+    // Poll until the DailyMotion API is ready.
+    this.poll(this.options.id + '_dailymotion', (function(player) {
         return function() {
-            var ready = jQuery('[src*=' + player.playerId + ']').length > 0;
+            var ready = jQuery('#' + player.playerId).length > 0;
             ready = ready && ('DM' in window);
-            ready = ready && (typeof DM.Player == 'function');
+            ready = ready && (typeof DM.player == 'function');
             if (ready) {
                 // Determine the origin of this script.
-                jQuery('[src*=' + player.playerId + ']').addClass('dailymotion-player');
+                jQuery('#' + player.playerId).addClass('dailymotion-player');
 
                 var params = {};
                 params = {
@@ -238,8 +241,8 @@ minplayer.players.dailymotion.prototype.createPlayer = function() {
 
 
                 // Create the player.
-                player.player = new DM.Player(player.playerId, {
-                    video: player.playerId,
+                player.player = new DM.player(player.playerId, {
+                    video: player.mediaFile.id,
                     height: '100%',
                     width: '100%',
                     frameborder: 0,
