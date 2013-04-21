@@ -107,29 +107,26 @@ minplayer.players.dailymotion.getImage = function(file, type, callback) {
  * @return {object} The mediafront node.
  */
 minplayer.players.dailymotion.parseNode = function(item) {
-    /*var node = (typeof item.video !== 'undefined') ? item.video : item;
      return {
-     title: node.title,
-     description: node.description,
-     mediafiles: {
-     image: {
-     'thumbnail': {
-     path: node.thumbnail.sqDefault
-     },
-     'image': {
-     path: node.thumbnail.hqDefault
-     }
-     },
-     media: {
-     'media': {
-     player: 'dailymotion',
-     id: node.id
-     }
-     }
-     }
-     };*/
-    console.log('Not Yet Implemented');
-    return false;
+        title: node.title,
+        description: node.description,
+        mediafiles: {
+            image: {
+                'thumbnail': {
+                    path: node.thumbnail_small_url
+                },
+                'image': {
+                    path: node.thumbnail_url
+                }
+            },
+           media: {
+                'media': {
+                    player: 'dailymotion',
+                    id: node.id
+                }
+            }
+        }
+     };
 };
 
 /**
@@ -141,7 +138,7 @@ minplayer.players.dailymotion.parseNode = function(item) {
 minplayer.players.dailymotion.getNode = function(file, callback) {
 
     var url = 'https://api.dailymotion.com/video/' + file.id;
-    url += '?fields=title,duration,user';
+    url += '?fields=title,id,description,thumbnail_small_url,thumbnail_url';
     jQuery.get(url, function(data) {
         callback(minplayer.players.dailymotion.parseNode(data.data));
     },
@@ -166,9 +163,7 @@ minplayer.players.dailymotion.prototype.onReady = function(event) {
  * @return {bool} TRUE - Player is found, FALSE - otherwise.
  */
 minplayer.players.dailymotion.prototype.playerFound = function() {
-    var id = 'iframe[src*="' + this.options.id + '"]';
-    var iframe = this.display.find(id);
-    return (iframe.length > 0);
+    return (this.display.find(this.mediaFile.type).length > 0);
 };
 
 /**
@@ -206,7 +201,7 @@ minplayer.players.dailymotion.prototype.hasController = function() {
 minplayer.players.dailymotion.prototype.createPlayer = function() {
     minplayer.players.base.prototype.createPlayer.call(this);
 
-    // Insert the DailyMotion iframe API player.
+    // Insert the Dailymotion iframe API player.
     var dailymotion_script = document.location.protocol + '//api.dmcdn.net/all.js';
     if (jQuery('script[src="' + dailymotion_script + '"]').length == 0) {
         var tag = document.createElement('script');
@@ -218,7 +213,7 @@ minplayer.players.dailymotion.prototype.createPlayer = function() {
     // Get the player ID.
     this.playerId = this.options.id + '-player';
 
-    // Poll until the DailyMotion API is ready.
+    // Poll until the Dailymotion API is ready.
     this.poll(this.options.id + '_dailymotion', (function(player) {
         return function() {
             var ready = jQuery('#' + player.playerId).length > 0;
@@ -249,12 +244,12 @@ minplayer.players.dailymotion.prototype.createPlayer = function() {
                     params: params
                 });
 
-                player.player.addEventListener('apiready', player.onReady);
-                player.player.addEventListener('ended', player.onComplete);
-                player.player.addEventListener('playing', player.onPlaying);
-                player.player.addEventListener('progress', player.onWaiting);
-                player.player.addEventListener('pause', player.onPaused);
-                player.player.addEventListener('error', player.onError);               
+                player.player.addEventListener('apiready', function() { player.onReady(player) } );
+                player.player.addEventListener('ended', function() { player.onComplete(player) });
+                player.player.addEventListener('playing', function() { player.onPlaying(player) });
+                player.player.addEventListener('progress', function() { player.onWaiting(player) });
+                player.player.addEventListener('pause', function() { player.onPaused(player) });
+                player.player.addEventListener('error', function() { player.onError(player) });
             }
             return !ready;
         };
@@ -271,7 +266,7 @@ minplayer.players.dailymotion.prototype.createPlayer = function() {
  */
 minplayer.players.dailymotion.prototype.load = function(file, callback) {
     minplayer.players.base.prototype.load.call(this, file, function() {
-        this.player.loadVideoById(file.id, 0, this.quality);
+        this.player.load(file.id);
         if (callback) {
             callback.call(this);
         }
@@ -283,7 +278,7 @@ minplayer.players.dailymotion.prototype.load = function(file, callback) {
  */
 minplayer.players.dailymotion.prototype.play = function(callback) {
     minplayer.players.base.prototype.play.call(this, function() {
-        this.onWaiting();
+        //this.onWaiting();
         this.player.play();
         if (callback) {
             callback.call(this);
@@ -321,7 +316,7 @@ minplayer.players.dailymotion.prototype.stop = function(callback) {
 minplayer.players.dailymotion.prototype.seek = function(pos, callback) {
     minplayer.players.base.prototype.seek.call(this, pos, function() {
         this.onWaiting();
-        this.player.seek(pos, true);
+        this.player.seek(pos);
         if (callback) {
             callback.call(this);
         }
@@ -333,29 +328,41 @@ minplayer.players.dailymotion.prototype.seek = function(pos, callback) {
  */
 minplayer.players.dailymotion.prototype.setVolume = function(vol, callback) {
     minplayer.players.base.prototype.setVolume.call(this, vol, function() {
-        this.player.volume(vol);
-        if (callback) {
+        this.player.setVolume(vol);
+        if (callback != undefined) {
             callback.call(this);
         }
     });
 };
 
 /**
+ * @see minplayer.players.base#getValue
+ */
+minplayer.players.dailymotion.prototype.getValue = function(getter, callback) {
+  if (this.isReady()) {
+    var value = this.player[getter];
+    if ((value !== undefined) && (value !== null) && callback) {
+      callback(value);
+    }
+  }
+};
+
+/**
  * @see minplayer.players.base#getVolume
  */
 minplayer.players.dailymotion.prototype.getVolume = function(callback) {
-    this.getValue('getVolume', callback);
+    this.getValue('volume', callback);
 };
 
 /**
  * @see minplayer.players.base#getDuration.
  */
 minplayer.players.dailymotion.prototype.getDuration = function(callback) {
-    if (this.options.duration) {
+    if (this.options.duration && callback != undefined) {
         callback(this.options.duration);
     }
     else {
-        this.getValue('getDuration', callback);
+        this.getValue('duration', callback);
     }
 };
 
@@ -363,26 +370,5 @@ minplayer.players.dailymotion.prototype.getDuration = function(callback) {
  * @see minplayer.players.base#getCurrentTime
  */
 minplayer.players.dailymotion.prototype.getCurrentTime = function(callback) {
-    this.getValue('getCurrentTime', callback);
-};
-
-/**
- * @see minplayer.players.base#getBytesStart.
- */
-minplayer.players.dailymotion.prototype.getBytesStart = function(callback) {
-    this.getValue('getVideoStartBytes', callback);
-};
-
-/**
- * @see minplayer.players.base#getBytesLoaded.
- */
-minplayer.players.dailymotion.prototype.getBytesLoaded = function(callback) {
-    this.getValue('getVideoBytesLoaded', callback);
-};
-
-/**
- * @see minplayer.players.base#getBytesTotal.
- */
-minplayer.players.dailymotion.prototype.getBytesTotal = function(callback) {
-    this.getValue('getVideoBytesTotal', callback);
+    this.getValue('currentTime', callback);
 };
