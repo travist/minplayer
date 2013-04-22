@@ -36,6 +36,8 @@ minplayer.players.html5.getPriority = function(file) {
 
 /**
  * @see minplayer.players.base#canPlay
+ * 
+ * @param {object} file A {@link minplayer.file} object.
  * @return {boolean} If this player can play this media type.
  */
 minplayer.players.html5.canPlay = function(file) {
@@ -247,6 +249,8 @@ minplayer.players.html5.prototype.getPlayer = function() {
 
 /**
  * @see minplayer.players.base#load
+ * 
+ * @param {object} file A {@link minplayer.file} object.
  */
 minplayer.players.html5.prototype.load = function(file, callback) {
 
@@ -260,7 +264,7 @@ minplayer.players.html5.prototype.load = function(file, callback) {
     }
 
     // Only swap out if the new file is different from the source.
-    if (src != file.path) {
+    if (src !== file.path) {
 
       // Add a new player.
       this.addPlayer();

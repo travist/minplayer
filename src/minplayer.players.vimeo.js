@@ -49,6 +49,8 @@ minplayer.players.vimeo.getPriority = function(file) {
 
 /**
  * @see minplayer.players.base#canPlay
+ * 
+ * @param {object} file A {@link minplayer.file} object.
  * @return {boolean} If this player can play this media type.
  */
 minplayer.players.vimeo.canPlay = function(file) {
@@ -183,7 +185,7 @@ minplayer.players.vimeo.prototype.createPlayer = function() {
 
   // Insert the Vimeo Froogaloop player.
   var vimeo_script = 'http://a.vimeocdn.com/js/froogaloop2.min.js';
-  if (jQuery('script[src="' + vimeo_script + '"]').length == 0) {
+  if (jQuery('script[src="' + vimeo_script + '"]').length === 0) {
     var tag = document.createElement('script');
     tag.src = vimeo_script;
     var firstScriptTag = document.getElementsByTagName('script')[0];
