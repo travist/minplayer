@@ -88,7 +88,7 @@ minplayer.players.minplayer.getPriority = function(file) {
 
 /**
  * @see minplayer.players.base#canPlay
- * 
+ *
  * @param {object} file A {@link minplayer.file} object.
  * @return {boolean} If this player can play this media type.
  */

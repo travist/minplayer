@@ -1,3 +1,5 @@
+/*jshint maxlen:90 */
+
 /** The minplayer namespace. */
 var minplayer = minplayer || {};
 
@@ -52,7 +54,7 @@ minplayer.players.dailymotion.getPriority = function(file) {
 
 /**
  * @see minplayer.players.base#canPlay
- * 
+ *
  * @param {object} file A {@link minplayer.file} object.
  * @return {boolean} If this player can play this media type.
  */
@@ -142,8 +144,7 @@ minplayer.players.dailymotion.getNode = function(file, callback) {
   url += '?fields=title,id,description,thumbnail_small_url,thumbnail_url';
   jQuery.get(url, function(data) {
     callback(minplayer.players.dailymotion.parseNode(data.data));
-  },
-          "jsonp");
+  }, 'jsonp');
 };
 
 /**
@@ -203,7 +204,8 @@ minplayer.players.dailymotion.prototype.createPlayer = function() {
   minplayer.players.base.prototype.createPlayer.call(this);
 
   // Insert the Dailymotion iframe API player.
-  var dailymotion_script = document.location.protocol + '//api.dmcdn.net/all.js';
+  var dailymotion_script = document.location.protocol;
+  dailymotion_script += '//api.dmcdn.net/all.js';
   if (jQuery('script[src="' + dailymotion_script + '"]').length === 0) {
     var tag = document.createElement('script');
     tag.src = dailymotion_script;

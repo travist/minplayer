@@ -34,7 +34,7 @@ minplayer.players.limelight.getPriority = function() {
 
 /**
  * @see minplayer.players.base#canPlay
- * 
+ *
  * @param {object} file A {@link minplayer.file} object.
  * @return {boolean} If this player can play this media type.
  */
@@ -176,12 +176,12 @@ minplayer.players.limelight.prototype.createPlayer = function() {
     'deepLink': 'true',
     'autoplay': this.options.autoplay ? 'true' : 'false',
     'startQuality': 'HD'
-  };
+  }, regex = null;
 
   // Get the channel for this player.
   var channel = this.options.channel;
   if (!channel) {
-    var regex = /.*limelight\.com.*channelId=([a-zA-Z0-9]+)/i;
+    regex = /.*limelight\.com.*channelId=([a-zA-Z0-9]+)/i;
     if (this.mediaFile.path.search(regex) === 0) {
       channel = this.mediaFile.path.match(regex)[1];
     }
@@ -189,13 +189,13 @@ minplayer.players.limelight.prototype.createPlayer = function() {
 
   // Set the channel.
   if (channel && this.mediaFile.queueType === 'media') {
-    flashVars['adConfigurationChannelId'] = channel;
+    flashVars.adConfigurationChannelId = channel;
   }
 
   // Get the playerForm for this player.
   var playerForm = this.options.playerForm;
   if (!playerForm) {
-    var regex = /.*limelight\.com.*playerForm=([a-zA-Z0-9]+)/i;
+    regex = /.*limelight\.com.*playerForm=([a-zA-Z0-9]+)/i;
     if (this.mediaFile.path.search(regex) === 0) {
       playerForm = this.mediaFile.path.match(regex)[1];
     }
@@ -203,11 +203,11 @@ minplayer.players.limelight.prototype.createPlayer = function() {
 
   // Set the player form.
   if (playerForm) {
-    flashVars['playerForm'] = playerForm;
+    flashVars.playerForm = playerForm;
   }
 
   // Add the media Id to the flashvars.
-  flashVars['mediaId'] = this.mediaFile.id;
+  flashVars.mediaId = this.mediaFile.id;
 
   // Set the player ID.
   var playerId = this.options.id + '-player';

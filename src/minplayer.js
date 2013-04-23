@@ -372,7 +372,7 @@ minplayer.getMediaFile = function(files) {
 minplayer.prototype.loadPlayer = function() {
 
   // Do nothing if there isn't a file or anywhere to put it.
-  if (!this.options.file || (this.elements.display.length == 0)) {
+  if (!this.options.file || (this.elements.display.length === 0)) {
     return false;
   }
 
