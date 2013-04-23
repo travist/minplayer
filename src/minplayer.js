@@ -181,7 +181,7 @@ minplayer.prototype.setFocus = function(focus) {
 minplayer.prototype.bindTo = function(plugin) {
   plugin.ubind(this.uuid + ':error', (function(player) {
     return function(event, data) {
-      if (player.currentPlayer == 'html5') {
+      if (player.currentPlayer === 'html5') {
         minplayer.player = 'minplayer';
         player.options.file.player = 'minplayer';
         player.loadPlayer();

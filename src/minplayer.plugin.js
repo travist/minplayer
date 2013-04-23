@@ -301,8 +301,8 @@ minplayer.plugin.prototype.checkQueue = function(plugin) {
 
       // Now check to see if this queue is about us.
       check = !q.id && !q.plugin;
-      check |= (q.plugin == plugin.name);
-      check &= (!q.id || (q.id == this.options.id));
+      check |= (q.plugin === plugin.name);
+      check &= (!q.id || (q.id === this.options.id));
 
       // If the check passes, and hasn't already been added...
       if (check && !q.addedto.hasOwnProperty(plugin.options.id)) {

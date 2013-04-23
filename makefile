@@ -21,6 +21,7 @@ files =   src/minplayer.compatibility.js\
           src/minplayer.file.js\
           src/minplayer.playLoader.js\
           src/minplayer.players.base.js\
+          src/minplayer.players.dailymotion.js\
           src/minplayer.players.html5.js\
           src/minplayer.players.flash.js\
           src/minplayer.players.minplayer.js\

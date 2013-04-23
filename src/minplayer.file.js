@@ -162,10 +162,10 @@ minplayer.file.prototype.getMimeType = function() {
 minplayer.file.prototype.getType = function() {
   var type = this.mimetype.match(/([^\/]+)(\/)/);
   type = (type && (type.length > 1)) ? type[1] : '';
-  if (type == 'video') {
+  if (type === 'video') {
     return 'video';
   }
-  if (type == 'audio') {
+  if (type === 'audio') {
     return 'audio';
   }
   switch (this.mimetype) {

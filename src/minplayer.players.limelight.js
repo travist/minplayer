@@ -34,6 +34,8 @@ minplayer.players.limelight.getPriority = function() {
 
 /**
  * @see minplayer.players.base#canPlay
+ * 
+ * @param {object} file A {@link minplayer.file} object.
  * @return {boolean} If this player can play this media type.
  */
 minplayer.players.limelight.canPlay = function(file) {
@@ -186,7 +188,7 @@ minplayer.players.limelight.prototype.createPlayer = function() {
   }
 
   // Set the channel.
-  if (channel && this.mediaFile.queueType == 'media') {
+  if (channel && this.mediaFile.queueType === 'media') {
     flashVars['adConfigurationChannelId'] = channel;
   }
 
