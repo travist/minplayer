@@ -1,0 +1,9 @@
+{
+  "name": "minplayer",
+  "version": "v1.0",
+  "ignore": [
+    "**/.*",
+    "*.txt",
+    "bower.json"
+  ]
+}
