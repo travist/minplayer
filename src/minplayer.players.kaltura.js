@@ -156,7 +156,7 @@ minplayer.players.kaltura.prototype.getInstance = function() {
   instance += '[' + (ids[2] - 1) + ']';
   this.instanceName = instance;
   return instance;
-}
+};
 
 /**
  * Register for the media player events.
@@ -213,13 +213,13 @@ minplayer.players.kaltura.prototype.createPlayer = function() {
   // Insert the embed javascript.
   var tag = document.createElement('script');
   tag.src = 'http://cdnapi.kaltura.com/p/';
-  tag.src += settings['partnerId'];
+  tag.src += settings.partnerId;
   tag.src += '/sp/';
-  tag.src += settings['partnerId'];
+  tag.src += settings.partnerId;
   tag.src += '00/embedIframeJs/uiconf_id/';
-  tag.src += settings['uiConfId'];
+  tag.src += settings.uiConfId;
   tag.src += '/partner_id/';
-  tag.src += settings['partnerId'];
+  tag.src += settings.partnerId;
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
@@ -227,14 +227,13 @@ minplayer.players.kaltura.prototype.createPlayer = function() {
   var playerId = this.options.id + '-player';
 
   // Check the embed code every second.
-  var self = this;
   setTimeout(function checkKaltura() {
     if (window.hasOwnProperty('kWidget')) {
       kWidget.embed({
         'targetId': playerId,
-	'wid': '_' + settings['partnerId'],
-	'uiconf_id' : settings['uiConfId'],
-	'entry_id' : settings['entryId'],
+	'wid': '_' + settings.partnerId,
+	'uiconf_id' : settings.uiConfId,
+	'entry_id' : settings.entryId,
 	'flashvars':{
           'autoPlay': false
         },
