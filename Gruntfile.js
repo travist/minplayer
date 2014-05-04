@@ -51,13 +51,13 @@ module.exports = function(grunt) {
         files: {
           'bin/minplayer.js': [screenfullPath].concat(files)
         }
-      },
+      }
     },
     uglify: {
       build: {
         files: {
-          'bin/minplayer.compressed.js': [screenfullPath].concat(files),
-          'bin/minplayer.min.js': [screenfullPath].concat(files)
+          'bin/minplayer.compressed.js': ['bin/minplayer.js'],
+          'bin/minplayer.min.js': ['bin/minplayer.js']
         }
       }
     },
