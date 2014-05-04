@@ -153,6 +153,7 @@ minplayer.players.minplayer.prototype.createPlayer = function() {
  * @param {string} eventType The event that was triggered in the player.
  */
 minplayer.players.minplayer.prototype.onMediaUpdate = function(eventType) {
+  this.onReady();
   switch (eventType) {
     case 'mediaMeta':
       this.onLoaded();
