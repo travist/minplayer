@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Documentation Source: minplayer.display.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	
+	<link type="text/css" rel="stylesheet" href="styles/site.simplex.css">
+	
+</head>
+
+<body>
+<div class="container-fluid">
+	<div class="navbar navbar-fixed-top ">
+		<div class="navbar-inner">
+			<a class="brand" href="index.html">Documentation</a>
+			<ul class="nav">
+				
+				<li class="dropdown">
+					<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b
+						class="caret"></b></a>
+
+					<ul class="dropdown-menu ">
+						
+						<li>
+							<a href="prototype..html">Define a jQuery minplayer prototype.</a>
+						</li>
+						
+						<li>
+							<a href="global.html#minplayer">minplayer</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.async.html">async</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.compatibility.html">compatibility</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.controller.html">controller</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.display.html">display</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.file.html">file</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.flags.html">flags</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.image.html">image</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.players.base.html">base</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.players.dailymotion.html">dailymotion</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.players.flash.html">flash</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.players.html5.html">html5</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.players.kaltura.html">kaltura</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.players.limelight.html">limelight</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.players.minplayer.html">minplayer</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.players.vimeo.html">vimeo</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.players.youtube.html">youtube</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.playLoader.html">playLoader</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.plugin.html">plugin</a>
+						</li>
+						
+
+					</ul>
+				</li>
+				
+			</ul>
+		</div>
+	</div>
+
+	<div class="row-fluid">
+
+		
+			<div class="span12">
+				
+				<div id="main">
+					
+
+
+		<h1 class="page-title">Source: minplayer.display.js</h1>
+    
+    <section>
+        <article>
+            <pre class="sunlight-highlight-javascript ">/**
+ * @constructor
+ * @extends minplayer.plugin
+ * @class Base class used to provide the display and options for any component
+ * deriving from this class.  Components who derive are expected to provide
+ * the elements that they define by implementing the getElements method.
+ *
+ * @param {string} name The name of this plugin.
+ * @param {object} context The jQuery context this component resides.
+ * @param {object} options The options for this component.
+ * @param {object} queue The event queue to pass events around.
+ */
+minplayer.display = function(name, context, options, queue) {
+
+  // Derive from plugin
+  minplayer.plugin.call(this, name, context, options, queue);
+};
+
+/** Derive from minplayer.plugin. */
+minplayer.display.prototype = new minplayer.plugin();
+
+/** Reset the constructor. */
+minplayer.display.prototype.constructor = minplayer.display;
+
+/**
+ * Returns the display for this component.
+ *
+ * @param {object} context The context which this display is within.
+ * @param {object} options The options to get the display.
+ *
+ * @return {object} The jQuery context for this display.
+ */
+minplayer.display.prototype.getDisplay = function(context, options) {
+
+  // Return the context.
+  return context;
+};
+
+/**
+ * @see minplayer.plugin.initialize
+ */
+minplayer.display.prototype.initialize = function() {
+
+  // Only set the display if it hasn't already been set.
+  if (!this.display) {
+
+    // Set the display.
+    this.display = this.getDisplay(this.context, this.options);
+  }
+
+  // Only continue loading this plugin if there is a display.
+  if (this.display) {
+
+    // Set the plugin name within the options.
+    this.options.pluginName = 'display';
+
+    // Get the display elements.
+    this.elements = this.getElements();
+
+    // Call the plugin initialize method.
+    minplayer.plugin.prototype.initialize.call(this);
+  }
+};
+
+/**
+ * @see minplayer.plugin.construct
+ */
+minplayer.display.prototype.construct = function() {
+
+  // Call the plugin constructor.
+  minplayer.plugin.prototype.construct.call(this);
+
+  // Set if this display is in autohide.
+  this.autoHide = false;
+
+  // Only do this if they allow resize for this display.
+  if (this.onResize) {
+
+    // Set the resize timeout and this pointer.
+    var resizeTimeout = 0;
+
+    // Add a handler to trigger a resize event.
+    jQuery(window).resize((function(display) {
+      return function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+          display.onResize();
+        }, 200);
+      };
+    })(this));
+  }
+};
+
+/**
+ * Called when the window resizes.
+ */
+minplayer.display.prototype.onResize = false;
+
+/**
+ * Wrapper around hide that will always not show.
+ *
+ * @param {object} element The element you wish to hide.
+ */
+minplayer.display.prototype.hide = function(element) {
+  element = element || this.display;
+  if (element) {
+    element.forceHide = true;
+    element.unbind().hide();
+  }
+};
+
+/**
+ * Gets the full screen element.
+ *
+ * @return {object} The display to be used for full screen support.
+ */
+minplayer.display.prototype.fullScreenElement = function() {
+  return this.display;
+};
+
+/**
+ * Fix for the click function in jQuery to be cross platform.
+ *
+ * @param {object} element The element that will be clicked.
+ * @param {function} fn Called when the element is clicked.
+ * @return {object} The element that is to be clicked.
+ */
+minplayer.click = function(element, fn) {
+  var flag = false;
+  element = jQuery(element);
+  element.bind('touchstart click', function(event) {
+    if (!flag) {
+      flag = true;
+      setTimeout(function() {
+        flag = false;
+      }, 100);
+      fn.call(this, event);
+    }
+  });
+  return element;
+};
+
+/**
+ * Determines if the player is in focus or not.
+ *
+ * @param {boolean} focus If the player is in focus.
+ */
+minplayer.display.prototype.onFocus = function(focus) {
+  this.hasFocus = this.focus = focus;
+
+  // If they have autoHide enabled, then show then hide this element.
+  if (this.autoHide) {
+    this.showThenHide(
+      this.autoHide.element,
+      this.autoHide.timeout,
+      this.autoHide.cb
+    );
+  }
+};
+
+/**
+ * Called if you would like for your plugin to show then hide.
+ *
+ * @param {object} element The element you would like to hide or show.
+ * @param {number} timeout The timeout to hide and show.
+ * @param {function} cb Called when something happens.
+ */
+minplayer.display.prototype.showThenHide = function(element, timeout, cb) {
+
+  // Get the element type.
+  var elementType = (typeof element);
+
+  // Set some interface defaults.
+  if (elementType === 'undefined') {
+    cb = null;
+    element = this.display;
+  }
+  else if (elementType === 'number') {
+    cb = timeout;
+    timeout = element;
+    element = this.display;
+  }
+  else if (elementType === 'function') {
+    cb = element;
+    element = this.display;
+  }
+
+  if (!element) {
+    return;
+  }
+
+  // Make sure we have a timeout.
+  timeout = timeout || 5000;
+
+  // Set the autohide variable.
+  this.autoHide = {
+    element: element,
+    timeout: timeout,
+    cb: cb
+  };
+
+  // Show the element.
+  if (!element.forceHide) {
+    if (typeof element.showMe !== 'undefined') {
+      if (element.showMe) {
+        element.showMe(cb);
+      }
+    }
+    else {
+      element.show();
+      if (cb) {
+        cb(true);
+      }
+    }
+  }
+
+  // Define the hover state for this element.
+  if (!element.hoverState) {
+    jQuery(element).bind('mouseenter', function() {
+      element.hoverState = true;
+    });
+    jQuery(element).bind('mouseleave', function() {
+      element.hoverState = false;
+    });
+  }
+
+  // Clear the timeout and start it over again.
+  clearTimeout(this.showTimer);
+  this.showTimer = setTimeout((function(self) {
+    return function tryAgain() {
+
+      // Check the hover state.
+      if (!element.hoverState) {
+        if (typeof element.hideMe !== 'undefined') {
+          if (element.hideMe) {
+            element.hideMe(cb);
+          }
+        }
+        else {
+          // Hide the element.
+          element.hide('slow', function() {
+            if (cb) {
+              cb(false);
+            }
+          });
+        }
+      }
+      else {
+
+        // Try again in the timeout time.
+        self.showTimer = setTimeout(tryAgain, timeout);
+      }
+    };
+  })(this), timeout);
+};
+
+/**
+ * Make this display element go fullscreen.
+ *
+ * @param {boolean} full Tell the player to go into fullscreen or not.
+ */
+minplayer.display.prototype.fullscreen = function(full) {
+  var isFull = this.isFullScreen();
+  var element = this.fullScreenElement();
+  if (isFull && !full) {
+    element.removeClass('fullscreen');
+    if (minplayer.screenfull) {
+      minplayer.screenfull.exit();
+    }
+    this.trigger('fullscreen', false);
+  }
+  else if (!isFull && full) {
+    element.addClass('fullscreen');
+    if (minplayer.screenfull) {
+      minplayer.screenfull.request(element[0]);
+      minplayer.screenfull.onchange = (function(display) {
+        return function(e) {
+          if (!minplayer.screenfull.isFullscreen) {
+            display.fullscreen(false);
+          }
+        };
+      })(this);
+    }
+    this.trigger('fullscreen', true);
+  }
+};
+
+/**
+ * Toggle fullscreen.
+ */
+minplayer.display.prototype.toggleFullScreen = function() {
+  this.fullscreen(!this.isFullScreen());
+};
+
+/**
+ * Checks to see if we are in fullscreen mode.
+ *
+ * @return {boolean} TRUE - fullscreen, FALSE - otherwise.
+ */
+minplayer.display.prototype.isFullScreen = function() {
+  return this.fullScreenElement().hasClass('fullscreen');
+};
+
+/**
+ * Returns a scaled rectangle provided a ratio and the container rect.
+ *
+ * @param {number} ratio The width/height ratio of what is being scaled.
+ * @param {object} rect The bounding rectangle for scaling.
+ * @return {object} The Rectangle object of the scaled rectangle.
+ */
+minplayer.display.prototype.getScaledRect = function(ratio, rect) {
+  var scaledRect = {};
+  scaledRect.x = rect.x ? rect.x : 0;
+  scaledRect.y = rect.y ? rect.y : 0;
+  scaledRect.width = rect.width ? rect.width : 0;
+  scaledRect.height = rect.height ? rect.height : 0;
+  if (ratio) {
+    if ((rect.width / rect.height) > ratio) {
+      scaledRect.height = rect.height;
+      scaledRect.width = Math.floor(rect.height * ratio);
+    }
+    else {
+      scaledRect.height = Math.floor(rect.width / ratio);
+      scaledRect.width = rect.width;
+    }
+    scaledRect.x = Math.floor((rect.width - scaledRect.width) / 2);
+    scaledRect.y = Math.floor((rect.height - scaledRect.height) / 2);
+  }
+  return scaledRect;
+};
+
+/**
+ * Returns all the jQuery elements that this component uses.
+ *
+ * @return {object} An object which defines all the jQuery elements that
+ * this component uses.
+ */
+minplayer.display.prototype.getElements = function() {
+  return {};
+};
+</pre>
+        </article>
+    </section>
+
+
+
+
+
+				</div>
+
+				<div class="clearfix"></div>
+				<footer>
+					
+					
+		<span class="jsdoc-message">
+		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
+		on Sun May 04 2014 17:34:39 GMT-0500 (CDT) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+		</span>
+				</footer>
+			</div>
+
+			
+			<br clear="both">
+		</div>
+
+	</div>
+	<script src="scripts/sunlight.js"></script>
+	<script src="scripts/sunlight.javascript.js"></script>
+	<script src="scripts/sunlight-plugin.doclinks.js"></script>
+	<script src="scripts/sunlight-plugin.linenumbers.js"></script>
+	<script src="scripts/sunlight-plugin.menu.js"></script>
+	<script src="scripts/jquery.min.js"></script>
+	<script src="scripts/jquery.scrollTo.js"></script>
+	<script src="scripts/jquery.localScroll.js"></script>
+	<script src="scripts/bootstrap-dropdown.js"></script>
+	<script src="scripts/toc.js"></script>
+
+
+	<script>  Sunlight.highlightAll({lineNumbers:,  showMenu: true, enableDoclinks :true}); </script>
+
+	<script>
+		$( function () {
+			$( "#toc" ).toc( {
+				selectors   : "h1,h2,h3,h4",
+				showAndHide : false,
+				scrollTo    : 60
+			} );
+			$( "#toc>ul" ).addClass( "nav nav-pills nav-stacked" );
+			$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+
+		} );
+	</script>
+
+	
+
+</body>
+</html>

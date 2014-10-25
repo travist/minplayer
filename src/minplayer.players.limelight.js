@@ -25,6 +25,19 @@ minplayer.players.limelight.prototype = new minplayer.players.flash();
 minplayer.players.limelight.prototype.constructor = minplayer.players.limelight;
 
 /**
+ * @see minplayer.plugin.construct
+ * @this minplayer.players.limelight
+ */
+minplayer.players.limelight.prototype.construct = function() {
+
+  // Call the players.flash constructor.
+  minplayer.players.flash.prototype.construct.call(this);
+
+  // Set the plugin name within the options.
+  this.options.pluginName = 'limelight';
+};
+
+/**
  * @see minplayer.players.base#getPriority
  * @return {number} The priority of this media player.
  */
@@ -107,7 +120,7 @@ minplayer.players.limelight.prototype.onMediaUpdate = function(event, data) {
         return;
       }
 
-      this.shouldSeek = (this.getSeek() > 0);
+      this.shouldSeek = (this.startTime > 0);
       this.onLoaded();
       break;
 
@@ -224,7 +237,7 @@ minplayer.players.limelight.prototype.createPlayer = function() {
 
   // Return a flash media player object.
   return this.getFlash({
-    swf: 'https://assets.delvenetworks.com/player/loader.swf',
+    swf: document.location.protocol + '//assets.delvenetworks.com/player/loader.swf',
     id: playerId,
     width: this.options.width,
     height: '100%',
@@ -270,16 +283,11 @@ minplayer.players.limelight.prototype.stop = function(callback) {
 };
 
 /**
- * @see minplayer.players.base#seek
+ * @see minplayer.players.base#_seek
  */
-minplayer.players.limelight.prototype.seek = function(pos, callback) {
-  minplayer.players.flash.prototype.seek.call(this, pos, function() {
-    this.seekValue = pos;
-    this.player.doSeekToSecond(pos);
-    if (callback) {
-      callback.call(this);
-    }
-  });
+minplayer.players.limelight.prototype._seek = function(pos) {
+  this.seekValue = pos;
+  this.player.doSeekToSecond(pos);
 };
 
 /**
@@ -297,10 +305,8 @@ minplayer.players.limelight.prototype.setVolume = function(vol, callback) {
 /**
  * @see minplayer.players.base#getVolume
  */
-minplayer.players.limelight.prototype.getVolume = function(callback) {
-  this.whenReady(function() {
-    callback(this.player.doGetVolume());
-  });
+minplayer.players.limelight.prototype._getVolume = function(callback) {
+  callback(this.player.doGetVolume());
 };
 
 /**

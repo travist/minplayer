@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Documentation Source: minplayer.file.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	
+	<link type="text/css" rel="stylesheet" href="styles/site.simplex.css">
+	
+</head>
+
+<body>
+<div class="container-fluid">
+	<div class="navbar navbar-fixed-top ">
+		<div class="navbar-inner">
+			<a class="brand" href="index.html">Documentation</a>
+			<ul class="nav">
+				
+				<li class="dropdown">
+					<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b
+						class="caret"></b></a>
+
+					<ul class="dropdown-menu ">
+						
+						<li>
+							<a href="prototype..html">Define a jQuery minplayer prototype.</a>
+						</li>
+						
+						<li>
+							<a href="global.html#minplayer">minplayer</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.async.html">async</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.compatibility.html">compatibility</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.controller.html">controller</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.display.html">display</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.file.html">file</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.flags.html">flags</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.image.html">image</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.players.base.html">base</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.players.dailymotion.html">dailymotion</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.players.flash.html">flash</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.players.html5.html">html5</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.players.kaltura.html">kaltura</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.players.limelight.html">limelight</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.players.minplayer.html">minplayer</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.players.vimeo.html">vimeo</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.players.youtube.html">youtube</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.playLoader.html">playLoader</a>
+						</li>
+						
+						<li>
+							<a href="minplayer.plugin.html">plugin</a>
+						</li>
+						
+
+					</ul>
+				</li>
+				
+			</ul>
+		</div>
+	</div>
+
+	<div class="row-fluid">
+
+		
+			<div class="span12">
+				
+				<div id="main">
+					
+
+
+		<h1 class="page-title">Source: minplayer.file.js</h1>
+    
+    <section>
+        <article>
+            <pre class="sunlight-highlight-javascript ">/** The minplayer namespace. */
+var minplayer = minplayer || {};
+
+/**
+ * @constructor
+ * @class A wrapper class used to provide all the data necessary to control an
+ * individual file within this media player.
+ *
+ * @param {object} file A media file object with minimal required information.
+ */
+minplayer.file = function(file) {
+
+  // If there isn't a file provided, then just return null.
+  if (!file) {
+    return null;
+  }
+
+  file = (typeof file === 'string') ? {path: file} : file;
+
+  // If we already are a minplayer file, then just return this file.
+  if (file.hasOwnProperty('isMinPlayerFile')) {
+    return file;
+  }
+
+  this.isMinPlayerFile = true;
+  this.duration = file.duration || 0;
+  this.bytesTotal = file.bytesTotal || 0;
+  this.quality = file.quality || 0;
+  this.stream = file.stream || '';
+  this.path = file.path || '';
+  this.codecs = file.codecs || '';
+
+  // These should be provided, but just in case...
+  this.extension = file.extension || this.getFileExtension();
+  this.mimetype = file.mimetype || file.filemime || this.getMimeType();
+  this.type = file.type || this.getType();
+
+  // Fail safe to try and guess the mimetype and media type.
+  if (!this.type) {
+    this.mimetype = this.getMimeType();
+    this.type = this.getType();
+  }
+
+  // Get the player.
+  this.player = minplayer.player || file.player || this.getBestPlayer();
+  this.priority = file.priority || this.getPriority();
+  this.id = file.id || this.getId();
+  if (!this.path) {
+    this.path = this.id;
+  }
+};
+
+/** Used to force the player for all media. */
+minplayer.player = '';
+
+/**
+ * Returns the best player for the job.
+ *
+ * @return {string} The best player to play the media file.
+ */
+minplayer.file.prototype.getBestPlayer = function() {
+  var bestplayer = null, bestpriority = 0;
+  jQuery.each(minplayer.players, (function(file) {
+    return function(name, player) {
+      var priority = player.getPriority(file);
+      if (player.canPlay(file) && (priority > bestpriority)) {
+        bestplayer = name;
+        bestpriority = priority;
+      }
+    };
+  })(this));
+  return bestplayer;
+};
+
+/**
+ * The priority of this file is determined by the priority of the best
+ * player multiplied by the priority of the mimetype.
+ *
+ * @return {integer} The priority of the media file.
+ */
+minplayer.file.prototype.getPriority = function() {
+  var priority = 1;
+  if (this.player) {
+    priority = minplayer.players[this.player].getPriority(this);
+  }
+  switch (this.mimetype) {
+    case 'video/x-webm':
+    case 'video/webm':
+    case 'application/octet-stream':
+    case 'application/vnd.apple.mpegurl':
+      return priority * 10;
+    case 'video/mp4':
+    case 'audio/mp4':
+    case 'audio/mpeg':
+      return priority * 9;
+    case 'video/ogg':
+    case 'audio/ogg':
+    case 'video/quicktime':
+      return priority * 8;
+    default:
+      return priority * 5;
+  }
+};
+
+/**
+ * Returns the file extension of the file path.
+ *
+ * @return {string} The file extension.
+ */
+minplayer.file.prototype.getFileExtension = function() {
+  return this.path.substring(this.path.lastIndexOf('.') + 1).toLowerCase();
+};
+
+/**
+ * Returns the proper mimetype based off of the extension.
+ *
+ * @return {string} The mimetype of the file based off of extension.
+ */
+minplayer.file.prototype.getMimeType = function() {
+  switch (this.extension) {
+    case 'mp4': case 'm4v': case 'flv': case 'f4v':
+      return 'video/mp4';
+    case 'm3u8':
+      return 'application/vnd.apple.mpegurl';
+    case'webm':
+      return 'video/webm';
+    case 'ogg': case 'ogv':
+      return 'video/ogg';
+    case '3g2':
+      return 'video/3gpp2';
+    case '3gpp':
+    case '3gp':
+      return 'video/3gpp';
+    case 'mov':
+      return 'video/quicktime';
+    case'swf':
+      return 'application/x-shockwave-flash';
+    case 'oga':
+      return 'audio/ogg';
+    case 'mp3':
+      return 'audio/mpeg';
+    case 'm4a': case 'f4a':
+      return 'audio/mp4';
+    case 'aac':
+      return 'audio/aac';
+    case 'wav':
+      return 'audio/vnd.wave';
+    case 'wma':
+      return 'audio/x-ms-wma';
+    default:
+      return 'unknown';
+  }
+};
+
+/**
+ * The type of media this is: video or audio.
+ *
+ * @return {string} "video" or "audio" based on what the type of media this
+ * is.
+ */
+minplayer.file.prototype.getType = function() {
+  var type = this.mimetype.match(/([^\/]+)(\/)/);
+  type = (type && (type.length > 1)) ? type[1] : '';
+  if (type === 'video') {
+    return 'video';
+  }
+  if (type === 'audio') {
+    return 'audio';
+  }
+  switch (this.mimetype) {
+    case 'application/octet-stream':
+    case 'application/x-shockwave-flash':
+    case 'application/vnd.apple.mpegurl':
+      return 'video';
+  }
+  return '';
+};
+
+/**
+ * Returns the ID for this media file.
+ *
+ * @return {string} The id for this media file which is provided by the player.
+ */
+minplayer.file.prototype.getId = function() {
+  var player = minplayer.players[this.player];
+  return (player && player.getMediaId) ? player.getMediaId(this) : '';
+};
+</pre>
+        </article>
+    </section>
+
+
+
+
+
+				</div>
+
+				<div class="clearfix"></div>
+				<footer>
+					
+					
+		<span class="jsdoc-message">
+		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
+		on Sun May 04 2014 17:34:39 GMT-0500 (CDT) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+		</span>
+				</footer>
+			</div>
+
+			
+			<br clear="both">
+		</div>
+
+	</div>
+	<script src="scripts/sunlight.js"></script>
+	<script src="scripts/sunlight.javascript.js"></script>
+	<script src="scripts/sunlight-plugin.doclinks.js"></script>
+	<script src="scripts/sunlight-plugin.linenumbers.js"></script>
+	<script src="scripts/sunlight-plugin.menu.js"></script>
+	<script src="scripts/jquery.min.js"></script>
+	<script src="scripts/jquery.scrollTo.js"></script>
+	<script src="scripts/jquery.localScroll.js"></script>
+	<script src="scripts/bootstrap-dropdown.js"></script>
+	<script src="scripts/toc.js"></script>
+
+
+	<script>  Sunlight.highlightAll({lineNumbers:,  showMenu: true, enableDoclinks :true}); </script>
+
+	<script>
+		$( function () {
+			$( "#toc" ).toc( {
+				selectors   : "h1,h2,h3,h4",
+				showAndHide : false,
+				scrollTo    : 60
+			} );
+			$( "#toc>ul" ).addClass( "nav nav-pills nav-stacked" );
+			$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+
+		} );
+	</script>
+
+	
+
+</body>
+</html>

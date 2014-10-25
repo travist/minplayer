@@ -1,0 +1,3 @@
+[submodule "lib/screenfull.js"]
+	path = lib/screenfull.js
+	url = https://github.com/sindresorhus/screenfull.js.git
