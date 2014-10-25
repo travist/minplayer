@@ -2757,7 +2757,9 @@ minplayer.players.base.prototype.onReady = function() {
 
     // Iterate through our ready queue.
     for (var i in this.readyQueue) {
-      this.readyQueue[i].call(this);
+      if(this.readyQueue.hasOwnProperty(i)) {
+        this.readyQueue[i].call(this);
+      }
     }
 
     // Empty the ready queue.
@@ -2966,7 +2968,9 @@ minplayer.players.base.prototype.onLoaded = function() {
 
   // Iterate through our ready queue.
   for (var i in this.loadedQueue) {
-    this.loadedQueue[i].call(this);
+    if(this.loadedQueue.hasOwnProperty(i)) {
+      this.loadedQueue[i].call(this);
+    }
   }
 
   // Empty the loaded queue.
