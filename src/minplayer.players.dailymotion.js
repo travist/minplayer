@@ -18,7 +18,7 @@ minplayer.players = minplayer.players || {};
 minplayer.players.dailymotion = function(context, options, queue) {
 
   /** The quality of the Dailymotion stream. */
-  this.quality = 'default';
+  this.quality = '380';
 
   // Derive from players base.
   minplayer.players.base.call(this, context, options, queue);
@@ -321,6 +321,7 @@ minplayer.players.dailymotion.prototype.pause = function(callback) {
 minplayer.players.dailymotion.prototype.stop = function(callback) {
   minplayer.players.base.prototype.stop.call(this, function() {
     this.player.pause();
+    this.player.seek(0);
     if (callback) {
       callback.call(this);
     }
