@@ -356,6 +356,7 @@ minplayer.players.youtube.prototype.pause = function(callback) {
 minplayer.players.youtube.prototype.stop = function(callback) {
   minplayer.players.base.prototype.stop.call(this, function() {
     this.player.stopVideo();
+    this.player.seekTo(0, true);
     if (callback) {
       callback.call(this);
     }
