@@ -10,9 +10,8 @@
 	<![endif]-->
 	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
 
-	
 	<link type="text/css" rel="stylesheet" href="styles/site.simplex.css">
-	
+
 </head>
 
 <body>
@@ -37,75 +36,75 @@
 						</li>
 						
 						<li>
-							<a href="minplayer.async.html">async</a>
+							<a href="minplayer.async.html">minplayer.async</a>
 						</li>
 						
 						<li>
-							<a href="minplayer.compatibility.html">compatibility</a>
+							<a href="minplayer.compatibility.html">minplayer.compatibility</a>
 						</li>
 						
 						<li>
-							<a href="minplayer.controller.html">controller</a>
+							<a href="minplayer.controller.html">minplayer.controller</a>
 						</li>
 						
 						<li>
-							<a href="minplayer.display.html">display</a>
+							<a href="minplayer.display.html">minplayer.display</a>
 						</li>
 						
 						<li>
-							<a href="minplayer.file.html">file</a>
+							<a href="minplayer.file.html">minplayer.file</a>
 						</li>
 						
 						<li>
-							<a href="minplayer.flags.html">flags</a>
+							<a href="minplayer.flags.html">minplayer.flags</a>
 						</li>
 						
 						<li>
-							<a href="minplayer.image.html">image</a>
+							<a href="minplayer.image.html">minplayer.image</a>
 						</li>
 						
 						<li>
-							<a href="minplayer.players.base.html">base</a>
+							<a href="minplayer.players.base.html">minplayer.players.base</a>
 						</li>
 						
 						<li>
-							<a href="minplayer.players.dailymotion.html">dailymotion</a>
+							<a href="minplayer.players.dailymotion.html">minplayer.players.dailymotion</a>
 						</li>
 						
 						<li>
-							<a href="minplayer.players.flash.html">flash</a>
+							<a href="minplayer.players.flash.html">minplayer.players.flash</a>
 						</li>
 						
 						<li>
-							<a href="minplayer.players.html5.html">html5</a>
+							<a href="minplayer.players.html5.html">minplayer.players.html5</a>
 						</li>
 						
 						<li>
-							<a href="minplayer.players.kaltura.html">kaltura</a>
+							<a href="minplayer.players.kaltura.html">minplayer.players.kaltura</a>
 						</li>
 						
 						<li>
-							<a href="minplayer.players.limelight.html">limelight</a>
+							<a href="minplayer.players.limelight.html">minplayer.players.limelight</a>
 						</li>
 						
 						<li>
-							<a href="minplayer.players.minplayer.html">minplayer</a>
+							<a href="minplayer.players.minplayer.html">minplayer.players.minplayer</a>
 						</li>
 						
 						<li>
-							<a href="minplayer.players.vimeo.html">vimeo</a>
+							<a href="minplayer.players.vimeo.html">minplayer.players.vimeo</a>
 						</li>
 						
 						<li>
-							<a href="minplayer.players.youtube.html">youtube</a>
+							<a href="minplayer.players.youtube.html">minplayer.players.youtube</a>
 						</li>
 						
 						<li>
-							<a href="minplayer.playLoader.html">playLoader</a>
+							<a href="minplayer.playLoader.html">minplayer.playLoader</a>
 						</li>
 						
 						<li>
-							<a href="minplayer.plugin.html">plugin</a>
+							<a href="minplayer.plugin.html">minplayer.plugin</a>
 						</li>
 						
 
@@ -244,36 +243,33 @@ functionality.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.js.html">minplayer.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -345,9 +341,9 @@ functionality.
 
         <dl>
             
-<dt>
-    <h4 class="name" id="eventTypes"><span class="type-signature">&lt;static> </span>eventTypes<span class="type-signature"></span></h4>
-    
+<dt class="name" id="eventTypes">
+    <h4><span class="type-signature">&lt;static> </span>eventTypes<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -356,52 +352,49 @@ functionality.
         All minplayer event types.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="hasTouch"><span class="type-signature">&lt;static> </span>hasTouch<span class="type-signature"></span></h4>
-    
+<dt class="name" id="hasTouch">
+    <h4><span class="type-signature">&lt;static> </span>hasTouch<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -410,52 +403,49 @@ functionality.
         Determine if we have a touchscreen.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.compatibility.js.html">minplayer.compatibility.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="isAndroid"><span class="type-signature">&lt;static> </span>isAndroid<span class="type-signature"></span></h4>
-    
+<dt class="name" id="isAndroid">
+    <h4><span class="type-signature">&lt;static> </span>isAndroid<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -464,52 +454,49 @@ functionality.
         See if we are an android device.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.compatibility.js.html">minplayer.compatibility.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="isIDevice"><span class="type-signature">&lt;static> </span>isIDevice<span class="type-signature"></span></h4>
-    
+<dt class="name" id="isIDevice">
+    <h4><span class="type-signature">&lt;static> </span>isIDevice<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -518,52 +505,49 @@ functionality.
         See if we are an iOS device.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.compatibility.js.html">minplayer.compatibility.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="isPlaybook"><span class="type-signature">&lt;static> </span>isPlaybook<span class="type-signature"></span></h4>
-    
+<dt class="name" id="isPlaybook">
+    <h4><span class="type-signature">&lt;static> </span>isPlaybook<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -572,52 +556,49 @@ functionality.
         See if we are a playbook device.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.compatibility.js.html">minplayer.compatibility.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="isTouchPad"><span class="type-signature">&lt;static> </span>isTouchPad<span class="type-signature"></span></h4>
-    
+<dt class="name" id="isTouchPad">
+    <h4><span class="type-signature">&lt;static> </span>isTouchPad<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -626,52 +607,49 @@ functionality.
         See if we are a touchpad device.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.compatibility.js.html">minplayer.compatibility.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="lock"><span class="type-signature">&lt;static> </span>lock<span class="type-signature"></span></h4>
-    
+<dt class="name" id="lock">
+    <h4><span class="type-signature">&lt;static> </span>lock<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -680,52 +658,49 @@ functionality.
         Mutex lock to keep multiple triggers from occuring.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="player"><span class="type-signature">&lt;static> </span>player<span class="type-signature"></span></h4>
-    
+<dt class="name" id="player">
+    <h4><span class="type-signature">&lt;static> </span>player<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -734,52 +709,49 @@ functionality.
         Used to force the player for all media.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.file.js.html">minplayer.file.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="players"><span class="type-signature">&lt;static> </span>players<span class="type-signature"></span></h4>
-    
+<dt class="name" id="players">
+    <h4><span class="type-signature">&lt;static> </span>players<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -788,52 +760,49 @@ functionality.
         All the media player implementations
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.players.base.js.html">minplayer.players.base.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="players"><span class="type-signature">&lt;static> </span>players<span class="type-signature"></span></h4>
-    
+<dt class="name" id="players">
+    <h4><span class="type-signature">&lt;static> </span>players<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -842,52 +811,49 @@ functionality.
         All the media player implementations
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.players.dailymotion.js.html">minplayer.players.dailymotion.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="players"><span class="type-signature">&lt;static> </span>players<span class="type-signature"></span></h4>
-    
+<dt class="name" id="players">
+    <h4><span class="type-signature">&lt;static> </span>players<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -896,52 +862,49 @@ functionality.
         All the media player implementations
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.players.html5.js.html">minplayer.players.html5.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="players"><span class="type-signature">&lt;static> </span>players<span class="type-signature"></span></h4>
-    
+<dt class="name" id="players">
+    <h4><span class="type-signature">&lt;static> </span>players<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -950,52 +913,49 @@ functionality.
         All the media player implementations
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.players.flash.js.html">minplayer.players.flash.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="players"><span class="type-signature">&lt;static> </span>players<span class="type-signature"></span></h4>
-    
+<dt class="name" id="players">
+    <h4><span class="type-signature">&lt;static> </span>players<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -1004,52 +964,49 @@ functionality.
         All the media player implementations
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.players.minplayer.js.html">minplayer.players.minplayer.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="players"><span class="type-signature">&lt;static> </span>players<span class="type-signature"></span></h4>
-    
+<dt class="name" id="players">
+    <h4><span class="type-signature">&lt;static> </span>players<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -1058,52 +1015,49 @@ functionality.
         All the media player implementations
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.players.youtube.js.html">minplayer.players.youtube.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="players"><span class="type-signature">&lt;static> </span>players<span class="type-signature"></span></h4>
-    
+<dt class="name" id="players">
+    <h4><span class="type-signature">&lt;static> </span>players<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -1112,52 +1066,49 @@ functionality.
         All the media player implementations
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.players.vimeo.js.html">minplayer.players.vimeo.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="players"><span class="type-signature">&lt;static> </span>players<span class="type-signature"></span></h4>
-    
+<dt class="name" id="players">
+    <h4><span class="type-signature">&lt;static> </span>players<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -1166,52 +1117,49 @@ functionality.
         All the media player implementations
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.players.limelight.js.html">minplayer.players.limelight.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="players"><span class="type-signature">&lt;static> </span>players<span class="type-signature"></span></h4>
-    
+<dt class="name" id="players">
+    <h4><span class="type-signature">&lt;static> </span>players<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -1220,52 +1168,49 @@ functionality.
         All the media player implementations
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.players.kaltura.js.html">minplayer.players.kaltura.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="playTypes"><span class="type-signature">&lt;static> </span>playTypes<span class="type-signature"></span></h4>
-    
+<dt class="name" id="playTypes">
+    <h4><span class="type-signature">&lt;static> </span>playTypes<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -1274,52 +1219,49 @@ functionality.
         The compatible playtypes for this browser.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.compatibility.js.html">minplayer.compatibility.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="plugins"><span class="type-signature">&lt;static> </span>plugins<span class="type-signature"></span></h4>
-    
+<dt class="name" id="plugins">
+    <h4><span class="type-signature">&lt;static> </span>plugins<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -1328,52 +1270,49 @@ functionality.
         Static array to keep track of all plugins.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="queue"><span class="type-signature">&lt;static> </span>queue<span class="type-signature"></span></h4>
-    
+<dt class="name" id="queue">
+    <h4><span class="type-signature">&lt;static> </span>queue<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -1382,52 +1321,49 @@ functionality.
         Static array to keep track of queues.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="timers"><span class="type-signature">&lt;static> </span>timers<span class="type-signature"></span></h4>
-    
+<dt class="name" id="timers">
+    <h4><span class="type-signature">&lt;static> </span>timers<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -1436,52 +1372,49 @@ functionality.
         Create timers for the polling.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="urlVars"><span class="type-signature">&lt;static> </span>urlVars<span class="type-signature"></span></h4>
-    
+<dt class="name" id="urlVars">
+    <h4><span class="type-signature">&lt;static> </span>urlVars<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -1490,52 +1423,49 @@ functionality.
         The URL variables for the minplayer.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.compatibility.js.html">minplayer.compatibility.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="active"><span class="type-signature"></span>active<span class="type-signature"></span></h4>
-    
+<dt class="name" id="active">
+    <h4><span class="type-signature"></span>active<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -1544,57 +1474,58 @@ functionality.
         Say that we are active.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#active">minplayer.plugin#active</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#active">minplayer.plugin#active</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="constructor"><span class="type-signature"></span>constructor<span class="type-signature"></span></h4>
-    
+<dt class="name" id="constructor">
+    <h4><span class="type-signature"></span>constructor<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -1603,52 +1534,49 @@ functionality.
         Reset the constructor.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.js.html">minplayer.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="context"><span class="type-signature"></span>context<span class="type-signature"></span></h4>
-    
+<dt class="name" id="context">
+    <h4><span class="type-signature"></span>context<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -1657,57 +1585,58 @@ functionality.
         Keep track of the context.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#context">minplayer.plugin#context</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#context">minplayer.plugin#context</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="controller"><span class="type-signature"></span>controller<span class="type-signature"></span></h4>
-    
+<dt class="name" id="controller">
+    <h4><span class="type-signature"></span>controller<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -1716,52 +1645,49 @@ functionality.
         The controller for this player.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.js.html">minplayer.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="currentPlayer"><span class="type-signature"></span>currentPlayer<span class="type-signature"></span></h4>
-    
+<dt class="name" id="currentPlayer">
+    <h4><span class="type-signature"></span>currentPlayer<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -1770,52 +1696,49 @@ functionality.
         Variable to store the current media player.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.js.html">minplayer.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="lock"><span class="type-signature"></span>lock<span class="type-signature"></span></h4>
-    
+<dt class="name" id="lock">
+    <h4><span class="type-signature"></span>lock<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -1824,57 +1747,58 @@ functionality.
         Create a queue lock.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#lock">minplayer.plugin#lock</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#lock">minplayer.plugin#lock</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="name"><span class="type-signature"></span>name<span class="type-signature"></span></h4>
-    
+<dt class="name" id="name">
+    <h4><span class="type-signature"></span>name<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -1883,57 +1807,58 @@ functionality.
         The name of this plugin.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#name">minplayer.plugin#name</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#name">minplayer.plugin#name</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="onResize"><span class="type-signature"></span>onResize<span class="type-signature"></span></h4>
-    
+<dt class="name" id="onResize">
+    <h4><span class="type-signature"></span>onResize<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -1942,57 +1867,58 @@ functionality.
         Called when the window resizes.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.display.html#onResize">minplayer.display#onResize</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.display.html#onResize">minplayer.display#onResize</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.display.js.html">minplayer.display.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="playLoader"><span class="type-signature"></span>playLoader<span class="type-signature"></span></h4>
-    
+<dt class="name" id="playLoader">
+    <h4><span class="type-signature"></span>playLoader<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -2001,52 +1927,49 @@ functionality.
         The play loader for this player.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.js.html">minplayer.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="pluginReady"><span class="type-signature"></span>pluginReady<span class="type-signature"></span></h4>
-    
+<dt class="name" id="pluginReady">
+    <h4><span class="type-signature"></span>pluginReady<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -2055,57 +1978,58 @@ functionality.
         The ready flag.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#pluginReady">minplayer.plugin#pluginReady</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#pluginReady">minplayer.plugin#pluginReady</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="queue"><span class="type-signature"></span>queue<span class="type-signature"></span></h4>
-    
+<dt class="name" id="queue">
+    <h4><span class="type-signature"></span>queue<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -2114,57 +2038,58 @@ functionality.
         The event queue.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#queue">minplayer.plugin#queue</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#queue">minplayer.plugin#queue</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="triggered"><span class="type-signature"></span>triggered<span class="type-signature"></span></h4>
-    
+<dt class="name" id="triggered">
+    <h4><span class="type-signature"></span>triggered<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -2173,57 +2098,58 @@ functionality.
         Keep track of already triggered events.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#triggered">minplayer.plugin#triggered</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#triggered">minplayer.plugin#triggered</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
         
             
-<dt>
-    <h4 class="name" id="uuid"><span class="type-signature"></span>uuid<span class="type-signature"></span></h4>
-    
+<dt class="name" id="uuid">
+    <h4><span class="type-signature"></span>uuid<span class="type-signature"></span></h4>
+
     
 </dt>
 <dd>
@@ -2232,49 +2158,50 @@ functionality.
         The universally unique ID for this plugin.
     </div>
     
-    
+
     
 
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#uuid">minplayer.plugin#uuid</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#uuid">minplayer.plugin#uuid</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
-    
+
     
 </dd>
 
@@ -2448,36 +2375,33 @@ functionality.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -2662,36 +2586,33 @@ it for a later time.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -2826,36 +2747,33 @@ it for a later time.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.display.js.html">minplayer.display.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -2967,36 +2885,33 @@ it for a later time.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.controller.js.html">minplayer.controller.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -3204,36 +3119,33 @@ ways to use this api.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -3345,36 +3257,33 @@ ways to use this api.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.js.html">minplayer.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -3437,36 +3346,33 @@ ways to use this api.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.js.html">minplayer.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -3506,36 +3412,33 @@ ways to use this api.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.js.html">minplayer.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -3647,41 +3550,42 @@ ways to use this api.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#addPlugin">minplayer.plugin#addPlugin</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#addPlugin">minplayer.plugin#addPlugin</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -3816,41 +3720,42 @@ ways to use this api.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#bind">minplayer.plugin#bind</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#bind">minplayer.plugin#bind</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -3962,36 +3867,33 @@ ways to use this api.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.js.html">minplayer.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -4080,41 +3982,42 @@ ways to use this api.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#checkQueue">minplayer.plugin#checkQueue</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#checkQueue">minplayer.plugin#checkQueue</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -4150,43 +4053,40 @@ ways to use this api.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.js.html">minplayer.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>minplayer.plugin.construct</li>
-        </ul>
-    </dd>
-    
+	
 
-    
+	
+
+	
+	<dt class="tag-see">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li>minplayer.plugin.construct</li>
+			</ul>
+	</dd>
+	
+
+	
 </dl>
 
     
@@ -4321,41 +4221,42 @@ ways to use this api.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#create">minplayer.plugin#create</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#create">minplayer.plugin#create</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -4467,36 +4368,33 @@ ways to use this api.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.js.html">minplayer.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -4536,41 +4434,42 @@ ways to use this api.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#destroy">minplayer.plugin#destroy</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#destroy">minplayer.plugin#destroy</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -4659,41 +4558,42 @@ ways to use this api.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.display.html#fullscreen">minplayer.display#fullscreen</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.display.html#fullscreen">minplayer.display#fullscreen</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.display.js.html">minplayer.display.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -4733,41 +4633,42 @@ ways to use this api.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.display.html#fullScreenElement">minplayer.display#fullScreenElement</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.display.html#fullScreenElement">minplayer.display#fullScreenElement</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.display.js.html">minplayer.display.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -4902,41 +4803,42 @@ ways to use this api.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#get">minplayer.plugin#get</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#get">minplayer.plugin#get</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -5071,41 +4973,42 @@ ways to use this api.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.display.html#getDisplay">minplayer.display#getDisplay</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.display.html#getDisplay">minplayer.display#getDisplay</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.display.js.html">minplayer.display.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -5168,41 +5071,42 @@ ways to use this api.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.display.html#getElements">minplayer.display#getElements</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.display.html#getElements">minplayer.display#getElements</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.display.js.html">minplayer.display.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -5266,36 +5170,33 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.js.html">minplayer.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -5430,41 +5331,42 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.display.html#getScaledRect">minplayer.display#getScaledRect</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.display.html#getScaledRect">minplayer.display#getScaledRect</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.display.js.html">minplayer.display.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -5576,41 +5478,42 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.display.html#hide">minplayer.display#hide</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.display.html#hide">minplayer.display#hide</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.display.js.html">minplayer.display.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -5646,48 +5549,49 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.display.html#initialize">minplayer.display#initialize</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.display.html#initialize">minplayer.display#initialize</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.display.js.html">minplayer.display.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
-    <dt class="tag-see">See:</dt>
-    <dd class="tag-see">
-        <ul>
-            <li>minplayer.plugin.initialize</li>
-        </ul>
-    </dd>
-    
+	
 
-    
+	
+
+	
+	<dt class="tag-see">See:</dt>
+	<dd class="tag-see">
+		<ul>
+			<li>minplayer.plugin.initialize</li>
+			</ul>
+	</dd>
+	
+
+	
 </dl>
 
     
@@ -5799,41 +5703,42 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#isEvent">minplayer.plugin#isEvent</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#isEvent">minplayer.plugin#isEvent</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -5896,41 +5801,42 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.display.html#isFullScreen">minplayer.display#isFullScreen</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.display.html#isFullScreen">minplayer.display#isFullScreen</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.display.js.html">minplayer.display.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -5993,41 +5899,42 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#isValid">minplayer.plugin#isValid</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#isValid">minplayer.plugin#isValid</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -6139,36 +6046,33 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.js.html">minplayer.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -6208,36 +6112,33 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.js.html">minplayer.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -6349,41 +6250,42 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#onAdded">minplayer.plugin#onAdded</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#onAdded">minplayer.plugin#onAdded</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -6472,41 +6374,42 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.display.html#onFocus">minplayer.display#onFocus</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.display.html#onFocus">minplayer.display#onFocus</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.display.js.html">minplayer.display.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -6641,41 +6544,42 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#poll">minplayer.plugin#poll</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#poll">minplayer.plugin#poll</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -6738,41 +6642,42 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#ready">minplayer.plugin#ready</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#ready">minplayer.plugin#ready</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -6812,36 +6717,33 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.js.html">minplayer.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -6930,36 +6832,33 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.js.html">minplayer.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -7048,36 +6947,33 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.js.html">minplayer.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -7212,41 +7108,42 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.display.html#showThenHide">minplayer.display#showThenHide</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.display.html#showThenHide">minplayer.display#showThenHide</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.display.js.html">minplayer.display.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -7286,41 +7183,42 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.display.html#toggleFullScreen">minplayer.display#toggleFullScreen</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.display.html#toggleFullScreen">minplayer.display#toggleFullScreen</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.display.js.html">minplayer.display.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -7455,41 +7353,42 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#trigger">minplayer.plugin#trigger</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#trigger">minplayer.plugin#trigger</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -7647,41 +7546,42 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#ubind">minplayer.plugin#ubind</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#ubind">minplayer.plugin#ubind</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -7793,41 +7693,42 @@ this component uses.
     
     
 <dl class="details">
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="inherited-from">Inherited From:</dt>
-    <dd class="inherited-from"><ul class="dummy"><li>
-        <a href="minplayer.plugin.html#unbind">minplayer.plugin#unbind</a>
-    </li></dd>
-    
+	
+	<dt class="inherited-from">Inherited From:</dt>
+	<dd class="inherited-from">
+		<ul class="dummy">
+			<li>
+				<a href="minplayer.plugin.html#unbind">minplayer.plugin#unbind</a>
+			</li>
+		</ul>
+	</dd>
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
+	
 
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="minplayer.plugin.js.html">minplayer.plugin.js</a>
-    </li></ul></dd>
-    
 
-    
 
-    
+	
 
-    
+	
+
+	
+
+	
 </dl>
 
     
@@ -7888,7 +7789,8 @@ this component uses.
 					
 		<span class="jsdoc-message">
 		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
-		on Sun May 04 2014 17:34:39 GMT-0500 (CDT) using the <a href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+		on 2014-12-13T14:31:18-06:00 using the <a
+			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
 		</span>
 				</footer>
 			</div>
@@ -7902,33 +7804,72 @@ this component uses.
 		</div>
 
 	</div>
-	<script src="scripts/sunlight.js"></script>
-	<script src="scripts/sunlight.javascript.js"></script>
-	<script src="scripts/sunlight-plugin.doclinks.js"></script>
-	<script src="scripts/sunlight-plugin.linenumbers.js"></script>
-	<script src="scripts/sunlight-plugin.menu.js"></script>
-	<script src="scripts/jquery.min.js"></script>
-	<script src="scripts/jquery.scrollTo.js"></script>
-	<script src="scripts/jquery.localScroll.js"></script>
+	<!--<script src="scripts/sunlight.js"></script>-->
+	<script src="scripts/docstrap.lib.js"></script>
 	<script src="scripts/bootstrap-dropdown.js"></script>
 	<script src="scripts/toc.js"></script>
 
-
-	<script>  Sunlight.highlightAll({lineNumbers:,  showMenu: true, enableDoclinks :true}); </script>
-
 	<script>
 		$( function () {
+			$( "[id*='$']" ).each( function () {
+				var $this = $( this );
+
+				$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+			} );
+
 			$( "#toc" ).toc( {
+				anchorName  : function ( i, heading, prefix ) {
+					return $( heading ).attr( "id" ) || ( prefix + i );
+				},
 				selectors   : "h1,h2,h3,h4",
 				showAndHide : false,
-				scrollTo    : 60
+				scrollTo    : "100px"
 			} );
+
 			$( "#toc>ul" ).addClass( "nav nav-pills nav-stacked" );
 			$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+			$( '.dropdown-toggle' ).dropdown();
+//			$( ".tutorial-section pre, .readme-section pre" ).addClass( "sunlight-highlight-javascript" ).addClass( "linenums" );
 
+			$( ".tutorial-section pre, .readme-section pre" ).each( function () {
+				var $this = $( this );
+
+				var example = $this.find( "code" );
+				exampleText = example.html();
+				var lang = /{@lang (.*?)}/.exec( exampleText );
+				if ( lang && lang[1] ) {
+					exampleText = exampleText.replace( lang[0], "" );
+					example.html( exampleText );
+					lang = lang[1];
+				} else {
+					lang = "javascript";
+				}
+
+				if ( lang ) {
+
+					$this
+						.addClass( "sunlight-highlight-" + lang )
+						.addClass( "linenums" )
+						.html( example.html() );
+
+				}
+			} );
+
+			Sunlight.highlightAll( {
+				lineNumbers : false,
+				showMenu : true,
+				enableDoclinks : true
+			} );
 		} );
-	</script>
+	 </script>
 
+
+
+	<!--Navigation and Symbol Display-->
+	
+
+
+	<!--Google Analytics-->
 	
 
 </body>
