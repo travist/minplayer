@@ -109,23 +109,25 @@ minplayer.players.youtube.getImage = function(file, type, callback) {
  * @return {object} The mediafront node.
  */
 minplayer.players.youtube.parseNode = function(item) {
-  var node = (typeof item.video !== 'undefined') ? item.video : item;
+  var node = (typeof item.snippet !== 'undefined') ? item.snippet : item;
+  var urlThumbnail = (node.thumbnails.hasOwnProperty('standard') ? node.thumbnails.standard.url : node.thumbnails.default.url);
+  var urlImage = (node.thumbnails.hasOwnProperty('maxres') ? node.thumbnails.maxres.url : urlThumbnail);
   return {
     title: node.title,
     description: node.description,
     mediafiles: {
       image: {
         'thumbnail': {
-          path: node.thumbnail.sqDefault
+          path: urlThumbnail
         },
         'image': {
-          path: node.thumbnail.hqDefault
+          path: urlImage
         }
       },
       media: {
         'media': {
           player: 'youtube',
-          id: node.id
+          id: item.id
         }
       }
     }
@@ -139,10 +141,12 @@ minplayer.players.youtube.parseNode = function(item) {
  * @param {function} callback Called when the node is loaded.
  */
 minplayer.players.youtube.getNode = function(file, callback) {
-  var url = 'https://gdata.youtube.com/feeds/api/videos/' + file.id;
-  url += '?v=2&alt=jsonc';
+  if(typeof(ENV) == "undefined" || typeof(ENV.youtubeApiKey) == 'undefined') throw 'YouTube API V3 requires authentication, please specify your API key in ENV.youtubeApiKey variable.';
+  var url = 'https://www.googleapis.com/youtube/v3/videos?id=' + file.id;
+  url += '&key=' + ENV.youtubeApiKey;
+  url += '&part=snippet';
   jQuery.get(url, function(data) {
-    callback(minplayer.players.youtube.parseNode(data.data));
+    callback(minplayer.players.youtube.parseNode(data.items[0]));
   });
 };
 
