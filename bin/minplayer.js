@@ -1,11 +1,11 @@
 var minplayer = minplayer || {};
 (function(exports) {/*!
-* screenfull
-* v1.2.0 - 2014-04-29
-* (c) Sindre Sorhus; MIT License
-*/
-!function(){"use strict";var a="undefined"!=typeof module&&module.exports,b="undefined"!=typeof Element&&"ALLOW_KEYBOARD_INPUT"in Element,c=function(){for(var a,b,c=[["requestFullscreen","exitFullscreen","fullscreenElement","fullscreenEnabled","fullscreenchange","fullscreenerror"],["webkitRequestFullscreen","webkitExitFullscreen","webkitFullscreenElement","webkitFullscreenEnabled","webkitfullscreenchange","webkitfullscreenerror"],["webkitRequestFullScreen","webkitCancelFullScreen","webkitCurrentFullScreenElement","webkitCancelFullScreen","webkitfullscreenchange","webkitfullscreenerror"],["mozRequestFullScreen","mozCancelFullScreen","mozFullScreenElement","mozFullScreenEnabled","mozfullscreenchange","mozfullscreenerror"],["msRequestFullscreen","msExitFullscreen","msFullscreenElement","msFullscreenEnabled","MSFullscreenChange","MSFullscreenError"]],d=0,e=c.length,f={};e>d;d++)if(a=c[d],a&&a[1]in document){for(d=0,b=a.length;b>d;d++)f[c[0][d]]=a[d];return f}return!1}(),d={request:function(a){var d=c.requestFullscreen;a=a||document.documentElement,/5\.1[\.\d]* Safari/.test(navigator.userAgent)?a[d]():a[d](b&&Element.ALLOW_KEYBOARD_INPUT)},exit:function(){document[c.exitFullscreen]()},toggle:function(a){this.isFullscreen?this.exit():this.request(a)},onchange:function(){},onerror:function(){},raw:c};return c?(Object.defineProperties(d,{isFullscreen:{get:function(){return!!document[c.fullscreenElement]}},element:{enumerable:!0,get:function(){return document[c.fullscreenElement]}},enabled:{enumerable:!0,get:function(){return!!document[c.fullscreenEnabled]}}}),document.addEventListener(c.fullscreenchange,function(a){d.onchange.call(d,a)}),document.addEventListener(c.fullscreenerror,function(a){d.onerror.call(d,a)}),void(a?module.exports=d:window.screenfull=d)):void(a?module.exports=!1:window.screenfull=!1)}();
-exports.screenfull = screenfull;
+ * screenfull
+ * v1.2.0 - 2014-04-29
+ * (c) Sindre Sorhus; MIT License
+ */
+  !function(){"use strict";var a="undefined"!=typeof module&&module.exports,b="undefined"!=typeof Element&&"ALLOW_KEYBOARD_INPUT"in Element,c=function(){for(var a,b,c=[["requestFullscreen","exitFullscreen","fullscreenElement","fullscreenEnabled","fullscreenchange","fullscreenerror"],["webkitRequestFullscreen","webkitExitFullscreen","webkitFullscreenElement","webkitFullscreenEnabled","webkitfullscreenchange","webkitfullscreenerror"],["webkitRequestFullScreen","webkitCancelFullScreen","webkitCurrentFullScreenElement","webkitCancelFullScreen","webkitfullscreenchange","webkitfullscreenerror"],["mozRequestFullScreen","mozCancelFullScreen","mozFullScreenElement","mozFullScreenEnabled","mozfullscreenchange","mozfullscreenerror"],["msRequestFullscreen","msExitFullscreen","msFullscreenElement","msFullscreenEnabled","MSFullscreenChange","MSFullscreenError"]],d=0,e=c.length,f={};e>d;d++)if(a=c[d],a&&a[1]in document){for(d=0,b=a.length;b>d;d++)f[c[0][d]]=a[d];return f}return!1}(),d={request:function(a){var d=c.requestFullscreen;a=a||document.documentElement,/5\.1[\.\d]* Safari/.test(navigator.userAgent)?a[d]():a[d](b&&Element.ALLOW_KEYBOARD_INPUT)},exit:function(){document[c.exitFullscreen]()},toggle:function(a){this.isFullscreen?this.exit():this.request(a)},onchange:function(){},onerror:function(){},raw:c};return c?(Object.defineProperties(d,{isFullscreen:{get:function(){return!!document[c.fullscreenElement]}},element:{enumerable:!0,get:function(){return document[c.fullscreenElement]}},enabled:{enumerable:!0,get:function(){return!!document[c.fullscreenEnabled]}}}),document.addEventListener(c.fullscreenchange,function(a){d.onchange.call(d,a)}),document.addEventListener(c.fullscreenerror,function(a){d.onerror.call(d,a)}),void(a?module.exports=d:window.screenfull=d)):void(a?module.exports=!1:window.screenfull=!1)}();
+  exports.screenfull = screenfull;
 })(minplayer);/** The minplayer namespace. */
 var minplayer = minplayer || {};
 
@@ -4767,23 +4767,25 @@ minplayer.players.youtube.getImage = function(file, type, callback) {
  * @return {object} The mediafront node.
  */
 minplayer.players.youtube.parseNode = function(item) {
-  var node = (typeof item.video !== 'undefined') ? item.video : item;
+  var node = (typeof item.snippet !== 'undefined') ? item.snippet : item;
+  var urlThumbnail = (node.thumbnails.hasOwnProperty('standard') ? node.thumbnails.standard.url : node.thumbnails.default.url);
+  var urlImage = (node.thumbnails.hasOwnProperty('maxres') ? node.thumbnails.maxres.url : urlThumbnail);
   return {
     title: node.title,
     description: node.description,
     mediafiles: {
       image: {
         'thumbnail': {
-          path: node.thumbnail.sqDefault
+          path: urlThumbnail
         },
         'image': {
-          path: node.thumbnail.hqDefault
+          path: urlImage
         }
       },
       media: {
         'media': {
           player: 'youtube',
-          id: node.id
+          id: item.id
         }
       }
     }
@@ -4797,10 +4799,12 @@ minplayer.players.youtube.parseNode = function(item) {
  * @param {function} callback Called when the node is loaded.
  */
 minplayer.players.youtube.getNode = function(file, callback) {
-  var url = 'https://gdata.youtube.com/feeds/api/videos/' + file.id;
-  url += '?v=2&alt=jsonc';
+  if(typeof(ENV) == "undefined" || typeof(ENV.youtubeApiKey) == 'undefined') throw 'YouTube API V3 requires authentication, please specify your API key in ENV.youtubeApiKey variable.';
+  var url = 'https://www.googleapis.com/youtube/v3/videos?id=' + file.id;
+  url += '&key=' + ENV.youtubeApiKey;
+  url += '&part=snippet';
   jQuery.get(url, function(data) {
-    callback(minplayer.players.youtube.parseNode(data.data));
+    callback(minplayer.players.youtube.parseNode(data.items[0]));
   });
 };
 
